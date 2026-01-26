@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace DevCrew.Desktop.ViewModels;
 
 /// <summary>
-/// Tab öğesi ViewModel'i
+/// ViewModel for tab item
 /// </summary>
 public partial class TabItemViewModel : ObservableObject
 {

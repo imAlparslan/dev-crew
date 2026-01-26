@@ -15,6 +15,8 @@ namespace DevCrew.Desktop.ViewModels;
 public partial class MainWindowViewModel : BaseViewModel
 {
     private readonly IApplicationService _applicationService;
+    private readonly DashboardViewModel _dashboardViewModel;
+    private readonly Func<CreateGuidViewModel> _createGuidViewModelFactory;
 
     [ObservableProperty]
     private string title = "DevCrew";
@@ -30,11 +32,16 @@ public partial class MainWindowViewModel : BaseViewModel
 
     public ObservableCollection<TabItemViewModel> Tabs { get; } = new();
 
-    public MainWindowViewModel(IApplicationService applicationService)
+    public MainWindowViewModel(
+        IApplicationService applicationService,
+        DashboardViewModel dashboardViewModel,
+        Func<CreateGuidViewModel> createGuidViewModelFactory)
     {
         _applicationService = applicationService;
+        _dashboardViewModel = dashboardViewModel;
+        _createGuidViewModelFactory = createGuidViewModelFactory;
         
-        // Başlangıçta Dashboard tab'ını aç
+        // Open Dashboard tab on startup
         OpenDashboard();
     }
 
@@ -47,13 +54,14 @@ public partial class MainWindowViewModel : BaseViewModel
     [RelayCommand]
     private void OpenDashboard()
     {
-        OpenOrSelectTab("dashboard", "Dashboard", new DashboardViewModel(), false, "🎯");
+        OpenOrSelectTab("dashboard", "Dashboard", _dashboardViewModel, false, "🎯");
     }
 
     [RelayCommand]
     private void OpenCreateGuidTab()
     {
-        OpenOrSelectTab("create-guid", "Create Guid", new CreateGuidViewModel(), true, "🎲");
+        var createGuidViewModel = _createGuidViewModelFactory();
+        OpenOrSelectTab("create-guid", "Create Guid", createGuidViewModel, true, "🎲");
     }
 
     [RelayCommand]
@@ -61,7 +69,7 @@ public partial class MainWindowViewModel : BaseViewModel
     {
         if (tab == null || !tab.IsClosable) return;
 
-        // Kaydedilmemiş değişiklikler varsa onay iste
+        // Request confirmation if there are unsaved changes
         if (tab.HasUnsavedChanges)
         {
             // TODO: Dialog implementation gerekli - şimdilik direkt kapat
@@ -72,21 +80,21 @@ public partial class MainWindowViewModel : BaseViewModel
         var index = Tabs.IndexOf(tab);
         Tabs.Remove(tab);
 
-        // Başka tab varsa ona geç
+        // Switch to another tab if available
         if (Tabs.Count > 0)
         {
             SelectedTab = index < Tabs.Count ? Tabs[index] : Tabs[^1];
         }
         else
         {
-            // Hiç tab kalmadıysa Dashboard'u aç
+            // Open Dashboard if no tabs remain
             OpenDashboard();
         }
     }
 
     private void OpenOrSelectTab(string id, string header, object content, bool isClosable, string? icon = null)
     {
-        // Mevcut tab'ı bul
+        // Find existing tab
         var existingTab = Tabs.FirstOrDefault(t => t.Id == id);
         if (existingTab != null)
         {
@@ -94,7 +102,7 @@ public partial class MainWindowViewModel : BaseViewModel
             return;
         }
 
-        // Yeni tab oluştur
+        // Create new tab
         var newTab = new TabItemViewModel
         {
             Id = id,
@@ -110,7 +118,7 @@ public partial class MainWindowViewModel : BaseViewModel
     }
 
     /// <summary>
-    /// ViewModel başlatıldığında çalışır
+    /// Runs when ViewModel is initialized
     /// </summary>
     public async Task InitializeAsync()
     {

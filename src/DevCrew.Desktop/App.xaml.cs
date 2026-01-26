@@ -1,9 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using DevCrew.Core;
+using DevCrew.Core.Services;
 using DevCrew.Desktop.ViewModels;
 using DevCrew.Desktop.Views;
-using DevCrew.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DevCrew.Desktop;
@@ -24,10 +25,17 @@ public partial class App : Application
         ConfigureServices(services);
         _serviceProvider = services.BuildServiceProvider();
 
+        var mainWindowViewModel = _serviceProvider?.GetRequiredService<MainWindowViewModel>();
+
         var mainWindow = new MainWindow
         {
-            DataContext = _serviceProvider?.GetRequiredService<MainWindowViewModel>()
+            DataContext = mainWindowViewModel
         };
+
+        if (mainWindowViewModel != null)
+        {
+            _ = mainWindowViewModel.InitializeAsync();
+        }
 
         if (ApplicationLifetime != null)
         {
@@ -41,9 +49,12 @@ public partial class App : Application
     private void ConfigureServices(IServiceCollection services)
     {
         // Core Services
-        services.AddScoped<IApplicationService, ApplicationService>();
+        services.AddDevCrewCore();
 
         // ViewModels
         services.AddScoped<MainWindowViewModel>();
+        services.AddSingleton<DashboardViewModel>();
+        services.AddTransient<CreateGuidViewModel>();
+        services.AddTransient<Func<CreateGuidViewModel>>(sp => () => sp.GetRequiredService<CreateGuidViewModel>());
     }
 }

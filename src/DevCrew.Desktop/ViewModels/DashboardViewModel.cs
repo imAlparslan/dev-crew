@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace DevCrew.Desktop.ViewModels;
 
 /// <summary>
-/// Dashboard görünümü için ViewModel
+/// ViewModel for the Dashboard view
 /// </summary>
 public partial class DashboardViewModel : ObservableObject
 {

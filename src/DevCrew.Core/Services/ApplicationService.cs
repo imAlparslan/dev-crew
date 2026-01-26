@@ -1,32 +1,32 @@
 namespace DevCrew.Core.Services;
 
 /// <summary>
-/// Uygulamanın başlatılması için gerekli işlemleri yönetir
+/// Manages the operations required to initialize the application
 /// </summary>
 public interface IApplicationService
 {
     /// <summary>
-    /// Uygulamayı başlat
+    /// Initialize the application
     /// </summary>
-    /// <param name="cancellationToken">İptal tokeni</param>
+    /// <param name="cancellationToken">Cancellation token</param>
     Task InitializeAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Uygulamayı kapat
+    /// Shutdown the application
     /// </summary>
-    /// <param name="cancellationToken">İptal tokeni</param>
+    /// <param name="cancellationToken">Cancellation token</param>
     Task ShutdownAsync(CancellationToken cancellationToken = default);
 }
 
 /// <summary>
-/// ApplicationService varsayılan uygulaması
+/// Default implementation of ApplicationService
 /// </summary>
 public class ApplicationService : IApplicationService
 {
     /// <inheritdoc />
     public Task InitializeAsync(CancellationToken cancellationToken = default)
     {
-        // Uygulama başlatma işlemleri burada yapılacak
+        // Application initialization operations will be performed here
         return Task.CompletedTask;
     }
 

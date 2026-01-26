@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace DevCrew.Desktop.Services;
 
 /// <summary>
-/// ViewModel'den View'a dinamik eşleme için ViewLocator servisi
+/// ViewLocator service for dynamic mapping from ViewModel to View
 /// </summary>
 public class ViewLocator : IDataTemplate
 {
@@ -15,18 +15,20 @@ public class ViewLocator : IDataTemplate
         if (data is null)
             return null;
 
-        var fullName = data.GetType().FullName!;
-        var name = fullName.Replace("ViewModel", "View");
-        
-        // Assembly-qualified name ile dene
-        var type = Type.GetType(name);
-        
-        // Bulunamazsa, aynı assembly'den dene
-        if (type == null)
-        {
-            var assemblyName = data.GetType().Assembly.FullName;
-            type = Type.GetType($"{name}, {assemblyName}");
-        }
+        var viewModelType = data.GetType();
+        var fullName = viewModelType.FullName;
+
+        if (string.IsNullOrWhiteSpace(fullName))
+            return new TextBlock { Text = "View bulunamadı: (adı çözülemedi)" };
+
+        // ViewModels ad uzayını Views ile değiştir, son ekleri ViewModel → View çevir.
+        var candidateName = fullName
+            .Replace(".ViewModels.", ".Views.")
+            .Replace("ViewModel", "View");
+
+        // Assembly-qualified dene, sonra aynı assembly içi dene.
+        var assemblyName = viewModelType.Assembly.FullName;
+        var type = Type.GetType(candidateName) ?? Type.GetType($"{candidateName}, {assemblyName}");
 
         if (type != null)
         {
@@ -35,12 +37,12 @@ public class ViewLocator : IDataTemplate
             return control;
         }
 
-        return new TextBlock { Text = $"View bulunamadı: {name}" };
+        return new TextBlock { Text = $"View bulunamadı: {candidateName}" };
     }
 
     public bool Match(object? data)
     {
-        // ObservableObject'ten türeyen tüm ViewModel'leri eşleştir
+        // Match all ViewModels derived from ObservableObject
         return data is ObservableObject && data.GetType().Name.EndsWith("ViewModel");
     }
 }

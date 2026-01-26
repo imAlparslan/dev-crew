@@ -4,7 +4,7 @@ using System.Globalization;
 namespace DevCrew.Desktop.Converters;
 
 /// <summary>
-/// Boolean değerini tersine çeviren converter
+/// Converter that inverts a boolean value
 /// </summary>
 public class BooleanInverseConverter : IValueConverter
 {

@@ -6,17 +6,17 @@ namespace DevCrew.Core.Models;
 public abstract class BaseModel
 {
     /// <summary>
-    /// Benzersiz tanımlayıcı
+    /// Unique identifier
     /// </summary>
     public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
-    /// Oluşturma tarihi
+    /// Creation date
     /// </summary>
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>
-    /// Son güncelleme tarihi
+    /// Last update date
     /// </summary>
     public DateTime? UpdatedAt { get; set; }
 }

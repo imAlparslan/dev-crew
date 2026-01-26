@@ -6,12 +6,12 @@ namespace DevCrew.Desktop;
 
 internal class Program
 {
-    // Komut satırı argümanlarını başa al (Avalonia için gerekli)
+    // Handle command line arguments (required for Avalonia)
     [STAThread]
     public static void Main(string[] args) => BuildAvaloniaApp()
         .StartWithClassicDesktopLifetime(args);
 
-    // Avalonia uygulama oluştur ve yapılandır
+    // Create and configure the Avalonia application
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()

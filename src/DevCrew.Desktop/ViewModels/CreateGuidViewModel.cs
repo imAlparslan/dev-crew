@@ -1,17 +1,19 @@
-using System;
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DevCrew.Core.Services;
 
 namespace DevCrew.Desktop.ViewModels;
 
 /// <summary>
-/// GUID oluşturma görünümü için ViewModel
-/// Her tab instance'ının kendi state'ini tutar
+/// ViewModel for the GUID creation view
+/// Each tab instance maintains its own state
 /// </summary>
 public partial class CreateGuidViewModel : ObservableObject
 {
+    private readonly IGuidService _guidService;
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasGuid))]
     private string currentGuid = string.Empty;
@@ -23,11 +25,16 @@ public partial class CreateGuidViewModel : ObservableObject
     public bool HasGuid => !string.IsNullOrWhiteSpace(CurrentGuid);
     public bool HasStatusMessage => !string.IsNullOrWhiteSpace(StatusMessage);
 
+    public CreateGuidViewModel(IGuidService guidService)
+    {
+        _guidService = guidService;
+    }
+
     [RelayCommand]
     private void GenerateGuid()
     {
-        CurrentGuid = Guid.NewGuid().ToString();
-        ShowStatusMessage("Yeni GUID oluşturuldu!");
+        CurrentGuid = _guidService.Generate();
+        ShowStatusMessage("New GUID created!");
     }
 
     [RelayCommand]
@@ -42,12 +49,12 @@ public partial class CreateGuidViewModel : ObservableObject
             if (topLevel?.Clipboard != null && !string.IsNullOrWhiteSpace(CurrentGuid))
             {
                 await topLevel.Clipboard.SetTextAsync(CurrentGuid);
-                ShowStatusMessage("Panoya kopyalandı!");
+                ShowStatusMessage("Copied to clipboard!");
             }
         }
         catch (Exception)
         {
-            ShowStatusMessage("Kopyalama başarısız!");
+            ShowStatusMessage("Copy failed!");
         }
     }
 
@@ -62,7 +69,7 @@ public partial class CreateGuidViewModel : ObservableObject
     {
         StatusMessage = message;
         
-        // 3 saniye sonra mesajı temizle
+        // Clear message after 3 seconds
         await Task.Delay(3000);
         StatusMessage = string.Empty;
     }

@@ -11,7 +11,7 @@ public abstract class BaseViewModel : ObservableObject
     private string? _errorMessage;
 
     /// <summary>
-    /// Yüklenme durumu
+    /// Loading state
     /// </summary>
     public bool IsLoading
     {
