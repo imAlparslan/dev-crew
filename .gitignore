@@ -52,3 +52,19 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Avalonia specific
+.avalonia/
+*.dev.json
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# IDE
+.idea/
+.vs/
+*.swp
+*.swo
+*~
+.DS_Store

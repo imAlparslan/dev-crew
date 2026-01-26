@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="DevCrew.Desktop.Views.MainWindow"
+        Title="DevCrew"
+        Width="800"
+        Height="600"
+        WindowStartupLocation="CenterScreen">
+    <Grid RowDefinitions="*, Auto">
+        <!-- İçerik alanı -->
+        <StackPanel Grid.Row="0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+            <TextBlock Text="DevCrew"
+                       FontSize="32"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,16" />
+            <TextBlock Text="Hoş geldiniz!"
+                       FontSize="16"
+                       HorizontalAlignment="Center"
+                       Foreground="Gray" />
+        </StackPanel>
+
+        <!-- Alt durum çubuğu -->
+        <Border Grid.Row="1"
+                BorderThickness="0,1,0,0"
+                BorderBrush="LightGray"
+                Padding="16,8">
+            <TextBlock Text="Hazır"
+                       Foreground="Gray" />
+        </Border>
+    </Grid>
+</Window>

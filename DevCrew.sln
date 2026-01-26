@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F6C1A1B1-5B5E-4F5E-8B1A-5B5E4F5E8B1A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F6C1A1B1-5B5E-4F5E-8B1A-5B5E4F5E8B1B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7558}") = "DevCrew.Core", "src\DevCrew.Core\DevCrew.Core.csproj", "{A1B2C3D4-E5F6-4G7H-8I9J-0K1L2M3N4O5P}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7558}") = "DevCrew.Desktop", "src\DevCrew.Desktop\DevCrew.Desktop.csproj", "{B2C3D4E5-F6G7-4H8I-9J0K-1L2M3N4O5P6Q}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1B2C3D4-E5F6-4G7H-8I9J-0K1L2M3N4O5P}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-4G7H-8I9J-0K1L2M3N4O5P}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-4G7H-8I9J-0K1L2M3N4O5P}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-4G7H-8I9J-0K1L2M3N4O5P}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2C3D4E5-F6G7-4H8I-9J0K-1L2M3N4O5P6Q}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2C3D4E5-F6G7-4H8I-9J0K-1L2M3N4O5P6Q}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2C3D4E5-F6G7-4H8I-9J0K-1L2M3N4O5P6Q}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2C3D4E5-F6G7-4H8I-9J0K-1L2M3N4O5P6Q}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A1B2C3D4-E5F6-4G7H-8I9J-0K1L2M3N4O5P} = {F6C1A1B1-5B5E-4F5E-8B1A-5B5E4F5E8B1A}
+		{B2C3D4E5-F6G7-4H8I-9J0K-1L2M3N4O5P6Q} = {F6C1A1B1-5B5E-4F5E-8B1A-5B5E4F5E8B1A}
+	EndGlobalSection
+EndGlobal
