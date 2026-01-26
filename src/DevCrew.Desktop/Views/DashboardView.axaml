@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DevCrew.Desktop.ViewModels"
+             x:Class="DevCrew.Desktop.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+    <Border Padding="24" Background="#1E293B">
+        <StackPanel Spacing="16" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="🎯 DevCrew Dashboard"
+                       FontSize="32"
+                       FontWeight="Bold"
+                       Foreground="#F8FAFC"
+                       HorizontalAlignment="Center" />
+            
+            <TextBlock Text="Hoş geldiniz! Yan menüden araçları seçerek başlayabilirsiniz."
+                       FontSize="16"
+                       Foreground="#CBD5E1"
+                       HorizontalAlignment="Center"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap"
+                       MaxWidth="400" />
+            
+            <Border Background="#334155"
+                    CornerRadius="12"
+                    Padding="20"
+                    Margin="0,16,0,0"
+                    MaxWidth="500"
+                    BorderBrush="#475569"
+                    BorderThickness="1">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Hızlı Başlangıç"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="#F8FAFC" />
+                    
+                    <TextBlock TextWrapping="Wrap"
+                               Foreground="#CBD5E1">
+                        <Run Text="• " />
+                        <Run Text="Yan menüdeki araçlara tıklayın" FontWeight="Medium" />
+                        <LineBreak />
+                        <Run Text="• Her araç yeni bir tab'da açılır" />
+                        <LineBreak />
+                        <Run Text="• Tabları kapatmak için × simgesine tıklayın" />
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Border>
+</UserControl>

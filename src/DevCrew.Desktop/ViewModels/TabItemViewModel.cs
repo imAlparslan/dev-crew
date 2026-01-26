@@ -1,0 +1,29 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace DevCrew.Desktop.ViewModels;
+
+/// <summary>
+/// Tab öğesi ViewModel'i
+/// </summary>
+public partial class TabItemViewModel : ObservableObject
+{
+    [ObservableProperty]
+    private string header = string.Empty;
+
+    [ObservableProperty]
+    private object? content;
+
+    [ObservableProperty]
+    private bool isClosable = true;
+
+    [ObservableProperty]
+    private string? icon;
+
+    [ObservableProperty]
+    private string? tooltip;
+
+    [ObservableProperty]
+    private bool hasUnsavedChanges;
+
+    public string Id { get; set; } = string.Empty;
+}

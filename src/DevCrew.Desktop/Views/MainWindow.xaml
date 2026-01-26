@@ -1,33 +1,135 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DevCrew.Desktop.ViewModels"
         x:Class="DevCrew.Desktop.Views.MainWindow"
         Title="DevCrew"
-        Width="800"
-        Height="600"
+        Width="900"
+        Height="640"
         WindowStartupLocation="CenterScreen">
-    <Grid RowDefinitions="*, Auto">
-        <!-- İçerik alanı -->
-        <StackPanel Grid.Row="0"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center">
-            <TextBlock Text="DevCrew"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,16" />
-            <TextBlock Text="Hoş geldiniz!"
-                       FontSize="16"
-                       HorizontalAlignment="Center"
-                       Foreground="Gray" />
-        </StackPanel>
+    <Grid RowDefinitions="Auto, *">
+        <!-- Üst bar: sol menüyü aç/kapat, başlık -->
+        <Border Grid.Row="0"
+                Background="#0F172A"
+                Padding="12,8"
+                BorderBrush="#1E293B"
+                BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="Auto,*,Auto"
+                  VerticalAlignment="Center">
+                <Button Grid.Column="0"
+                        Width="36"
+                        Height="36"
+                        CornerRadius="8"
+                        Background="#1F2937"
+                        Foreground="White"
+                        Content="☰"
+                        Command="{Binding ToggleSidebarCommand}" />
 
-        <!-- Alt durum çubuğu -->
-        <Border Grid.Row="1"
-                BorderThickness="0,1,0,0"
-                BorderBrush="LightGray"
-                Padding="16,8">
-            <TextBlock Text="Hazır"
-                       Foreground="Gray" />
+                <StackPanel Grid.Column="1"
+                            Orientation="Vertical"
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Title}"
+                               FontSize="20"
+                               FontWeight="SemiBold"
+                               Foreground="White" />
+                    <TextBlock Text="{Binding StatusMessage}"
+                               FontSize="12"
+                               Foreground="#CBD5E1" />
+                </StackPanel>
+            </Grid>
         </Border>
+
+        <!-- Ana alan: sol panel + içerik -->
+        <SplitView Grid.Row="1"
+                   IsPaneOpen="{Binding IsSidebarOpen, Mode=TwoWay}"
+                   OpenPaneLength="240"
+                   CompactPaneLength="0"
+                   DisplayMode="Inline"
+                   PanePlacement="Left">
+            <SplitView.Pane>
+                <Border Background="#0B1220"
+                        BorderBrush="#1E293B"
+                        BorderThickness="0,0,1,0"
+                        Padding="16">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Menü"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="White"
+                                   Margin="0,0,0,8" />
+
+                        <Button Content="Dashboard"
+                                HorizontalAlignment="Stretch"
+                                Background="#111827"
+                                Foreground="White"
+                                BorderBrush="#1F2937"
+                                Padding="10,8"
+                                CornerRadius="6"
+                                Command="{Binding OpenDashboardCommand}" />
+
+                        <Button Content="Create Guid"
+                                HorizontalAlignment="Stretch"
+                                Background="#0EA5E9"
+                                Foreground="White"
+                                BorderBrush="#0284C7"
+                                Padding="10,8"
+                                CornerRadius="6"
+                                Command="{Binding OpenCreateGuidTabCommand}" />
+                    </StackPanel>
+                </Border>
+            </SplitView.Pane>
+
+            <SplitView.Content>
+                <Grid RowDefinitions="*, Auto">
+                    <TabControl Grid.Row="0"
+                                ItemsSource="{Binding Tabs}"
+                                SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="8" ToolTip.Tip="{Binding Tooltip}">
+                                    <TextBlock Text="{Binding Icon}" 
+                                               VerticalAlignment="Center"
+                                               IsVisible="{Binding Icon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                                    <TextBlock Text="{Binding Header}" VerticalAlignment="Center" />
+                                    <TextBlock Text="●"
+                                               FontSize="10"
+                                               Foreground="#F59E0B"
+                                               VerticalAlignment="Center"
+                                               IsVisible="{Binding HasUnsavedChanges}"
+                                               ToolTip.Tip="Kaydedilmemiş değişiklikler var" />
+                                    <Button Content="×"
+                                            Command="{Binding $parent[Window].DataContext.CloseTabCommand}"
+                                            CommandParameter="{Binding}"
+                                            IsVisible="{Binding IsClosable}"
+                                            Width="20"
+                                            Height="20"
+                                            Padding="0"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            FontSize="16"
+                                            VerticalAlignment="Center"
+                                            ToolTip.Tip="Kapat" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <ContentControl Content="{Binding Content}" />
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </TabControl>
+
+                    <!-- Alt durum çubuğu -->
+                    <Border Grid.Row="1"
+                            BorderThickness="0,1,0,0"
+                            BorderBrush="#1E293B"
+                            Background="#0F172A"
+                            Padding="16,8">
+                        <TextBlock Text="{Binding StatusMessage}"
+                                   Foreground="#94A3B8" />
+                    </Border>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
     </Grid>
 </Window>

@@ -1,8 +1,59 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="DevCrew.Desktop.App"
-             xmlns:local="using:DevCrew.Desktop">
+             xmlns:local="using:DevCrew.Desktop"
+             xmlns:services="using:DevCrew.Desktop.Services">
+    <Application.DataTemplates>
+        <services:ViewLocator />
+    </Application.DataTemplates>
+    
     <Application.Styles>
         <FluentTheme />
+        
+        <!-- Custom TabControl Styles (Dark Mode) -->
+        <Style Selector="TabControl">
+            <Setter Property="Background" Value="#1E293B" />
+        </Style>
+        
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="16,10" />
+            <Setter Property="Margin" Value="0,0,2,0" />
+            <Setter Property="Background" Value="#334155" />
+            <Setter Property="Foreground" Value="#94A3B8" />
+            <Setter Property="BorderThickness" Value="0,0,0,2" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        
+        <Style Selector="TabItem:pointerover">
+            <Setter Property="Background" Value="#475569" />
+            <Setter Property="Foreground" Value="#CBD5E1" />
+        </Style>
+        
+        <Style Selector="TabItem:selected">
+            <Setter Property="Background" Value="#1E293B" />
+            <Setter Property="Foreground" Value="#F8FAFC" />
+            <Setter Property="BorderBrush" Value="#0EA5E9" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        
+        <Style Selector="TabItem:selected:pointerover">
+            <Setter Property="Background" Value="#1E293B" />
+        </Style>
+        
+        <!-- Close button hover effect -->
+        <Style Selector="TabItem Button">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                </Transitions>
+            </Setter>
+        </Style>
+        
+        <Style Selector="TabItem Button:pointerover">
+            <Setter Property="Background" Value="#EF4444" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
     </Application.Styles>
 </Application>
