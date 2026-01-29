@@ -13,6 +13,11 @@ public class ViewLocator : IDataTemplate
 {
     private static readonly ConcurrentDictionary<Type, Type?> _viewTypeCache = new();
 
+    /// <summary>
+    /// Builds a view for the supplied view model instance.
+    /// </summary>
+    /// <param name="data">View model instance.</param>
+    /// <returns>The resolved view or a fallback control.</returns>
     public Control? Build(object? data)
     {
         if (data is null)
@@ -48,6 +53,11 @@ public class ViewLocator : IDataTemplate
         return new TextBlock { Text = $"View bulunamadı: {viewModelName}" };
     }
 
+    /// <summary>
+    /// Determines whether this template can build a view for the data.
+    /// </summary>
+    /// <param name="data">View model instance.</param>
+    /// <returns>True when the data is a supported view model.</returns>
     public bool Match(object? data)
     {
         // Match all ViewModels derived from ObservableObject

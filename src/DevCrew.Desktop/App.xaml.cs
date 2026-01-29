@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using DevCrew.Core;
-using DevCrew.Core.Services;
+using DevCrew.Desktop.Services;
 using DevCrew.Desktop.ViewModels;
 using DevCrew.Desktop.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,6 +49,9 @@ public partial class App : Application
     {
         // Core Services
         services.AddDevCrewCore();
+
+        // Desktop Services
+        services.AddSingleton<IClipboardService, ClipboardService>();
 
         // ViewModels
         services.AddScoped<MainWindowViewModel>();

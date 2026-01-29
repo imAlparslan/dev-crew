@@ -1,8 +1,17 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:DevCrew.Desktop.ViewModels"
-             x:Class="DevCrew.Desktop.Views.CreateGuidView"
-             x:DataType="vm:CreateGuidViewModel">
+                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                         xmlns:vm="using:DevCrew.Desktop.ViewModels"
+                         xmlns:conv="using:DevCrew.Desktop.Converters"
+                         x:Class="DevCrew.Desktop.Views.CreateGuidView"
+                         x:DataType="vm:CreateGuidViewModel">
+        <UserControl.Resources>
+                <conv:BooleanToBrushConverter x:Key="GuidBackgroundConverter"
+                                                                          TrueBrush="{StaticResource BrushAccent}"
+                                                                          FalseBrush="{StaticResource BrushTertiaryBackground}" />
+                <conv:BooleanToBrushConverter x:Key="GuidBorderConverter"
+                                                                          TrueBrush="{StaticResource BrushAccentDark}"
+                                                                          FalseBrush="{StaticResource BrushBorderSecondary}" />
+        </UserControl.Resources>
     <Border Padding="16" Background="{StaticResource BrushSecondaryBackground}">
         <StackPanel Spacing="12"
                     HorizontalAlignment="Center"
@@ -37,8 +46,8 @@
                      IsReadOnly="True"
                      Margin="0,4,0,0"
                      Padding="10"
-                     Background="{Binding GuidBackground}"
-                     BorderBrush="{Binding GuidBorderBrush}"
+                     Background="{Binding IsGuidCopied, Converter={StaticResource GuidBackgroundConverter}}"
+                     BorderBrush="{Binding IsGuidCopied, Converter={StaticResource GuidBorderConverter}}"
                      Foreground="{StaticResource BrushPrimaryText}"
                      FontFamily="Consolas, Courier New, monospace"
                      Watermark="GUID burada görünecek"

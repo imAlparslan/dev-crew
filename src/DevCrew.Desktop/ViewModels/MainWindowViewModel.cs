@@ -27,8 +27,17 @@ public partial class MainWindowViewModel : BaseViewModel
     [ObservableProperty]
     private TabItemViewModel? selectedTab;
 
+    /// <summary>
+    /// Collection of open tabs.
+    /// </summary>
     public ObservableCollection<TabItemViewModel> Tabs { get; } = new();
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
+    /// </summary>
+    /// <param name="applicationService">Application service.</param>
+    /// <param name="dashboardViewModel">Dashboard view model.</param>
+    /// <param name="createGuidViewModelFactory">Factory for new GUID view models.</param>
     public MainWindowViewModel(
         IApplicationService applicationService,
         DashboardViewModel dashboardViewModel,

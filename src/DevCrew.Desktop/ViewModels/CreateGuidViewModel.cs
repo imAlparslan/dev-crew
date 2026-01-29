@@ -1,9 +1,9 @@
+using System;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
+using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -14,31 +14,28 @@ namespace DevCrew.Desktop.ViewModels;
 public partial class CreateGuidViewModel : ObservableObject
 {
     private readonly IGuidService _guidService;
+    private readonly IClipboardService _clipboardService;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasGuid))]
     private string currentGuid = string.Empty;
+    /// <summary>
+    /// Indicates whether a GUID value is available.
+    /// </summary>
     public bool HasGuid => !string.IsNullOrWhiteSpace(CurrentGuid);
 
     [ObservableProperty]
     private bool isGuidCopied;
 
-    [ObservableProperty]
-    private IBrush guidBackground;
-
-    [ObservableProperty]
-    private IBrush guidBorderBrush;
-
-    private static readonly IBrush FallbackTertiaryBackground = new SolidColorBrush(Color.Parse("#334155"));
-    private static readonly IBrush FallbackBorderSecondary = new SolidColorBrush(Color.Parse("#475569"));
-    private static readonly IBrush FallbackAccent = new SolidColorBrush(Color.Parse("#0EA5E9"));
-    private static readonly IBrush FallbackAccentDark = new SolidColorBrush(Color.Parse("#0284C7"));
-
-    public CreateGuidViewModel(IGuidService guidService)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CreateGuidViewModel"/> class.
+    /// </summary>
+    /// <param name="guidService">GUID generation service.</param>
+    /// <param name="clipboardService">Clipboard access service.</param>
+    public CreateGuidViewModel(IGuidService guidService, IClipboardService clipboardService)
     {
         _guidService = guidService;
-        guidBackground = GetBrush("BrushTertiaryBackground", FallbackTertiaryBackground);
-        guidBorderBrush = GetBrush("BrushBorderSecondary", FallbackBorderSecondary);
+        _clipboardService = clipboardService;
     }
 
     [RelayCommand]
@@ -52,14 +49,9 @@ public partial class CreateGuidViewModel : ObservableObject
     {
         try
         {
-            var topLevel = Avalonia.Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop
-                ? desktop.MainWindow
-                : null;
-
-            if (topLevel?.Clipboard != null && !string.IsNullOrWhiteSpace(CurrentGuid))
+            if (!string.IsNullOrWhiteSpace(CurrentGuid))
             {
-                await topLevel.Clipboard.SetTextAsync(CurrentGuid);
-                IsGuidCopied = true;
+                IsGuidCopied = await _clipboardService.TrySetTextAsync(CurrentGuid);
             }
         }
         catch (Exception ex)
@@ -77,33 +69,5 @@ public partial class CreateGuidViewModel : ObservableObject
     partial void OnCurrentGuidChanged(string value)
     {
         IsGuidCopied = false;
-        GuidBackground = GetBrush("BrushTertiaryBackground", FallbackTertiaryBackground);
-        GuidBorderBrush = GetBrush("BrushBorderSecondary", FallbackBorderSecondary);
-    }
-
-    partial void OnIsGuidCopiedChanged(bool value)
-    {
-        if (value)
-        {
-            GuidBackground = GetBrush("BrushAccent", FallbackAccent);
-            GuidBorderBrush = GetBrush("BrushAccentDark", FallbackAccentDark);
-        }
-        else
-        {
-            GuidBackground = GetBrush("BrushTertiaryBackground", FallbackTertiaryBackground);
-            GuidBorderBrush = GetBrush("BrushBorderSecondary", FallbackBorderSecondary);
-        }
-    }
-
-    private static IBrush GetBrush(string key, IBrush fallback)
-    {
-        if (Application.Current?.Resources != null
-            && Application.Current.Resources.TryGetValue(key, out var resource)
-            && resource is IBrush brush)
-        {
-            return brush;
-        }
-
-        return fallback;
     }
 }

@@ -22,5 +22,8 @@ public partial class TabItemViewModel : ObservableObject
     [ObservableProperty]
     private string? tooltip;
 
+    /// <summary>
+    /// Unique identifier for the tab.
+    /// </summary>
     public string Id { get; set; } = string.Empty;
 }
