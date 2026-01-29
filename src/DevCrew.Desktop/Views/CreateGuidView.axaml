@@ -67,12 +67,6 @@
                         CornerRadius="6" />
             </StackPanel>
             
-            <TextBlock Text="{Binding StatusMessage}"
-                       FontSize="12"
-                       Foreground="#16A34A"
-                       HorizontalAlignment="Center"
-                       Margin="0,8,0,0"
-                       IsVisible="{Binding HasStatusMessage}" />
         </StackPanel>
     </Border>
 </UserControl>

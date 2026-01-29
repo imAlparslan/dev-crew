@@ -22,9 +22,6 @@ public partial class MainWindowViewModel : BaseViewModel
     private string title = "DevCrew";
 
     [ObservableProperty]
-    private string statusMessage = "Uygulamaya hoş geldiniz";
-
-    [ObservableProperty]
     private bool isSidebarOpen = true;
 
     [ObservableProperty]
@@ -118,12 +115,10 @@ public partial class MainWindowViewModel : BaseViewModel
         {
             IsLoading = true;
             await _applicationService.InitializeAsync();
-            StatusMessage = "Uygulama başarıyla başlatıldı";
         }
         catch (Exception ex)
         {
             ErrorMessage = $"Başlatma hatası: {ex.Message}";
-            StatusMessage = "Hata oluştu";
         }
         finally
         {

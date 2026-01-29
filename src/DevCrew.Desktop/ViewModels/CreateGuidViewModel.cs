@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
@@ -17,13 +16,7 @@ public partial class CreateGuidViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasGuid))]
     private string currentGuid = string.Empty;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HasStatusMessage))]
-    private string statusMessage = string.Empty;
-
     public bool HasGuid => !string.IsNullOrWhiteSpace(CurrentGuid);
-    public bool HasStatusMessage => !string.IsNullOrWhiteSpace(StatusMessage);
 
     public CreateGuidViewModel(IGuidService guidService)
     {
@@ -34,7 +27,6 @@ public partial class CreateGuidViewModel : ObservableObject
     private void GenerateGuid()
     {
         CurrentGuid = _guidService.Generate();
-        ShowStatusMessage("New GUID created!");
     }
 
     [RelayCommand]
@@ -49,12 +41,10 @@ public partial class CreateGuidViewModel : ObservableObject
             if (topLevel?.Clipboard != null && !string.IsNullOrWhiteSpace(CurrentGuid))
             {
                 await topLevel.Clipboard.SetTextAsync(CurrentGuid);
-                ShowStatusMessage("Copied to clipboard!");
             }
         }
         catch (Exception)
         {
-            ShowStatusMessage("Copy failed!");
         }
     }
 
@@ -62,15 +52,5 @@ public partial class CreateGuidViewModel : ObservableObject
     private void Clear()
     {
         CurrentGuid = string.Empty;
-        StatusMessage = string.Empty;
-    }
-
-    private async void ShowStatusMessage(string message)
-    {
-        StatusMessage = message;
-        
-        // Clear message after 3 seconds
-        await Task.Delay(3000);
-        StatusMessage = string.Empty;
     }
 }

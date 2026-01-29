@@ -8,7 +8,7 @@
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <DataTemplate x:Key="TabHeaderTemplate">
-            <StackPanel Orientation="Horizontal" Spacing="8" ToolTip.Tip="{Binding Tooltip}">
+            <StackPanel Orientation="Horizontal" Spacing="4" ToolTip.Tip="{Binding Tooltip}">
                 <TextBlock Text="{Binding Icon}" 
                            VerticalAlignment="Center"
                            IsVisible="{Binding Icon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
@@ -46,7 +46,7 @@
         <!-- Üst bar: sol menüyü aç/kapat, başlık -->
         <Border Grid.Row="0"
                 Background="#0F172A"
-                Padding="12,8"
+                Padding="8,4"
                 BorderBrush="#1E293B"
                 BorderThickness="0,0,0,1">
             <Grid ColumnDefinitions="Auto,Auto,*"
@@ -61,16 +61,13 @@
                         Command="{Binding ToggleSidebarCommand}" />
 
                 <StackPanel Grid.Column="1"
-                            Orientation="Vertical"
-                            Margin="12,0,24,0"
-                            VerticalAlignment="Center">
+                        Orientation="Vertical"
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center">
                     <TextBlock Text="{Binding Title}"
-                               FontSize="20"
-                               FontWeight="SemiBold"
-                               Foreground="White" />
-                    <TextBlock Text="{Binding StatusMessage}"
-                               FontSize="12"
-                               Foreground="#CBD5E1" />
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Foreground="White" />
                 </StackPanel>
 
                 <TabStrip Grid.Column="2"
@@ -78,6 +75,7 @@
                           SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
                           ItemTemplate="{StaticResource TabHeaderTemplate}"
                           Classes="top-tabs"
+                          Margin="100,0,0,0"
                           VerticalAlignment="Center" />
             </Grid>
         </Border>
@@ -123,20 +121,7 @@
             </SplitView.Pane>
 
             <SplitView.Content>
-                <Grid RowDefinitions="*, Auto">
-                    <ContentControl Grid.Row="0"
-                                    Content="{Binding SelectedTab.Content}" />
-
-                    <!-- Alt durum çubuğu -->
-                    <Border Grid.Row="1"
-                            BorderThickness="0,1,0,0"
-                            BorderBrush="#1E293B"
-                            Background="#0F172A"
-                            Padding="16,8">
-                        <TextBlock Text="{Binding StatusMessage}"
-                                   Foreground="#94A3B8" />
-                    </Border>
-                </Grid>
+                <ContentControl Content="{Binding SelectedTab.Content}" />
             </SplitView.Content>
         </SplitView>
     </Grid>
