@@ -28,6 +28,11 @@ public partial class MainWindowViewModel : BaseViewModel
     private TabItemViewModel? selectedTab;
 
     /// <summary>
+    /// Sidebar menu items.
+    /// </summary>
+    public ObservableCollection<MenuItemViewModel> MenuItems { get; } = new();
+
+    /// <summary>
     /// Collection of open tabs.
     /// </summary>
     public ObservableCollection<TabItemViewModel> Tabs { get; } = new();
@@ -47,8 +52,16 @@ public partial class MainWindowViewModel : BaseViewModel
         _dashboardViewModel = dashboardViewModel;
         _createGuidViewModelFactory = createGuidViewModelFactory;
         
+        InitializeMenuItems();
+
         // Open Dashboard tab on startup
         OpenDashboard();
+    }
+
+    private void InitializeMenuItems()
+    {
+        MenuItems.Add(new MenuItemViewModel("dashboard", "Dashboard", OpenDashboardCommand, "Primary", "🎯"));
+        MenuItems.Add(new MenuItemViewModel("create-guid", "Create Guid", OpenCreateGuidTabCommand, "Primary", "🎲"));
     }
 
     [RelayCommand]
@@ -60,12 +73,14 @@ public partial class MainWindowViewModel : BaseViewModel
     [RelayCommand]
     private void OpenDashboard()
     {
+        SetSelectedMenuItem("dashboard");
         OpenOrSelectTab("dashboard", "Dashboard", _dashboardViewModel, false, "🎯");
     }
 
     [RelayCommand]
     private void OpenCreateGuidTab()
     {
+        SetSelectedMenuItem("create-guid");
         var existingTab = Tabs.FirstOrDefault(t => t.Id == "create-guid");
         if (existingTab != null)
         {
@@ -75,6 +90,31 @@ public partial class MainWindowViewModel : BaseViewModel
 
         var createGuidViewModel = _createGuidViewModelFactory();
         OpenOrSelectTab("create-guid", "Create Guid", createGuidViewModel, true, "🎲");
+    }
+
+    private void SetSelectedMenuItem(string id)
+    {
+        foreach (var item in MenuItems)
+        {
+            item.IsSelected = item.Id == id;
+        }
+    }
+
+    partial void OnSelectedTabChanged(TabItemViewModel? value)
+    {
+        if (value == null)
+        {
+            SetSelectedMenuItem(string.Empty);
+            return;
+        }
+
+        if (value.Id == "dashboard" || value.Id == "create-guid")
+        {
+            SetSelectedMenuItem(value.Id);
+            return;
+        }
+
+        SetSelectedMenuItem(string.Empty);
     }
 
     [RelayCommand]

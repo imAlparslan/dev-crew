@@ -28,6 +28,22 @@
         </DataTemplate>
     </Window.Resources>
 
+    <Window.Styles>
+        <Style Selector="ToggleButton.menu-item">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Foreground" Value="{StaticResource BrushPrimaryText}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BrushButtonSecondary}" />
+            <Setter Property="Background" Value="{StaticResource BrushButtonPrimary}" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+
+        <Style Selector="ToggleButton.menu-item:checked">
+            <Setter Property="Background" Value="{StaticResource BrushSecondaryBackground}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BrushAccent}" />
+        </Style>
+    </Window.Styles>
+
     <Grid RowDefinitions="Auto, *">
         <!-- Üst bar: sol menüyü aç/kapat, başlık -->
         <Border Grid.Row="0"
@@ -85,23 +101,21 @@
                                    Foreground="{StaticResource BrushPrimaryText}"
                                    Margin="0,0,0,8" />
 
-                        <Button Content="Dashboard"
-                                HorizontalAlignment="Stretch"
-                                Background="{StaticResource BrushButtonPrimary}"
-                                Foreground="{StaticResource BrushPrimaryText}"
-                                BorderBrush="{StaticResource BrushButtonSecondary}"
-                                Padding="10,8"
-                                CornerRadius="6"
-                                Command="{Binding OpenDashboardCommand}" />
-
-                        <Button Content="Create Guid"
-                                HorizontalAlignment="Stretch"
-                                Background="{StaticResource BrushAccent}"
-                                Foreground="{StaticResource BrushPrimaryText}"
-                                BorderBrush="{StaticResource BrushAccentDark}"
-                                Padding="10,8"
-                                CornerRadius="6"
-                                Command="{Binding OpenCreateGuidTabCommand}" />
+                        <ItemsControl ItemsSource="{Binding MenuItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                        <ToggleButton Classes="menu-item"
+                                                      Command="{Binding Command}"
+                                                      IsChecked="{Binding IsSelected, Mode=TwoWay}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <TextBlock Text="{Binding Icon}"
+                                                       IsVisible="{Binding Icon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                                            <TextBlock Text="{Binding Header}" />
+                                        </StackPanel>
+                                        </ToggleButton>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                 </Border>
             </SplitView.Pane>
