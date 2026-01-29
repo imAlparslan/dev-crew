@@ -32,12 +32,12 @@ public class ViewLocator : IDataTemplate
             if (string.IsNullOrWhiteSpace(fullName))
                 return null;
 
-            // ViewModels ad uzayını Views ile değiştir, son ekleri ViewModel → View çevir.
+            // Replace ViewModels namespace with Views and convert ViewModel suffix to View.
             var candidateName = fullName
                 .Replace(".ViewModels.", ".Views.")
                 .Replace("ViewModel", "View");
 
-            // Assembly-qualified dene, sonra aynı assembly içi dene.
+            // Try assembly-qualified name first, then try within the same assembly.
             var assemblyName = vmType.Assembly.FullName;
             return Type.GetType(candidateName) ?? Type.GetType($"{candidateName}, {assemblyName}");
         });
@@ -50,7 +50,7 @@ public class ViewLocator : IDataTemplate
         }
 
         var viewModelName = viewModelType.Name;
-        return new TextBlock { Text = $"View bulunamadı: {viewModelName}" };
+        return new TextBlock { Text = $"View not found for {viewModelName}" };
     }
 
     /// <summary>
