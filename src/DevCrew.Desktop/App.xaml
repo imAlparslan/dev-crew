@@ -14,6 +14,84 @@
         <Style Selector="TabControl">
             <Setter Property="Background"
                     Value="#1E293B"/>
+            <Setter Property="Padding"
+                    Value="0"/>
+            <Setter Property="Margin"
+                    Value="0"/>
+        </Style>
+
+        <Style Selector="TabStrip">
+            <Setter Property="Padding"
+                    Value="0"/>
+            <Setter Property="Margin"
+                    Value="0"/>
+        </Style>
+
+        <Style Selector="TabStrip.top-tabs">
+            <Setter Property="Background"
+                    Value="Transparent"/>
+        </Style>
+
+        <Style Selector="TabStrip.top-tabs TabStripItem">
+            <Setter Property="FontSize"
+                    Value="14"/>
+            <Setter Property="Padding"
+                    Value="16,10"/>
+            <Setter Property="Margin"
+                    Value="0,0,2,0"/>
+            <Setter Property="Background"
+                    Value="#334155"/>
+            <Setter Property="Foreground"
+                    Value="#94A3B8"/>
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,2"/>
+            <Setter Property="BorderBrush"
+                    Value="Transparent"/>
+        </Style>
+
+        <Style Selector="TabStrip.top-tabs TabStripItem:pointerover">
+            <Setter Property="Background"
+                    Value="#475569"/>
+            <Setter Property="Foreground"
+                    Value="#CBD5E1"/>
+        </Style>
+
+        <Style Selector="TabStrip.top-tabs TabStripItem:selected">
+            <Setter Property="Background"
+                    Value="#1E293B"/>
+            <Setter Property="Foreground"
+                    Value="#F8FAFC"/>
+            <Setter Property="BorderBrush"
+                    Value="#0EA5E9"/>
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+        </Style>
+
+        <Style Selector="TabStrip.top-tabs TabStripItem:selected /template/ Border#PART_SelectedPipe">
+            <Setter Property="Background"/>
+        </Style>
+
+        <Style Selector="TabStrip.top-tabs TabStripItem:selected:pointerover">
+            <Setter Property="Background"
+                    Value="#1E293B"/>
+        </Style>
+
+        <Style Selector="TabStrip.top-tabs TabStripItem Button">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                            Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="TabStrip.top-tabs TabStripItem Button:pointerover">
+            <Setter Property="Background"
+                    Value="#EF4444"/>
+            <Setter Property="Foreground"
+                    Value="White"/>
+            <Setter Property="CornerRadius"
+                    Value="4"/>
         </Style>
 
         <Style Selector="TabItem">

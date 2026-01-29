@@ -6,6 +6,42 @@
         Width="900"
         Height="640"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <DataTemplate x:Key="TabHeaderTemplate">
+            <StackPanel Orientation="Horizontal" Spacing="8" ToolTip.Tip="{Binding Tooltip}">
+                <TextBlock Text="{Binding Icon}" 
+                           VerticalAlignment="Center"
+                           IsVisible="{Binding Icon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                <TextBlock Text="{Binding Header}" VerticalAlignment="Center" />
+                <Button Content="×"
+                        Command="{Binding $parent[Window].DataContext.CloseTabCommand}"
+                        CommandParameter="{Binding}"
+                        IsVisible="{Binding IsClosable}"
+                        Width="20"
+                        Height="20"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        FontSize="16"
+                        VerticalAlignment="Center"
+                        ToolTip.Tip="Kapat" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Window.Styles>
+        <Style Selector="TabControl.content-tabs /template/ TabStrip">
+            <Setter Property="IsVisible"
+                    Value="False"/>
+            <Setter Property="Height"
+                    Value="0"/>
+            <Setter Property="Margin"
+                    Value="0"/>
+            <Setter Property="Padding"
+                    Value="0"/>
+        </Style>
+    </Window.Styles>
+
     <Grid RowDefinitions="Auto, *">
         <!-- Üst bar: sol menüyü aç/kapat, başlık -->
         <Border Grid.Row="0"
@@ -13,7 +49,7 @@
                 Padding="12,8"
                 BorderBrush="#1E293B"
                 BorderThickness="0,0,0,1">
-            <Grid ColumnDefinitions="Auto,*,Auto"
+            <Grid ColumnDefinitions="Auto,Auto,*"
                   VerticalAlignment="Center">
                 <Button Grid.Column="0"
                         Width="36"
@@ -26,7 +62,7 @@
 
                 <StackPanel Grid.Column="1"
                             Orientation="Vertical"
-                            Margin="12,0,0,0"
+                            Margin="12,0,24,0"
                             VerticalAlignment="Center">
                     <TextBlock Text="{Binding Title}"
                                FontSize="20"
@@ -36,6 +72,13 @@
                                FontSize="12"
                                Foreground="#CBD5E1" />
                 </StackPanel>
+
+                <TabStrip Grid.Column="2"
+                          ItemsSource="{Binding Tabs}"
+                          SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
+                          ItemTemplate="{StaticResource TabHeaderTemplate}"
+                          Classes="top-tabs"
+                          VerticalAlignment="Center" />
             </Grid>
         </Border>
 
@@ -81,37 +124,8 @@
 
             <SplitView.Content>
                 <Grid RowDefinitions="*, Auto">
-                    <TabControl Grid.Row="0"
-                                ItemsSource="{Binding Tabs}"
-                                SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
-                        <TabControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Spacing="8" ToolTip.Tip="{Binding Tooltip}">
-                                    <TextBlock Text="{Binding Icon}" 
-                                               VerticalAlignment="Center"
-                                               IsVisible="{Binding Icon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-                                    <TextBlock Text="{Binding Header}" VerticalAlignment="Center" />
-                                    <Button Content="×"
-                                            Command="{Binding $parent[Window].DataContext.CloseTabCommand}"
-                                            CommandParameter="{Binding}"
-                                            IsVisible="{Binding IsClosable}"
-                                            Width="20"
-                                            Height="20"
-                                            Padding="0"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            FontSize="16"
-                                            VerticalAlignment="Center"
-                                            ToolTip.Tip="Kapat" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </TabControl.ItemTemplate>
-                        <TabControl.ContentTemplate>
-                            <DataTemplate>
-                                <ContentControl Content="{Binding Content}" />
-                            </DataTemplate>
-                        </TabControl.ContentTemplate>
-                    </TabControl>
+                    <ContentControl Grid.Row="0"
+                                    Content="{Binding SelectedTab.Content}" />
 
                     <!-- Alt durum çubuğu -->
                     <Border Grid.Row="1"
