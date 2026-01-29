@@ -50,9 +50,6 @@ public partial class App : Application
         // Core Services
         services.AddDevCrewCore();
 
-        // Desktop Services
-        services.AddSingleton<IClipboardService, ClipboardService>();
-
         // ViewModels
         services.AddScoped<MainWindowViewModel>();
         services.AddSingleton<DashboardViewModel>();

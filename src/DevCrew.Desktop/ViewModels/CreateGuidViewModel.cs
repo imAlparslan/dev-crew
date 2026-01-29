@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
-using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
 
