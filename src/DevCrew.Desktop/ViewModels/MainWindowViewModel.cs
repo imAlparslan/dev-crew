@@ -69,14 +69,6 @@ public partial class MainWindowViewModel : BaseViewModel
     {
         if (tab == null || !tab.IsClosable) return;
 
-        // Request confirmation if there are unsaved changes
-        if (tab.HasUnsavedChanges)
-        {
-            // TODO: Dialog implementation gerekli - şimdilik direkt kapat
-            // var result = await ShowConfirmationDialog("Kaydedilmemiş değişiklikler var. Devam etmek istiyor musunuz?");
-            // if (!result) return;
-        }
-
         var index = Tabs.IndexOf(tab);
         Tabs.Remove(tab);
 

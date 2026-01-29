@@ -22,8 +22,5 @@ public partial class TabItemViewModel : ObservableObject
     [ObservableProperty]
     private string? tooltip;
 
-    [ObservableProperty]
-    private bool hasUnsavedChanges;
-
     public string Id { get; set; } = string.Empty;
 }

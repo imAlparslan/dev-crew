@@ -91,12 +91,6 @@
                                                VerticalAlignment="Center"
                                                IsVisible="{Binding Icon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                                     <TextBlock Text="{Binding Header}" VerticalAlignment="Center" />
-                                    <TextBlock Text="●"
-                                               FontSize="10"
-                                               Foreground="#F59E0B"
-                                               VerticalAlignment="Center"
-                                               IsVisible="{Binding HasUnsavedChanges}"
-                                               ToolTip.Tip="Kaydedilmemiş değişiklikler var" />
                                     <Button Content="×"
                                             Command="{Binding $parent[Window].DataContext.CloseTabCommand}"
                                             CommandParameter="{Binding}"
