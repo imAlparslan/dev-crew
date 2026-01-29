@@ -57,12 +57,19 @@ public partial class MainWindowViewModel : BaseViewModel
     [RelayCommand]
     private void OpenCreateGuidTab()
     {
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == "create-guid");
+        if (existingTab != null)
+        {
+            SelectedTab = existingTab;
+            return;
+        }
+
         var createGuidViewModel = _createGuidViewModelFactory();
         OpenOrSelectTab("create-guid", "Create Guid", createGuidViewModel, true, "🎲");
     }
 
     [RelayCommand]
-    private async Task CloseTab(TabItemViewModel tab)
+    private void CloseTab(TabItemViewModel tab)
     {
         if (tab == null || !tab.IsClosable) return;
 

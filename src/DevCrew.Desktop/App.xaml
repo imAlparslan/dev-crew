@@ -1,24 +1,21 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="DevCrew.Desktop.App"
-             xmlns:local="using:DevCrew.Desktop"
              xmlns:services="using:DevCrew.Desktop.Services">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Styles/Colors.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
     <Application.DataTemplates>
         <services:ViewLocator/>
     </Application.DataTemplates>
 
     <Application.Styles>
         <FluentTheme/>
-
-        <!-- Custom TabControl Styles (Dark Mode) -->
-        <Style Selector="TabControl">
-            <Setter Property="Background"
-                    Value="#1E293B"/>
-            <Setter Property="Padding"
-                    Value="0"/>
-            <Setter Property="Margin"
-                    Value="0"/>
-        </Style>
 
         <Style Selector="TabStrip">
             <Setter Property="Padding"
@@ -40,9 +37,9 @@
             <Setter Property="Margin"
                     Value="0,0,2,0"/>
             <Setter Property="Background"
-                    Value="#334155"/>
+                    Value="{StaticResource BrushTertiaryBackground}"/>
             <Setter Property="Foreground"
-                    Value="#94A3B8"/>
+                    Value="{StaticResource BrushTertiaryText}"/>
             <Setter Property="BorderThickness"
                     Value="0,0,0,2"/>
             <Setter Property="BorderBrush"
@@ -51,18 +48,18 @@
 
         <Style Selector="TabStrip.top-tabs TabStripItem:pointerover">
             <Setter Property="Background"
-                    Value="#475569"/>
+                    Value="{StaticResource BrushButtonHover}"/>
             <Setter Property="Foreground"
-                    Value="#CBD5E1"/>
+                    Value="{StaticResource BrushSecondaryText}"/>
         </Style>
 
         <Style Selector="TabStrip.top-tabs TabStripItem:selected">
             <Setter Property="Background"
-                    Value="#1E293B"/>
+                    Value="{StaticResource BrushSecondaryBackground}"/>
             <Setter Property="Foreground"
-                    Value="#F8FAFC"/>
+                    Value="{StaticResource BrushPrimaryText}"/>
             <Setter Property="BorderBrush"
-                    Value="#0EA5E9"/>
+                    Value="{StaticResource BrushAccent}"/>
             <Setter Property="FontWeight"
                     Value="SemiBold"/>
         </Style>
@@ -73,7 +70,7 @@
 
         <Style Selector="TabStrip.top-tabs TabStripItem:selected:pointerover">
             <Setter Property="Background"
-                    Value="#1E293B"/>
+                    Value="{StaticResource BrushSecondaryBackground}"/>
         </Style>
 
         <Style Selector="TabStrip.top-tabs TabStripItem Button">
@@ -87,74 +84,12 @@
 
         <Style Selector="TabStrip.top-tabs TabStripItem Button:pointerover">
             <Setter Property="Background"
-                    Value="#EF4444"/>
+                    Value="{StaticResource BrushDanger}"/>
             <Setter Property="Foreground"
-                    Value="White"/>
+                    Value="{StaticResource BrushPrimaryText}"/>
             <Setter Property="CornerRadius"
                     Value="4"/>
         </Style>
 
-        <Style Selector="TabItem">
-            <Setter Property="FontSize"
-                    Value="14"/>
-            <Setter Property="Padding"
-                    Value="16,10"/>
-            <Setter Property="Margin"
-                    Value="0,0,2,0"/>
-            <Setter Property="Background"
-                    Value="#334155"/>
-            <Setter Property="Foreground"
-                    Value="#94A3B8"/>
-            <Setter Property="BorderThickness"
-                    Value="0,0,0,2"/>
-            <Setter Property="BorderBrush"
-                    Value="Transparent"/>
-        </Style>
-
-        <Style Selector="TabItem:pointerover">
-            <Setter Property="Background"
-                    Value="#475569"/>
-            <Setter Property="Foreground"
-                    Value="#CBD5E1"/>
-        </Style>
-
-        <Style Selector="TabItem:selected">
-            <Setter Property="Background"
-                    Value="#1E293B"/>
-            <Setter Property="Foreground"
-                    Value="#F8FAFC"/>
-            <Setter Property="BorderBrush"
-                    Value="#0EA5E9"/>
-            <Setter Property="FontWeight"
-                    Value="SemiBold"/>
-        </Style>
-
-        <Style Selector="TabItem:selected /template/ Border#PART_SelectedPipe">
-            <Setter Property="Background"/>
-        </Style>
-
-        <Style Selector="TabItem:selected:pointerover">
-            <Setter Property="Background"
-                    Value="#1E293B"/>
-        </Style>
-
-        <!-- Close button hover effect -->
-        <Style Selector="TabItem Button">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition Property="Opacity"
-                            Duration="0:0:0.2"/>
-                </Transitions>
-            </Setter>
-        </Style>
-
-        <Style Selector="TabItem Button:pointerover">
-            <Setter Property="Background"
-                    Value="#EF4444"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="CornerRadius"
-                    Value="4"/>
-        </Style>
     </Application.Styles>
 </Application>

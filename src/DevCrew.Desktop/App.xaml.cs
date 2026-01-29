@@ -1,5 +1,5 @@
 using Avalonia;
-using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using DevCrew.Core;
 using DevCrew.Core.Services;
@@ -37,10 +37,9 @@ public partial class App : Application
             _ = mainWindowViewModel.InitializeAsync();
         }
 
-        if (ApplicationLifetime != null)
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            dynamic lifetime = ApplicationLifetime;
-            lifetime.MainWindow = mainWindow;
+            desktop.MainWindow = mainWindow;
         }
 
         base.OnFrameworkInitializationCompleted();

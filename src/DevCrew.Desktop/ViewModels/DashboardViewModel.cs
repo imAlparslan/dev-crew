@@ -1,12 +1,10 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+using DevCrew.Core.ViewModels;
 
 namespace DevCrew.Desktop.ViewModels;
 
 /// <summary>
 /// ViewModel for the Dashboard view
 /// </summary>
-public partial class DashboardViewModel : ObservableObject
+public partial class DashboardViewModel : BaseViewModel
 {
-    [ObservableProperty]
-    private string welcomeMessage = "DevCrew uygulamasına hoş geldiniz!";
 }

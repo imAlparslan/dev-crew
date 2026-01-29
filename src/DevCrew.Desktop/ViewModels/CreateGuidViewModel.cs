@@ -43,8 +43,9 @@ public partial class CreateGuidViewModel : ObservableObject
                 await topLevel.Clipboard.SetTextAsync(CurrentGuid);
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Clipboard error: {ex.Message}");
         }
     }
 

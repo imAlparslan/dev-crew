@@ -3,7 +3,7 @@
              xmlns:vm="using:DevCrew.Desktop.ViewModels"
              x:Class="DevCrew.Desktop.Views.CreateGuidView"
              x:DataType="vm:CreateGuidViewModel">
-    <Border Padding="16" Background="#1E293B">
+    <Border Padding="16" Background="{StaticResource BrushSecondaryBackground}">
         <StackPanel Spacing="12"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -11,13 +11,13 @@
             <TextBlock Text="GUID Oluşturucu"
                        FontSize="20"
                        FontWeight="Bold"
-                       Foreground="#F8FAFC"
+                       Foreground="{StaticResource BrushPrimaryText}"
                        HorizontalAlignment="Center"
                        Margin="0,0,0,8" />
             
             <TextBlock Text="Yeni bir GUID üretmek için butona tıklayın"
                        FontSize="14"
-                       Foreground="#CBD5E1"
+                       Foreground="{StaticResource BrushSecondaryText}"
                        HorizontalAlignment="Center"
                        TextAlignment="Center"
                        Margin="0,0,0,8" />
@@ -26,9 +26,9 @@
                     Command="{Binding GenerateGuidCommand}"
                     HorizontalAlignment="Stretch"
                     Padding="12,10"
-                    Background="#16A34A"
-                    Foreground="White"
-                    BorderBrush="#15803D"
+                    Background="{StaticResource BrushSuccess}"
+                    Foreground="{StaticResource BrushPrimaryText}"
+                    BorderBrush="{StaticResource BrushSuccessDark}"
                     CornerRadius="8"
                     FontWeight="SemiBold" />
             
@@ -37,12 +37,12 @@
                      IsReadOnly="True"
                      Margin="0,4,0,0"
                      Padding="10"
-                     Background="#334155"
-                     BorderBrush="#475569"
-                     Foreground="#F8FAFC"
+                     Background="{StaticResource BrushTertiaryBackground}"
+                     BorderBrush="{StaticResource BrushBorderSecondary}"
+                     Foreground="{StaticResource BrushPrimaryText}"
                      FontFamily="Consolas, Courier New, monospace"
                      Watermark="GUID burada görünecek"
-                     SelectionBrush="#0EA5E9" />
+                     SelectionBrush="{StaticResource BrushAccent}" />
             
             <StackPanel Orientation="Horizontal" 
                         Spacing="8" 
@@ -52,18 +52,18 @@
                         Command="{Binding CopyToClipboardCommand}"
                         IsEnabled="{Binding HasGuid}"
                         Padding="12,8"
-                        Background="#0EA5E9"
-                        Foreground="White"
-                        BorderBrush="#0284C7"
+                        Background="{StaticResource BrushAccent}"
+                        Foreground="{StaticResource BrushPrimaryText}"
+                        BorderBrush="{StaticResource BrushAccentDark}"
                         CornerRadius="6" />
                 
                 <Button Content="🗑️ Temizle"
                         Command="{Binding ClearCommand}"
                         IsEnabled="{Binding HasGuid}"
                         Padding="12,8"
-                        Background="#EF4444"
-                        Foreground="White"
-                        BorderBrush="#DC2626"
+                        Background="{StaticResource BrushDanger}"
+                        Foreground="{StaticResource BrushPrimaryText}"
+                        BorderBrush="{StaticResource BrushDangerDark}"
                         CornerRadius="6" />
             </StackPanel>
             

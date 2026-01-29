@@ -1,6 +1,5 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:DevCrew.Desktop.ViewModels"
         x:Class="DevCrew.Desktop.Views.MainWindow"
         Title="DevCrew"
         Width="900"
@@ -29,25 +28,12 @@
         </DataTemplate>
     </Window.Resources>
 
-    <Window.Styles>
-        <Style Selector="TabControl.content-tabs /template/ TabStrip">
-            <Setter Property="IsVisible"
-                    Value="False"/>
-            <Setter Property="Height"
-                    Value="0"/>
-            <Setter Property="Margin"
-                    Value="0"/>
-            <Setter Property="Padding"
-                    Value="0"/>
-        </Style>
-    </Window.Styles>
-
     <Grid RowDefinitions="Auto, *">
         <!-- Üst bar: sol menüyü aç/kapat, başlık -->
         <Border Grid.Row="0"
-                Background="#0F172A"
+                Background="{StaticResource BrushPrimaryBackground}"
                 Padding="8,4"
-                BorderBrush="#1E293B"
+                BorderBrush="{StaticResource BrushBorder}"
                 BorderThickness="0,0,0,1">
             <Grid ColumnDefinitions="Auto,Auto,*"
                   VerticalAlignment="Center">
@@ -55,7 +41,7 @@
                         Width="36"
                         Height="36"
                         CornerRadius="8"
-                        Background="#1F2937"
+                        Background="{StaticResource BrushButtonSecondary}"
                         Foreground="White"
                         Content="☰"
                         Command="{Binding ToggleSidebarCommand}" />
@@ -67,7 +53,7 @@
                     <TextBlock Text="{Binding Title}"
                            FontSize="20"
                            FontWeight="SemiBold"
-                           Foreground="White" />
+                           Foreground="{StaticResource BrushPrimaryText}" />
                 </StackPanel>
 
                 <TabStrip Grid.Column="2"
@@ -88,31 +74,31 @@
                    DisplayMode="Inline"
                    PanePlacement="Left">
             <SplitView.Pane>
-                <Border Background="#0B1220"
-                        BorderBrush="#1E293B"
+                <Border Background="{StaticResource BrushSurfaceBackground}"
+                        BorderBrush="{StaticResource BrushBorder}"
                         BorderThickness="0,0,1,0"
                         Padding="16">
                     <StackPanel Spacing="12">
                         <TextBlock Text="Menü"
                                    FontSize="16"
                                    FontWeight="SemiBold"
-                                   Foreground="White"
+                                   Foreground="{StaticResource BrushPrimaryText}"
                                    Margin="0,0,0,8" />
 
                         <Button Content="Dashboard"
                                 HorizontalAlignment="Stretch"
-                                Background="#111827"
-                                Foreground="White"
-                                BorderBrush="#1F2937"
+                                Background="{StaticResource BrushButtonPrimary}"
+                                Foreground="{StaticResource BrushPrimaryText}"
+                                BorderBrush="{StaticResource BrushButtonSecondary}"
                                 Padding="10,8"
                                 CornerRadius="6"
                                 Command="{Binding OpenDashboardCommand}" />
 
                         <Button Content="Create Guid"
                                 HorizontalAlignment="Stretch"
-                                Background="#0EA5E9"
-                                Foreground="White"
-                                BorderBrush="#0284C7"
+                                Background="{StaticResource BrushAccent}"
+                                Foreground="{StaticResource BrushPrimaryText}"
+                                BorderBrush="{StaticResource BrushAccentDark}"
                                 Padding="10,8"
                                 CornerRadius="6"
                                 Command="{Binding OpenCreateGuidTabCommand}" />

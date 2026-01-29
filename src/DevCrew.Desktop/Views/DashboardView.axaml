@@ -3,37 +3,37 @@
              xmlns:vm="using:DevCrew.Desktop.ViewModels"
              x:Class="DevCrew.Desktop.Views.DashboardView"
              x:DataType="vm:DashboardViewModel">
-    <Border Padding="24" Background="#1E293B">
+    <Border Padding="24" Background="{StaticResource BrushSecondaryBackground}">
         <StackPanel Spacing="16" VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="🎯 DevCrew Dashboard"
                        FontSize="32"
                        FontWeight="Bold"
-                       Foreground="#F8FAFC"
+                       Foreground="{StaticResource BrushPrimaryText}"
                        HorizontalAlignment="Center" />
             
             <TextBlock Text="Hoş geldiniz! Yan menüden araçları seçerek başlayabilirsiniz."
                        FontSize="16"
-                       Foreground="#CBD5E1"
+                       Foreground="{StaticResource BrushSecondaryText}"
                        HorizontalAlignment="Center"
                        TextAlignment="Center"
                        TextWrapping="Wrap"
                        MaxWidth="400" />
             
-            <Border Background="#334155"
+            <Border Background="{StaticResource BrushTertiaryBackground}"
                     CornerRadius="12"
                     Padding="20"
                     Margin="0,16,0,0"
                     MaxWidth="500"
-                    BorderBrush="#475569"
+                    BorderBrush="{StaticResource BrushBorderSecondary}"
                     BorderThickness="1">
                 <StackPanel Spacing="12">
                     <TextBlock Text="Hızlı Başlangıç"
                                FontSize="18"
                                FontWeight="SemiBold"
-                               Foreground="#F8FAFC" />
+                               Foreground="{StaticResource BrushPrimaryText}" />
                     
                     <TextBlock TextWrapping="Wrap"
-                               Foreground="#CBD5E1">
+                               Foreground="{StaticResource BrushSecondaryText}">
                         <Run Text="• " />
                         <Run Text="Yan menüdeki araçlara tıklayın" FontWeight="Medium" />
                         <LineBreak />
