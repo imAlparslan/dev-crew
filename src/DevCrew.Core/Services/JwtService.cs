@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json;
 using DevCrew.Core.Models;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DevCrew.Core.Services;
@@ -9,14 +10,17 @@ namespace DevCrew.Core.Services;
 public class JwtService : IJwtService
 {
     private readonly JwtSecurityTokenHandler _tokenHandler;
+    private readonly ILogger<JwtService>? _logger;
 
-    public JwtService()
+    public JwtService(ILogger<JwtService>? logger = null)
     {
         _tokenHandler = new JwtSecurityTokenHandler();
+        _logger = logger;
     }
 
     public JwtDecodeResult DecodeToken(string token)
     {
+        _logger?.LogDebug("JWT token decode işlemi başlatıldı");
         var result = new JwtDecodeResult();
 
         try
@@ -24,6 +28,7 @@ public class JwtService : IJwtService
             if (string.IsNullOrWhiteSpace(token))
             {
                 result.ErrorMessage = "Token cannot be empty";
+                _logger?.LogWarning("Token boş veya null");
                 return result;
             }
 
@@ -33,10 +38,14 @@ public class JwtService : IJwtService
             if (!_tokenHandler.CanReadToken(token))
             {
                 result.ErrorMessage = "Invalid JWT token format";
+                _logger?.LogWarning("Geçersiz JWT token formatı");
                 return result;
             }
 
             var jwtToken = _tokenHandler.ReadJwtToken(token);
+            _logger?.LogDebug("JWT token başarıyla okundu. Issuer: {Issuer}, Algorithm: {Algorithm}", 
+                jwtToken.Issuer ?? "N/A", 
+                jwtToken.SignatureAlgorithm ?? "N/A");
 
             // Format header as JSON
             var headerJson = JsonSerializer.Serialize(jwtToken.Header, new JsonSerializerOptions
@@ -107,11 +116,13 @@ public class JwtService : IJwtService
             result.Subject = jwtToken.Subject;
 
             result.IsValid = true;
+            _logger?.LogDebug("JWT token başarıyla decode edildi");
         }
         catch (Exception ex)
         {
             result.ErrorMessage = $"Error decoding token: {ex.Message}";
             result.IsValid = false;
+            _logger?.LogError(ex, "JWT token decode edilirken hata oluştu");
         }
 
         return result;
@@ -119,10 +130,12 @@ public class JwtService : IJwtService
 
     public bool ValidateTokenSignature(string token, string secret)
     {
+        _logger?.LogDebug("JWT token signature validasyonu başlatıldı");
         try
         {
             if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(secret))
             {
+                _logger?.LogWarning("Token veya secret boş");
                 return false;
             }
 
@@ -131,6 +144,7 @@ public class JwtService : IJwtService
 
             if (!_tokenHandler.CanReadToken(token))
             {
+                _logger?.LogWarning("Token okunamıyor");
                 return false;
             }
 
@@ -145,18 +159,22 @@ public class JwtService : IJwtService
             };
 
             _tokenHandler.ValidateToken(token, validationParameters, out _);
+            _logger?.LogDebug("JWT signature başarıyla doğrulandı");
             return true;
         }
-        catch (SecurityTokenSignatureKeyNotFoundException)
+        catch (SecurityTokenSignatureKeyNotFoundException ex)
         {
+            _logger?.LogWarning(ex, "Signature key bulunamadı");
             return false;
         }
-        catch (SecurityTokenInvalidSignatureException)
+        catch (SecurityTokenInvalidSignatureException ex)
         {
+            _logger?.LogWarning(ex, "Geçersiz signature");
             return false;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger?.LogError(ex, "Token validasyonunda beklenmeyen hata");
             return false;
         }
     }
