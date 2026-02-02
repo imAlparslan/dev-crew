@@ -1,11 +1,20 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.LogicalTree;
+using Avalonia.VisualTree;
 using DevCrew.Desktop.ViewModels;
 
 namespace DevCrew.Desktop.Views;
 
+/// <summary>
+/// View for creating and managing GUIDs
+/// </summary>
 public partial class CreateGuidView : UserControl
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CreateGuidView"/> class.
+    /// </summary>
     public CreateGuidView()
     {
         InitializeComponent();
@@ -21,6 +30,21 @@ public partial class CreateGuidView : UserControl
                 await viewModel.LoadSavedGuidsAsync();
             }
         };
+    }
+
+    private void OnRootPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        var source = e.Source as Control;
+        if (source is null)
+            return;
+
+        if (source is TextBox || source.FindLogicalAncestorOfType<TextBox>() is not null)
+            return;
+
+        if (TopLevel.GetTopLevel(this)?.FocusManager is { } focusManager)
+        {
+            focusManager.ClearFocus();
+        }
     }
 
     private async void OnGuidsScrollChanged(object? sender, ScrollChangedEventArgs e)

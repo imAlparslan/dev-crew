@@ -59,6 +59,9 @@ public partial class CreateGuidViewModel : ObservableObject
     [ObservableProperty]
     private bool showOnlySavedGuids;
 
+    [ObservableProperty]
+    private string searchQuery = string.Empty;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="CreateGuidViewModel"/> class.
     /// </summary>
@@ -97,6 +100,22 @@ public partial class CreateGuidViewModel : ObservableObject
             if (!string.IsNullOrWhiteSpace(CurrentGuid))
             {
                 IsGuidCopied = await _clipboardService.TrySetTextAsync(CurrentGuid);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Clipboard error: {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
+    private async Task CopyGuidItem(GuidItemViewModel guidItem)
+    {
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(guidItem.GuidValue))
+            {
+                await _clipboardService.TrySetTextAsync(guidItem.GuidValue);
             }
         }
         catch (Exception ex)
@@ -192,12 +211,25 @@ public partial class CreateGuidViewModel : ObservableObject
         {
             FilteredGuidsByPage.Clear();
 
-            foreach (var item in RecentGuids)
+            var filtered = RecentGuids.AsEnumerable();
+            if (!string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                var query = SearchQuery.ToLower();
+                filtered = filtered.Where(item => 
+                    item.Notes != null && item.Notes.ToLower().Contains(query));
+            }
+
+            foreach (var item in filtered)
             {
                 AttachGuidItem(item);
                 FilteredGuidsByPage.Add(item);
             }
         }
+    }
+
+    partial void OnSearchQueryChanged(string value)
+    {
+        UpdateFilteredGuids();
     }
 
     partial void OnShowOnlySavedGuidsChanged(bool value)
@@ -248,6 +280,14 @@ public partial class CreateGuidViewModel : ObservableObject
                 .Skip(_savedSkip)
                 .Take(PageSize)
                 .ToListAsync();
+
+            // Apply search filter
+            if (!string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                var query = SearchQuery.ToLower();
+                savedGuids = savedGuids.Where(g => 
+                    g.Notes != null && g.Notes.ToLower().Contains(query)).ToList();
+            }
 
             foreach (var dbGuid in savedGuids)
             {
@@ -332,6 +372,7 @@ public partial class CreateGuidViewModel : ObservableObject
             return;
 
         await UpdateSavedGuidNotesAsync(item.DatabaseId.Value, item.Notes);
+        SyncGuidNotesAcrossCollections(item);
     }
 
     private async Task UpdateSavedGuidNotesAsync(int databaseId, string? notes)
@@ -350,6 +391,36 @@ public partial class CreateGuidViewModel : ObservableObject
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Update GUID notes error: {ex.Message}");
+        }
+    }
+
+    private void SyncGuidNotesAcrossCollections(GuidItemViewModel source)
+    {
+        if (!source.DatabaseId.HasValue)
+            return;
+
+        var databaseId = source.DatabaseId.Value;
+
+        foreach (var item in RecentGuids)
+        {
+            if (ReferenceEquals(item, source))
+                continue;
+
+            if (item.DatabaseId == databaseId)
+            {
+                item.Notes = source.Notes;
+            }
+        }
+
+        foreach (var item in FilteredGuidsByPage)
+        {
+            if (ReferenceEquals(item, source))
+                continue;
+
+            if (item.DatabaseId == databaseId)
+            {
+                item.Notes = source.Notes;
+            }
         }
     }
 }

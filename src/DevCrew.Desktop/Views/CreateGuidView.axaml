@@ -3,7 +3,8 @@
                          xmlns:vm="using:DevCrew.Desktop.ViewModels"
                          xmlns:conv="using:DevCrew.Desktop.Converters"
                          x:Class="DevCrew.Desktop.Views.CreateGuidView"
-                         x:DataType="vm:CreateGuidViewModel">
+                         x:DataType="vm:CreateGuidViewModel"
+                         PointerPressed="OnRootPointerPressed">
         <UserControl.Resources>
                 <conv:BooleanToBrushConverter x:Key="GuidBackgroundConverter"
                                                                           TrueBrush="{StaticResource BrushAccent}"
@@ -41,40 +42,52 @@
                         CornerRadius="8"
                         FontWeight="SemiBold" />
                 
-                <TextBox Text="{Binding CurrentGuid}"
+                <Border Margin="0,4,0,0"
+                    Padding="6,4"
+                    Background="{Binding IsGuidCopied, Converter={StaticResource GuidBackgroundConverter}}"
+                    BorderBrush="{Binding IsGuidCopied, Converter={StaticResource GuidBorderConverter}}"
+                    BorderThickness="1"
+                    CornerRadius="6">
+                    <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+                    <Button Grid.Column="0"
+                        Content="📋"
+                        Command="{Binding CopyToClipboardCommand}"
+                        IsEnabled="{Binding HasGuid}"
+                        IsVisible="{Binding HasGuid}"
+                        Padding="6,4"
+                        Background="{StaticResource BrushAccent}"
+                        Foreground="{StaticResource BrushPrimaryText}"
+                        BorderBrush="{StaticResource BrushAccentDark}"
+                        CornerRadius="4"
+                        Margin="0,0,6,0"
+                        ToolTip.Tip="Kopyala" />
+
+                    <TextBox Grid.Column="1"
+                         Text="{Binding CurrentGuid}"
                          AcceptsReturn="False"
                          IsReadOnly="True"
-                         Margin="0,4,0,0"
-                         Padding="10"
-                         Background="{Binding IsGuidCopied, Converter={StaticResource GuidBackgroundConverter}}"
-                         BorderBrush="{Binding IsGuidCopied, Converter={StaticResource GuidBorderConverter}}"
+                         Padding="6,4"
+                         Background="Transparent"
+                         BorderThickness="0"
                          Foreground="{StaticResource BrushPrimaryText}"
                          FontFamily="Consolas, Courier New, monospace"
                          Watermark="GUID burada görünecek"
                          SelectionBrush="{StaticResource BrushAccent}" />
-                
-                <StackPanel Orientation="Horizontal" 
-                            Spacing="8" 
-                            HorizontalAlignment="Center"
-                            Margin="0,8,0,0">
-                    <Button Content="📋 Kopyala"
-                            Command="{Binding CopyToClipboardCommand}"
-                            IsEnabled="{Binding HasGuid}"
-                            Padding="12,8"
-                            Background="{StaticResource BrushAccent}"
-                            Foreground="{StaticResource BrushPrimaryText}"
-                            BorderBrush="{StaticResource BrushAccentDark}"
-                            CornerRadius="6" />
-                    
-                    <Button Content="🗑️ Temizle"
-                            Command="{Binding ClearCommand}"
-                            IsEnabled="{Binding HasGuid}"
-                            Padding="12,8"
-                            Background="{StaticResource BrushDanger}"
-                            Foreground="{StaticResource BrushPrimaryText}"
-                            BorderBrush="{StaticResource BrushDangerDark}"
-                            CornerRadius="6" />
-                </StackPanel>
+
+                    <Button Grid.Column="2"
+                        Content="✕"
+                        Command="{Binding ClearCommand}"
+                        IsEnabled="{Binding HasGuid}"
+                        IsVisible="{Binding HasGuid}"
+                        Padding="6,4"
+                        Background="{StaticResource BrushDanger}"
+                        Foreground="{StaticResource BrushPrimaryText}"
+                        BorderBrush="{StaticResource BrushDangerDark}"
+                        CornerRadius="4"
+                        Margin="6,0,0,0"
+                        ToolTip.Tip="Temizle" />
+                    </Grid>
+                </Border>
             </StackPanel>
             
             <!-- Recently Generated GUIDs List - Scrollable -->
@@ -89,7 +102,7 @@
                 <Grid RowDefinitions="Auto,*">
                     <!-- Title with Filter Checkbox -->
                     <Grid Grid.Row="0"
-                          ColumnDefinitions="*,Auto"
+                          ColumnDefinitions="*,Auto,Auto"
                           Margin="0,0,0,8">
                         <TextBlock Grid.Column="0"
                                    Text="Son Üretilen GUID'ler"
@@ -98,7 +111,19 @@
                                    Foreground="{StaticResource BrushPrimaryText}"
                                    VerticalAlignment="Center" />
                         
-                        <CheckBox Grid.Column="1"
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding SearchQuery}"
+                                 Watermark="Açıklamada ara..."
+                                 FontSize="12"
+                                 Padding="8,6"
+                                 Margin="0,0,8,0"
+                                 Background="{StaticResource BrushTertiaryBackground}"
+                                 Foreground="{StaticResource BrushSecondaryText}"
+                                 BorderBrush="{StaticResource BrushBorderSecondary}"
+                                 CornerRadius="4"
+                                 Width="200" />
+                        
+                        <CheckBox Grid.Column="2"
                                   Content="Kayıtlılar"
                                   IsChecked="{Binding ShowOnlySavedGuids}"
                                   Foreground="{StaticResource BrushSecondaryText}"
@@ -150,8 +175,7 @@
                                                     Orientation="Horizontal"
                                                     Spacing="4"
                                                     VerticalAlignment="Center">
-                                            <Button Content="💾"
-                                                    Command="{Binding $parent[UserControl].DataContext.SaveGuidCommand}"
+                                            <Button Command="{Binding $parent[UserControl].DataContext.SaveGuidCommand}"
                                                     CommandParameter="{Binding}"
                                                     IsEnabled="{Binding !IsSaved}"
                                                     Padding="6,4"
@@ -159,17 +183,31 @@
                                                     Foreground="{StaticResource BrushPrimaryText}"
                                                     BorderBrush="{StaticResource BrushSuccessDark}"
                                                     CornerRadius="4"
-                                                    ToolTip.Tip="Kaydet" />
+                                                    ToolTip.Tip="Kaydet">
+                                                <TextBlock Text="💾" />
+                                            </Button>
                                             
-                                            <Button Content="🗑️"
-                                                    Command="{Binding $parent[UserControl].DataContext.DeleteGuidCommand}"
+                                            <Button Command="{Binding $parent[UserControl].DataContext.CopyGuidItemCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Padding="6,4"
+                                                    Background="{StaticResource BrushAccent}"
+                                                    Foreground="{StaticResource BrushPrimaryText}"
+                                                    BorderBrush="{StaticResource BrushAccentDark}"
+                                                    CornerRadius="4"
+                                                    ToolTip.Tip="Kopyala">
+                                                <TextBlock Text="📋" />
+                                            </Button>
+                                            
+                                            <Button Command="{Binding $parent[UserControl].DataContext.DeleteGuidCommand}"
                                                     CommandParameter="{Binding}"
                                                     Padding="6,4"
                                                     Background="{StaticResource BrushDanger}"
                                                     Foreground="{StaticResource BrushPrimaryText}"
                                                     BorderBrush="{StaticResource BrushDangerDark}"
                                                     CornerRadius="4"
-                                                    ToolTip.Tip="Sil" />
+                                                    ToolTip.Tip="Sil">
+                                                <TextBlock Text="🗑️" />
+                                            </Button>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
