@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -20,6 +22,7 @@ public partial class CreateGuidViewModel : ObservableObject
     private readonly IGuidService _guidService;
     private readonly IClipboardService _clipboardService;
     private readonly AppDbContext _dbContext;
+    private readonly HashSet<GuidItemViewModel> _trackedGuidItems = new();
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasGuid))]
@@ -74,6 +77,7 @@ public partial class CreateGuidViewModel : ObservableObject
     {
         CurrentGuid = _guidService.Generate();
         var guidItem = new GuidItemViewModel(CurrentGuid);
+        AttachGuidItem(guidItem);
         RecentGuids.Insert(0, guidItem);
         
         // Keep only the last 10 GUIDs
@@ -190,6 +194,7 @@ public partial class CreateGuidViewModel : ObservableObject
 
             foreach (var item in RecentGuids)
             {
+                AttachGuidItem(item);
                 FilteredGuidsByPage.Add(item);
             }
         }
@@ -252,6 +257,7 @@ public partial class CreateGuidViewModel : ObservableObject
                     databaseId: dbGuid.Id,
                     notes: dbGuid.Notes
                 );
+                AttachGuidItem(guidItem);
                 FilteredGuidsByPage.Add(guidItem);
             }
 
@@ -293,6 +299,7 @@ public partial class CreateGuidViewModel : ObservableObject
                     databaseId: guid.Id,
                     notes: guid.Notes
                 );
+                AttachGuidItem(guidItem);
                 RecentGuids.Add(guidItem);
             }
             
@@ -302,6 +309,47 @@ public partial class CreateGuidViewModel : ObservableObject
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Load and filter saved GUIDs error: {ex.Message}");
+        }
+    }
+
+    private void AttachGuidItem(GuidItemViewModel item)
+    {
+        if (_trackedGuidItems.Add(item))
+        {
+            item.PropertyChanged += OnGuidItemPropertyChanged;
+        }
+    }
+
+    private async void OnGuidItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(GuidItemViewModel.Notes))
+            return;
+
+        if (sender is not GuidItemViewModel item)
+            return;
+
+        if (!item.IsSaved || !item.DatabaseId.HasValue)
+            return;
+
+        await UpdateSavedGuidNotesAsync(item.DatabaseId.Value, item.Notes);
+    }
+
+    private async Task UpdateSavedGuidNotesAsync(int databaseId, string? notes)
+    {
+        try
+        {
+            var historyItem = await _dbContext.GuidHistories
+                .FirstOrDefaultAsync(g => g.Id == databaseId);
+
+            if (historyItem == null)
+                return;
+
+            historyItem.Notes = notes;
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Update GUID notes error: {ex.Message}");
         }
     }
 }
