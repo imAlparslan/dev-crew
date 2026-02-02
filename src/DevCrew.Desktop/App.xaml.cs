@@ -3,10 +3,8 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using DevCrew.Core;
 using DevCrew.Core.Data;
-using DevCrew.Desktop.Services;
 using DevCrew.Desktop.ViewModels;
 using DevCrew.Desktop.Views;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DevCrew.Desktop;
@@ -66,7 +64,7 @@ public partial class App : Application
     {
         using var scope = _serviceProvider?.CreateScope();
         var dbContext = scope?.ServiceProvider.GetRequiredService<AppDbContext>();
-        
+
         if (dbContext != null)
         {
             // Create database if it doesn't exist

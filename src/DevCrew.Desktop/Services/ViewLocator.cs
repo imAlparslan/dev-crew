@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Concurrent;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
@@ -24,7 +23,7 @@ public class ViewLocator : IDataTemplate
             return null;
 
         var viewModelType = data.GetType();
-        
+
         var viewType = _viewTypeCache.GetOrAdd(viewModelType, vmType =>
         {
             var fullName = vmType.FullName;

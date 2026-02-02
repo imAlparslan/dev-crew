@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Data;
@@ -82,7 +78,7 @@ public partial class CreateGuidViewModel : ObservableObject
         var guidItem = new GuidItemViewModel(CurrentGuid);
         AttachGuidItem(guidItem);
         RecentGuids.Insert(0, guidItem);
-        
+
         // Keep only the last 10 GUIDs
         while (RecentGuids.Count > 10)
         {
@@ -174,7 +170,7 @@ public partial class CreateGuidViewModel : ObservableObject
             {
                 var historyItem = await _dbContext.GuidHistories
                     .FirstOrDefaultAsync(g => g.Id == guidItem.DatabaseId.Value);
-                
+
                 if (historyItem != null)
                 {
                     _dbContext.GuidHistories.Remove(historyItem);
@@ -184,7 +180,7 @@ public partial class CreateGuidViewModel : ObservableObject
 
             // Remove from recent list
             RecentGuids.Remove(guidItem);
-            
+
             // If showing only saved guids, reload from database to reflect changes
             if (ShowOnlySavedGuids)
             {
@@ -214,9 +210,8 @@ public partial class CreateGuidViewModel : ObservableObject
             var filtered = RecentGuids.AsEnumerable();
             if (!string.IsNullOrWhiteSpace(SearchQuery))
             {
-                var query = SearchQuery.ToLower();
-                filtered = filtered.Where(item => 
-                    item.Notes != null && item.Notes.ToLower().Contains(query));
+                filtered = filtered.Where(item =>
+                    item.Notes != null && item.Notes.Contains(SearchQuery, StringComparison.CurrentCultureIgnoreCase));
             }
 
             foreach (var item in filtered)
@@ -284,9 +279,8 @@ public partial class CreateGuidViewModel : ObservableObject
             // Apply search filter
             if (!string.IsNullOrWhiteSpace(SearchQuery))
             {
-                var query = SearchQuery.ToLower();
-                savedGuids = savedGuids.Where(g => 
-                    g.Notes != null && g.Notes.ToLower().Contains(query)).ToList();
+                savedGuids = savedGuids.Where(g =>
+                    g.Notes != null && g.Notes.Contains(SearchQuery, StringComparison.CurrentCultureIgnoreCase)).ToList();
             }
 
             foreach (var dbGuid in savedGuids)
@@ -342,7 +336,7 @@ public partial class CreateGuidViewModel : ObservableObject
                 AttachGuidItem(guidItem);
                 RecentGuids.Add(guidItem);
             }
-            
+
             // Update filtered view after loading saved GUIDs
             UpdateFilteredGuids();
         }

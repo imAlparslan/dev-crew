@@ -15,7 +15,7 @@ public static class DependencyInjection
             "DevCrew",
             "devcrew.db"
         );
-        
+
         // Ensure directory exists
         var directory = Path.GetDirectoryName(dbPath);
         if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
@@ -30,7 +30,7 @@ public static class DependencyInjection
         services.AddScoped<IApplicationService, ApplicationService>();
         services.AddSingleton<IGuidService, GuidService>();
         services.AddSingleton<IClipboardService, ClipboardService>();
-        
+
         return services;
     }
 }

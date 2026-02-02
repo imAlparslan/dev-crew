@@ -1,11 +1,8 @@
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DevCrew.Core.ViewModels;
 using DevCrew.Core.Services;
+using DevCrew.Core.ViewModels;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -51,7 +48,7 @@ public partial class MainWindowViewModel : BaseViewModel
         _applicationService = applicationService;
         _dashboardViewModel = dashboardViewModel;
         _createGuidViewModelFactory = createGuidViewModelFactory;
-        
+
         InitializeMenuItems();
 
         // Open Dashboard tab on startup
@@ -62,10 +59,10 @@ public partial class MainWindowViewModel : BaseViewModel
     {
         var dashboardItem = new MenuItemViewModel("dashboard", "Dashboard", OpenDashboardCommand, "Primary", "🎯");
         var createGuidItem = new MenuItemViewModel("create-guid", "Create Guid", OpenCreateGuidTabCommand, "Primary", "🎲");
-        
+
         MenuItems.Add(dashboardItem);
         MenuItems.Add(createGuidItem);
-        
+
         // Dashboard'daki MenuItems'ı doldur
         _dashboardViewModel.MenuItems.Add(dashboardItem);
         _dashboardViewModel.MenuItems.Add(createGuidItem);

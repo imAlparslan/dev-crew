@@ -28,7 +28,7 @@ indent_size = 2
 [*.cs]
 
 # Namespaces
-csharp_using_directive_placement = file_scoped
+csharp_using_directive_placement = outside_namespace
 csharp_namespace_declarations_file_scoped = true
 
 # Indentation
@@ -116,6 +116,11 @@ dotnet_remove_unnecessary_suppression_exclusions = none
 # Organization preferences
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = false
+dotnet_remove_unnecessary_imports = true
+
+# Diagnostics
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.CS1591.severity = none
 
 # New line preferences
 dotnet_style_allow_multiple_blank_lines_in_sequential_block_statements = false
