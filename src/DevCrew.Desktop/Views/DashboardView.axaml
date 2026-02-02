@@ -4,45 +4,55 @@
              x:Class="DevCrew.Desktop.Views.DashboardView"
              x:DataType="vm:DashboardViewModel">
     <Border Padding="24" Background="{StaticResource BrushSecondaryBackground}">
-        <StackPanel Spacing="16" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel Spacing="24">
             <TextBlock Text="🎯 DevCrew Dashboard"
                        FontSize="32"
                        FontWeight="Bold"
                        Foreground="{StaticResource BrushPrimaryText}"
                        HorizontalAlignment="Center" />
             
-            <TextBlock Text="Hoş geldiniz! Yan menüden araçları seçerek başlayabilirsiniz."
-                       FontSize="16"
-                       Foreground="{StaticResource BrushSecondaryText}"
-                       HorizontalAlignment="Center"
-                       TextAlignment="Center"
-                       TextWrapping="Wrap"
-                       MaxWidth="400" />
+            <!-- <TextBlock Text="Araçlar"
+                       FontSize="20"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource BrushPrimaryText}"
+                       Margin="0,16,0,0" /> -->
             
-            <Border Background="{StaticResource BrushTertiaryBackground}"
-                    CornerRadius="12"
-                    Padding="20"
-                    Margin="0,16,0,0"
-                    MaxWidth="500"
-                    BorderBrush="{StaticResource BrushBorderSecondary}"
-                    BorderThickness="1">
-                <StackPanel Spacing="12">
-                    <TextBlock Text="Hızlı Başlangıç"
-                               FontSize="18"
-                               FontWeight="SemiBold"
-                               Foreground="{StaticResource BrushPrimaryText}" />
-                    
-                    <TextBlock TextWrapping="Wrap"
-                               Foreground="{StaticResource BrushSecondaryText}">
-                        <Run Text="• " />
-                        <Run Text="Yan menüdeki araçlara tıklayın" FontWeight="Medium" />
-                        <LineBreak />
-                        <Run Text="• Her araç yeni bir tab'da açılır" />
-                        <LineBreak />
-                        <Run Text="• Tabları kapatmak için × simgesine tıklayın" />
-                    </TextBlock>
-                </StackPanel>
-            </Border>
+            <ItemsControl ItemsSource="{Binding MenuItems}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Command="{Binding Command}"
+                                Background="{StaticResource BrushTertiaryBackground}"
+                                BorderBrush="{StaticResource BrushBorderSecondary}"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="24,20"
+                                Margin="0,0,16,16"
+                                Width="200"
+                                Height="120"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center">
+                            <StackPanel Spacing="8" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding Icon}"
+                                           FontSize="32"
+                                           HorizontalAlignment="Center"
+                                           IsVisible="{Binding Icon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                                <TextBlock Text="{Binding Header}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrushPrimaryText}"
+                                           HorizontalAlignment="Center"
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
     </Border>
 </UserControl>

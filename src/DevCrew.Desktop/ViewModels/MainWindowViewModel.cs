@@ -60,8 +60,15 @@ public partial class MainWindowViewModel : BaseViewModel
 
     private void InitializeMenuItems()
     {
-        MenuItems.Add(new MenuItemViewModel("dashboard", "Dashboard", OpenDashboardCommand, "Primary", "🎯"));
-        MenuItems.Add(new MenuItemViewModel("create-guid", "Create Guid", OpenCreateGuidTabCommand, "Primary", "🎲"));
+        var dashboardItem = new MenuItemViewModel("dashboard", "Dashboard", OpenDashboardCommand, "Primary", "🎯");
+        var createGuidItem = new MenuItemViewModel("create-guid", "Create Guid", OpenCreateGuidTabCommand, "Primary", "🎲");
+        
+        MenuItems.Add(dashboardItem);
+        MenuItems.Add(createGuidItem);
+        
+        // Dashboard'daki MenuItems'ı doldur
+        _dashboardViewModel.MenuItems.Add(dashboardItem);
+        _dashboardViewModel.MenuItems.Add(createGuidItem);
     }
 
     [RelayCommand]
