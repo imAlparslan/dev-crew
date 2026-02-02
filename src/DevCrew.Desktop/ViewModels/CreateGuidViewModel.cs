@@ -1,8 +1,13 @@
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DevCrew.Core.Data;
+using DevCrew.Core.Models;
 using DevCrew.Core.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -14,6 +19,7 @@ public partial class CreateGuidViewModel : ObservableObject
 {
     private readonly IGuidService _guidService;
     private readonly IClipboardService _clipboardService;
+    private readonly AppDbContext _dbContext;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasGuid))]
@@ -27,20 +33,56 @@ public partial class CreateGuidViewModel : ObservableObject
     private bool isGuidCopied;
 
     /// <summary>
+    /// Collection of recently generated GUIDs
+    /// </summary>
+    public ObservableCollection<GuidItemViewModel> RecentGuids { get; } = new();
+
+    /// <summary>
+    /// Displayed GUIDs (supports infinite scroll when showing saved items)
+    /// </summary>
+    public ObservableCollection<GuidItemViewModel> FilteredGuidsByPage { get; } = new();
+
+    [ObservableProperty]
+    private int pageSize = 10;
+
+    [ObservableProperty]
+    private bool isLoadingMore;
+
+    [ObservableProperty]
+    private bool hasMoreSavedGuids = true;
+
+    private int _savedSkip;
+
+    [ObservableProperty]
+    private bool showOnlySavedGuids;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="CreateGuidViewModel"/> class.
     /// </summary>
     /// <param name="guidService">GUID generation service.</param>
     /// <param name="clipboardService">Clipboard access service.</param>
-    public CreateGuidViewModel(IGuidService guidService, IClipboardService clipboardService)
+    /// <param name="dbContext">Database context.</param>
+    public CreateGuidViewModel(IGuidService guidService, IClipboardService clipboardService, AppDbContext dbContext)
     {
         _guidService = guidService;
         _clipboardService = clipboardService;
+        _dbContext = dbContext;
     }
 
     [RelayCommand]
     private void GenerateGuid()
     {
         CurrentGuid = _guidService.Generate();
+        var guidItem = new GuidItemViewModel(CurrentGuid);
+        RecentGuids.Insert(0, guidItem);
+        
+        // Keep only the last 10 GUIDs
+        while (RecentGuids.Count > 10)
+        {
+            RecentGuids.RemoveAt(RecentGuids.Count - 1);
+        }
+
+        UpdateFilteredGuids();
     }
 
     [RelayCommand]
@@ -65,8 +107,201 @@ public partial class CreateGuidViewModel : ObservableObject
         CurrentGuid = string.Empty;
     }
 
+    [RelayCommand]
+    private async Task SaveGuid(GuidItemViewModel guidItem)
+    {
+        try
+        {
+            if (guidItem.IsSaved)
+                return;
+
+            var guidHistory = new GuidHistory
+            {
+                GuidValue = guidItem.GuidValue,
+                CreatedAt = DateTime.UtcNow,
+                Notes = guidItem.Notes
+            };
+            _dbContext.GuidHistories.Add(guidHistory);
+            await _dbContext.SaveChangesAsync();
+
+            guidItem.IsSaved = true;
+            guidItem.DatabaseId = guidHistory.Id;
+            if (ShowOnlySavedGuids)
+            {
+                await LoadSavedGuidsPageAsync(reset: true);
+            }
+            else
+            {
+                UpdateFilteredGuids();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Save GUID error: {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteGuid(GuidItemViewModel guidItem)
+    {
+        try
+        {
+            // Remove from database if saved
+            if (guidItem.IsSaved && guidItem.DatabaseId.HasValue)
+            {
+                var historyItem = await _dbContext.GuidHistories
+                    .FirstOrDefaultAsync(g => g.Id == guidItem.DatabaseId.Value);
+                
+                if (historyItem != null)
+                {
+                    _dbContext.GuidHistories.Remove(historyItem);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+
+            // Remove from recent list
+            RecentGuids.Remove(guidItem);
+            
+            // If showing only saved guids, reload from database to reflect changes
+            if (ShowOnlySavedGuids)
+            {
+                await LoadSavedGuidsPageAsync(reset: true);
+            }
+            else
+            {
+                UpdateFilteredGuids();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Delete GUID error: {ex.Message}");
+        }
+    }
+
+    private void UpdateFilteredGuids()
+    {
+        if (ShowOnlySavedGuids)
+        {
+            _ = LoadSavedGuidsPageAsync(reset: true);
+        }
+        else
+        {
+            FilteredGuidsByPage.Clear();
+
+            foreach (var item in RecentGuids)
+            {
+                FilteredGuidsByPage.Add(item);
+            }
+        }
+    }
+
+    partial void OnShowOnlySavedGuidsChanged(bool value)
+    {
+        // When filter is toggled, reload from database if needed
+        if (value)
+        {
+            _ = LoadSavedGuidsPageAsync(reset: true);
+        }
+        else
+        {
+            UpdateFilteredGuids();
+        }
+    }
+
+    /// <summary>
+    /// Loads the next page of saved GUIDs when infinite scrolling.
+    /// </summary>
+    public async Task LoadMoreSavedGuidsAsync()
+    {
+        await LoadSavedGuidsPageAsync(reset: false);
+    }
+
+    private async Task LoadSavedGuidsPageAsync(bool reset)
+    {
+        if (!ShowOnlySavedGuids)
+            return;
+
+        if (IsLoadingMore)
+            return;
+
+        if (!HasMoreSavedGuids && !reset)
+            return;
+
+        try
+        {
+            IsLoadingMore = true;
+
+            if (reset)
+            {
+                _savedSkip = 0;
+                HasMoreSavedGuids = true;
+                FilteredGuidsByPage.Clear();
+            }
+
+            var savedGuids = await _dbContext.GuidHistories
+                .OrderByDescending(g => g.CreatedAt)
+                .Skip(_savedSkip)
+                .Take(PageSize)
+                .ToListAsync();
+
+            foreach (var dbGuid in savedGuids)
+            {
+                var guidItem = new GuidItemViewModel(
+                    guidValue: dbGuid.GuidValue,
+                    isSaved: true,
+                    databaseId: dbGuid.Id,
+                    notes: dbGuid.Notes
+                );
+                FilteredGuidsByPage.Add(guidItem);
+            }
+
+            _savedSkip += savedGuids.Count;
+            HasMoreSavedGuids = savedGuids.Count == PageSize;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Load saved GUIDs page error: {ex.Message}");
+        }
+        finally
+        {
+            IsLoadingMore = false;
+        }
+    }
+
     partial void OnCurrentGuidChanged(string value)
     {
         IsGuidCopied = false;
+    }
+
+    /// <summary>
+    /// Load saved GUIDs from the database
+    /// </summary>
+    public async Task LoadSavedGuidsAsync()
+    {
+        try
+        {
+            var savedGuids = await _dbContext.GuidHistories
+                .OrderByDescending(g => g.CreatedAt)
+                .Take(10)
+                .ToListAsync();
+
+            foreach (var guid in savedGuids)
+            {
+                var guidItem = new GuidItemViewModel(
+                    guidValue: guid.GuidValue,
+                    isSaved: true,
+                    databaseId: guid.Id,
+                    notes: guid.Notes
+                );
+                RecentGuids.Add(guidItem);
+            }
+            
+            // Update filtered view after loading saved GUIDs
+            UpdateFilteredGuids();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Load and filter saved GUIDs error: {ex.Message}");
+        }
     }
 }

@@ -13,69 +13,172 @@
                                                                           FalseBrush="{StaticResource BrushBorderSecondary}" />
         </UserControl.Resources>
     <Border Padding="16" Background="{StaticResource BrushSecondaryBackground}">
-        <StackPanel Spacing="12"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Width="360">
-            <TextBlock Text="GUID Oluşturucu"
-                       FontSize="20"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource BrushPrimaryText}"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,8" />
-            
-            <TextBlock Text="Yeni bir GUID üretmek için butona tıklayın"
-                       FontSize="14"
-                       Foreground="{StaticResource BrushSecondaryText}"
-                       HorizontalAlignment="Center"
-                       TextAlignment="Center"
-                       Margin="0,0,0,8" />
-            
-            <Button Content="🎲 Yeni GUID Üret"
-                    Command="{Binding GenerateGuidCommand}"
-                    HorizontalAlignment="Stretch"
-                    Padding="12,10"
-                    Background="{StaticResource BrushSuccess}"
-                    Foreground="{StaticResource BrushPrimaryText}"
-                    BorderBrush="{StaticResource BrushSuccessDark}"
-                    CornerRadius="8"
-                    FontWeight="SemiBold" />
-            
-            <TextBox Text="{Binding CurrentGuid}"
-                     AcceptsReturn="False"
-                     IsReadOnly="True"
-                     Margin="0,4,0,0"
-                     Padding="10"
-                     Background="{Binding IsGuidCopied, Converter={StaticResource GuidBackgroundConverter}}"
-                     BorderBrush="{Binding IsGuidCopied, Converter={StaticResource GuidBorderConverter}}"
-                     Foreground="{StaticResource BrushPrimaryText}"
-                     FontFamily="Consolas, Courier New, monospace"
-                     Watermark="GUID burada görünecek"
-                     SelectionBrush="{StaticResource BrushAccent}" />
-            
-            <StackPanel Orientation="Horizontal" 
-                        Spacing="8" 
-                        HorizontalAlignment="Center"
-                        Margin="0,8,0,0">
-                <Button Content="📋 Kopyala"
-                        Command="{Binding CopyToClipboardCommand}"
-                        IsEnabled="{Binding HasGuid}"
-                        Padding="12,8"
-                        Background="{StaticResource BrushAccent}"
-                        Foreground="{StaticResource BrushPrimaryText}"
-                        BorderBrush="{StaticResource BrushAccentDark}"
-                        CornerRadius="6" />
+        <Grid RowDefinitions="Auto,*" Width="600" HorizontalAlignment="Center">
+            <!-- Top Section - Fixed -->
+            <StackPanel Grid.Row="0"
+                        Spacing="12">
+                <TextBlock Text="GUID Oluşturucu"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource BrushPrimaryText}"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,8" />
                 
-                <Button Content="🗑️ Temizle"
-                        Command="{Binding ClearCommand}"
-                        IsEnabled="{Binding HasGuid}"
-                        Padding="12,8"
-                        Background="{StaticResource BrushDanger}"
+                <TextBlock Text="Yeni bir GUID üretmek için butona tıklayın"
+                           FontSize="14"
+                           Foreground="{StaticResource BrushSecondaryText}"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           Margin="0,0,0,8" />
+                
+                <Button Content="🎲 Yeni GUID Üret"
+                        Command="{Binding GenerateGuidCommand}"
+                        HorizontalAlignment="Stretch"
+                        Padding="12,10"
+                        Background="{StaticResource BrushSuccess}"
                         Foreground="{StaticResource BrushPrimaryText}"
-                        BorderBrush="{StaticResource BrushDangerDark}"
-                        CornerRadius="6" />
+                        BorderBrush="{StaticResource BrushSuccessDark}"
+                        CornerRadius="8"
+                        FontWeight="SemiBold" />
+                
+                <TextBox Text="{Binding CurrentGuid}"
+                         AcceptsReturn="False"
+                         IsReadOnly="True"
+                         Margin="0,4,0,0"
+                         Padding="10"
+                         Background="{Binding IsGuidCopied, Converter={StaticResource GuidBackgroundConverter}}"
+                         BorderBrush="{Binding IsGuidCopied, Converter={StaticResource GuidBorderConverter}}"
+                         Foreground="{StaticResource BrushPrimaryText}"
+                         FontFamily="Consolas, Courier New, monospace"
+                         Watermark="GUID burada görünecek"
+                         SelectionBrush="{StaticResource BrushAccent}" />
+                
+                <StackPanel Orientation="Horizontal" 
+                            Spacing="8" 
+                            HorizontalAlignment="Center"
+                            Margin="0,8,0,0">
+                    <Button Content="📋 Kopyala"
+                            Command="{Binding CopyToClipboardCommand}"
+                            IsEnabled="{Binding HasGuid}"
+                            Padding="12,8"
+                            Background="{StaticResource BrushAccent}"
+                            Foreground="{StaticResource BrushPrimaryText}"
+                            BorderBrush="{StaticResource BrushAccentDark}"
+                            CornerRadius="6" />
+                    
+                    <Button Content="🗑️ Temizle"
+                            Command="{Binding ClearCommand}"
+                            IsEnabled="{Binding HasGuid}"
+                            Padding="12,8"
+                            Background="{StaticResource BrushDanger}"
+                            Foreground="{StaticResource BrushPrimaryText}"
+                            BorderBrush="{StaticResource BrushDangerDark}"
+                            CornerRadius="6" />
+                </StackPanel>
             </StackPanel>
             
-        </StackPanel>
+            <!-- Recently Generated GUIDs List - Scrollable -->
+            <Border Grid.Row="1"
+                    BorderBrush="{StaticResource BrushBorderSecondary}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="12"
+                    Background="{StaticResource BrushTertiaryBackground}"
+                    Margin="0,12,0,0"
+                    IsVisible="{Binding RecentGuids.Count}">
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Title with Filter Checkbox -->
+                    <Grid Grid.Row="0"
+                          ColumnDefinitions="*,Auto"
+                          Margin="0,0,0,8">
+                        <TextBlock Grid.Column="0"
+                                   Text="Son Üretilen GUID'ler"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushPrimaryText}"
+                                   VerticalAlignment="Center" />
+                        
+                        <CheckBox Grid.Column="1"
+                                  Content="Kayıtlılar"
+                                  IsChecked="{Binding ShowOnlySavedGuids}"
+                                  Foreground="{StaticResource BrushSecondaryText}"
+                                  VerticalAlignment="Center" />
+                    </Grid>
+                    
+                    <!-- Scrollable Content -->
+                    <ScrollViewer Grid.Row="1"
+                                  x:Name="GuidsScrollViewer"
+                                  IsVisible="{Binding FilteredGuidsByPage.Count}">
+                        <ItemsControl ItemsSource="{Binding FilteredGuidsByPage}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{StaticResource BrushSecondaryBackground}"
+                                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                                        BorderThickness="1"
+                                        CornerRadius="4"
+                                        Padding="8,6"
+                                        Margin="0,2">
+                                    <Grid ColumnDefinitions="280,*,Auto">
+                                        <!-- Column 1: GUID Value -->
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding GuidValue}"
+                                                   FontFamily="Consolas, Courier New, monospace"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource BrushSecondaryText}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,8,0" />
+                                        
+                                        <!-- Column 2: Notes TextBox -->
+                                        <TextBox Grid.Column="1"
+                                                 Text="{Binding Notes}"
+                                                 Watermark="Not ekle (opsiyonel)"
+                                                 FontSize="11"
+                                                 Padding="6,4"
+                                                 Background="{StaticResource BrushTertiaryBackground}"
+                                                 Foreground="{StaticResource BrushSecondaryText}"
+                                                 BorderBrush="{StaticResource BrushBorderSecondary}"
+                                                 CornerRadius="3"
+                                                 Margin="0,0,8,0" />
+                                        
+                                        <!-- Column 3: Action Buttons -->
+                                        <StackPanel Grid.Column="2"
+                                                    Orientation="Horizontal"
+                                                    Spacing="4"
+                                                    VerticalAlignment="Center">
+                                            <Button Content="💾"
+                                                    Command="{Binding $parent[UserControl].DataContext.SaveGuidCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    IsEnabled="{Binding !IsSaved}"
+                                                    Padding="6,4"
+                                                    Background="{StaticResource BrushSuccess}"
+                                                    Foreground="{StaticResource BrushPrimaryText}"
+                                                    BorderBrush="{StaticResource BrushSuccessDark}"
+                                                    CornerRadius="4"
+                                                    ToolTip.Tip="Kaydet" />
+                                            
+                                            <Button Content="🗑️"
+                                                    Command="{Binding $parent[UserControl].DataContext.DeleteGuidCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Padding="6,4"
+                                                    Background="{StaticResource BrushDanger}"
+                                                    Foreground="{StaticResource BrushPrimaryText}"
+                                                    BorderBrush="{StaticResource BrushDangerDark}"
+                                                    CornerRadius="4"
+                                                    ToolTip.Tip="Sil" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
     </Border>
 </UserControl>
