@@ -91,32 +91,18 @@ public partial class CreateGuidViewModel : ObservableObject
     [RelayCommand]
     private async Task CopyToClipboard()
     {
-        try
+        if (!string.IsNullOrWhiteSpace(CurrentGuid))
         {
-            if (!string.IsNullOrWhiteSpace(CurrentGuid))
-            {
-                IsGuidCopied = await _clipboardService.TrySetTextAsync(CurrentGuid);
-            }
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Clipboard error: {ex.Message}");
+            IsGuidCopied = await _clipboardService.TrySetTextAsync(CurrentGuid);
         }
     }
 
     [RelayCommand]
     private async Task CopyGuidItem(GuidItemViewModel guidItem)
     {
-        try
+        if (!string.IsNullOrWhiteSpace(guidItem.GuidValue))
         {
-            if (!string.IsNullOrWhiteSpace(guidItem.GuidValue))
-            {
-                await _clipboardService.TrySetTextAsync(guidItem.GuidValue);
-            }
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Clipboard error: {ex.Message}");
+            await _clipboardService.TrySetTextAsync(guidItem.GuidValue);
         }
     }
 

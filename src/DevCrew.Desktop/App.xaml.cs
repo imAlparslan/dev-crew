@@ -6,7 +6,6 @@ using DevCrew.Core.Data;
 using DevCrew.Desktop.ViewModels;
 using DevCrew.Desktop.Views;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace DevCrew.Desktop;
 
@@ -51,21 +50,6 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
-        // Logging
-#if DEBUG
-        services.AddLogging(configure =>
-        {
-            configure.AddConsole();
-            configure.AddDebug();
-            configure.SetMinimumLevel(LogLevel.Debug);
-        });
-#else
-        services.AddLogging(configure =>
-        {
-            configure.SetMinimumLevel(LogLevel.Warning);
-        });
-#endif
-
         // Core Services
         services.AddDevCrewCore();
 

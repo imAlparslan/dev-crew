@@ -15,3 +15,4 @@ public partial class DashboardViewModel : BaseViewModel
 
     public ObservableCollection<MenuItemViewModel> MenuItems { get; }
 }
+

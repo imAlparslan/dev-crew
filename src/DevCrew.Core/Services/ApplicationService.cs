@@ -37,3 +37,4 @@ public class ApplicationService : IApplicationService
         return Task.CompletedTask;
     }
 }
+

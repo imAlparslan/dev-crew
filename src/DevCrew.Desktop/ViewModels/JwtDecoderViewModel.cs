@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
-using System.Text.Json;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -72,33 +71,25 @@ public partial class JwtDecoderViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanDecode))]
     private void DecodeToken()
     {
-        try
+        ErrorMessage = null;
+        IsSignatureValid = null;
+
+        var result = _jwtService.DecodeToken(RawToken);
+
+        if (result.IsValid)
         {
+            DecodedHeader = result.Header;
+            DecodedPayload = result.Payload;
+            ExpiresAt = result.ExpiresAt;
+            IssuedAt = result.IssuedAt;
+            Issuer = result.Issuer;
+            Audience = result.Audience;
+            Subject = result.Subject;
             ErrorMessage = null;
-            IsSignatureValid = null;
-
-            var result = _jwtService.DecodeToken(RawToken);
-
-            if (result.IsValid)
-            {
-                DecodedHeader = result.Header;
-                DecodedPayload = result.Payload;
-                ExpiresAt = result.ExpiresAt;
-                IssuedAt = result.IssuedAt;
-                Issuer = result.Issuer;
-                Audience = result.Audience;
-                Subject = result.Subject;
-                ErrorMessage = null;
-            }
-            else
-            {
-                ErrorMessage = result.ErrorMessage;
-                ClearDecodedData();
-            }
         }
-        catch (Exception ex)
+        else
         {
-            ErrorMessage = $"Error: {ex.Message}";
+            ErrorMessage = result.ErrorMessage;
             ClearDecodedData();
         }
     }
@@ -106,15 +97,7 @@ public partial class JwtDecoderViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanValidateSignature))]
     private void ValidateSignature()
     {
-        try
-        {
-            IsSignatureValid = _jwtService.ValidateTokenSignature(RawToken, Secret);
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = $"Validation error: {ex.Message}";
-            IsSignatureValid = false;
-        }
+        IsSignatureValid = _jwtService.ValidateTokenSignature(RawToken, Secret);
     }
 
     [RelayCommand]

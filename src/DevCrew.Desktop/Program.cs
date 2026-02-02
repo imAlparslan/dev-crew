@@ -1,5 +1,4 @@
 using Avalonia;
-using System.Diagnostics;
 
 namespace DevCrew.Desktop;
 
@@ -14,11 +13,5 @@ internal class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .WithInterFont()
-#if DEBUG
-            .LogToTrace(level: Avalonia.Logging.LogEventLevel.Debug)
-#else
-            .LogToTrace(level: Avalonia.Logging.LogEventLevel.Warning)
-#endif
-            ;
+            .WithInterFont();
 }

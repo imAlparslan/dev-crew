@@ -21,3 +21,4 @@ public class GuidService : IGuidService
     /// </summary>
     public string Generate() => Guid.NewGuid().ToString();
 }
+
