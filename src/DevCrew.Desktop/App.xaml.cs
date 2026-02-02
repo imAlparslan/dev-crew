@@ -58,6 +58,8 @@ public partial class App : Application
         services.AddSingleton<DashboardViewModel>();
         services.AddTransient<CreateGuidViewModel>();
         services.AddTransient<Func<CreateGuidViewModel>>(sp => () => sp.GetRequiredService<CreateGuidViewModel>());
+        services.AddTransient<JwtDecoderViewModel>();
+        services.AddTransient<Func<JwtDecoderViewModel>>(sp => () => sp.GetRequiredService<JwtDecoderViewModel>());
     }
 
     private void InitializeDatabase()

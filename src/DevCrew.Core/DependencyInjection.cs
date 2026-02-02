@@ -30,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<IApplicationService, ApplicationService>();
         services.AddSingleton<IGuidService, GuidService>();
         services.AddSingleton<IClipboardService, ClipboardService>();
+        services.AddSingleton<IJwtService, JwtService>();
 
         return services;
     }

@@ -14,6 +14,7 @@ public partial class MainWindowViewModel : BaseViewModel
     private readonly IApplicationService _applicationService;
     private readonly DashboardViewModel _dashboardViewModel;
     private readonly Func<CreateGuidViewModel> _createGuidViewModelFactory;
+    private readonly Func<JwtDecoderViewModel> _jwtDecoderViewModelFactory;
 
     [ObservableProperty]
     private string title = "DevCrew";
@@ -40,14 +41,17 @@ public partial class MainWindowViewModel : BaseViewModel
     /// <param name="applicationService">Application service.</param>
     /// <param name="dashboardViewModel">Dashboard view model.</param>
     /// <param name="createGuidViewModelFactory">Factory for new GUID view models.</param>
+    /// <param name="jwtDecoderViewModelFactory">Factory for new JWT Decoder view models.</param>
     public MainWindowViewModel(
         IApplicationService applicationService,
         DashboardViewModel dashboardViewModel,
-        Func<CreateGuidViewModel> createGuidViewModelFactory)
+        Func<CreateGuidViewModel> createGuidViewModelFactory,
+        Func<JwtDecoderViewModel> jwtDecoderViewModelFactory)
     {
         _applicationService = applicationService;
         _dashboardViewModel = dashboardViewModel;
         _createGuidViewModelFactory = createGuidViewModelFactory;
+        _jwtDecoderViewModelFactory = jwtDecoderViewModelFactory;
 
         InitializeMenuItems();
 
@@ -59,13 +63,16 @@ public partial class MainWindowViewModel : BaseViewModel
     {
         var dashboardItem = new MenuItemViewModel("dashboard", "Dashboard", OpenDashboardCommand, "Primary", "🎯");
         var createGuidItem = new MenuItemViewModel("create-guid", "Create Guid", OpenCreateGuidTabCommand, "Primary", "🎲");
+        var jwtDecoderItem = new MenuItemViewModel("jwt-decoder", "JWT Decoder", OpenJwtDecoderTabCommand, "Primary", "🔐");
 
         MenuItems.Add(dashboardItem);
         MenuItems.Add(createGuidItem);
+        MenuItems.Add(jwtDecoderItem);
 
         // Dashboard'daki MenuItems'ı doldur
         _dashboardViewModel.MenuItems.Add(dashboardItem);
         _dashboardViewModel.MenuItems.Add(createGuidItem);
+        _dashboardViewModel.MenuItems.Add(jwtDecoderItem);
     }
 
     [RelayCommand]
@@ -96,6 +103,21 @@ public partial class MainWindowViewModel : BaseViewModel
         OpenOrSelectTab("create-guid", "Create Guid", createGuidViewModel, true, "🎲");
     }
 
+    [RelayCommand]
+    private void OpenJwtDecoderTab()
+    {
+        SetSelectedMenuItem("jwt-decoder");
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == "jwt-decoder");
+        if (existingTab != null)
+        {
+            SelectedTab = existingTab;
+            return;
+        }
+
+        var jwtDecoderViewModel = _jwtDecoderViewModelFactory();
+        OpenOrSelectTab("jwt-decoder", "JWT Decoder", jwtDecoderViewModel, true, "🔐");
+    }
+
     private void SetSelectedMenuItem(string id)
     {
         foreach (var item in MenuItems)
@@ -112,7 +134,7 @@ public partial class MainWindowViewModel : BaseViewModel
             return;
         }
 
-        if (value.Id == "dashboard" || value.Id == "create-guid")
+        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder")
         {
             SetSelectedMenuItem(value.Id);
             return;

@@ -1,0 +1,333 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DevCrew.Desktop.ViewModels"
+             xmlns:conv="using:DevCrew.Desktop.Converters"
+             x:Class="DevCrew.Desktop.Views.JwtDecoderView"
+             x:DataType="vm:JwtDecoderViewModel">
+    <UserControl.Resources>
+        <conv:BooleanToBrushConverter x:Key="SignatureValidBackgroundConverter"
+                                      TrueBrush="{StaticResource BrushSuccess}"
+                                      FalseBrush="{StaticResource BrushDanger}" />
+        <conv:BooleanToBrushConverter x:Key="SignatureValidBorderConverter"
+                                      TrueBrush="{StaticResource BrushSuccessDark}"
+                                      FalseBrush="{StaticResource BrushDangerDark}" />
+    </UserControl.Resources>
+    
+    <ScrollViewer>
+        <Border Padding="16" Background="{StaticResource BrushSecondaryBackground}">
+            <Grid RowDefinitions="Auto,Auto,*" Width="800" HorizontalAlignment="Center">
+                <!-- Header -->
+                <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
+                    <TextBlock Text="JWT Decoder"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushPrimaryText}"
+                               HorizontalAlignment="Center" />
+                    
+                    <TextBlock Text="JWT token'ınızı yapıştırın, otomatik olarak decode edilecek"
+                               FontSize="14"
+                               Foreground="{StaticResource BrushSecondaryText}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center" />
+                </StackPanel>
+
+                <!-- Input Section -->
+                <StackPanel Grid.Row="1" Spacing="12">
+                    <!-- JWT Token Input -->
+                    <Border Background="{StaticResource BrushTertiaryBackground}"
+                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12">
+                        <Grid RowDefinitions="Auto,Auto,Auto">
+                            <TextBlock Grid.Row="0"
+                                       Text="JWT Token"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       Margin="0,0,0,8" />
+                            
+                            <TextBox Grid.Row="1"
+                                     Text="{Binding RawToken}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MinHeight="80"
+                                     MaxHeight="150"
+                                     Padding="8"
+                                     Background="{StaticResource BrushSecondaryBackground}"
+                                     BorderBrush="{StaticResource BrushBorderSecondary}"
+                                     BorderThickness="1"
+                                     CornerRadius="4"
+                                     Foreground="{StaticResource BrushPrimaryText}"
+                                     FontFamily="Consolas, Courier New, monospace"
+                                     FontSize="11"
+                                     Watermark="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ..."
+                                     SelectionBrush="{StaticResource BrushAccent}" />
+                            
+                            <StackPanel Grid.Row="2"
+                                        Orientation="Horizontal"
+                                        Spacing="8"
+                                        HorizontalAlignment="Right"
+                                        Margin="0,8,0,0">
+                                <Button Content="🔍 Decode"
+                                        Command="{Binding DecodeTokenCommand}"
+                                        Padding="12,6"
+                                        Background="{StaticResource BrushAccent}"
+                                        Foreground="{StaticResource BrushPrimaryText}"
+                                        BorderBrush="{StaticResource BrushAccentDark}"
+                                        CornerRadius="4"
+                                        FontWeight="SemiBold" />
+                                
+                                <Button Content="✕ Clear"
+                                        Command="{Binding ClearCommand}"
+                                        Padding="12,6"
+                                        Background="{StaticResource BrushDanger}"
+                                        Foreground="{StaticResource BrushPrimaryText}"
+                                        BorderBrush="{StaticResource BrushDangerDark}"
+                                        CornerRadius="4" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Secret Input for Signature Validation -->
+                    <Border Background="{StaticResource BrushTertiaryBackground}"
+                            BorderThickness="2"
+                            CornerRadius="6"
+                            Padding="12"
+                            IsVisible="{Binding DecodedHeader, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                        <Border.BorderBrush>
+                            <Binding Path="IsSignatureValid" Converter="{StaticResource SignatureValidBorderConverter}" FallbackValue="{StaticResource BrushBorderSecondary}" />
+                        </Border.BorderBrush>
+                        <Grid RowDefinitions="Auto,Auto,Auto">
+                            <TextBlock Grid.Row="0"
+                                       Text="Secret Key (İmza Doğrulama)"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       Margin="0,0,0,8" />
+                            
+                            <TextBox Grid.Row="1"
+                                     Text="{Binding Secret}"
+                                     PasswordChar="●"
+                                     Padding="8"
+                                     Background="{StaticResource BrushSecondaryBackground}"
+                                     BorderBrush="{StaticResource BrushBorderSecondary}"
+                                     BorderThickness="1"
+                                     CornerRadius="4"
+                                     Foreground="{StaticResource BrushPrimaryText}"
+                                     FontFamily="Consolas, Courier New, monospace"
+                                     Watermark="Secret key'inizi girin"
+                                     SelectionBrush="{StaticResource BrushAccent}" />
+                            
+                            <Grid Grid.Row="2" Margin="0,8,0,0" ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4"
+                                            IsVisible="{Binding IsSignatureValid, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <TextBlock Text="İmza Durumu: "
+                                               FontSize="12"
+                                               Foreground="{StaticResource BrushSecondaryText}"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock FontSize="12"
+                                               VerticalAlignment="Center"
+                                               Foreground="{Binding IsSignatureValid, Converter={StaticResource SignatureValidBackgroundConverter}}">
+                                        <TextBlock.Text>
+                                            <Binding Path="IsSignatureValid">
+                                                <Binding.Converter>
+                                                    <conv:BooleanToBrushConverter TrueString="✓ Geçerli" FalseString="✗ Geçersiz" />
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                                
+                                <Button Grid.Column="1"
+                                        Content="🔐 Validate"
+                                        Command="{Binding ValidateSignatureCommand}"
+                                        Padding="12,6"
+                                        Background="{StaticResource BrushAccent}"
+                                        Foreground="{StaticResource BrushPrimaryText}"
+                                        BorderBrush="{StaticResource BrushAccentDark}"
+                                        CornerRadius="4" />
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Error Message -->
+                    <Border Background="{StaticResource BrushDanger}"
+                            BorderBrush="{StaticResource BrushDangerDark}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12"
+                            IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   FontSize="12"
+                                   Foreground="{StaticResource BrushPrimaryText}"
+                                   TextWrapping="Wrap" />
+                    </Border>
+                </StackPanel>
+
+                <!-- Decoded Output Section -->
+                <Grid Grid.Row="2"
+                      RowDefinitions="Auto,Auto,Auto"
+                      Margin="0,16,0,0"
+                      IsVisible="{Binding DecodedHeader, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    
+                    <!-- Token Info -->
+                    <Border Grid.Row="0"
+                            Background="{StaticResource BrushTertiaryBackground}"
+                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12"
+                            Margin="0,0,0,12">
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                                       Text="Token Bilgileri"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushPrimaryText}"
+                                       Margin="0,0,0,8" />
+                            
+                            <StackPanel Grid.Row="1" Grid.Column="0" Spacing="4">
+                                <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}">
+                                    <Run Text="Issuer: " />
+                                    <Run Text="{Binding Issuer, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
+                                </TextBlock>
+                                <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}">
+                                    <Run Text="Subject: " />
+                                    <Run Text="{Binding Subject, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
+                                </TextBlock>
+                                <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}">
+                                    <Run Text="Audience: " />
+                                    <Run Text="{Binding Audience, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
+                                </TextBlock>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="1" Grid.Column="1" Spacing="4">
+                                <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}">
+                                    <Run Text="Issued At: " />
+                                    <Run Text="{Binding IssuedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
+                                </TextBlock>
+                                <TextBlock FontSize="11">
+                                    <Run Text="Expires At: " Foreground="{StaticResource BrushSecondaryText}" />
+                                    <Run Text="{Binding ExpiresAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', FallbackValue='N/A'}" 
+                                         Foreground="{StaticResource BrushPrimaryText}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Decoded Header -->
+                    <Border Grid.Row="1"
+                            Background="{StaticResource BrushTertiaryBackground}"
+                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12"
+                            Margin="0,0,0,12">
+                        <Grid RowDefinitions="Auto,Auto">
+                            <Grid Grid.Row="0"
+                                  ColumnDefinitions="*,Auto"
+                                  Margin="0,0,0,8">
+                                <TextBlock Grid.Column="0"
+                                           Text="Decoded Header"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrushPrimaryText}"
+                                           VerticalAlignment="Center" />
+                                
+                                <Button Grid.Column="1"
+                                        Command="{Binding CopyHeaderCommand}"
+                                        Padding="8,4"
+                                        Background="{StaticResource BrushAccent}"
+                                        Foreground="{StaticResource BrushPrimaryText}"
+                                        BorderBrush="{StaticResource BrushAccentDark}"
+                                        CornerRadius="4"
+                                        FontSize="11">
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <Binding Path="IsHeaderCopied">
+                                                <Binding.Converter>
+                                                    <conv:BooleanToBrushConverter TrueString="✓ Copied" FalseString="📋 Copy" />
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Button>
+                            </Grid>
+                            
+                            <Border Grid.Row="1"
+                                    Background="{StaticResource BrushSecondaryBackground}"
+                                    BorderBrush="{StaticResource BrushBorderSecondary}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="8">
+                                <ScrollViewer MaxHeight="200">
+                                    <TextBlock Text="{Binding DecodedHeader}"
+                                               FontFamily="Consolas, Courier New, monospace"
+                                               FontSize="11"
+                                               Foreground="{StaticResource BrushPrimaryText}"
+                                               TextWrapping="Wrap" />
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Decoded Payload -->
+                    <Border Grid.Row="2"
+                            Background="{StaticResource BrushTertiaryBackground}"
+                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12">
+                        <Grid RowDefinitions="Auto,Auto">
+                            <Grid Grid.Row="0"
+                                  ColumnDefinitions="*,Auto"
+                                  Margin="0,0,0,8">
+                                <TextBlock Grid.Column="0"
+                                           Text="Decoded Payload"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrushPrimaryText}"
+                                           VerticalAlignment="Center" />
+                                
+                                <Button Grid.Column="1"
+                                        Command="{Binding CopyPayloadCommand}"
+                                        Padding="8,4"
+                                        Background="{StaticResource BrushAccent}"
+                                        Foreground="{StaticResource BrushPrimaryText}"
+                                        BorderBrush="{StaticResource BrushAccentDark}"
+                                        CornerRadius="4"
+                                        FontSize="11">
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <Binding Path="IsPayloadCopied">
+                                                <Binding.Converter>
+                                                    <conv:BooleanToBrushConverter TrueString="✓ Copied" FalseString="📋 Copy" />
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Button>
+                            </Grid>
+                            
+                            <Border Grid.Row="1"
+                                    Background="{StaticResource BrushSecondaryBackground}"
+                                    BorderBrush="{StaticResource BrushBorderSecondary}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="8">
+                                <ScrollViewer MaxHeight="300">
+                                    <TextBlock Text="{Binding DecodedPayload}"
+                                               FontFamily="Consolas, Courier New, monospace"
+                                               FontSize="11"
+                                               Foreground="{StaticResource BrushPrimaryText}"
+                                               TextWrapping="Wrap" />
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+    </ScrollViewer>
+</UserControl>

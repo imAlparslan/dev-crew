@@ -21,6 +21,11 @@ public class AppDbContext : DbContext
     /// </summary>
     public DbSet<GuidHistory> GuidHistories { get; set; }
 
+    /// <summary>
+    /// Gets or sets the JWT history records
+    /// </summary>
+    public DbSet<JwtHistory> JwtHistories { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -34,6 +39,17 @@ public class AppDbContext : DbContext
             entity.Property(e => e.CreatedAt).IsRequired();
             entity.Property(e => e.Notes).HasMaxLength(500);
             entity.HasIndex(e => e.CreatedAt).IsDescending();
+        });
+
+        // Configure JwtHistory entity
+        modelBuilder.Entity<JwtHistory>(entity =>
+        {
+            entity.ToTable("JwtHistories");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Token).IsRequired();
+            entity.Property(e => e.DecodedAt).IsRequired();
+            entity.Property(e => e.Notes).HasMaxLength(500);
+            entity.HasIndex(e => e.DecodedAt).IsDescending();
         });
     }
 }
