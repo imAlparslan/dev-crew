@@ -270,18 +270,19 @@ public partial class CreateGuidViewModel : ObservableObject
                 FilteredGuidsByPage.Clear();
             }
 
-            var savedGuids = await _dbContext.GuidHistories
+            // Build query with search filter BEFORE pagination
+            var query = _dbContext.GuidHistories.AsQueryable();
+            
+            if (!string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                query = query.Where(g => g.Notes != null && g.Notes.Contains(SearchQuery));
+            }
+
+            var savedGuids = await query
                 .OrderByDescending(g => g.CreatedAt)
                 .Skip(_savedSkip)
                 .Take(PageSize)
                 .ToListAsync();
-
-            // Apply search filter
-            if (!string.IsNullOrWhiteSpace(SearchQuery))
-            {
-                savedGuids = savedGuids.Where(g =>
-                    g.Notes != null && g.Notes.Contains(SearchQuery, StringComparison.CurrentCultureIgnoreCase)).ToList();
-            }
 
             foreach (var dbGuid in savedGuids)
             {

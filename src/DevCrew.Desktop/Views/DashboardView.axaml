@@ -3,56 +3,60 @@
              xmlns:vm="using:DevCrew.Desktop.ViewModels"
              x:Class="DevCrew.Desktop.Views.DashboardView"
              x:DataType="vm:DashboardViewModel">
-    <Border Padding="24" Background="{StaticResource BrushSecondaryBackground}">
-        <StackPanel Spacing="24">
-            <TextBlock Text="🎯 DevCrew Dashboard"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource BrushPrimaryText}"
-                       HorizontalAlignment="Center" />
-            
-            <!-- <TextBlock Text="Araçlar"
-                       FontSize="20"
-                       FontWeight="SemiBold"
-                       Foreground="{StaticResource BrushPrimaryText}"
-                       Margin="0,16,0,0" /> -->
-            
-            <ItemsControl ItemsSource="{Binding MenuItems}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Command="{Binding Command}"
-                                Background="{StaticResource BrushTertiaryBackground}"
-                                BorderBrush="{StaticResource BrushBorderSecondary}"
-                                BorderThickness="1"
-                                CornerRadius="12"
-                                Padding="24,20"
-                                Margin="0,0,16,16"
-                                Width="200"
-                                Height="120"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center">
-                            <StackPanel Spacing="8" HorizontalAlignment="Center">
-                                <TextBlock Text="{Binding Icon}"
-                                           FontSize="32"
-                                           HorizontalAlignment="Center"
-                                           IsVisible="{Binding Icon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-                                <TextBlock Text="{Binding Header}"
-                                           FontSize="16"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource BrushPrimaryText}"
-                                           HorizontalAlignment="Center"
-                                           TextAlignment="Center"
-                                           TextWrapping="Wrap" />
-                            </StackPanel>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
-    </Border>
+    <ScrollViewer>
+        <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
+            <StackPanel Spacing="24" MaxWidth="1200" HorizontalAlignment="Center">
+                <TextBlock Text="🎯 DevCrew Dashboard"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource BrushPrimaryText}"
+                           HorizontalAlignment="Center" />
+                
+                <!-- <TextBlock Text="Araçlar"
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource BrushPrimaryText}"
+                           Margin="0,16,0,0" /> -->
+                
+                <ItemsControl ItemsSource="{Binding MenuItems}" HorizontalAlignment="Center">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel HorizontalAlignment="Center" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding Command}"
+                                    Background="{StaticResource BrushTertiaryBackground}"
+                                    BorderBrush="{StaticResource BrushBorderSecondary}"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="24,20"
+                                    Margin="8"
+                                    MinWidth="{DynamicResource DashboardTileMinWidth}"
+                                    MaxWidth="{DynamicResource DashboardTileMaxWidth}"
+                                    Height="{DynamicResource DashboardTileHeight}"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center">
+                                <StackPanel Spacing="8" HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding Icon}"
+                                               FontSize="32"
+                                               HorizontalAlignment="Center"
+                                               IsVisible="{Binding Icon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                                    <TextBlock Text="{Binding Header}"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource BrushPrimaryText}"
+                                               HorizontalAlignment="Center"
+                                               TextAlignment="Center"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
 </UserControl>

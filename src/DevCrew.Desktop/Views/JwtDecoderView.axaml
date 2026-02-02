@@ -14,8 +14,8 @@
     </UserControl.Resources>
     
     <ScrollViewer>
-        <Border Padding="16" Background="{StaticResource BrushSecondaryBackground}">
-            <Grid RowDefinitions="Auto,Auto,*" Width="800" HorizontalAlignment="Center">
+        <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
+            <Grid RowDefinitions="Auto,Auto,*" MaxWidth="1200" HorizontalAlignment="Center">
                 <!-- Header -->
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
                     <TextBlock Text="JWT Decoder"
@@ -28,7 +28,8 @@
                                FontSize="14"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
-                               TextAlignment="Center" />
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" />
                 </StackPanel>
 
                 <!-- Input Section -->
@@ -179,40 +180,42 @@
                             CornerRadius="6"
                             Padding="12"
                             Margin="0,0,0,12">
-                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*">
-                            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                        <Grid RowDefinitions="Auto,Auto">
+                            <TextBlock Grid.Row="0"
                                        Text="Token Bilgileri"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource BrushPrimaryText}"
                                        Margin="0,0,0,8" />
                             
-                            <StackPanel Grid.Row="1" Grid.Column="0" Spacing="4">
-                                <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}">
-                                    <Run Text="Issuer: " />
-                                    <Run Text="{Binding Issuer, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
-                                </TextBlock>
-                                <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}">
-                                    <Run Text="Subject: " />
-                                    <Run Text="{Binding Subject, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
-                                </TextBlock>
-                                <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}">
-                                    <Run Text="Audience: " />
-                                    <Run Text="{Binding Audience, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
-                                </TextBlock>
-                            </StackPanel>
-                            
-                            <StackPanel Grid.Row="1" Grid.Column="1" Spacing="4">
-                                <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}">
-                                    <Run Text="Issued At: " />
-                                    <Run Text="{Binding IssuedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
-                                </TextBlock>
-                                <TextBlock FontSize="11">
-                                    <Run Text="Expires At: " Foreground="{StaticResource BrushSecondaryText}" />
-                                    <Run Text="{Binding ExpiresAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', FallbackValue='N/A'}" 
-                                         Foreground="{StaticResource BrushPrimaryText}" />
-                                </TextBlock>
-                            </StackPanel>
+                            <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
+                                    <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
+                                        <Run Text="Issuer: " />
+                                        <Run Text="{Binding Issuer, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
+                                    </TextBlock>
+                                    <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
+                                        <Run Text="Subject: " />
+                                        <Run Text="{Binding Subject, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
+                                    </TextBlock>
+                                    <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
+                                        <Run Text="Audience: " />
+                                        <Run Text="{Binding Audience, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
+                                    </TextBlock>
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Column="1" Spacing="4">
+                                    <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
+                                        <Run Text="Issued At: " />
+                                        <Run Text="{Binding IssuedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
+                                    </TextBlock>
+                                    <TextBlock FontSize="11" TextWrapping="Wrap">
+                                        <Run Text="Expires At: " Foreground="{StaticResource BrushSecondaryText}" />
+                                        <Run Text="{Binding ExpiresAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', FallbackValue='N/A'}" 
+                                             Foreground="{StaticResource BrushPrimaryText}" />
+                                    </TextBlock>
+                                </StackPanel>
+                            </Grid>
                         </Grid>
                     </Border>
                     

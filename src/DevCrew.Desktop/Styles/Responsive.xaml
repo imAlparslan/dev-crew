@@ -1,0 +1,27 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- Responsive Breakpoints -->
+    <x:Double x:Key="BreakpointSmall">480</x:Double>
+    <x:Double x:Key="BreakpointMedium">768</x:Double>
+    <x:Double x:Key="BreakpointLarge">1024</x:Double>
+    
+    <!-- Responsive Grid Column Definitions -->
+    <GridLength x:Key="ResponsiveColumnAuto">Auto</GridLength>
+    <GridLength x:Key="ResponsiveColumnStar">*</GridLength>
+    
+    <!-- Responsive Margins and Padding -->
+    <Thickness x:Key="ResponsiveMarginSmall">8</Thickness>
+    <Thickness x:Key="ResponsiveMarginMedium">16</Thickness>
+    <Thickness x:Key="ResponsiveMarginLarge">24</Thickness>
+    
+    <Thickness x:Key="ResponsivePaddingSmall">8</Thickness>
+    <Thickness x:Key="ResponsivePaddingMedium">16</Thickness>
+    <Thickness x:Key="ResponsivePaddingLarge">24</Thickness>
+    
+    <!-- Dashboard Tile Sizes -->
+    <x:Double x:Key="DashboardTileMinWidth">180</x:Double>
+    <x:Double x:Key="DashboardTileMaxWidth">240</x:Double>
+    <x:Double x:Key="DashboardTileHeight">120</x:Double>
+    
+</ResourceDictionary>
