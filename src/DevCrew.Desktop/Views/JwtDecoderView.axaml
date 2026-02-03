@@ -121,36 +121,66 @@
                             <Binding Path="IsSignatureValid" Converter="{StaticResource SignatureValidBorderConverter}" FallbackValue="{StaticResource BrushBorderSecondary}" />
                         </Border.BorderBrush>
                         <Grid RowDefinitions="Auto,Auto,Auto">
-                            <TextBlock Grid.Row="0"
-                                       Text="Secret Key (İmza Doğrulama)"
-                                       FontSize="12"
-                                       FontWeight="SemiBold"
-                                       Foreground="{StaticResource BrushSecondaryText}"
-                                       Margin="0,0,0,8" />
+                            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                                <TextBlock Grid.Column="0"
+                                           Text="Secret Key (İmza Doğrulama)"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrushSecondaryText}"
+                                           VerticalAlignment="Center" />
+                                
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Secret.Length, FallbackValue='0 karakter'}"
+                                           FontSize="10"
+                                           Foreground="{StaticResource BrushSecondaryText}"
+                                           VerticalAlignment="Center">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} karakter">
+                                            <Binding Path="Secret.Length" FallbackValue="0" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
                             
-                            <TextBox Grid.Row="1"
-                                     Text="{Binding Secret}"
-                                     PasswordChar="●"
-                                     Padding="8"
-                                     Width="556"
-                                     Height="36"
-                                     TextWrapping="NoWrap"
-                                     MaxLines="1"
-                                     HorizontalAlignment="Stretch"
-                                     VerticalAlignment="Top"
-                                     VerticalContentAlignment="Center"
-                                     UseLayoutRounding="False"
-                                     ClipToBounds="True"
-                                     Background="{StaticResource BrushSecondaryBackground}"
-                                     BorderBrush="{StaticResource BrushBorderSecondary}"
-                                     BorderThickness="1"
-                                     CornerRadius="4"
-                                     Foreground="{StaticResource BrushPrimaryText}"
-                                     FontFamily="Consolas, Courier New, monospace"
-                                     Watermark="Secret key'inizi girin"
-                                     SelectionBrush="{StaticResource BrushAccent}"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                     ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                            <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+                                <Button Grid.Column="0"
+                                        Content="👁️"
+                                        Width="36"
+                                        Height="36"
+                                        Padding="0"
+                                        Margin="0,0,4,0"
+                                        Background="{StaticResource BrushTertiaryBackground}"
+                                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                                        BorderThickness="1"
+                                        CornerRadius="4"
+                                        ToolTip.Tip="Göster/Gizle"
+                                        Command="{Binding ToggleSecretVisibilityCommand}" />
+                                
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding Secret}"
+                                         PasswordChar="●"
+                                         RevealPassword="{Binding IsSecretVisible}"
+                                         Padding="8"
+                                         Width="516"
+                                         Height="36"
+                                         TextWrapping="NoWrap"
+                                         MaxLines="1"
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Top"
+                                         VerticalContentAlignment="Center"
+                                         UseLayoutRounding="False"
+                                         ClipToBounds="True"
+                                         Background="{StaticResource BrushSecondaryBackground}"
+                                         BorderBrush="{StaticResource BrushBorderSecondary}"
+                                         BorderThickness="1"
+                                         CornerRadius="4"
+                                         Foreground="{StaticResource BrushPrimaryText}"
+                                         FontFamily="Consolas, Courier New, monospace"
+                                         Watermark="Secret key'inizi girin"
+                                         SelectionBrush="{StaticResource BrushAccent}"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                            </Grid>
                             
                             <Grid Grid.Row="2" Margin="0,8,0,0" ColumnDefinitions="*,Auto">
                                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4"

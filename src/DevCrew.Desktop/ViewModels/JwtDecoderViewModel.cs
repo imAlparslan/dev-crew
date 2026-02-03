@@ -53,6 +53,9 @@ public partial class JwtDecoderViewModel : ObservableObject
     [ObservableProperty]
     private string? subject;
 
+    [ObservableProperty]
+    private bool isSecretVisible;
+
     public bool HasToken => !string.IsNullOrWhiteSpace(RawToken);
     public bool CanDecode => HasToken;
     public bool CanValidateSignature => HasToken && !string.IsNullOrWhiteSpace(Secret);
@@ -168,5 +171,11 @@ public partial class JwtDecoderViewModel : ObservableObject
             ValidateSignature();
         }
         ValidateSignatureCommand.NotifyCanExecuteChanged();
+    }
+
+    [RelayCommand]
+    private void ToggleSecretVisibility()
+    {
+        IsSecretVisible = !IsSecretVisible;
     }
 }
