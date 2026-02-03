@@ -27,8 +27,7 @@ public class JwtService : IJwtService
                 return result;
             }
 
-            // Remove "Bearer " prefix if present
-            token = token.Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase).Trim();
+            token = RemoveBearerPrefix(token);
 
             if (!_tokenHandler.CanReadToken(token))
             {
@@ -68,10 +67,9 @@ public class JwtService : IJwtService
                 WriteIndented = true
             });
             result.Payload = payloadJson;
-
             // Extract common claims - check both properties and claims
-            // exp (expiration time)
-            var expClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "exp");
+            // Expiration time
+            var expClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Expiration);
             if (expClaim != null && long.TryParse(expClaim.Value, out long expTimestamp))
             {
                 result.ExpiresAt = DateTimeOffset.FromUnixTimeSeconds(expTimestamp).UtcDateTime;
@@ -81,8 +79,8 @@ public class JwtService : IJwtService
                 result.ExpiresAt = jwtToken.ValidTo;
             }
 
-            // iat (issued at)
-            var iatClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "iat");
+            // Issued at
+            var iatClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtClaimTypes.IssuedAt);
             if (iatClaim != null && long.TryParse(iatClaim.Value, out long iatTimestamp))
             {
                 result.IssuedAt = DateTimeOffset.FromUnixTimeSeconds(iatTimestamp).UtcDateTime;
@@ -92,8 +90,8 @@ public class JwtService : IJwtService
                 result.IssuedAt = jwtToken.ValidFrom;
             }
 
-            // nbf (not before)
-            var nbfClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "nbf");
+            // Not before
+            var nbfClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtClaimTypes.NotBefore);
             if (nbfClaim != null && long.TryParse(nbfClaim.Value, out long nbfTimestamp))
             {
                 result.NotBefore = DateTimeOffset.FromUnixTimeSeconds(nbfTimestamp).UtcDateTime;
@@ -126,8 +124,7 @@ public class JwtService : IJwtService
                 return false;
             }
 
-            // Remove "Bearer " prefix if present
-            token = token.Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase).Trim();
+            token = RemoveBearerPrefix(token);
 
             if (!_tokenHandler.CanReadToken(token))
             {
@@ -159,5 +156,23 @@ public class JwtService : IJwtService
         {
             return false;
         }
+    }
+
+    /// <summary>
+    /// Removes "Bearer " prefix from JWT token if present.
+    /// Safely removes only the prefix at the beginning of the token.
+    /// </summary>
+    /// <param name="token">The token with possible "Bearer " prefix</param>
+    /// <returns>Token without the prefix</returns>
+    private string RemoveBearerPrefix(string token)
+    {
+        const string bearerPrefix = "Bearer ";
+        
+        if (token.StartsWith(bearerPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            return token[bearerPrefix.Length..].Trim();
+        }
+
+        return token.Trim();
     }
 }

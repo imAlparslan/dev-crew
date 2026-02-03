@@ -23,6 +23,9 @@
     <Color x:Key="ColorButtonPrimary">#111827</Color>
     <Color x:Key="ColorButtonSecondary">#1F2937</Color>
     <Color x:Key="ColorButtonHover">#475569</Color>
+    <Color x:Key="ColorButtonPageDefault">#2D2D2D</Color>
+    <Color x:Key="ColorButtonPageDisabled">#3C3C3C</Color>
+    <Color x:Key="ColorButtonPageBorderDefault">#1F1F1F</Color>
     
     <!-- Solid Color Brushes -->
     <SolidColorBrush x:Key="BrushPrimaryBackground" Color="{StaticResource ColorPrimaryBackground}" />

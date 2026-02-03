@@ -111,8 +111,7 @@ public partial class JwtDecoderViewModel : ObservableObject
             IsHeaderCopied = await _clipboardService.TrySetTextAsync(DecodedHeader);
             if (IsHeaderCopied)
             {
-                await Task.Delay(2000);
-                IsHeaderCopied = false;
+                await ResetCopyIndicatorAsync(() => IsHeaderCopied = false);
             }
         }
     }
@@ -125,8 +124,7 @@ public partial class JwtDecoderViewModel : ObservableObject
             IsPayloadCopied = await _clipboardService.TrySetTextAsync(DecodedPayload);
             if (IsPayloadCopied)
             {
-                await Task.Delay(2000);
-                IsPayloadCopied = false;
+                await ResetCopyIndicatorAsync(() => IsPayloadCopied = false);
             }
         }
     }
@@ -171,6 +169,16 @@ public partial class JwtDecoderViewModel : ObservableObject
             ValidateSignature();
         }
         ValidateSignatureCommand.NotifyCanExecuteChanged();
+    }
+
+    /// <summary>
+    /// Helper method to reset copy indicator after a delay.
+    /// </summary>
+    /// <param name="resetAction">Action to execute for resetting the indicator</param>
+    private async Task ResetCopyIndicatorAsync(Action resetAction)
+    {
+        await Task.Delay(2000);
+        resetAction();
     }
 
     [RelayCommand]

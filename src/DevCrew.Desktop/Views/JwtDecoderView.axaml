@@ -5,12 +5,11 @@
              x:Class="DevCrew.Desktop.Views.JwtDecoderView"
              x:DataType="vm:JwtDecoderViewModel">
     <UserControl.Resources>
-        <conv:BooleanToBrushConverter x:Key="SignatureValidBackgroundConverter"
-                                      TrueBrush="{StaticResource BrushSuccess}"
-                                      FalseBrush="{StaticResource BrushDanger}" />
-        <conv:BooleanToBrushConverter x:Key="SignatureValidBorderConverter"
-                                      TrueBrush="{StaticResource BrushSuccessDark}"
-                                      FalseBrush="{StaticResource BrushDangerDark}" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="../Styles/Fonts.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     
     <ScrollViewer>
@@ -72,8 +71,8 @@
                                      BorderThickness="1"
                                      CornerRadius="4"
                                      Foreground="{StaticResource BrushPrimaryText}"
-                                     FontFamily="Consolas, Courier New, monospace"
-                                     FontSize="11"
+                                     FontFamily="{StaticResource FontMonospace}"
+                                     FontSize="{StaticResource FontSizeSmall}"
                                      Watermark="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ..."
                                      SelectionBrush="{StaticResource BrushAccent}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -175,7 +174,7 @@
                                          BorderThickness="1"
                                          CornerRadius="4"
                                          Foreground="{StaticResource BrushPrimaryText}"
-                                         FontFamily="Consolas, Courier New, monospace"
+                                         FontFamily="{StaticResource FontMonospace}"
                                          Watermark="Secret key'inizi girin"
                                          SelectionBrush="{StaticResource BrushAccent}"
                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -193,11 +192,8 @@
                                                VerticalAlignment="Center"
                                                Foreground="{Binding IsSignatureValid, Converter={StaticResource SignatureValidBackgroundConverter}}">
                                         <TextBlock.Text>
-                                            <Binding Path="IsSignatureValid">
-                                                <Binding.Converter>
-                                                    <conv:BooleanToBrushConverter TrueString="✓ Geçerli" FalseString="✗ Geçersiz" />
-                                                </Binding.Converter>
-                                            </Binding>
+                                            <Binding Path="IsSignatureValid"
+                                                     Converter="{StaticResource SignatureStatusConverter}" />
                                         </TextBlock.Text>
                                     </TextBlock>
                                 </StackPanel>
@@ -311,11 +307,8 @@
                                         FontSize="11">
                                     <TextBlock>
                                         <TextBlock.Text>
-                                            <Binding Path="IsHeaderCopied">
-                                                <Binding.Converter>
-                                                    <conv:BooleanToBrushConverter TrueString="✓ Copied" FalseString="📋 Copy" />
-                                                </Binding.Converter>
-                                            </Binding>
+                                            <Binding Path="IsHeaderCopied"
+                                                     Converter="{StaticResource CopyStatusConverter}" />
                                         </TextBlock.Text>
                                     </TextBlock>
                                 </Button>
@@ -329,8 +322,8 @@
                                     Padding="8">
                                 <ScrollViewer MaxHeight="200">
                                     <TextBlock Text="{Binding DecodedHeader}"
-                                               FontFamily="Consolas, Courier New, monospace"
-                                               FontSize="11"
+                                               FontFamily="{StaticResource FontMonospace}"
+                                               FontSize="{StaticResource FontSizeSmall}"
                                                Foreground="{StaticResource BrushPrimaryText}"
                                                TextWrapping="Wrap" />
                                 </ScrollViewer>
@@ -366,11 +359,8 @@
                                         FontSize="11">
                                     <TextBlock>
                                         <TextBlock.Text>
-                                            <Binding Path="IsPayloadCopied">
-                                                <Binding.Converter>
-                                                    <conv:BooleanToBrushConverter TrueString="✓ Copied" FalseString="📋 Copy" />
-                                                </Binding.Converter>
-                                            </Binding>
+                                            <Binding Path="IsPayloadCopied"
+                                                     Converter="{StaticResource CopyStatusConverter}" />
                                         </TextBlock.Text>
                                     </TextBlock>
                                 </Button>
@@ -384,8 +374,8 @@
                                     Padding="8">
                                 <ScrollViewer MaxHeight="300">
                                     <TextBlock Text="{Binding DecodedPayload}"
-                                               FontFamily="Consolas, Courier New, monospace"
-                                               FontSize="11"
+                                               FontFamily="{StaticResource FontMonospace}"
+                                               FontSize="{StaticResource FontSizeSmall}"
                                                Foreground="{StaticResource BrushPrimaryText}"
                                                TextWrapping="Wrap" />
                                 </ScrollViewer>

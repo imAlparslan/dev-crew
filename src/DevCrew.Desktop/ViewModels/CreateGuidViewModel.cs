@@ -2,10 +2,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DevCrew.Core.Data;
 using DevCrew.Core.Models;
 using DevCrew.Core.Services;
-using Microsoft.EntityFrameworkCore;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -17,7 +15,7 @@ public partial class CreateGuidViewModel : ObservableObject
 {
     private readonly IGuidService _guidService;
     private readonly IClipboardService _clipboardService;
-    private readonly AppDbContext _dbContext;
+    private readonly IGuidRepository _guidRepository;
     private readonly HashSet<GuidItemViewModel> _trackedGuidItems = new();
 
     [ObservableProperty]
@@ -63,12 +61,12 @@ public partial class CreateGuidViewModel : ObservableObject
     /// </summary>
     /// <param name="guidService">GUID generation service.</param>
     /// <param name="clipboardService">Clipboard access service.</param>
-    /// <param name="dbContext">Database context.</param>
-    public CreateGuidViewModel(IGuidService guidService, IClipboardService clipboardService, AppDbContext dbContext)
+    /// <param name="guidRepository">Repository for GUID data access.</param>
+    public CreateGuidViewModel(IGuidService guidService, IClipboardService clipboardService, IGuidRepository guidRepository)
     {
         _guidService = guidService;
         _clipboardService = clipboardService;
-        _dbContext = dbContext;
+        _guidRepository = guidRepository;
     }
 
     [RelayCommand]
@@ -120,17 +118,10 @@ public partial class CreateGuidViewModel : ObservableObject
             if (guidItem.IsSaved)
                 return;
 
-            var guidHistory = new GuidHistory
-            {
-                GuidValue = guidItem.GuidValue,
-                CreatedAt = DateTime.UtcNow,
-                Notes = guidItem.Notes
-            };
-            _dbContext.GuidHistories.Add(guidHistory);
-            await _dbContext.SaveChangesAsync();
+            var savedGuidHistory = await _guidRepository.SaveGuidAsync(guidItem.GuidValue, guidItem.Notes);
 
             guidItem.IsSaved = true;
-            guidItem.DatabaseId = guidHistory.Id;
+            guidItem.DatabaseId = savedGuidHistory.Id;
             if (ShowOnlySavedGuids)
             {
                 await LoadSavedGuidsPageAsync(reset: true);
@@ -154,14 +145,7 @@ public partial class CreateGuidViewModel : ObservableObject
             // Remove from database if saved
             if (guidItem.IsSaved && guidItem.DatabaseId.HasValue)
             {
-                var historyItem = await _dbContext.GuidHistories
-                    .FirstOrDefaultAsync(g => g.Id == guidItem.DatabaseId.Value);
-
-                if (historyItem != null)
-                {
-                    _dbContext.GuidHistories.Remove(historyItem);
-                    await _dbContext.SaveChangesAsync();
-                }
+                await _guidRepository.DeleteGuidAsync(guidItem.DatabaseId.Value);
             }
 
             // Remove from recent list
@@ -256,19 +240,8 @@ public partial class CreateGuidViewModel : ObservableObject
                 FilteredGuidsByPage.Clear();
             }
 
-            // Build query with search filter BEFORE pagination
-            var query = _dbContext.GuidHistories.AsQueryable();
-            
-            if (!string.IsNullOrWhiteSpace(SearchQuery))
-            {
-                query = query.Where(g => g.Notes != null && g.Notes.Contains(SearchQuery));
-            }
-
-            var savedGuids = await query
-                .OrderByDescending(g => g.CreatedAt)
-                .Skip(_savedSkip)
-                .Take(PageSize)
-                .ToListAsync();
+            // Fetch paginated GUIDs from repository with optional search filter
+            var savedGuids = await _guidRepository.GetGuidsPagedAsync(_savedSkip, PageSize, SearchQuery);
 
             foreach (var dbGuid in savedGuids)
             {
@@ -307,10 +280,7 @@ public partial class CreateGuidViewModel : ObservableObject
     {
         try
         {
-            var savedGuids = await _dbContext.GuidHistories
-                .OrderByDescending(g => g.CreatedAt)
-                .Take(10)
-                .ToListAsync();
+            var savedGuids = await _guidRepository.GetGuidsPagedAsync(0, 10);
 
             foreach (var guid in savedGuids)
             {
@@ -360,14 +330,7 @@ public partial class CreateGuidViewModel : ObservableObject
     {
         try
         {
-            var historyItem = await _dbContext.GuidHistories
-                .FirstOrDefaultAsync(g => g.Id == databaseId);
-
-            if (historyItem == null)
-                return;
-
-            historyItem.Notes = notes;
-            await _dbContext.SaveChangesAsync();
+            await _guidRepository.UpdateGuidNotesAsync(databaseId, notes);
         }
         catch (Exception ex)
         {

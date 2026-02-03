@@ -1,0 +1,20 @@
+<Styles xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- Dashboard Tile Button Style -->
+    <Style Selector="Button.DashboardTile">
+        <Setter Property="Background" Value="{StaticResource BrushTertiaryBackground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorderSecondary}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Padding" Value="24,20" />
+        <Setter Property="Margin" Value="8" />
+        <Setter Property="MinWidth" Value="{StaticResource DashboardTileMinWidth}" />
+        <Setter Property="MaxWidth" Value="{StaticResource DashboardTileMaxWidth}" />
+        <Setter Property="Height" Value="{StaticResource DashboardTileHeight}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    
+</Styles>

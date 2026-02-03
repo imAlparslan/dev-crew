@@ -1,6 +1,8 @@
 using System.Globalization;
+using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using Avalonia.Styling;
 
 namespace DevCrew.Desktop.Converters;
 
@@ -17,10 +19,18 @@ public sealed class PageButtonBorderConverter : IMultiValueConverter
         if (string.IsNullOrEmpty(pageText) || currentPageObj == null)
             return null;
 
+        var app = Application.Current;
+        if (app?.Resources == null)
+            return null;
+
         // Ellipsis buttons should not be clickable
         if (pageText == "...")
         {
-            return new SolidColorBrush(Color.Parse("#2D2D2D")); // Subtle border
+            if (app.Resources.TryGetResource("ColorButtonPageDisabled", null, out var color) && color is Color disabledColor)
+            {
+                return new SolidColorBrush(disabledColor);
+            }
+            return null;
         }
 
         // Parse current page
@@ -33,9 +43,18 @@ public sealed class PageButtonBorderConverter : IMultiValueConverter
         // Highlight current page with darker accent color
         if (pageNum == currentPage)
         {
-            return new SolidColorBrush(Color.Parse("#0A515A")); // BrushAccentDark
+            if (app.Resources.TryGetResource("ColorAccentDark", null, out var color) && color is Color accentDarkColor)
+            {
+                return new SolidColorBrush(accentDarkColor);
+            }
         }
 
-        return new SolidColorBrush(Color.Parse("#1F1F1F")); // Default border color
+        // Default border color
+        if (app.Resources.TryGetResource("ColorButtonPageBorderDefault", null, out var defaultColor) && defaultColor is Color borderColor)
+        {
+            return new SolidColorBrush(borderColor);
+        }
+
+        return null;
     }
 }

@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace DevCrew.Core.ViewModels;
 
 /// <summary>
-/// Temel ViewModel sınıfı
+/// Base ViewModel class providing common functionality for all ViewModels.
 /// </summary>
 public abstract class BaseViewModel : ObservableObject
 {
@@ -20,7 +20,7 @@ public abstract class BaseViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Hata mesajı
+    /// Error message
     /// </summary>
     public string? ErrorMessage
     {
@@ -29,10 +29,72 @@ public abstract class BaseViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Hata durumunu temizle
+    /// Clears the error state.
     /// </summary>
     public void ClearError()
     {
         ErrorMessage = null;
+    }
+
+    /// <summary>
+    /// Executes an async operation with automatic loading state and error handling.
+    /// </summary>
+    /// <param name="operation">The async operation to execute</param>
+    /// <param name="errorContext">Optional error context message if operation fails</param>
+    /// <returns>True if operation succeeded, false otherwise</returns>
+    protected async Task<bool> RunAsyncOperationAsync(Func<Task> operation, string? errorContext = null)
+    {
+        if (operation == null)
+            throw new ArgumentNullException(nameof(operation));
+
+        try
+        {
+            ClearError();
+            IsLoading = true;
+            await operation();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = string.IsNullOrWhiteSpace(errorContext)
+                ? ex.Message
+                : $"{errorContext}: {ex.Message}";
+            return false;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    /// <summary>
+    /// Executes an async operation that returns a result with automatic loading state and error handling.
+    /// </summary>
+    /// <param name="operation">The async operation to execute</param>
+    /// <param name="errorContext">Optional error context message if operation fails</param>
+    /// <returns>A tuple of (success, result). Result is default if operation failed.</returns>
+    protected async Task<(bool Success, T? Result)> RunAsyncOperationAsync<T>(Func<Task<T>> operation, string? errorContext = null)
+    {
+        if (operation == null)
+            throw new ArgumentNullException(nameof(operation));
+
+        try
+        {
+            ClearError();
+            IsLoading = true;
+            var result = await operation();
+            return (true, result);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = string.IsNullOrWhiteSpace(errorContext)
+                ? ex.Message
+                : $"{errorContext}: {ex.Message}";
+            return (false, default);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 }

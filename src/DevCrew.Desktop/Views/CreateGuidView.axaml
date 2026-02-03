@@ -6,14 +6,12 @@
                          x:DataType="vm:CreateGuidViewModel"
                          PointerPressed="OnRootPointerPressed">
         <UserControl.Resources>
-                <conv:BooleanToBrushConverter x:Key="GuidBackgroundConverter"
-                                                                          TrueBrush="{StaticResource BrushAccent}"
-                                                                          FalseBrush="{StaticResource BrushTertiaryBackground}" />
-                <conv:BooleanToBrushConverter x:Key="GuidBorderConverter"
-                                                                          TrueBrush="{StaticResource BrushAccentDark}"
-                                                                          FalseBrush="{StaticResource BrushBorderSecondary}" />
-                <conv:BoolToDoubleConverter x:Key="BoolToOpacityConverter" />
-        </UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="../Styles/Fonts.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
             <Grid RowDefinitions="Auto,*" MaxWidth="900" HorizontalAlignment="Center">
@@ -94,7 +92,7 @@
                              Background="Transparent"
                              BorderThickness="0"
                              Foreground="{StaticResource BrushPrimaryText}"
-                             FontFamily="Consolas, Courier New, monospace"
+                             FontFamily="{StaticResource FontMonospace}"
                              Watermark="GUID burada görünecek"
                              SelectionBrush="{StaticResource BrushAccent}"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -193,8 +191,8 @@
                                         <!-- Column 1: GUID Value -->
                                         <TextBlock Grid.Column="0"
                                                    Text="{Binding GuidValue}"
-                                                   FontFamily="Consolas, Courier New, monospace"
-                                                   FontSize="12"
+                                                   FontFamily="{StaticResource FontMonospace}"
+                                                   FontSize="{StaticResource FontSizeDefault}"
                                                    Foreground="{StaticResource BrushSecondaryText}"
                                                    VerticalAlignment="Center"
                                                    MinWidth="250"

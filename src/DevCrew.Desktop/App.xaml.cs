@@ -5,6 +5,7 @@ using DevCrew.Core;
 using DevCrew.Core.Data;
 using DevCrew.Desktop.ViewModels;
 using DevCrew.Desktop.Views;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DevCrew.Desktop;
@@ -12,6 +13,7 @@ namespace DevCrew.Desktop;
 public partial class App : Application
 {
     private IServiceProvider? _serviceProvider;
+    private IConfiguration? _configuration;
 
     public override void Initialize()
     {
@@ -20,6 +22,9 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        // Load configuration
+        _configuration = LoadConfiguration();
+
         // Dependency Injection Container'ını yapılandır
         var services = new ServiceCollection();
         ConfigureServices(services);
@@ -48,10 +53,30 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
+    private IConfiguration LoadConfiguration()
+    {
+        var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+        var basePath = AppContext.BaseDirectory;
+        
+        var configBuilder = new ConfigurationBuilder()
+            .SetBasePath(basePath)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+            .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: false)
+            .AddEnvironmentVariables("DEVCREW_");
+
+        return configBuilder.Build();
+    }
+
     private void ConfigureServices(IServiceCollection services)
     {
+        // Register configuration
+        if (_configuration != null)
+        {
+            services.AddSingleton(_configuration);
+        }
+
         // Core Services
-        services.AddDevCrewCore();
+        services.AddDevCrewCore(_configuration ?? new ConfigurationBuilder().Build());
 
         // ViewModels
         services.AddScoped<MainWindowViewModel>();

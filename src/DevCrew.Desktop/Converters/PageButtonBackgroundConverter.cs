@@ -1,6 +1,8 @@
 using System.Globalization;
+using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using Avalonia.Styling;
 
 namespace DevCrew.Desktop.Converters;
 
@@ -17,10 +19,18 @@ public sealed class PageButtonBackgroundConverter : IMultiValueConverter
         if (string.IsNullOrEmpty(pageText) || currentPageObj == null)
             return null;
 
+        var app = Application.Current;
+        if (app?.Resources == null)
+            return null;
+
         // Ellipsis buttons should not be clickable and have muted appearance
         if (pageText == "...")
         {
-            return new SolidColorBrush(Color.Parse("#3C3C3C")); // Darker gray for disabled appearance
+            if (app.Resources.TryGetResource("ColorButtonPageDisabled", null, out var color) && color is Color disabledColor)
+            {
+                return new SolidColorBrush(disabledColor);
+            }
+            return null;
         }
 
         // Parse current page
@@ -33,9 +43,18 @@ public sealed class PageButtonBackgroundConverter : IMultiValueConverter
         // Highlight current page with accent color
         if (pageNum == currentPage)
         {
-            return new SolidColorBrush(Color.Parse("#0E7C86")); // BrushAccent
+            if (app.Resources.TryGetResource("ColorAccent", null, out var color) && color is Color accentColor)
+            {
+                return new SolidColorBrush(accentColor);
+            }
         }
 
-        return new SolidColorBrush(Color.Parse("#2D2D2D")); // Default button color
+        // Default button color
+        if (app.Resources.TryGetResource("ColorButtonPageDefault", null, out var defaultColor) && defaultColor is Color buttonColor)
+        {
+            return new SolidColorBrush(buttonColor);
+        }
+
+        return null;
     }
 }

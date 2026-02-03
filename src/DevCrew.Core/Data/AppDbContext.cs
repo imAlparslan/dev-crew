@@ -35,9 +35,9 @@ public class AppDbContext : DbContext
         {
             entity.ToTable("GuidHistories");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.GuidValue).IsRequired().HasMaxLength(36);
+            entity.Property(e => e.GuidValue).IsRequired().HasMaxLength(EntityConfiguration.GuidValueMaxLength);
             entity.Property(e => e.CreatedAt).IsRequired();
-            entity.Property(e => e.Notes).HasMaxLength(500);
+            entity.Property(e => e.Notes).HasMaxLength(EntityConfiguration.NotesMaxLength);
             entity.HasIndex(e => e.CreatedAt).IsDescending();
         });
 
@@ -46,9 +46,9 @@ public class AppDbContext : DbContext
         {
             entity.ToTable("JwtHistories");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Token).IsRequired();
+            entity.Property(e => e.Token).IsRequired().HasMaxLength(EntityConfiguration.JwtTokenMaxLength);
             entity.Property(e => e.DecodedAt).IsRequired();
-            entity.Property(e => e.Notes).HasMaxLength(500);
+            entity.Property(e => e.Notes).HasMaxLength(EntityConfiguration.NotesMaxLength);
             entity.HasIndex(e => e.DecodedAt).IsDescending();
         });
     }

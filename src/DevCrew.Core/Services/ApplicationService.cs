@@ -33,7 +33,7 @@ public class ApplicationService : IApplicationService
     /// <inheritdoc />
     public Task ShutdownAsync(CancellationToken cancellationToken = default)
     {
-        // Uygulama kapatma işlemleri burada yapılacak
+        // Application shutdown operations will be performed here
         return Task.CompletedTask;
     }
 }

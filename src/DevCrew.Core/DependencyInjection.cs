@@ -1,33 +1,32 @@
 using DevCrew.Core.Data;
 using DevCrew.Core.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DevCrew.Core;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddDevCrewCore(this IServiceCollection services)
+    public static IServiceCollection AddDevCrewCore(this IServiceCollection services, IConfiguration configuration)
     {
-        // Register DbContext with SQLite
-        var dbPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "DevCrew",
-            "devcrew.db"
-        );
+        // Add logging
+        services.AddLogging();
 
-        // Ensure directory exists
-        var directory = Path.GetDirectoryName(dbPath);
-        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+        // Create database options - use FilePath from config if available
+        var databaseOptions = new DatabaseOptions
         {
-            Directory.CreateDirectory(directory);
-        }
+            FilePath = configuration["Database:FilePath"]
+        };
+        var dbPath = databaseOptions.GetDatabasePath();
 
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlite($"Data Source={dbPath}"));
 
         // Register services
         services.AddScoped<IApplicationService, ApplicationService>();
+        services.AddScoped<IGuidRepository, GuidRepository>();
+        services.AddSingleton<IErrorHandler, ErrorHandler>();
         services.AddSingleton<IGuidService, GuidService>();
         services.AddSingleton<IClipboardService, ClipboardService>();
         services.AddSingleton<IJwtService, JwtService>();
