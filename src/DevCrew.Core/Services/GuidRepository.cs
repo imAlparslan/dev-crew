@@ -39,12 +39,9 @@ public class GuidRepository : IGuidRepository
     /// <inheritdoc/>
     public async Task<bool> DeleteGuidAsync(int id)
     {
-        var historyItem = await _dbContext.GuidHistories.FindAsync(id);
-        if (historyItem == null)
-            return false;
-
-        _dbContext.GuidHistories.Remove(historyItem);
-        await _dbContext.SaveChangesAsync();
+        _ = await _dbContext.GuidHistories
+                    .Where(g => g.Id == id)
+                    .ExecuteDeleteAsync();
 
         return true;
     }
@@ -52,12 +49,9 @@ public class GuidRepository : IGuidRepository
     /// <inheritdoc/>
     public async Task<bool> UpdateGuidNotesAsync(int id, string? notes)
     {
-        var historyItem = await _dbContext.GuidHistories.FindAsync(id);
-        if (historyItem == null)
-            return false;
-
-        historyItem.Notes = notes;
-        await _dbContext.SaveChangesAsync();
+        _ = await _dbContext.GuidHistories
+                    .Where(g => g.Id == id)
+                    .ExecuteUpdateAsync(setter => setter.SetProperty(g => g.Notes, notes));
 
         return true;
     }
@@ -65,7 +59,7 @@ public class GuidRepository : IGuidRepository
     /// <inheritdoc/>
     public async Task<List<GuidHistory>> GetGuidsPagedAsync(int skip, int take, string? searchQuery = null)
     {
-        var query = _dbContext.GuidHistories.AsQueryable();
+        var query = _dbContext.GuidHistories.AsNoTracking().AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
@@ -85,7 +79,7 @@ public class GuidRepository : IGuidRepository
     /// <inheritdoc/>
     public async Task<int> GetGuidCountAsync(string? searchQuery = null)
     {
-        var query = _dbContext.GuidHistories.AsQueryable();
+        var query = _dbContext.GuidHistories.AsNoTracking().AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {

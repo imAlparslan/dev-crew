@@ -5,6 +5,7 @@ using DevCrew.Core;
 using DevCrew.Core.Data;
 using DevCrew.Desktop.ViewModels;
 using DevCrew.Desktop.Views;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -57,7 +58,6 @@ public partial class App : Application
     {
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
         var basePath = AppContext.BaseDirectory;
-        
         var configBuilder = new ConfigurationBuilder()
             .SetBasePath(basePath)
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
@@ -96,6 +96,18 @@ public partial class App : Application
         {
             // Create database if it doesn't exist
             dbContext.Database.EnsureCreated();
+
+            // Warm up the database connection to avoid first query delay
+            try
+            {
+
+                _ = dbContext.GuidHistories.AsNoTracking().Take(1).ToListAsync();
+
+            }
+            catch
+            {
+                // Warm-up query failure should not prevent app startup
+            }
         }
     }
 }

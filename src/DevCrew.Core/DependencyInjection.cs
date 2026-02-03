@@ -20,8 +20,11 @@ public static class DependencyInjection
         };
         var dbPath = databaseOptions.GetDatabasePath();
 
+        // SQLite connection string - simple configuration, pragmas set at runtime
+        var connectionString = $"Data Source={dbPath};Pooling=true;Foreign Keys=true;";
+        
         services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlite($"Data Source={dbPath}"));
+            options.UseSqlite(connectionString));
 
         // Register services
         services.AddScoped<IApplicationService, ApplicationService>();
