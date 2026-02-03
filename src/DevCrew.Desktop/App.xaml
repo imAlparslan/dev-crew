@@ -20,6 +20,8 @@
     <Application.Styles>
         <FluentTheme/>
                 <StyleInclude Source="/Styles/DashboardTile.xaml" />
+                <StyleInclude Source="/Styles/CommonStyles.xaml" />
+                <StyleInclude Source="/Styles/CreateGuidStyles.xaml" />
 
         <Style Selector="TabStrip">
             <Setter Property="Padding"

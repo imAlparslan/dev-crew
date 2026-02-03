@@ -1,0 +1,30 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Primary action button (Generate GUID) -->
+    <Style Selector="Button.PrimaryActionButton">
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="Background" Value="{StaticResource BrushSuccess}" />
+        <Setter Property="Foreground" Value="{StaticResource BrushPrimaryText}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushSuccessDark}" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <!-- GUID display textbox -->
+    <Style Selector="TextBox.GuidDisplayTextBox">
+        <Setter Property="UseLayoutRounding" Value="False" />
+        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="MaxLines" Value="1" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{StaticResource BrushPrimaryText}" />
+        <Setter Property="SelectionBrush" Value="{StaticResource BrushAccent}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+    </Style>
+
+</Styles>

@@ -35,9 +35,19 @@ public partial class CreateGuidViewModel : ObservableObject
     public ObservableCollection<GuidItemViewModel> RecentGuids { get; } = new();
 
     /// <summary>
+    /// Indicates whether recent GUIDs exist.
+    /// </summary>
+    public bool HasRecentGuids => RecentGuids.Count > 0;
+
+    /// <summary>
     /// Displayed GUIDs (supports infinite scroll when showing saved items)
     /// </summary>
     public ObservableCollection<GuidItemViewModel> FilteredGuidsByPage { get; } = new();
+
+    /// <summary>
+    /// Indicates whether filtered GUIDs exist.
+    /// </summary>
+    public bool HasFilteredGuids => FilteredGuidsByPage.Count > 0;
 
     [ObservableProperty]
     private int pageSize = 10;
@@ -67,6 +77,9 @@ public partial class CreateGuidViewModel : ObservableObject
         _guidService = guidService;
         _clipboardService = clipboardService;
         _guidRepository = guidRepository;
+
+        RecentGuids.CollectionChanged += (_, __) => OnPropertyChanged(nameof(HasRecentGuids));
+        FilteredGuidsByPage.CollectionChanged += (_, __) => OnPropertyChanged(nameof(HasFilteredGuids));
     }
 
     [RelayCommand]
@@ -102,6 +115,18 @@ public partial class CreateGuidViewModel : ObservableObject
         {
             await _clipboardService.TrySetTextAsync(guidItem.GuidValue);
         }
+    }
+
+    [RelayCommand]
+    private async Task LoadSavedGuids()
+    {
+        await LoadSavedGuidsAsync();
+    }
+
+    [RelayCommand]
+    private async Task LoadMoreSavedGuids()
+    {
+        await LoadMoreSavedGuidsAsync();
     }
 
     [RelayCommand]

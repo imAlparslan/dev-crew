@@ -2,16 +2,11 @@
                          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                          xmlns:vm="using:DevCrew.Desktop.ViewModels"
                          xmlns:conv="using:DevCrew.Desktop.Converters"
+                         xmlns:behaviors="using:DevCrew.Desktop.Behaviors"
                          x:Class="DevCrew.Desktop.Views.CreateGuidView"
                          x:DataType="vm:CreateGuidViewModel"
-                         PointerPressed="OnRootPointerPressed">
-        <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="../Styles/Fonts.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
+                         behaviors:FocusClearBehavior.IsEnabled="True"
+                         behaviors:LoadedCommandBehavior.Command="{Binding LoadSavedGuidsCommand}">
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
             <Grid RowDefinitions="Auto,*" MaxWidth="900" HorizontalAlignment="Center">
@@ -39,12 +34,7 @@
                             Content="🎲 Yeni GUID Üret"
                             Command="{Binding GenerateGuidCommand}"
                             HorizontalAlignment="Stretch"
-                            Padding="12,10"
-                            Background="{StaticResource BrushSuccess}"
-                            Foreground="{StaticResource BrushPrimaryText}"
-                            BorderBrush="{StaticResource BrushSuccessDark}"
-                            CornerRadius="8"
-                            FontWeight="SemiBold"
+                            Classes="PrimaryActionButton"
                             Margin="0,0,0,12" />
                     
                     <Border Grid.Row="3"
@@ -67,11 +57,7 @@
                             IsHitTestVisible="{Binding HasGuid}"
                             Width="40"
                             HorizontalAlignment="Left"
-                            Padding="6,4"
-                            Background="{StaticResource BrushAccent}"
-                            Foreground="{StaticResource BrushPrimaryText}"
-                            BorderBrush="{StaticResource BrushAccentDark}"
-                            CornerRadius="4"
+                            Classes="IconActionButton AccentActionButton"
                             Margin="0,0,6,0"
                             ToolTip.Tip="Kopyala" />
 
@@ -82,21 +68,11 @@
                              Padding="6,4"
                              Height="32"
                              Width="488"
-                             TextWrapping="NoWrap"
-                             MaxLines="1"
+                                Classes="GuidDisplayTextBox"
                              HorizontalAlignment="Stretch"
-                             VerticalAlignment="Center"
-                             VerticalContentAlignment="Center"
-                             UseLayoutRounding="False"
-                             ClipToBounds="True"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Foreground="{StaticResource BrushPrimaryText}"
                              FontFamily="{StaticResource FontMonospace}"
                              Watermark="GUID burada görünecek"
-                             SelectionBrush="{StaticResource BrushAccent}"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                                />
 
                         <Button Grid.Column="2"
                             Content="✕"
@@ -106,11 +82,7 @@
                             IsHitTestVisible="{Binding HasGuid}"
                             Width="40"
                             HorizontalAlignment="Right"
-                            Padding="6,4"
-                            Background="{StaticResource BrushDanger}"
-                            Foreground="{StaticResource BrushPrimaryText}"
-                            BorderBrush="{StaticResource BrushDangerDark}"
-                            CornerRadius="4"
+                            Classes="IconActionButton DangerActionButton"
                             Margin="6,0,0,0"
                             ToolTip.Tip="Temizle" />
                         </Grid>
@@ -125,7 +97,7 @@
                         Padding="12"
                         Background="{StaticResource BrushTertiaryBackground}"
                         Margin="{DynamicResource ResponsiveMarginSmall}"
-                    IsVisible="{Binding RecentGuids.Count}">
+                    IsVisible="{Binding HasRecentGuids}">
                 <Grid RowDefinitions="Auto,*">
                     <!-- Title with Filter Checkbox -->
                     <Grid Grid.Row="0"
@@ -147,20 +119,11 @@
                                  MinHeight="32"
                                  Height="32"
                                  MaxHeight="32"
-                                 TextWrapping="NoWrap"
-                                 MaxLines="1"
-                                 VerticalAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 UseLayoutRounding="False"
-                                 ClipToBounds="True"
+                                 Classes="CompactInputTextBox"
                                  Margin="0,0,8,0"
-                                 Background="{StaticResource BrushTertiaryBackground}"
-                                 Foreground="{StaticResource BrushSecondaryText}"
-                                 BorderBrush="{StaticResource BrushBorderSecondary}"
                                  CornerRadius="4"
                                  Width="200"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                                 />
                         
                         <CheckBox Grid.Column="2"
                                   Content="Kayıtlılar"
@@ -171,8 +134,9 @@
                     
                     <!-- Scrollable Content -->
                     <ScrollViewer Grid.Row="1"
-                                  x:Name="GuidsScrollViewer"
-                                  IsVisible="{Binding FilteredGuidsByPage.Count}">
+                                  IsVisible="{Binding HasFilteredGuids}"
+                                  behaviors:ScrollLoadBehavior.LoadMoreCommand="{Binding LoadMoreSavedGuidsCommand}"
+                                  behaviors:ScrollLoadBehavior.Threshold="80">
                         <ItemsControl ItemsSource="{Binding FilteredGuidsByPage}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -209,20 +173,11 @@
                                                  MinHeight="28"
                                                  Height="28"
                                                  MaxHeight="28"
-                                                 TextWrapping="NoWrap"
-                                                 MaxLines="1"
+                                                 Classes="CompactInputTextBox"
                                                  HorizontalAlignment="Stretch"
-                                                 VerticalAlignment="Center"
-                                                 VerticalContentAlignment="Center"
-                                                 UseLayoutRounding="False"
-                                                 ClipToBounds="True"
-                                                 Background="{StaticResource BrushTertiaryBackground}"
-                                                 Foreground="{StaticResource BrushSecondaryText}"
-                                                 BorderBrush="{StaticResource BrushBorderSecondary}"
                                                  CornerRadius="3"
                                                  Margin="0,0,8,0"
-                                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                                                 />
                                         
                                         <!-- Column 3: Action Buttons -->
                                         <StackPanel Grid.Column="2"
@@ -232,33 +187,21 @@
                                             <Button Command="{Binding $parent[UserControl].DataContext.SaveGuidCommand}"
                                                     CommandParameter="{Binding}"
                                                     IsEnabled="{Binding !IsSaved}"
-                                                    Padding="6,4"
-                                                    Background="{StaticResource BrushSuccess}"
-                                                    Foreground="{StaticResource BrushPrimaryText}"
-                                                    BorderBrush="{StaticResource BrushSuccessDark}"
-                                                    CornerRadius="4"
+                                                    Classes="IconActionButton SuccessActionButton"
                                                     ToolTip.Tip="Kaydet">
                                                 <TextBlock Text="💾" />
                                             </Button>
                                             
                                             <Button Command="{Binding $parent[UserControl].DataContext.CopyGuidItemCommand}"
                                                     CommandParameter="{Binding}"
-                                                    Padding="6,4"
-                                                    Background="{StaticResource BrushAccent}"
-                                                    Foreground="{StaticResource BrushPrimaryText}"
-                                                    BorderBrush="{StaticResource BrushAccentDark}"
-                                                    CornerRadius="4"
+                                                    Classes="IconActionButton AccentActionButton"
                                                     ToolTip.Tip="Kopyala">
                                                 <TextBlock Text="📋" />
                                             </Button>
                                             
                                             <Button Command="{Binding $parent[UserControl].DataContext.DeleteGuidCommand}"
                                                     CommandParameter="{Binding}"
-                                                    Padding="6,4"
-                                                    Background="{StaticResource BrushDanger}"
-                                                    Foreground="{StaticResource BrushPrimaryText}"
-                                                    BorderBrush="{StaticResource BrushDangerDark}"
-                                                    CornerRadius="4"
+                                                    Classes="IconActionButton DangerActionButton"
                                                     ToolTip.Tip="Sil">
                                                 <TextBlock Text="🗑️" />
                                             </Button>

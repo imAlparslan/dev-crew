@@ -1,0 +1,73 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Base icon/action buttons -->
+    <Style Selector="Button.IconActionButton">
+        <Setter Property="Padding" Value="6,4" />
+        <Setter Property="Foreground" Value="{StaticResource BrushPrimaryText}" />
+        <Setter Property="CornerRadius" Value="4" />
+    </Style>
+
+    <Style Selector="Button.SuccessActionButton">
+        <Setter Property="Background" Value="{StaticResource BrushSuccess}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushSuccessDark}" />
+    </Style>
+
+    <Style Selector="Button.AccentActionButton">
+        <Setter Property="Background" Value="{StaticResource BrushAccent}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushAccentDark}" />
+    </Style>
+
+    <Style Selector="Button.DangerActionButton">
+        <Setter Property="Background" Value="{StaticResource BrushDanger}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushDangerDark}" />
+    </Style>
+
+    <Style Selector="Button.NeutralActionButton">
+        <Setter Property="Background" Value="{StaticResource BrushTertiaryBackground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorderSecondary}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="4" />
+    </Style>
+
+    <Style Selector="Button.ActionButton">
+        <Setter Property="Padding" Value="12,6" />
+        <Setter Property="Foreground" Value="{StaticResource BrushPrimaryText}" />
+        <Setter Property="CornerRadius" Value="4" />
+    </Style>
+
+    <Style Selector="Button.ActionButtonCompact">
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Foreground" Value="{StaticResource BrushPrimaryText}" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="FontSize" Value="11" />
+    </Style>
+
+    <!-- Shared compact input textboxes -->
+    <Style Selector="TextBox.CompactInputTextBox">
+        <Setter Property="UseLayoutRounding" Value="False" />
+        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="MaxLines" Value="1" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="{StaticResource BrushTertiaryBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource BrushSecondaryText}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorderSecondary}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+    </Style>
+
+    <Style Selector="TextBox.MonospaceInputTextBox">
+        <Setter Property="UseLayoutRounding" Value="False" />
+        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="Background" Value="{StaticResource BrushSecondaryBackground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorderSecondary}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="Foreground" Value="{StaticResource BrushPrimaryText}" />
+        <Setter Property="FontFamily" Value="{StaticResource FontMonospace}" />
+        <Setter Property="SelectionBrush" Value="{StaticResource BrushAccent}" />
+    </Style>
+
+</Styles>

@@ -4,13 +4,6 @@
              xmlns:conv="using:DevCrew.Desktop.Converters"
              x:Class="DevCrew.Desktop.Views.JwtDecoderView"
              x:DataType="vm:JwtDecoderViewModel">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="../Styles/Fonts.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
     
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
@@ -64,17 +57,9 @@
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Stretch"
                                      VerticalContentAlignment="Top"
-                                     UseLayoutRounding="False"
-                                     ClipToBounds="True"
-                                     Background="{StaticResource BrushSecondaryBackground}"
-                                     BorderBrush="{StaticResource BrushBorderSecondary}"
-                                     BorderThickness="1"
-                                     CornerRadius="4"
-                                     Foreground="{StaticResource BrushPrimaryText}"
-                                     FontFamily="{StaticResource FontMonospace}"
+                                     Classes="MonospaceInputTextBox"
                                      FontSize="{StaticResource FontSizeSmall}"
                                      Watermark="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ..."
-                                     SelectionBrush="{StaticResource BrushAccent}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto" />
                             
@@ -85,20 +70,12 @@
                                         Margin="0,8,0,0">
                                 <Button Content="🔍 Decode"
                                         Command="{Binding DecodeTokenCommand}"
-                                        Padding="12,6"
-                                        Background="{StaticResource BrushAccent}"
-                                        Foreground="{StaticResource BrushPrimaryText}"
-                                        BorderBrush="{StaticResource BrushAccentDark}"
-                                        CornerRadius="4"
-                                        FontWeight="SemiBold" />
+                                    Classes="ActionButton AccentActionButton"
+                                    FontWeight="SemiBold" />
                                 
                                 <Button Content="✕ Clear"
                                         Command="{Binding ClearCommand}"
-                                        Padding="12,6"
-                                        Background="{StaticResource BrushDanger}"
-                                        Foreground="{StaticResource BrushPrimaryText}"
-                                        BorderBrush="{StaticResource BrushDangerDark}"
-                                        CornerRadius="4" />
+                                    Classes="ActionButton DangerActionButton" />
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -148,10 +125,7 @@
                                         Height="36"
                                         Padding="0"
                                         Margin="0,0,4,0"
-                                        Background="{StaticResource BrushTertiaryBackground}"
-                                        BorderBrush="{StaticResource BrushBorderSecondary}"
-                                        BorderThickness="1"
-                                        CornerRadius="4"
+                                    Classes="NeutralActionButton"
                                         ToolTip.Tip="Göster/Gizle"
                                         Command="{Binding ToggleSecretVisibilityCommand}" />
                                 
@@ -167,16 +141,8 @@
                                          HorizontalAlignment="Stretch"
                                          VerticalAlignment="Top"
                                          VerticalContentAlignment="Center"
-                                         UseLayoutRounding="False"
-                                         ClipToBounds="True"
-                                         Background="{StaticResource BrushSecondaryBackground}"
-                                         BorderBrush="{StaticResource BrushBorderSecondary}"
-                                         BorderThickness="1"
-                                         CornerRadius="4"
-                                         Foreground="{StaticResource BrushPrimaryText}"
-                                         FontFamily="{StaticResource FontMonospace}"
+                                         Classes="MonospaceInputTextBox"
                                          Watermark="Secret key'inizi girin"
-                                         SelectionBrush="{StaticResource BrushAccent}"
                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                          ScrollViewer.VerticalScrollBarVisibility="Disabled" />
                             </Grid>
@@ -201,11 +167,7 @@
                                 <Button Grid.Column="1"
                                         Content="🔐 Validate"
                                         Command="{Binding ValidateSignatureCommand}"
-                                        Padding="12,6"
-                                        Background="{StaticResource BrushAccent}"
-                                        Foreground="{StaticResource BrushPrimaryText}"
-                                        BorderBrush="{StaticResource BrushAccentDark}"
-                                        CornerRadius="4" />
+                                    Classes="ActionButton AccentActionButton" />
                             </Grid>
                         </Grid>
                     </Border>
@@ -299,12 +261,7 @@
                                 
                                 <Button Grid.Column="1"
                                         Command="{Binding CopyHeaderCommand}"
-                                        Padding="8,4"
-                                        Background="{StaticResource BrushAccent}"
-                                        Foreground="{StaticResource BrushPrimaryText}"
-                                        BorderBrush="{StaticResource BrushAccentDark}"
-                                        CornerRadius="4"
-                                        FontSize="11">
+                                    Classes="ActionButtonCompact AccentActionButton">
                                     <TextBlock>
                                         <TextBlock.Text>
                                             <Binding Path="IsHeaderCopied"
@@ -351,12 +308,7 @@
                                 
                                 <Button Grid.Column="1"
                                         Command="{Binding CopyPayloadCommand}"
-                                        Padding="8,4"
-                                        Background="{StaticResource BrushAccent}"
-                                        Foreground="{StaticResource BrushPrimaryText}"
-                                        BorderBrush="{StaticResource BrushAccentDark}"
-                                        CornerRadius="4"
-                                        FontSize="11">
+                                    Classes="ActionButtonCompact AccentActionButton">
                                     <TextBlock>
                                         <TextBlock.Text>
                                             <Binding Path="IsPayloadCopied"
