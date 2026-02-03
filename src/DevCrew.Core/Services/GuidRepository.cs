@@ -64,8 +64,8 @@ public class GuidRepository : IGuidRepository
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
             // Search in both GUID value and notes
-            query = query.Where(g => 
-                g.GuidValue.Contains(searchQuery) || 
+            query = query.Where(g =>
+                g.GuidValue.Contains(searchQuery) ||
                 (g.Notes != null && g.Notes.Contains(searchQuery)));
         }
 
@@ -84,8 +84,8 @@ public class GuidRepository : IGuidRepository
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
             // Search in both GUID value and notes
-            query = query.Where(g => 
-                g.GuidValue.Contains(searchQuery) || 
+            query = query.Where(g =>
+                g.GuidValue.Contains(searchQuery) ||
                 (g.Notes != null && g.Notes.Contains(searchQuery)));
         }
 

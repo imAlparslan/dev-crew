@@ -14,7 +14,7 @@ public sealed class BooleanToBrushConverter : IValueConverter
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         bool? flag = value as bool?;
-        
+
         if (!flag.HasValue)
         {
             // Return default for null values
@@ -29,7 +29,7 @@ public sealed class BooleanToBrushConverter : IValueConverter
             if (TrueString != null || FalseString != null)
                 return flag == true ? TrueString : FalseString;
         }
-        
+
         if (targetType == typeof(IBrush) || targetType == typeof(object))
         {
             return flag == true ? TrueBrush : FalseBrush;

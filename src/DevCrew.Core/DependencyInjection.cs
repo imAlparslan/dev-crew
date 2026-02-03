@@ -22,7 +22,7 @@ public static class DependencyInjection
 
         // SQLite connection string - simple configuration, pragmas set at runtime
         var connectionString = $"Data Source={dbPath};Pooling=true;Foreign Keys=true;";
-        
+
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlite(connectionString));
 

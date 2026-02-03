@@ -47,7 +47,7 @@ public class JwtService : IJwtService
             // Format payload as JSON - handle duplicate claims
             var payloadDict = new Dictionary<string, object>();
             var claimGroups = jwtToken.Claims.GroupBy(c => c.Type);
-            
+
             foreach (var group in claimGroups)
             {
                 var claims = group.ToList();
@@ -61,7 +61,7 @@ public class JwtService : IJwtService
                     payloadDict[group.Key] = claims.Select(c => c.Value).ToArray();
                 }
             }
-            
+
             var payloadJson = JsonSerializer.Serialize(payloadDict, new JsonSerializerOptions
             {
                 WriteIndented = true
@@ -167,7 +167,7 @@ public class JwtService : IJwtService
     private string RemoveBearerPrefix(string token)
     {
         const string bearerPrefix = "Bearer ";
-        
+
         if (token.StartsWith(bearerPrefix, StringComparison.OrdinalIgnoreCase))
         {
             return token[bearerPrefix.Length..].Trim();

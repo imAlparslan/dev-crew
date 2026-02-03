@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DevCrew.Core.Models;
 using DevCrew.Core.Services;
 
 namespace DevCrew.Desktop.ViewModels;

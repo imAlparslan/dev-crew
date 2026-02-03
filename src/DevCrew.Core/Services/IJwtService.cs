@@ -8,7 +8,7 @@ public interface IJwtService
     /// Decodes a JWT token without validation
     /// </summary>
     JwtDecodeResult DecodeToken(string token);
-    
+
     /// <summary>
     /// Validates a JWT token signature with the provided secret
     /// </summary>
