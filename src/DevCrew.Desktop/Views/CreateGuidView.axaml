@@ -12,29 +12,33 @@
                 <conv:BooleanToBrushConverter x:Key="GuidBorderConverter"
                                                                           TrueBrush="{StaticResource BrushAccentDark}"
                                                                           FalseBrush="{StaticResource BrushBorderSecondary}" />
+                <conv:BoolToDoubleConverter x:Key="BoolToOpacityConverter" />
         </UserControl.Resources>
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
             <Grid RowDefinitions="Auto,*" MaxWidth="900" HorizontalAlignment="Center">
                 <!-- Top Section - Fixed -->
-                <StackPanel Grid.Row="0"
-                            Spacing="12"
-                            Margin="{DynamicResource ResponsiveMarginSmall}">
-                    <TextBlock Text="GUID Oluşturucu"
+                <Grid Grid.Row="0"
+                      RowDefinitions="Auto,Auto,Auto,Auto"
+                      Margin="{DynamicResource ResponsiveMarginSmall}">
+                    <TextBlock Grid.Row="0"
+                               Text="GUID Oluşturucu"
                                FontSize="20"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center"
-                               Margin="0,0,0,8" />
+                               Margin="0,0,0,20" />
                     
-                    <TextBlock Text="Yeni bir GUID üretmek için butona tıklayın"
+                    <TextBlock Grid.Row="1"
+                               Text="Yeni bir GUID üretmek için butona tıklayın"
                                FontSize="14"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
-                               Margin="0,0,0,8" />
+                               Margin="0,0,0,20" />
                     
-                    <Button Content="🎲 Yeni GUID Üret"
+                    <Button Grid.Row="2"
+                            Content="🎲 Yeni GUID Üret"
                             Command="{Binding GenerateGuidCommand}"
                             HorizontalAlignment="Stretch"
                             Padding="12,10"
@@ -42,20 +46,29 @@
                             Foreground="{StaticResource BrushPrimaryText}"
                             BorderBrush="{StaticResource BrushSuccessDark}"
                             CornerRadius="8"
-                            FontWeight="SemiBold" />
+                            FontWeight="SemiBold"
+                            Margin="0,0,0,12" />
                     
-                    <Border Margin="0,4,0,0"
+                    <Border Grid.Row="3"
+                        x:Name="GuidBorder"
                         Padding="6,4"
+                        Width="580"
+                        Height="44"
+                        HorizontalAlignment="Left"
+                        ClipToBounds="True"
                         Background="{Binding IsGuidCopied, Converter={StaticResource GuidBackgroundConverter}}"
                         BorderBrush="{Binding IsGuidCopied, Converter={StaticResource GuidBorderConverter}}"
                         BorderThickness="1"
                         CornerRadius="6">
-                        <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+                        <Grid ColumnDefinitions="46,488,46" Height="32" VerticalAlignment="Center" HorizontalAlignment="Stretch" ClipToBounds="True">
                         <Button Grid.Column="0"
                             Content="📋"
                             Command="{Binding CopyToClipboardCommand}"
                             IsEnabled="{Binding HasGuid}"
-                            IsVisible="{Binding HasGuid}"
+                            Opacity="{Binding HasGuid, Converter={StaticResource BoolToOpacityConverter}}"
+                            IsHitTestVisible="{Binding HasGuid}"
+                            Width="40"
+                            HorizontalAlignment="Left"
                             Padding="6,4"
                             Background="{StaticResource BrushAccent}"
                             Foreground="{StaticResource BrushPrimaryText}"
@@ -69,18 +82,32 @@
                              AcceptsReturn="False"
                              IsReadOnly="True"
                              Padding="6,4"
+                             Height="32"
+                             Width="488"
+                             TextWrapping="NoWrap"
+                             MaxLines="1"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             UseLayoutRounding="False"
+                             ClipToBounds="True"
                              Background="Transparent"
                              BorderThickness="0"
                              Foreground="{StaticResource BrushPrimaryText}"
                              FontFamily="Consolas, Courier New, monospace"
                              Watermark="GUID burada görünecek"
-                             SelectionBrush="{StaticResource BrushAccent}" />
+                             SelectionBrush="{StaticResource BrushAccent}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled" />
 
                         <Button Grid.Column="2"
                             Content="✕"
                             Command="{Binding ClearCommand}"
                             IsEnabled="{Binding HasGuid}"
-                            IsVisible="{Binding HasGuid}"
+                            Opacity="{Binding HasGuid, Converter={StaticResource BoolToOpacityConverter}}"
+                            IsHitTestVisible="{Binding HasGuid}"
+                            Width="40"
+                            HorizontalAlignment="Right"
                             Padding="6,4"
                             Background="{StaticResource BrushDanger}"
                             Foreground="{StaticResource BrushPrimaryText}"
@@ -90,7 +117,7 @@
                             ToolTip.Tip="Temizle" />
                         </Grid>
                     </Border>
-                </StackPanel>
+                </Grid>
                 
                 <!-- Recently Generated GUIDs List - Scrollable -->
                 <Border Grid.Row="1"
@@ -105,6 +132,7 @@
                     <!-- Title with Filter Checkbox -->
                     <Grid Grid.Row="0"
                           ColumnDefinitions="*,Auto,Auto"
+                          Height="40"
                           Margin="0,0,0,8">
                         <TextBlock Grid.Column="0"
                                    Text="Son Üretilen GUID'ler"
@@ -118,12 +146,23 @@
                                  Watermark="Açıklamada ara..."
                                  FontSize="12"
                                  Padding="8,6"
+                                 MinHeight="32"
+                                 Height="32"
+                                 MaxHeight="32"
+                                 TextWrapping="NoWrap"
+                                 MaxLines="1"
+                                 VerticalAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 UseLayoutRounding="False"
+                                 ClipToBounds="True"
                                  Margin="0,0,8,0"
                                  Background="{StaticResource BrushTertiaryBackground}"
                                  Foreground="{StaticResource BrushSecondaryText}"
                                  BorderBrush="{StaticResource BrushBorderSecondary}"
                                  CornerRadius="4"
-                                 Width="200" />
+                                 Width="200"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" />
                         
                         <CheckBox Grid.Column="2"
                                   Content="Kayıtlılar"
@@ -169,11 +208,23 @@
                                                  Watermark="Not ekle (opsiyonel)"
                                                  FontSize="11"
                                                  Padding="6,4"
+                                                 MinHeight="28"
+                                                 Height="28"
+                                                 MaxHeight="28"
+                                                 TextWrapping="NoWrap"
+                                                 MaxLines="1"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Center"
+                                                 VerticalContentAlignment="Center"
+                                                 UseLayoutRounding="False"
+                                                 ClipToBounds="True"
                                                  Background="{StaticResource BrushTertiaryBackground}"
                                                  Foreground="{StaticResource BrushSecondaryText}"
                                                  BorderBrush="{StaticResource BrushBorderSecondary}"
                                                  CornerRadius="3"
-                                                 Margin="0,0,8,0" />
+                                                 Margin="0,0,8,0"
+                                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" />
                                         
                                         <!-- Column 3: Action Buttons -->
                                         <StackPanel Grid.Column="2"

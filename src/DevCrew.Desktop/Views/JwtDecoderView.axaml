@@ -15,7 +15,7 @@
     
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
-            <Grid RowDefinitions="Auto,Auto,*" MaxWidth="1200" HorizontalAlignment="Center">
+            <Grid RowDefinitions="Auto,Auto,*" MaxWidth="900" HorizontalAlignment="Center">
                 <!-- Header -->
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
                     <TextBlock Text="JWT Decoder"
@@ -33,14 +33,21 @@
                 </StackPanel>
 
                 <!-- Input Section -->
-                <StackPanel Grid.Row="1" Spacing="12">
+                <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto">
                     <!-- JWT Token Input -->
-                    <Border Background="{StaticResource BrushTertiaryBackground}"
+                    <Border Grid.Row="0"
+                            Background="{StaticResource BrushTertiaryBackground}"
                             BorderBrush="{StaticResource BrushBorderSecondary}"
                             BorderThickness="1"
                             CornerRadius="6"
-                            Padding="12">
-                        <Grid RowDefinitions="Auto,Auto,Auto">
+                            Padding="12"
+                            Width="580"
+                            Margin="0,0,0,12"
+                            MinHeight="208"
+                            Height="208"
+                            MaxHeight="208"
+                            HorizontalAlignment="Left">
+                        <Grid RowDefinitions="Auto,120,Auto" MinHeight="184" Height="184" MaxHeight="184">
                             <TextBlock Grid.Row="0"
                                        Text="JWT Token"
                                        FontSize="12"
@@ -52,9 +59,14 @@
                                      Text="{Binding RawToken}"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
-                                     MinHeight="80"
-                                     MaxHeight="150"
+                                     Width="556"
+                                     Height="120"
                                      Padding="8"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch"
+                                     VerticalContentAlignment="Top"
+                                     UseLayoutRounding="False"
+                                     ClipToBounds="True"
                                      Background="{StaticResource BrushSecondaryBackground}"
                                      BorderBrush="{StaticResource BrushBorderSecondary}"
                                      BorderThickness="1"
@@ -63,7 +75,9 @@
                                      FontFamily="Consolas, Courier New, monospace"
                                      FontSize="11"
                                      Watermark="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ..."
-                                     SelectionBrush="{StaticResource BrushAccent}" />
+                                     SelectionBrush="{StaticResource BrushAccent}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
                             
                             <StackPanel Grid.Row="2"
                                         Orientation="Horizontal"
@@ -91,10 +105,17 @@
                     </Border>
 
                     <!-- Secret Input for Signature Validation -->
-                    <Border Background="{StaticResource BrushTertiaryBackground}"
+                    <Border Grid.Row="1"
+                            Background="{StaticResource BrushTertiaryBackground}"
                             BorderThickness="2"
                             CornerRadius="6"
                             Padding="12"
+                            Width="580"
+                            Margin="0,0,0,12"
+                            MinHeight="128"
+                            Height="128"
+                            MaxHeight="128"
+                            HorizontalAlignment="Left"
                             IsVisible="{Binding DecodedHeader, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                         <Border.BorderBrush>
                             <Binding Path="IsSignatureValid" Converter="{StaticResource SignatureValidBorderConverter}" FallbackValue="{StaticResource BrushBorderSecondary}" />
@@ -111,6 +132,15 @@
                                      Text="{Binding Secret}"
                                      PasswordChar="●"
                                      Padding="8"
+                                     Width="556"
+                                     Height="36"
+                                     TextWrapping="NoWrap"
+                                     MaxLines="1"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Top"
+                                     VerticalContentAlignment="Center"
+                                     UseLayoutRounding="False"
+                                     ClipToBounds="True"
                                      Background="{StaticResource BrushSecondaryBackground}"
                                      BorderBrush="{StaticResource BrushBorderSecondary}"
                                      BorderThickness="1"
@@ -118,7 +148,9 @@
                                      Foreground="{StaticResource BrushPrimaryText}"
                                      FontFamily="Consolas, Courier New, monospace"
                                      Watermark="Secret key'inizi girin"
-                                     SelectionBrush="{StaticResource BrushAccent}" />
+                                     SelectionBrush="{StaticResource BrushAccent}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     ScrollViewer.VerticalScrollBarVisibility="Disabled" />
                             
                             <Grid Grid.Row="2" Margin="0,8,0,0" ColumnDefinitions="*,Auto">
                                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4"
@@ -153,7 +185,8 @@
                     </Border>
 
                     <!-- Error Message -->
-                    <Border Background="{StaticResource BrushDanger}"
+                    <Border Grid.Row="2"
+                            Background="{StaticResource BrushDanger}"
                             BorderBrush="{StaticResource BrushDangerDark}"
                             BorderThickness="1"
                             CornerRadius="6"
@@ -164,7 +197,7 @@
                                    Foreground="{StaticResource BrushPrimaryText}"
                                    TextWrapping="Wrap" />
                     </Border>
-                </StackPanel>
+                </Grid>
 
                 <!-- Decoded Output Section -->
                 <Grid Grid.Row="2"
