@@ -221,10 +221,11 @@
                         </Grid>
                         
                         <!-- Expiration -->
-                        <Grid ColumnDefinitions="120,Auto,Auto,*" RowDefinitions="Auto">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto">
                             <CheckBox Grid.Column="0"
                                       IsChecked="{Binding IncludeExpiration}"
                                       Content="Expiration (exp)"
+                                      MinWidth="120"
                                       FontSize="12"
                                       Foreground="{StaticResource BrushSecondaryText}"
                                       VerticalAlignment="Center" />
@@ -234,8 +235,10 @@
                                            Minimum="1"
                                            Maximum="525600"
                                            Increment="5"
-                                           Width="100"
+                                           MinWidth="80"
                                            Height="36"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Center"
                                            IsEnabled="{Binding IncludeExpiration}"
                                            Margin="8,0,4,0" />
                             
