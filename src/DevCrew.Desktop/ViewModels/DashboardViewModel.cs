@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using DevCrew.Core.Services;
 using DevCrew.Core.ViewModels;
 
 namespace DevCrew.Desktop.ViewModels;
@@ -8,7 +9,8 @@ namespace DevCrew.Desktop.ViewModels;
 /// </summary>
 public partial class DashboardViewModel : BaseViewModel
 {
-    public DashboardViewModel()
+    public DashboardViewModel(IErrorHandler errorHandler)
+        : base(errorHandler)
     {
         MenuItems = new ObservableCollection<MenuItemViewModel>();
     }

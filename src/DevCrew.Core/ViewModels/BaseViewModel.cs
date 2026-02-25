@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using DevCrew.Core.Services;
 
 namespace DevCrew.Core.ViewModels;
 
@@ -7,8 +8,19 @@ namespace DevCrew.Core.ViewModels;
 /// </summary>
 public abstract class BaseViewModel : ObservableObject
 {
+    protected readonly IErrorHandler ErrorHandler;
+    
     private bool _isLoading;
     private string? _errorMessage;
+
+    /// <summary>
+    /// Initializes a new instance of the BaseViewModel class.
+    /// </summary>
+    /// <param name="errorHandler">The error handler for centralized error logging</param>
+    protected BaseViewModel(IErrorHandler errorHandler)
+    {
+        ErrorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
+    }
 
     /// <summary>
     /// Loading state
@@ -56,6 +68,7 @@ public abstract class BaseViewModel : ObservableObject
         }
         catch (Exception ex)
         {
+            ErrorHandler.LogException(ex, errorContext);
             ErrorMessage = string.IsNullOrWhiteSpace(errorContext)
                 ? ex.Message
                 : $"{errorContext}: {ex.Message}";
@@ -87,6 +100,7 @@ public abstract class BaseViewModel : ObservableObject
         }
         catch (Exception ex)
         {
+            ErrorHandler.LogException(ex, errorContext);
             ErrorMessage = string.IsNullOrWhiteSpace(errorContext)
                 ? ex.Message
                 : $"{errorContext}: {ex.Message}";

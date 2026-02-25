@@ -1,13 +1,14 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
+using DevCrew.Core.ViewModels;
 
 namespace DevCrew.Desktop.ViewModels;
 
 /// <summary>
 /// ViewModel for the JWT Decoder view
 /// </summary>
-public partial class JwtDecoderViewModel : ObservableObject
+public partial class JwtDecoderViewModel : BaseViewModel
 {
     private readonly IJwtService _jwtService;
     private readonly IClipboardService _clipboardService;
@@ -34,9 +35,6 @@ public partial class JwtDecoderViewModel : ObservableObject
 
     [ObservableProperty]
     private bool? isSignatureValid;
-
-    [ObservableProperty]
-    private string? errorMessage;
 
     [ObservableProperty]
     private bool isHeaderCopied;
@@ -71,7 +69,11 @@ public partial class JwtDecoderViewModel : ObservableObject
     /// <summary>
     /// Initializes a new instance of the <see cref="JwtDecoderViewModel"/> class.
     /// </summary>
-    public JwtDecoderViewModel(IJwtService jwtService, IClipboardService clipboardService)
+    public JwtDecoderViewModel(
+        IErrorHandler errorHandler,
+        IJwtService jwtService, 
+        IClipboardService clipboardService)
+        : base(errorHandler)
     {
         _jwtService = jwtService;
         _clipboardService = clipboardService;

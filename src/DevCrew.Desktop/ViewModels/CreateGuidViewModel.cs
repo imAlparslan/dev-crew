@@ -3,6 +3,7 @@ using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
+using DevCrew.Core.ViewModels;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -10,12 +11,13 @@ namespace DevCrew.Desktop.ViewModels;
 /// ViewModel for the GUID creation view
 /// Each tab instance maintains its own state
 /// </summary>
-public partial class CreateGuidViewModel : ObservableObject
+public partial class CreateGuidViewModel : BaseViewModel, IDisposable
 {
     private readonly IGuidService _guidService;
     private readonly IClipboardService _clipboardService;
     private readonly IGuidRepository _guidRepository;
     private readonly HashSet<GuidItemViewModel> _trackedGuidItems = new();
+    private CancellationTokenSource? _loadCancellationTokenSource;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasGuid))]
@@ -68,10 +70,16 @@ public partial class CreateGuidViewModel : ObservableObject
     /// <summary>
     /// Initializes a new instance of the <see cref="CreateGuidViewModel"/> class.
     /// </summary>
+    /// <param name="errorHandler">Error handler for centralized logging.</param>
     /// <param name="guidService">GUID generation service.</param>
     /// <param name="clipboardService">Clipboard access service.</param>
     /// <param name="guidRepository">Repository for GUID data access.</param>
-    public CreateGuidViewModel(IGuidService guidService, IClipboardService clipboardService, IGuidRepository guidRepository)
+    public CreateGuidViewModel(
+        IErrorHandler errorHandler,
+        IGuidService guidService, 
+        IClipboardService clipboardService, 
+        IGuidRepository guidRepository)
+        : base(errorHandler)
     {
         _guidService = guidService;
         _clipboardService = clipboardService;
@@ -92,7 +100,9 @@ public partial class CreateGuidViewModel : ObservableObject
         // Keep only the last 10 GUIDs
         while (RecentGuids.Count > 10)
         {
+            var removedItem = RecentGuids[RecentGuids.Count - 1];
             RecentGuids.RemoveAt(RecentGuids.Count - 1);
+            DetachGuidItem(removedItem);
         }
 
         UpdateFilteredGuids();
@@ -157,7 +167,8 @@ public partial class CreateGuidViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Save GUID error: {ex.Message}");
+            ErrorHandler.LogException(ex, "Save GUID");
+            ErrorMessage = $"Failed to save GUID: {ex.Message}";
         }
     }
 
@@ -174,6 +185,7 @@ public partial class CreateGuidViewModel : ObservableObject
 
             // Remove from recent list
             RecentGuids.Remove(guidItem);
+            DetachGuidItem(guidItem);
 
             // If showing only saved guids, reload from database to reflect changes
             if (ShowOnlySavedGuids)
@@ -187,7 +199,8 @@ public partial class CreateGuidViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Delete GUID error: {ex.Message}");
+            ErrorHandler.LogException(ex, "Delete GUID");
+            ErrorMessage = $"Failed to delete GUID: {ex.Message}";
         }
     }
 
@@ -253,6 +266,13 @@ public partial class CreateGuidViewModel : ObservableObject
         if (!HasMoreSavedGuids && !reset)
             return;
 
+        // Cancel any existing load operation
+        _loadCancellationTokenSource?.Cancel();
+        _loadCancellationTokenSource?.Dispose();
+        _loadCancellationTokenSource = new CancellationTokenSource();
+        
+        var cancellationToken = _loadCancellationTokenSource.Token;
+
         try
         {
             IsLoadingMore = true;
@@ -261,11 +281,17 @@ public partial class CreateGuidViewModel : ObservableObject
             {
                 _savedSkip = 0;
                 HasMoreSavedGuids = true;
+                
+                // Detach items before clearing when resetting saved GUIDs view
+                foreach (var item in FilteredGuidsByPage.ToList())
+                {
+                    DetachGuidItem(item);
+                }
                 FilteredGuidsByPage.Clear();
             }
 
             // Fetch paginated GUIDs from repository with optional search filter
-            var savedGuids = await _guidRepository.GetGuidsPagedAsync(_savedSkip, PageSize, SearchQuery);
+            var savedGuids = await _guidRepository.GetGuidsPagedAsync(_savedSkip, PageSize, SearchQuery, cancellationToken);
 
             foreach (var dbGuid in savedGuids)
             {
@@ -282,9 +308,14 @@ public partial class CreateGuidViewModel : ObservableObject
             _savedSkip += savedGuids.Count;
             HasMoreSavedGuids = savedGuids.Count == PageSize;
         }
+        catch (OperationCanceledException)
+        {
+            // Operation was cancelled, this is expected
+        }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Load saved GUIDs page error: {ex.Message}");
+            ErrorHandler.LogException(ex, "Load saved GUIDs page");
+            ErrorMessage = $"Failed to load GUIDs: {ex.Message}";
         }
         finally
         {
@@ -323,7 +354,8 @@ public partial class CreateGuidViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Load and filter saved GUIDs error: {ex.Message}");
+            ErrorHandler.LogException(ex, "Load and filter saved GUIDs");
+            ErrorMessage = $"Failed to load saved GUIDs: {ex.Message}";
         }
     }
 
@@ -358,7 +390,8 @@ public partial class CreateGuidViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Update GUID notes error: {ex.Message}");
+            ErrorHandler.LogException(ex, "Update GUID notes");
+            ErrorMessage = $"Failed to update notes: {ex.Message}";
         }
     }
 
@@ -390,5 +423,32 @@ public partial class CreateGuidViewModel : ObservableObject
                 item.Notes = source.Notes;
             }
         }
+    }
+
+    private void DetachGuidItem(GuidItemViewModel item)
+    {
+        if (_trackedGuidItems.Remove(item))
+        {
+            item.PropertyChanged -= OnGuidItemPropertyChanged;
+        }
+    }
+
+    /// <summary>
+    /// Disposes the ViewModel and cleans up event handlers to prevent memory leaks.
+    /// </summary>
+    public void Dispose()
+    {
+        // Cancel and dispose any ongoing load operations
+        _loadCancellationTokenSource?.Cancel();
+        _loadCancellationTokenSource?.Dispose();
+        
+        // Detach all event handlers
+        foreach (var item in _trackedGuidItems.ToList())
+        {
+            item.PropertyChanged -= OnGuidItemPropertyChanged;
+        }
+        _trackedGuidItems.Clear();
+
+        GC.SuppressFinalize(this);
     }
 }

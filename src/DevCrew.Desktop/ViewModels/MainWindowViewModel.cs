@@ -7,7 +7,7 @@ using DevCrew.Core.ViewModels;
 namespace DevCrew.Desktop.ViewModels;
 
 /// <summary>
-/// Ana pencere ViewModel'i
+/// Main window ViewModel
 /// </summary>
 public partial class MainWindowViewModel : BaseViewModel
 {
@@ -39,17 +39,20 @@ public partial class MainWindowViewModel : BaseViewModel
     /// <summary>
     /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
     /// </summary>
+    /// <param name="errorHandler">Error handler for centralized logging.</param>
     /// <param name="applicationService">Application service.</param>
     /// <param name="dashboardViewModel">Dashboard view model.</param>
     /// <param name="createGuidViewModelFactory">Factory for new GUID view models.</param>
     /// <param name="jwtDecoderViewModelFactory">Factory for new JWT Decoder view models.</param>
     /// <param name="jwtBuilderViewModelFactory">Factory for new JWT Builder view models.</param>
     public MainWindowViewModel(
+        IErrorHandler errorHandler,
         IApplicationService applicationService,
         DashboardViewModel dashboardViewModel,
         Func<CreateGuidViewModel> createGuidViewModelFactory,
         Func<JwtDecoderViewModel> jwtDecoderViewModelFactory,
         Func<JwtBuilderViewModel> jwtBuilderViewModelFactory)
+        : base(errorHandler)
     {
         _applicationService = applicationService;
         _dashboardViewModel = dashboardViewModel;
@@ -75,7 +78,7 @@ public partial class MainWindowViewModel : BaseViewModel
         MenuItems.Add(jwtDecoderItem);
         MenuItems.Add(jwtBuilderItem);
 
-        // Dashboard'daki MenuItems'ı doldur
+        // Populate Dashboard MenuItems
         _dashboardViewModel.MenuItems.Add(dashboardItem);
         _dashboardViewModel.MenuItems.Add(createGuidItem);
         _dashboardViewModel.MenuItems.Add(jwtDecoderItem);

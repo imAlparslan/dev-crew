@@ -29,9 +29,9 @@ public static class DependencyInjection
         // Register services
         services.AddScoped<IApplicationService, ApplicationService>();
         services.AddScoped<IGuidRepository, GuidRepository>();
+        services.AddScoped<IJwtRepository, JwtRepository>();
         services.AddSingleton<IErrorHandler, ErrorHandler>();
         services.AddSingleton<IGuidService, GuidService>();
-        services.AddSingleton<IClipboardService, ClipboardService>();
         services.AddSingleton<IJwtService, JwtService>();
 
         return services;

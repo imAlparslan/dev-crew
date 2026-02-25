@@ -18,7 +18,7 @@ public class GuidRepository : IGuidRepository
     }
 
     /// <inheritdoc/>
-    public async Task<GuidHistory> SaveGuidAsync(string guidValue, string? notes = null)
+    public async Task<GuidHistory> SaveGuidAsync(string guidValue, string? notes = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(guidValue))
             throw new ArgumentException("GUID value cannot be empty", nameof(guidValue));
@@ -31,33 +31,33 @@ public class GuidRepository : IGuidRepository
         };
 
         _dbContext.GuidHistories.Add(guidHistory);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         return guidHistory;
     }
 
     /// <inheritdoc/>
-    public async Task<bool> DeleteGuidAsync(int id)
+    public async Task<bool> DeleteGuidAsync(int id, CancellationToken cancellationToken = default)
     {
         _ = await _dbContext.GuidHistories
                     .Where(g => g.Id == id)
-                    .ExecuteDeleteAsync();
+                    .ExecuteDeleteAsync(cancellationToken);
 
         return true;
     }
 
     /// <inheritdoc/>
-    public async Task<bool> UpdateGuidNotesAsync(int id, string? notes)
+    public async Task<bool> UpdateGuidNotesAsync(int id, string? notes, CancellationToken cancellationToken = default)
     {
         _ = await _dbContext.GuidHistories
                     .Where(g => g.Id == id)
-                    .ExecuteUpdateAsync(setter => setter.SetProperty(g => g.Notes, notes));
+                    .ExecuteUpdateAsync(setter => setter.SetProperty(g => g.Notes, notes), cancellationToken);
 
         return true;
     }
 
     /// <inheritdoc/>
-    public async Task<List<GuidHistory>> GetGuidsPagedAsync(int skip, int take, string? searchQuery = null)
+    public async Task<List<GuidHistory>> GetGuidsPagedAsync(int skip, int take, string? searchQuery = null, CancellationToken cancellationToken = default)
     {
         var query = _dbContext.GuidHistories.AsNoTracking().AsQueryable();
 
@@ -73,11 +73,11 @@ public class GuidRepository : IGuidRepository
             .OrderByDescending(g => g.CreatedAt)
             .Skip(skip)
             .Take(take)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
     /// <inheritdoc/>
-    public async Task<int> GetGuidCountAsync(string? searchQuery = null)
+    public async Task<int> GetGuidCountAsync(string? searchQuery = null, CancellationToken cancellationToken = default)
     {
         var query = _dbContext.GuidHistories.AsNoTracking().AsQueryable();
 
@@ -89,12 +89,12 @@ public class GuidRepository : IGuidRepository
                 (g.Notes != null && g.Notes.Contains(searchQuery)));
         }
 
-        return await query.CountAsync();
+        return await query.CountAsync(cancellationToken);
     }
 
     /// <inheritdoc/>
-    public async Task<GuidHistory?> GetGuidByIdAsync(int id)
+    public async Task<GuidHistory?> GetGuidByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.GuidHistories.FindAsync(id);
+        return await _dbContext.GuidHistories.FindAsync(new object[] { id }, cancellationToken);
     }
 }

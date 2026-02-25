@@ -3,13 +3,14 @@ using System.Security.Cryptography;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
+using DevCrew.Core.ViewModels;
 
 namespace DevCrew.Desktop.ViewModels;
 
 /// <summary>
 /// ViewModel for the JWT Builder view
 /// </summary>
-public partial class JwtBuilderViewModel : ObservableObject
+public partial class JwtBuilderViewModel : BaseViewModel
 {
     private readonly IJwtService _jwtService;
     private readonly IClipboardService _clipboardService;
@@ -20,11 +21,11 @@ public partial class JwtBuilderViewModel : ObservableObject
 
     partial void OnAlgorithmChanged(string value)
     {
-        // Algorithm değiştiğinde CanBuildToken'ı güncelle
+        // Update CanBuildToken when algorithm changes
         OnPropertyChanged(nameof(CanBuildToken));
         OnPropertyChanged(nameof(IsRsaAlgorithm));
         
-        // RSA olmayan algoritmaya geçildiğinde public key'i temizle
+        // Clear public key when switching to non-RSA algorithm
         if (!value.StartsWith("RS"))
         {
             PublicKey = string.Empty;
@@ -53,9 +54,6 @@ public partial class JwtBuilderViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasGeneratedToken))]
     private string? generatedToken;
-
-    [ObservableProperty]
-    private string? errorMessage;
 
     [ObservableProperty]
     private bool isTokenCopied;
@@ -93,7 +91,11 @@ public partial class JwtBuilderViewModel : ObservableObject
     /// <summary>
     /// Initializes a new instance of the <see cref="JwtBuilderViewModel"/> class.
     /// </summary>
-    public JwtBuilderViewModel(IJwtService jwtService, IClipboardService clipboardService)
+    public JwtBuilderViewModel(
+        IErrorHandler errorHandler,
+        IJwtService jwtService, 
+        IClipboardService clipboardService)
+        : base(errorHandler)
     {
         _jwtService = jwtService;
         _clipboardService = clipboardService;
@@ -108,7 +110,7 @@ public partial class JwtBuilderViewModel : ObservableObject
 
         try
         {
-            // Build claims dictionary - aynı key'in birden fazla value'si varsa array oluştur
+            // Build claims dictionary - create array if the same key has multiple values
             var claimsDict = new Dictionary<string, List<string>>();
 
             // Group claims by key
@@ -169,6 +171,7 @@ public partial class JwtBuilderViewModel : ObservableObject
         }
         catch (Exception ex)
         {
+            ErrorHandler.LogException(ex, "Build JWT token");
             ErrorMessage = $"Error building token: {ex.Message}";
             GeneratedToken = null;
         }
@@ -180,7 +183,7 @@ public partial class JwtBuilderViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(CustomClaimKey))
             return;
 
-        // Aynı key'e sahip birden fazla value eklenebilir
+        // Multiple values can be added with the same key
         CustomClaims.Add(new CustomClaimItem
         {
             Key = CustomClaimKey,
@@ -243,14 +246,14 @@ public partial class JwtBuilderViewModel : ObservableObject
     {
         if (Algorithm.StartsWith("RS"))
         {
-            // RSA algoritmaları için otomatik private key ve public key üret
+            // Auto-generate private key and public key for RSA algorithms
             using var rsa = RSA.Create(2048);
             Secret = rsa.ExportRSAPrivateKeyPem();
             PublicKey = rsa.ExportSubjectPublicKeyInfoPem();
         }
         else
         {
-            // HMAC algoritmaları için default secret key kullan
+            // Use default secret key for HMAC algorithms
             Secret = _jwtService.GetDefaultSecretKey(Algorithm);
             PublicKey = string.Empty;
         }

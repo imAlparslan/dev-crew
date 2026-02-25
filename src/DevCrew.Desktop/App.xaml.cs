@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using DevCrew.Core;
 using DevCrew.Core.Data;
+using DevCrew.Core.Services;
 using DevCrew.Desktop.ViewModels;
 using DevCrew.Desktop.Views;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ public partial class App : Application
         // Load configuration
         _configuration = LoadConfiguration();
 
-        // Dependency Injection Container'ını yapılandır
+        // Configure Dependency Injection Container
         var services = new ServiceCollection();
         ConfigureServices(services);
         _serviceProvider = services.BuildServiceProvider();
@@ -77,6 +78,9 @@ public partial class App : Application
 
         // Core Services
         services.AddDevCrewCore(_configuration ?? new ConfigurationBuilder().Build());
+        
+        // Desktop-specific services
+        services.AddScoped<IClipboardService, Services.ClipboardService>();
 
         // ViewModels
         services.AddScoped<MainWindowViewModel>();
@@ -100,16 +104,19 @@ public partial class App : Application
             dbContext.Database.EnsureCreated();
 
             // Warm up the database connection to avoid first query delay
-            try
+            // This asynchronous operation is intentionally fire-and-forget
+            // as database readiness is not critical for app startup
+            Task.Run(async () =>
             {
-
-                _ = dbContext.GuidHistories.AsNoTracking().Take(1).ToListAsync();
-
-            }
-            catch
-            {
-                // Warm-up query failure should not prevent app startup
-            }
+                try
+                {
+                    await dbContext.GuidHistories.AsNoTracking().Take(1).ToListAsync();
+                }
+                catch
+                {
+                    // Warm-up query failure should not prevent app startup
+                }
+            });
         }
     }
 }
