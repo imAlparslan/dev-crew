@@ -12,6 +12,17 @@ public class JwtService : IJwtService
 {
     private readonly JwtSecurityTokenHandler _tokenHandler;
 
+    // Default secret keys for each algorithm
+    private static readonly Dictionary<string, string> DefaultSecretKeys = new()
+    {
+        { "HS256", "a-string-secret-at-least-256-bits-long" },
+        { "HS384", "a-valid-string-secret-that-is-at-least-384-bits-long" },
+        { "HS512", "a-valid-string-secret-that-is-at-least-512-bits-long-which-is-very-long" },
+        { "RS256", "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7VJTUt9Us8cKjMzEfYyjiWA4R4/M2bS1GB4t7NXp98C3SC6dVMvDuictGeurT8jNbvJZHtCSuYEvuNMoSfm76oqFvAp8Gy0iz5sxjZmSnXyCdPEovGhLa0VzMaQ8s+CLOyS56YyCFGeJZqgtzJ6GR3eqoYSW9b9UMvkBpZODSctWSNGj3P7jRFDO5VoTwCQAWbFnOjDfH5Ulhp2PKSQnSJP3AJLQNFNe7br1XbrhV//eO+t51mIpGSDCUv3E0DDFcWDTH9cXDTTlRZVEiR2BwpZOOkE/Z0/BVnhZYL71oZV34bKfWjQIt6V/isSMahdsAASDqp4ZTGN0iwBfrgIDAQABAoIBABiCKvJun7lyPJ8jMuiKqLBXAObMhd0N8gH0/Ny/OBPGxXiPqRMbyNz/LglLKZz1sLYEW0tVMTp8pP+WylVkP6KBw9N7VOhfXe3C8SplvNjxE6xARQHK2VT1j1J0pVmP0hGnpZT4GV9bEz+0DShEQzKhMqfWKZxXBkJxB8c0i7vJDXW/tA7OBgxXjY7cJFkLZ3hPFXNeFJLRgjOJBSNZExPsPVPLdQmGFpKPQQ7LBz5VX6aQWdJLBQJJN7bFCb5AKLBFBm3GQqGJ7r+B9nRnQuqYJB9YWRgLMPGpPVQKZZQm3k/Sg9jwKB0TRCBCPqS5Ac1AoEFNJqTGMtLR4kJVwAECgYEA3fMj7X1MZqgLhENqY7rCqhA9xQQNiJ7C2MXqVZNYhSkPKt9R8LoX/b7PqEKXYxELsPQELBJRKSf0n4k2GfOdU/wEuEz8LNSdN8v7lPKLRJ0lZVJSE9r7qxD1VKAM8qp1JWhKPTHQqPCAEZ5yLYuFZEj5gTKz9plPgqcqBqCqWAECgYEA2HKGNQMhKMVJgPKPLBb1J0FRBqBWXDO6jTHqFRfGC0LQKqW4qMj9QqPYqQGE7V4Y5qBVK7J9PQMX/nFXqGkCVN8vpJQqz/7J1R7hM9lJ7XqMx0gJP7A3QkP1bJXpF7j3aXQ9BWz0k/lKMqF7N0lV7N4WQJ8XlB/7Z0YqzqT71wIDAQAB\n-----END PRIVATE KEY-----" },
+        { "RS384", "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7VJTUt9Us8cKjMzEfYyjiWA4R4/M2bS1GB4t7NXp98C3SC6dVMvDuictGeurT8jNbvJZHtCSuYEvuNMoSfm76oqFvAp8Gy0iz5sxjZmSnXyCdPEovGhLa0VzMaQ8s+CLOyS56YyCFGeJZqgtzJ6GR3eqoYSW9b9UMvkBpZODSctWSNGj3P7jRFDO5VoTwCQAWbFnOjDfH5Ulhp2PKSQnSJP3AJLQNFNe7br1XbrhV//eO+t51mIpGSDCUv3E0DDFcWDTH9cXDTTlRZVEiR2BwpZOOkE/Z0/BVnhZYL71oZV34bKfWjQIt6V/isSMahdsAASDqp4ZTGN0iwBfrgIDAQABAoIBABiCKvJun7lyPJ8jMuiKqLBXAObMhd0N8gH0/Ny/OBPGxXiPqRMbyNz/LglLKZz1sLYEW0tVMTp8pP+WylVkP6KBw9N7VOhfXe3C8SplvNjxE6xARQHK2VT1j1J0pVmP0hGnpZT4GV9bEz+0DShEQzKhMqfWKZxXBkJxB8c0i7vJDXW/tA7OBgxXjY7cJFkLZ3hPFXNeFJLRgjOJBSNZExPsPVPLdQmGFpKPQQ7LBz5VX6aQWdJLBQJJN7bFCb5AKLBFBm3GQqGJ7r+B9nRnQuqYJB9YWRgLMPGpPVQKZZQm3k/Sg9jwKB0TRCBCPqS5Ac1AoEFNJqTGMtLR4kJVwAECgYEA3fMj7X1MZqgLhENqY7rCqhA9xQQNiJ7C2MXqVZNYhSkPKt9R8LoX/b7PqEKXYxELsPQELBJRKSf0n4k2GfOdU/wEuEz8LNSdN8v7lPKLRJ0lZVJSE9r7qxD1VKAM8qp1JWhKPTHQqPCAEZ5yLYuFZEj5gTKz9plPgqcqBqCqWAECgYEA2HKGNQMhKMVJgPKPLBb1J0FRBqBWXDO6jTHqFRfGC0LQKqW4qMj9QqPYqQGE7V4Y5qBVK7J9PQMX/nFXqGkCVN8vpJQqz/7J1R7hM9lJ7XqMx0gJP7A3QkP1bJXpF7j3aXQ9BWz0k/lKMqF7N0lV7N4WQJ8XlB/7Z0YqzqT71wIDAQAB\n-----END PRIVATE KEY-----" },
+        { "RS512", "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7VJTUt9Us8cKjMzEfYyjiWA4R4/M2bS1GB4t7NXp98C3SC6dVMvDuictGeurT8jNbvJZHtCSuYEvuNMoSfm76oqFvAp8Gy0iz5sxjZmSnXyCdPEovGhLa0VzMaQ8s+CLOyS56YyCFGeJZqgtzJ6GR3eqoYSW9b9UMvkBpZODSctWSNGj3P7jRFDO5VoTwCQAWbFnOjDfH5Ulhp2PKSQnSJP3AJLQNFNe7br1XbrhV//eO+t51mIpGSDCUv3E0DDFcWDTH9cXDTTlRZVEiR2BwpZOOkE/Z0/BVnhZYL71oZV34bKfWjQIt6V/isSMahdsAASDqp4ZTGN0iwBfrgIDAQABAoIBABiCKvJun7lyPJ8jMuiKqLBXAObMhd0N8gH0/Ny/OBPGxXiPqRMbyNz/LglLKZz1sLYEW0tVMTp8pP+WylVkP6KBw9N7VOhfXe3C8SplvNjxE6xARQHK2VT1j1J0pVmP0hGnpZT4GV9bEz+0DShEQzKhMqfWKZxXBkJxB8c0i7vJDXW/tA7OBgxXjY7cJFkLZ3hPFXNeFJLRgjOJBSNZExPsPVPLdQmGFpKPQQ7LBz5VX6aQWdJLBQJJN7bFCb5AKLBFBm3GQqGJ7r+B9nRnQuqYJB9YWRgLMPGpPVQKZZQm3k/Sg9jwKB0TRCBCPqS5Ac1AoEFNJqTGMtLR4kJVwAECgYEA3fMj7X1MZqgLhENqY7rCqhA9xQQNiJ7C2MXqVZNYhSkPKt9R8LoX/b7PqEKXYxELsPQELBJRKSf0n4k2GfOdU/wEuEz8LNSdN8v7lPKLRJ0lZVJSE9r7qxD1VKAM8qp1JWhKPTHQqPCAEZ5yLYuFZEj5gTKz9plPgqcqBqCqWAECgYEA2HKGNQMhKMVJgPKPLBb1J0FRBqBWXDO6jTHqFRfGC0LQKqW4qMj9QqPYqQGE7V4Y5qBVK7J9PQMX/nFXqGkCVN8vpJQqz/7J1R7hM9lJ7XqMx0gJP7A3QkP1bJXpF7j3aXQ9BWz0k/lKMqF7N0lV7N4WQJ8XlB/7Z0YqzqT71wIDAQAB\n-----END PRIVATE KEY-----" }
+    };
+
     public JwtService()
     {
         _tokenHandler = new JwtSecurityTokenHandler();
@@ -219,7 +230,7 @@ public class JwtService : IJwtService
                 // HMAC algorithms - use symmetric key
                 var keyBytes = Encoding.UTF8.GetBytes(secret);
                 securityKey = new SymmetricSecurityKey(keyBytes);
-                
+
                 var algorithmName = algorithm switch
                 {
                     "HS256" => SecurityAlgorithms.HmacSha256,
@@ -227,7 +238,7 @@ public class JwtService : IJwtService
                     "HS512" => SecurityAlgorithms.HmacSha512,
                     _ => SecurityAlgorithms.HmacSha256
                 };
-                
+
                 signingCredentials = new SigningCredentials(securityKey, algorithmName);
             }
             else // RS256, RS384, RS512
@@ -236,7 +247,7 @@ public class JwtService : IJwtService
                 try
                 {
                     var rsa = RSA.Create();
-                    
+
                     // Try to import as PEM format first
                     if (secret.Contains("BEGIN RSA PRIVATE KEY") || secret.Contains("BEGIN PRIVATE KEY"))
                     {
@@ -247,9 +258,9 @@ public class JwtService : IJwtService
                         // Try to import as XML format
                         rsa.FromXmlString(secret);
                     }
-                    
+
                     securityKey = new RsaSecurityKey(rsa);
-                    
+
                     var algorithmName = algorithm switch
                     {
                         "RS256" => SecurityAlgorithms.RsaSha256,
@@ -257,7 +268,7 @@ public class JwtService : IJwtService
                         "RS512" => SecurityAlgorithms.RsaSha512,
                         _ => SecurityAlgorithms.RsaSha256
                     };
-                    
+
                     signingCredentials = new SigningCredentials(securityKey, algorithmName);
                 }
                 catch (Exception ex)
@@ -333,5 +344,15 @@ public class JwtService : IJwtService
         {
             return (false, null, $"Error building token: {ex.Message}");
         }
+    }
+
+    public string GetDefaultSecretKey(string algorithm)
+    {
+        if (DefaultSecretKeys.TryGetValue(algorithm, out var secretKey))
+        {
+            return secretKey;
+        }
+
+        return string.Empty;
     }
 }

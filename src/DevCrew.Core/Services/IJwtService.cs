@@ -33,4 +33,11 @@ public interface IJwtService
         string? issuer = null,
         string? audience = null,
         string? subject = null);
+
+    /// <summary>
+    /// Gets the default secret key for the specified algorithm
+    /// </summary>
+    /// <param name="algorithm">Algorithm name (HS256, HS384, HS512, RS256, RS384, RS512)</param>
+    /// <returns>Default secret key for the algorithm</returns>
+    string GetDefaultSecretKey(string algorithm);
 }

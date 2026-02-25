@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Security.Cryptography;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
@@ -14,13 +15,20 @@ public partial class JwtBuilderViewModel : ObservableObject
     private readonly IClipboardService _clipboardService;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CanBuildToken))]
+    [NotifyPropertyChangedFor(nameof(CanBuildToken), nameof(IsRsaAlgorithm))]
     private string algorithm = "HS256";
 
     partial void OnAlgorithmChanged(string value)
     {
         // Algorithm değiştiğinde CanBuildToken'ı güncelle
         OnPropertyChanged(nameof(CanBuildToken));
+        OnPropertyChanged(nameof(IsRsaAlgorithm));
+        
+        // RSA olmayan algoritmaya geçildiğinde public key'i temizle
+        if (!value.StartsWith("RS"))
+        {
+            PublicKey = string.Empty;
+        }
     }
 
     [ObservableProperty]
@@ -56,6 +64,9 @@ public partial class JwtBuilderViewModel : ObservableObject
     private bool isSecretVisible;
 
     [ObservableProperty]
+    private string publicKey = string.Empty;
+
+    [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(AddCustomClaimCommand))]
     private string customClaimKey = string.Empty;
 
@@ -77,6 +88,7 @@ public partial class JwtBuilderViewModel : ObservableObject
     public bool CanBuildToken => !string.IsNullOrWhiteSpace(Secret);
     public bool CanAddCustomClaim => !string.IsNullOrWhiteSpace(CustomClaimKey);
     public bool HasGeneratedToken => !string.IsNullOrWhiteSpace(GeneratedToken);
+    public bool IsRsaAlgorithm => Algorithm.StartsWith("RS");
 
     /// <summary>
     /// Initializes a new instance of the <see cref="JwtBuilderViewModel"/> class.
@@ -204,6 +216,7 @@ public partial class JwtBuilderViewModel : ObservableObject
     private void Clear()
     {
         Secret = string.Empty;
+        PublicKey = string.Empty;
         Issuer = string.Empty;
         Audience = string.Empty;
         Subject = string.Empty;
@@ -223,6 +236,42 @@ public partial class JwtBuilderViewModel : ObservableObject
     private void ToggleSecretVisibility()
     {
         IsSecretVisible = !IsSecretVisible;
+    }
+
+    [RelayCommand]
+    private void GenerateSecretKey()
+    {
+        if (Algorithm.StartsWith("RS"))
+        {
+            // RSA algoritmaları için otomatik private key ve public key üret
+            using var rsa = RSA.Create(2048);
+            Secret = rsa.ExportRSAPrivateKeyPem();
+            PublicKey = rsa.ExportSubjectPublicKeyInfoPem();
+        }
+        else
+        {
+            // HMAC algoritmaları için default secret key kullan
+            Secret = _jwtService.GetDefaultSecretKey(Algorithm);
+            PublicKey = string.Empty;
+        }
+    }
+
+    [RelayCommand]
+    private async Task CopySecret()
+    {
+        if (!string.IsNullOrWhiteSpace(Secret))
+        {
+            await _clipboardService.TrySetTextAsync(Secret);
+        }
+    }
+
+    [RelayCommand]
+    private async Task CopyPublicKey()
+    {
+        if (!string.IsNullOrWhiteSpace(PublicKey))
+        {
+            await _clipboardService.TrySetTextAsync(PublicKey);
+        }
     }
 }
 

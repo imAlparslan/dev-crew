@@ -55,7 +55,7 @@
                         </Grid>
                         
                         <!-- Secret Key -->
-                        <Grid ColumnDefinitions="120,Auto,*" RowDefinitions="Auto">
+                        <Grid ColumnDefinitions="120,Auto,Auto,Auto,*" RowDefinitions="Auto">
                             <TextBlock Grid.Column="0"
                                        Text="Secret Key:"
                                        FontSize="12"
@@ -73,7 +73,26 @@
                                     ToolTip.Tip="Göster/Gizle"
                                     Command="{Binding ToggleSecretVisibilityCommand}" />
                             
-                            <TextBox Grid.Column="2"
+                            <Button Grid.Column="2"
+                                    Content="🔑 Generate"
+                                    Height="36"
+                                    Padding="8,0"
+                                    Margin="0,0,4,0"
+                                    Classes="NeutralActionButton"
+                                    ToolTip.Tip="Algoritma için örnek secret key oluştur"
+                                    Command="{Binding GenerateSecretKeyCommand}" />
+                            
+                            <Button Grid.Column="3"
+                                    Content="📋"
+                                    Width="36"
+                                    Height="36"
+                                    Padding="0"
+                                    Margin="0,0,4,0"
+                                    Classes="NeutralActionButton"
+                                    ToolTip.Tip="Secret key'i kopyala"
+                                    Command="{Binding CopySecretCommand}" />
+                            
+                            <TextBox Grid.Column="4"
                                      Text="{Binding Secret}"
                                      PasswordChar="●"
                                      RevealPassword="{Binding IsSecretVisible}"
@@ -89,10 +108,52 @@
                                      ScrollViewer.VerticalScrollBarVisibility="Disabled" />
                         </Grid>
                         
+                        <!-- Public Key (only for RSA algorithms) -->
+                        <Grid ColumnDefinitions="120,Auto,*" 
+                              RowDefinitions="Auto"
+                              IsVisible="{Binding IsRsaAlgorithm}">
+                            <TextBlock Grid.Column="0"
+                                       Text="Public Key:"
+                                       FontSize="12"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            
+                            <Button Grid.Column="1"
+                                    Content="📋"
+                                    Width="36"
+                                    Height="36"
+                                    Padding="0"
+                                    Margin="0,0,4,0"
+                                    Classes="NeutralActionButton"
+                                    ToolTip.Tip="Public key'i kopyala (JWT.io validation için)"
+                                    Command="{Binding CopyPublicKeyCommand}" />
+                            
+                            <TextBox Grid.Column="2"
+                                     Text="{Binding PublicKey}"
+                                     IsReadOnly="True"
+                                     Padding="8"
+                                     Height="36"
+                                     TextWrapping="NoWrap"
+                                     MaxLines="1"
+                                     VerticalAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     Classes="MonospaceInputTextBox"
+                                     Watermark="Public key - JWT.io validation için gerekli"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                        </Grid>
+                        
                         <TextBlock Text="💡 HMAC (HS256/384/512) için string secret, RSA (RS256/384/512) için PEM formatında private key kullanın"
                                    FontSize="11"
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    TextWrapping="Wrap" />
+                        
+                        <TextBlock Text="🔐 RSA: Private key ile token imzalanır, Public key ile doğrulanır (JWT.io'da validation için Public Key kullanın)"
+                                   FontSize="11"
+                                   Foreground="{StaticResource BrushSecondaryText}"
+                                   TextWrapping="Wrap"
+                                   IsVisible="{Binding IsRsaAlgorithm}" />
                     </StackPanel>
                 </Border>
 
