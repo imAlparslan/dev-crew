@@ -89,36 +89,35 @@
                             Width="580"
                             Margin="0,0,0,12"
                             MinHeight="128"
-                            Height="128"
-                            MaxHeight="128"
+                            MaxHeight="200"
                             HorizontalAlignment="Left"
                             IsVisible="{Binding DecodedHeader, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                         <Border.BorderBrush>
                             <Binding Path="IsSignatureValid" Converter="{StaticResource SignatureValidBorderConverter}" FallbackValue="{StaticResource BrushBorderSecondary}" />
                         </Border.BorderBrush>
-                        <Grid RowDefinitions="Auto,Auto,Auto">
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto">
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                                <!-- HMAC Title -->
                                 <TextBlock Grid.Column="0"
                                            Text="Secret Key (İmza Doğrulama)"
                                            FontSize="12"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
-                                           VerticalAlignment="Center" />
+                                           VerticalAlignment="Center"
+                                           IsVisible="{Binding !IsRsaAlgorithm}" />
                                 
-                                <TextBlock Grid.Column="1"
-                                           Text="{Binding Secret.Length, FallbackValue='0 karakter'}"
-                                           FontSize="10"
+                                <!-- RSA Title -->
+                                <TextBlock Grid.Column="0"
+                                           Text="Public Key (İmza Doğrulama - RSA)"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
-                                           VerticalAlignment="Center">
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0} karakter">
-                                            <Binding Path="Secret.Length" FallbackValue="0" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
+                                           VerticalAlignment="Center"
+                                           IsVisible="{Binding IsRsaAlgorithm}" />
                             </Grid>
                             
-                            <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+                            <!-- HMAC Secret Key -->
+                            <Grid Grid.Row="1" ColumnDefinitions="Auto,*" IsVisible="{Binding !IsRsaAlgorithm}">
                                 <Button Grid.Column="0"
                                         Content="👁️"
                                         Width="36"
@@ -147,7 +146,24 @@
                                          ScrollViewer.VerticalScrollBarVisibility="Disabled" />
                             </Grid>
                             
-                            <Grid Grid.Row="2" Margin="0,8,0,0" ColumnDefinitions="*,Auto">
+                            <!-- RSA Public Key -->
+                            <TextBox Grid.Row="2"
+                                     Text="{Binding PublicKey}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     Padding="8"
+                                     Width="556"
+                                     MinHeight="60"
+                                     MaxHeight="100"
+                                     HorizontalAlignment="Stretch"
+                                     Classes="MonospaceInputTextBox"
+                                     FontSize="{StaticResource FontSizeSmall}"
+                                     Watermark="-----BEGIN PUBLIC KEY-----&#x0a;...&#x0a;-----END PUBLIC KEY-----"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     IsVisible="{Binding IsRsaAlgorithm}" />
+                            
+                            <Grid Grid.Row="3" Margin="0,8,0,0" ColumnDefinitions="*,Auto">
                                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4"
                                             IsVisible="{Binding IsSignatureValid, Converter={x:Static ObjectConverters.IsNotNull}}">
                                     <TextBlock Text="İmza Durumu: "

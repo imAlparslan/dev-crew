@@ -50,6 +50,9 @@ public class JwtService : IJwtService
 
             var jwtToken = _tokenHandler.ReadJwtToken(token);
 
+            // Extract algorithm from header
+            result.Algorithm = jwtToken.Header.Alg;
+
             // Format header as JSON
             var headerJson = JsonSerializer.Serialize(jwtToken.Header, new JsonSerializerOptions
             {
@@ -145,13 +148,49 @@ public class JwtService : IJwtService
             }
 
             var jwtToken = _tokenHandler.ReadJwtToken(token);
+            var algorithm = jwtToken.Header.Alg?.ToUpperInvariant();
+
+            SecurityKey securityKey;
+
+            // Determine key type based on algorithm
+            if (algorithm?.StartsWith("RS") == true)
+            {
+                // RSA algorithms - parse public key
+                try
+                {
+                    var rsa = RSA.Create();
+
+                    // Try to import as PEM format first
+                    if (secret.Contains("BEGIN PUBLIC KEY") || secret.Contains("BEGIN RSA PUBLIC KEY"))
+                    {
+                        rsa.ImportFromPem(secret);
+                    }
+                    else
+                    {
+                        // Try to import as XML format
+                        rsa.FromXmlString(secret);
+                    }
+
+                    securityKey = new RsaSecurityKey(rsa);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                // HMAC algorithms - use symmetric key
+                securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+            }
+
             var validationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = false, // Don't validate expiration for signature check
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+                IssuerSigningKey = securityKey
             };
 
             _tokenHandler.ValidateToken(token, validationParameters, out _);

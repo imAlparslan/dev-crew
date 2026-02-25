@@ -5,6 +5,7 @@ public class JwtDecodeResult
     public bool IsValid { get; set; }
     public string? Header { get; set; }
     public string? Payload { get; set; }
+    public string? Algorithm { get; set; }
     public string? ErrorMessage { get; set; }
     public DateTime? ExpiresAt { get; set; }
     public DateTime? IssuedAt { get; set; }
