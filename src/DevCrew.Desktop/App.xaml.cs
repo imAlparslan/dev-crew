@@ -85,6 +85,8 @@ public partial class App : Application
         services.AddTransient<Func<CreateGuidViewModel>>(sp => () => sp.GetRequiredService<CreateGuidViewModel>());
         services.AddTransient<JwtDecoderViewModel>();
         services.AddTransient<Func<JwtDecoderViewModel>>(sp => () => sp.GetRequiredService<JwtDecoderViewModel>());
+        services.AddTransient<JwtBuilderViewModel>();
+        services.AddTransient<Func<JwtBuilderViewModel>>(sp => () => sp.GetRequiredService<JwtBuilderViewModel>());
     }
 
     private void InitializeDatabase()

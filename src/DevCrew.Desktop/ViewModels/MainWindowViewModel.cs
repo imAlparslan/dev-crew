@@ -15,6 +15,7 @@ public partial class MainWindowViewModel : BaseViewModel
     private readonly DashboardViewModel _dashboardViewModel;
     private readonly Func<CreateGuidViewModel> _createGuidViewModelFactory;
     private readonly Func<JwtDecoderViewModel> _jwtDecoderViewModelFactory;
+    private readonly Func<JwtBuilderViewModel> _jwtBuilderViewModelFactory;
 
     [ObservableProperty]
     private string title = "DevCrew";
@@ -42,16 +43,19 @@ public partial class MainWindowViewModel : BaseViewModel
     /// <param name="dashboardViewModel">Dashboard view model.</param>
     /// <param name="createGuidViewModelFactory">Factory for new GUID view models.</param>
     /// <param name="jwtDecoderViewModelFactory">Factory for new JWT Decoder view models.</param>
+    /// <param name="jwtBuilderViewModelFactory">Factory for new JWT Builder view models.</param>
     public MainWindowViewModel(
         IApplicationService applicationService,
         DashboardViewModel dashboardViewModel,
         Func<CreateGuidViewModel> createGuidViewModelFactory,
-        Func<JwtDecoderViewModel> jwtDecoderViewModelFactory)
+        Func<JwtDecoderViewModel> jwtDecoderViewModelFactory,
+        Func<JwtBuilderViewModel> jwtBuilderViewModelFactory)
     {
         _applicationService = applicationService;
         _dashboardViewModel = dashboardViewModel;
         _createGuidViewModelFactory = createGuidViewModelFactory;
         _jwtDecoderViewModelFactory = jwtDecoderViewModelFactory;
+        _jwtBuilderViewModelFactory = jwtBuilderViewModelFactory;
 
         InitializeMenuItems();
 
@@ -64,15 +68,18 @@ public partial class MainWindowViewModel : BaseViewModel
         var dashboardItem = new MenuItemViewModel("dashboard", "Dashboard", OpenDashboardCommand, "Primary", "🎯");
         var createGuidItem = new MenuItemViewModel("create-guid", "Create Guid", OpenCreateGuidTabCommand, "Primary", "🎲");
         var jwtDecoderItem = new MenuItemViewModel("jwt-decoder", "JWT Decoder", OpenJwtDecoderTabCommand, "Primary", "🔐");
+        var jwtBuilderItem = new MenuItemViewModel("jwt-builder", "JWT Builder", OpenJwtBuilderTabCommand, "Primary", "🔧");
 
         MenuItems.Add(dashboardItem);
         MenuItems.Add(createGuidItem);
         MenuItems.Add(jwtDecoderItem);
+        MenuItems.Add(jwtBuilderItem);
 
         // Dashboard'daki MenuItems'ı doldur
         _dashboardViewModel.MenuItems.Add(dashboardItem);
         _dashboardViewModel.MenuItems.Add(createGuidItem);
         _dashboardViewModel.MenuItems.Add(jwtDecoderItem);
+        _dashboardViewModel.MenuItems.Add(jwtBuilderItem);
     }
 
     [RelayCommand]
@@ -118,6 +125,21 @@ public partial class MainWindowViewModel : BaseViewModel
         OpenOrSelectTab("jwt-decoder", "JWT Decoder", jwtDecoderViewModel, true, "🔐");
     }
 
+    [RelayCommand]
+    private void OpenJwtBuilderTab()
+    {
+        SetSelectedMenuItem("jwt-builder");
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == "jwt-builder");
+        if (existingTab != null)
+        {
+            SelectedTab = existingTab;
+            return;
+        }
+
+        var jwtBuilderViewModel = _jwtBuilderViewModelFactory();
+        OpenOrSelectTab("jwt-builder", "JWT Builder", jwtBuilderViewModel, true, "🔧");
+    }
+
     private void SetSelectedMenuItem(string id)
     {
         foreach (var item in MenuItems)
@@ -134,7 +156,7 @@ public partial class MainWindowViewModel : BaseViewModel
             return;
         }
 
-        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder")
+        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder" || value.Id == "jwt-builder")
         {
             SetSelectedMenuItem(value.Id);
             return;

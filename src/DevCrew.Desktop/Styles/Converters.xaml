@@ -28,7 +28,7 @@
                                   TrueString="✓ Geçerli"
                                   FalseString="✗ Geçersiz" />
     <conv:BooleanToBrushConverter x:Key="CopyStatusConverter"
-                                  TrueString="✓ Copied"
-                                  FalseString="📋 Copy" />
+                                  TrueString="✓ Kopyalandı"
+                                  FalseString="📋 Kopyala" />
     
 </ResourceDictionary>

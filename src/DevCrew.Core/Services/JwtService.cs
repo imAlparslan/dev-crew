@@ -1,4 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using DevCrew.Core.Models;
@@ -174,5 +176,162 @@ public class JwtService : IJwtService
         }
 
         return token.Trim();
+    }
+
+    public (bool Success, string? Token, string? ErrorMessage) BuildToken(
+        Dictionary<string, object> claims,
+        string secret,
+        string algorithm = "HS256",
+        DateTime? expiresAt = null,
+        string? issuer = null,
+        string? audience = null,
+        string? subject = null)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(secret))
+            {
+                return (false, null, "Secret key cannot be empty");
+            }
+
+            // Claims dictionary can be empty - we'll add standard claims below
+            if (claims == null)
+            {
+                claims = new Dictionary<string, object>();
+            }
+
+            // Normalize algorithm name
+            algorithm = algorithm.ToUpperInvariant();
+
+            // Validate algorithm
+            var supportedAlgorithms = new[] { "HS256", "HS384", "HS512", "RS256", "RS384", "RS512" };
+            if (!supportedAlgorithms.Contains(algorithm))
+            {
+                return (false, null, $"Unsupported algorithm: {algorithm}. Supported: {string.Join(", ", supportedAlgorithms)}");
+            }
+
+            // Create security key based on algorithm
+            SecurityKey securityKey;
+            SigningCredentials signingCredentials;
+
+            if (algorithm.StartsWith("HS"))
+            {
+                // HMAC algorithms - use symmetric key
+                var keyBytes = Encoding.UTF8.GetBytes(secret);
+                securityKey = new SymmetricSecurityKey(keyBytes);
+                
+                var algorithmName = algorithm switch
+                {
+                    "HS256" => SecurityAlgorithms.HmacSha256,
+                    "HS384" => SecurityAlgorithms.HmacSha384,
+                    "HS512" => SecurityAlgorithms.HmacSha512,
+                    _ => SecurityAlgorithms.HmacSha256
+                };
+                
+                signingCredentials = new SigningCredentials(securityKey, algorithmName);
+            }
+            else // RS256, RS384, RS512
+            {
+                // RSA algorithms - parse private key
+                try
+                {
+                    var rsa = RSA.Create();
+                    
+                    // Try to import as PEM format first
+                    if (secret.Contains("BEGIN RSA PRIVATE KEY") || secret.Contains("BEGIN PRIVATE KEY"))
+                    {
+                        rsa.ImportFromPem(secret);
+                    }
+                    else
+                    {
+                        // Try to import as XML format
+                        rsa.FromXmlString(secret);
+                    }
+                    
+                    securityKey = new RsaSecurityKey(rsa);
+                    
+                    var algorithmName = algorithm switch
+                    {
+                        "RS256" => SecurityAlgorithms.RsaSha256,
+                        "RS384" => SecurityAlgorithms.RsaSha384,
+                        "RS512" => SecurityAlgorithms.RsaSha512,
+                        _ => SecurityAlgorithms.RsaSha256
+                    };
+                    
+                    signingCredentials = new SigningCredentials(securityKey, algorithmName);
+                }
+                catch (Exception ex)
+                {
+                    return (false, null, $"Invalid RSA private key format: {ex.Message}");
+                }
+            }
+
+            // Build claims list
+            var claimsList = new List<Claim>();
+
+            // Add custom claims
+            foreach (var claim in claims)
+            {
+                if (claim.Value is string[] arrayValue)
+                {
+                    // Aynı key'in birden fazla value'si varsa, her biri için ayrı Claim oluştur
+                    foreach (var value in arrayValue)
+                    {
+                        claimsList.Add(new Claim(claim.Key, value ?? string.Empty));
+                    }
+                }
+                else
+                {
+                    // Single value
+                    var claimValue = claim.Value?.ToString() ?? string.Empty;
+                    claimsList.Add(new Claim(claim.Key, claimValue));
+                }
+            }
+
+            // Add subject if provided
+            if (!string.IsNullOrWhiteSpace(subject))
+            {
+                claimsList.Add(new Claim(JwtRegisteredClaimNames.Sub, subject));
+            }
+
+            // Create token descriptor
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claimsList),
+                SigningCredentials = signingCredentials
+            };
+
+            // Set issuer if provided
+            if (!string.IsNullOrWhiteSpace(issuer))
+            {
+                tokenDescriptor.Issuer = issuer;
+            }
+
+            // Set audience if provided
+            if (!string.IsNullOrWhiteSpace(audience))
+            {
+                tokenDescriptor.Audience = audience;
+            }
+
+            // Set expiration if provided
+            if (expiresAt.HasValue)
+            {
+                tokenDescriptor.Expires = expiresAt.Value;
+            }
+
+            // Set issued at time
+            tokenDescriptor.IssuedAt = DateTime.UtcNow;
+            tokenDescriptor.NotBefore = DateTime.UtcNow;
+
+            // Create token
+            var token = _tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = _tokenHandler.WriteToken(token);
+
+            return (true, tokenString, null);
+        }
+        catch (Exception ex)
+        {
+            return (false, null, $"Error building token: {ex.Message}");
+        }
     }
 }

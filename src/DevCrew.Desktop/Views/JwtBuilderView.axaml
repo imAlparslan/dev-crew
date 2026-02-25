@@ -1,0 +1,376 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DevCrew.Desktop.ViewModels"
+             x:Class="DevCrew.Desktop.Views.JwtBuilderView"
+             x:DataType="vm:JwtBuilderViewModel">
+    
+    <ScrollViewer>
+        <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
+            <StackPanel Spacing="12" MaxWidth="900" HorizontalAlignment="Center">
+                <!-- Header -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="JWT Builder"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushPrimaryText}"
+                               HorizontalAlignment="Center" />
+                    
+                    <TextBlock Text="JWT token oluşturun - Claims, algoritma ve secret key belirleyin"
+                               FontSize="14"
+                               Foreground="{StaticResource BrushSecondaryText}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+
+                <!-- Algorithm and Secret -->
+                <Border Background="{StaticResource BrushTertiaryBackground}"
+                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Algoritma ve Secret Key"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushPrimaryText}" />
+                        
+                        <!-- Algorithm Selection -->
+                        <Grid ColumnDefinitions="120,*" RowDefinitions="Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="Algoritma:"
+                                       FontSize="12"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+
+                            <ComboBox Grid.Column="1"
+                                      SelectedItem="{Binding Algorithm}"
+                                      ItemsSource="{Binding AvailableAlgorithms}"
+                                      Width="200"
+                                      Height="36"
+                                      Padding="8"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Center" />
+                        </Grid>
+                        
+                        <!-- Secret Key -->
+                        <Grid ColumnDefinitions="120,Auto,*" RowDefinitions="Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="Secret Key:"
+                                       FontSize="12"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            
+                            <Button Grid.Column="1"
+                                    Content="👁️"
+                                    Width="36"
+                                    Height="36"
+                                    Padding="0"
+                                    Margin="0,0,4,0"
+                                    Classes="NeutralActionButton"
+                                    ToolTip.Tip="Göster/Gizle"
+                                    Command="{Binding ToggleSecretVisibilityCommand}" />
+                            
+                            <TextBox Grid.Column="2"
+                                     Text="{Binding Secret}"
+                                     PasswordChar="●"
+                                     RevealPassword="{Binding IsSecretVisible}"
+                                     Padding="8"
+                                     Height="36"
+                                     TextWrapping="NoWrap"
+                                     MaxLines="1"
+                                     VerticalAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     Classes="MonospaceInputTextBox"
+                                     Watermark="Secret key veya RSA private key"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+                        </Grid>
+                        
+                        <TextBlock Text="💡 HMAC (HS256/384/512) için string secret, RSA (RS256/384/512) için PEM formatında private key kullanın"
+                                   FontSize="11"
+                                   Foreground="{StaticResource BrushSecondaryText}"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Standard Claims -->
+                <Border Background="{StaticResource BrushTertiaryBackground}"
+                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Standard Claims"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushPrimaryText}" />
+                        
+                        <!-- Issuer -->
+                        <Grid ColumnDefinitions="120,*" RowDefinitions="Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="Issuer (iss):"
+                                       FontSize="12"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding Issuer}"
+                                     Padding="8"
+                                     Height="36"
+                                     VerticalContentAlignment="Center"
+                                     Watermark="Token issuer (örn: https://myapi.com)" />
+                        </Grid>
+                        
+                        <!-- Audience -->
+                        <Grid ColumnDefinitions="120,*" RowDefinitions="Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="Audience (aud):"
+                                       FontSize="12"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding Audience}"
+                                     Padding="8"
+                                     Height="36"
+                                     VerticalContentAlignment="Center"
+                                     Watermark="Token audience (örn: myapp)" />
+                        </Grid>
+                        
+                        <!-- Subject -->
+                        <Grid ColumnDefinitions="120,*" RowDefinitions="Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="Subject (sub):"
+                                       FontSize="12"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+                            
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding Subject}"
+                                     Padding="8"
+                                     Height="36"
+                                     VerticalContentAlignment="Center"
+                                     Watermark="Token subject (örn: user-id-123)" />
+                        </Grid>
+                        
+                        <!-- Expiration -->
+                        <Grid ColumnDefinitions="120,Auto,Auto,*" RowDefinitions="Auto">
+                            <CheckBox Grid.Column="0"
+                                      IsChecked="{Binding IncludeExpiration}"
+                                      Content="Expiration (exp)"
+                                      FontSize="12"
+                                      Foreground="{StaticResource BrushSecondaryText}"
+                                      VerticalAlignment="Center" />
+                            
+                            <NumericUpDown Grid.Column="1"
+                                           Value="{Binding ExpirationMinutes}"
+                                           Minimum="1"
+                                           Maximum="525600"
+                                           Increment="5"
+                                           Width="100"
+                                           Height="36"
+                                           IsEnabled="{Binding IncludeExpiration}"
+                                           Margin="8,0,4,0" />
+                            
+                            <TextBlock Grid.Column="2"
+                                       Text="dakika sonra"
+                                       FontSize="12"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                        
+                        <TextBlock Text="💡 IssuedAt (iat) ve NotBefore (nbf) otomatik olarak mevcut zaman ile eklenir"
+                                   FontSize="11"
+                                   Foreground="{StaticResource BrushSecondaryText}"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Custom Claims -->
+                <Border Background="{StaticResource BrushTertiaryBackground}"
+                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Custom Claims"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushPrimaryText}" />
+                        
+                        <!-- Add Custom Claim -->
+                        <Grid ColumnDefinitions="*,*,Auto" RowDefinitions="Auto">
+                            <TextBox Grid.Column="0"
+                                     Text="{Binding CustomClaimKey}"
+                                     Padding="8"
+                                     Height="36"
+                                     VerticalContentAlignment="Center"
+                                     Watermark="Claim key"
+                                     Margin="0,0,8,0" />
+                            
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding CustomClaimValue}"
+                                     Padding="8"
+                                     Height="36"
+                                     VerticalContentAlignment="Center"
+                                     Watermark="Claim value"
+                                     Margin="0,0,8,0" />
+                            
+                            <Button Grid.Column="2"
+                                    Content="➕ Ekle"
+                                    Command="{Binding AddCustomClaimCommand}"
+                                    Classes="ActionButton AccentActionButton"
+                                    Height="36"
+                                    FontWeight="SemiBold" />
+                        </Grid>
+                        
+                        <!-- Custom Claims List -->
+                        <ItemsControl ItemsSource="{Binding CustomClaims}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{StaticResource BrushSecondaryBackground}"
+                                            BorderBrush="{StaticResource BrushBorder}"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            Padding="8"
+                                            Margin="0,0,0,4">
+                                        <Grid ColumnDefinitions="*,*,Auto">
+                                            <TextBlock Grid.Column="0"
+                                                       Text="{Binding Key}"
+                                                       FontSize="12"
+                                                       FontFamily="{StaticResource FontMonospace}"
+                                                       Foreground="{StaticResource BrushPrimaryText}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,8,0" />
+                                            
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Value}"
+                                                       FontSize="12"
+                                                       FontFamily="{StaticResource FontMonospace}"
+                                                       Foreground="{StaticResource BrushSecondaryText}"
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Margin="0,0,8,0" />
+                                            
+                                            <Button Grid.Column="2"
+                                                    Content="✕"
+                                                    Command="{Binding $parent[ItemsControl].DataContext.RemoveCustomClaimCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Classes="ActionButton DangerActionButton ActionButtonCompact"
+                                                    Width="28"
+                                                    Height="28"
+                                                    Padding="0"
+                                                    FontSize="12" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        
+                        <TextBlock Text="Claim listesi boş"
+                                   FontSize="12"
+                                   Foreground="{StaticResource BrushSecondaryText}"
+                                   FontStyle="Italic"
+                                   HorizontalAlignment="Center"
+                                   IsVisible="{Binding !CustomClaims.Count}" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Build Actions -->
+                <Border Background="{StaticResource BrushTertiaryBackground}"
+                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="8"
+                                HorizontalAlignment="Center">
+                        <Button Content="🔧 Token Oluştur"
+                                Command="{Binding BuildTokenCommand}"
+                                Classes="ActionButton AccentActionButton"
+                                FontWeight="SemiBold"
+                                FontSize="14"
+                                Padding="16,8" />
+                        
+                        <Button Content="✕ Temizle"
+                                Command="{Binding ClearCommand}"
+                                Classes="ActionButton DangerActionButton"
+                                FontSize="14"
+                                Padding="16,8" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Error Message -->
+                <Border Background="{StaticResource BrushDanger}"
+                        BorderBrush="{StaticResource BrushDanger}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12"
+                        IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               FontSize="12"
+                               Foreground="White"
+                               TextWrapping="Wrap" />
+                </Border>
+
+                <!-- Generated Token Output -->
+                <Border Background="{StaticResource BrushTertiaryBackground}"
+                        BorderBrush="{StaticResource BrushSuccess}"
+                        BorderThickness="2"
+                        CornerRadius="6"
+                        Padding="12"
+                        IsVisible="{Binding HasGeneratedToken}">
+                    <StackPanel Spacing="12">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="Oluşturulan JWT Token"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushPrimaryText}"
+                                       VerticalAlignment="Center" />
+                            
+                            <Button Grid.Column="1"
+                                    Command="{Binding CopyTokenCommand}"
+                                    Classes="ActionButton AccentActionButton"
+                                    Height="32"
+                                    Padding="12,0"
+                                    FontSize="12">
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <Binding Path="IsTokenCopied"
+                                                 Converter="{StaticResource CopyStatusConverter}" />
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Button>
+                        </Grid>
+                        
+                        <Border Background="{StaticResource BrushSecondaryBackground}"
+                                BorderBrush="{StaticResource BrushBorder}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="12">
+                            <TextBox Text="{Binding GeneratedToken, Mode=OneWay}"
+                                     IsReadOnly="True"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MinHeight="120"
+                                     MaxHeight="300"
+                                     FontFamily="{StaticResource FontMonospace}"
+                                     FontSize="{StaticResource FontSizeSmall}"
+                                     Foreground="{StaticResource BrushPrimaryText}"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>
