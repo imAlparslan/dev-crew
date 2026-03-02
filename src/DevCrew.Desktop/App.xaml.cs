@@ -91,6 +91,8 @@ public partial class App : Application
         services.AddTransient<Func<JwtDecoderViewModel>>(sp => () => sp.GetRequiredService<JwtDecoderViewModel>());
         services.AddTransient<JwtBuilderViewModel>();
         services.AddTransient<Func<JwtBuilderViewModel>>(sp => () => sp.GetRequiredService<JwtBuilderViewModel>());
+        services.AddTransient<JsonFormatterViewModel>();
+        services.AddTransient<Func<JsonFormatterViewModel>>(sp => () => sp.GetRequiredService<JsonFormatterViewModel>());
     }
 
     private void InitializeDatabase()

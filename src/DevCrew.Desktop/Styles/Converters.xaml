@@ -7,6 +7,9 @@
     <!-- Boolean to Opacity (0.0 to 1.0) -->
     <conv:BoolToDoubleConverter x:Key="BoolToOpacityConverter" />
     
+    <!-- Boolean to Color -->
+    <conv:BoolToColorConverter x:Key="BoolToColorConverter" />
+    
     <!-- GUID View Converters -->
     <conv:BooleanToBrushConverter x:Key="GuidBackgroundConverter"
                                   TrueBrush="{StaticResource BrushAccent}"

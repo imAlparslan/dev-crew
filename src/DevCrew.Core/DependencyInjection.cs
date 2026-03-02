@@ -34,6 +34,7 @@ public static class DependencyInjection
         services.AddSingleton<IErrorHandler, ErrorHandler>();
         services.AddSingleton<IGuidService, GuidService>();
         services.AddSingleton<IJwtService, JwtService>();
+        services.AddSingleton<IJsonFormatterService, JsonFormatterService>();
 
         return services;
     }

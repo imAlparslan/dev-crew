@@ -1,0 +1,173 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DevCrew.Desktop.ViewModels"
+             x:Class="DevCrew.Desktop.Views.JsonFormatterView"
+             x:DataType="vm:JsonFormatterViewModel">
+    
+    <ScrollViewer>
+        <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
+            <Grid RowDefinitions="Auto,Auto,*" MaxWidth="1200" HorizontalAlignment="Center">
+                <!-- Header -->
+                <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
+                    <TextBlock Text="JSON Formatter"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushPrimaryText}"
+                               HorizontalAlignment="Center" />
+                    
+                    <TextBlock Text="JSON verilerinizi validate edin, prettify veya minify yapın"
+                               FontSize="14"
+                               Foreground="{StaticResource BrushSecondaryText}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+
+                <!-- Action Buttons -->
+                <StackPanel Grid.Row="1"
+                            Orientation="Horizontal"
+                            Spacing="8"
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,16">
+                    <Button Content="Prettify"
+                            Command="{Binding PrettifyCommand}"
+                            Classes="ActionButton PrimaryActionButton"
+                            FontWeight="SemiBold"
+                            ToolTip.Tip="JSON'u biçimlendir" />
+                    
+                    <Button Content="Minify"
+                            Command="{Binding MinifyCommand}"
+                            Classes="ActionButton PrimaryActionButton"
+                            FontWeight="SemiBold"
+                            ToolTip.Tip="JSON'u sıkıştır" />
+                    
+                    <CheckBox Content="Sort Keys"
+                              IsChecked="{Binding IsSortKeysEnabled}"
+                              FontWeight="SemiBold"
+                              Foreground="{StaticResource BrushPrimaryText}"
+                              VerticalAlignment="Center"
+                              Margin="8,0"
+                              ToolTip.Tip="Anahtarları alfabetik sırala" />
+                    
+                    <Button Content="✕ Clear"
+                            Command="{Binding ClearCommand}"
+                            Classes="ActionButton DangerActionButton"
+                            FontWeight="SemiBold"
+                            ToolTip.Tip="Temizle" />
+                </StackPanel>
+
+                <!-- Input/Output Section -->
+                <Grid Grid.Row="2" ColumnDefinitions="*,16,*">
+                    <!-- Input Section (Left) -->
+                    <Border Grid.Column="0"
+                            Background="{StaticResource BrushTertiaryBackground}"
+                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12">
+                        <Grid RowDefinitions="Auto,*">
+                            <TextBlock Grid.Row="0"
+                                       Text="Girdi (Input)"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       Margin="0,0,0,8" />
+                            
+                            <TextBox Grid.Row="1"
+                                     Text="{Binding InputJson}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MinHeight="400"
+                                     Padding="8"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch"
+                                     VerticalContentAlignment="Top"
+                                     Classes="MonospaceInputTextBox"
+                                     FontFamily="{StaticResource FontMonospace}"
+                                     FontSize="{StaticResource FontSizeSmall}"
+                                     Watermark="{}{&#x0a;  &quot;name&quot;: &quot;DevCrew&quot;,&#x0a;  &quot;version&quot;: &quot;1.0.0&quot;,&#x0a;  &quot;tools&quot;: [&quot;GUID&quot;, &quot;JWT&quot;, &quot;JSON&quot;]&#x0a;}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Output Section (Right) -->
+                    <Border Grid.Column="2"
+                            Background="{StaticResource BrushTertiaryBackground}"
+                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12">
+                        <Grid RowDefinitions="Auto,Auto,*">
+                            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                                <TextBlock Grid.Column="0"
+                                           Text="Çıktı (Output)"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrushSecondaryText}"
+                                           VerticalAlignment="Center" />
+                                
+                                <Button Grid.Column="1"
+                                        Command="{Binding CopyOutputCommand}"
+                                        IsEnabled="{Binding HasOutput}"
+                                        Width="32"
+                                        Height="32"
+                                        Padding="0"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        ToolTip.Tip="Çıktıyı kopyala"
+                                        Cursor="Hand">
+                                    <TextBlock Text="📋"
+                                               FontSize="16"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Button>
+                            </Grid>
+                            
+                            <!-- Validation Message -->
+                            <Border Grid.Row="1"
+                                    Padding="8"
+                                    CornerRadius="4"
+                                    Margin="0,0,0,8"
+                                    IsVisible="{Binding ValidationMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#2D5F2E|#5F2D2D'}" Opacity="0.2" />
+                                </Border.Background>
+                                <Border.BorderBrush>
+                                    <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#4CAF50|#F44336'}" />
+                                </Border.BorderBrush>
+                                <Border.BorderThickness>1</Border.BorderThickness>
+                                
+                                <TextBlock Text="{Binding ValidationMessage}"
+                                           FontSize="12"
+                                           FontWeight="Medium"
+                                           TextWrapping="Wrap">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#4CAF50|#F44336'}" />
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </Border>
+                            
+                            <TextBox Grid.Row="2"
+                                     Text="{Binding OutputJson}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     IsReadOnly="True"
+                                     MinHeight="400"
+                                     Padding="8"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch"
+                                     VerticalContentAlignment="Top"
+                                     Classes="MonospaceInputTextBox"
+                                     FontFamily="{StaticResource FontMonospace}"
+                                     FontSize="{StaticResource FontSizeSmall}"
+                                     Watermark="Çıktı burada görünecek..."
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+    </ScrollViewer>
+</UserControl>
