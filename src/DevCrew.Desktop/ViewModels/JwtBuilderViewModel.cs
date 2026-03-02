@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Security.Cryptography;
+using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DevCrew.Core.Models;
 using DevCrew.Core.Services;
 using DevCrew.Core.ViewModels;
 
@@ -14,6 +16,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
 {
     private readonly IJwtService _jwtService;
     private readonly IClipboardService _clipboardService;
+    private readonly IJwtBuilderTemplateRepository _templateRepository;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanBuildToken), nameof(IsRsaAlgorithm))]
@@ -71,7 +74,19 @@ public partial class JwtBuilderViewModel : BaseViewModel
     [ObservableProperty]
     private string customClaimValue = string.Empty;
 
+    [ObservableProperty]
+    private string templateName = string.Empty;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanUpdateTemplate))]
+    private int? currentTemplateId;
+
+    [ObservableProperty]
+    private JwtBuilderTemplateItemViewModel? selectedTemplate;
+
     public ObservableCollection<CustomClaimItem> CustomClaims { get; } = new();
+    
+    public ObservableCollection<JwtBuilderTemplateItemViewModel> SavedTemplates { get; } = new();
 
     public List<string> AvailableAlgorithms { get; } = new()
     {
@@ -87,6 +102,9 @@ public partial class JwtBuilderViewModel : BaseViewModel
     public bool CanAddCustomClaim => !string.IsNullOrWhiteSpace(CustomClaimKey);
     public bool HasGeneratedToken => !string.IsNullOrWhiteSpace(GeneratedToken);
     public bool IsRsaAlgorithm => Algorithm.StartsWith("RS");
+    public bool CanUpdateTemplate => CurrentTemplateId.HasValue;
+    public bool CanSaveTemplate => !string.IsNullOrWhiteSpace(TemplateName);
+    public bool CanLoadTemplate => SelectedTemplate != null;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="JwtBuilderViewModel"/> class.
@@ -94,11 +112,16 @@ public partial class JwtBuilderViewModel : BaseViewModel
     public JwtBuilderViewModel(
         IErrorHandler errorHandler,
         IJwtService jwtService, 
-        IClipboardService clipboardService)
+        IClipboardService clipboardService,
+        IJwtBuilderTemplateRepository templateRepository)
         : base(errorHandler)
     {
         _jwtService = jwtService;
         _clipboardService = clipboardService;
+        _templateRepository = templateRepository;
+        
+        // Load templates when the view model is created
+        _ = LoadTemplatesAsync();
     }
 
     [RelayCommand(CanExecute = nameof(CanBuildToken))]
@@ -276,6 +299,302 @@ public partial class JwtBuilderViewModel : BaseViewModel
             await _clipboardService.TrySetTextAsync(PublicKey);
         }
     }
+
+    #region Template Management
+
+    /// <summary>
+    /// Loads all saved templates from the database
+    /// </summary>
+    private async Task LoadTemplatesAsync()
+    {
+        try
+        {
+            var templates = await _templateRepository.GetAllAsync();
+            SavedTemplates.Clear();
+            
+            foreach (var template in templates)
+            {
+                SavedTemplates.Add(new JwtBuilderTemplateItemViewModel(
+                    template.Id,
+                    template.TemplateName,
+                    template.Algorithm,
+                    template.CreatedAt,
+                    template.LastUsedAt));
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorHandler.LogException(ex, "Load JWT Builder templates");
+        }
+    }
+
+    /// <summary>
+    /// Loads a template and populates the form
+    /// </summary>
+    [RelayCommand]
+    private async Task LoadTemplate()
+    {
+        if (SelectedTemplate == null)
+            return;
+
+        try
+        {
+            var template = await _templateRepository.GetByIdAsync(SelectedTemplate.Id);
+            if (template == null)
+            {
+                ErrorMessage = "Template bulunamadı.";
+                return;
+            }
+
+            // Populate form with template data
+            Algorithm = template.Algorithm;
+            Secret = template.Secret;
+            PublicKey = template.PublicKey ?? string.Empty;
+            Issuer = template.Issuer ?? string.Empty;
+            Audience = template.Audience ?? string.Empty;
+            Subject = template.Subject ?? string.Empty;
+            ExpirationMinutes = template.ExpirationMinutes;
+            IncludeExpiration = template.IncludeExpiration;
+            TemplateName = template.TemplateName;
+
+            // Load custom claims from JSON
+            CustomClaims.Clear();
+            if (!string.IsNullOrWhiteSpace(template.CustomClaimsJson))
+            {
+                var claims = DeserializeCustomClaims(template.CustomClaimsJson);
+                foreach (var claim in claims)
+                {
+                    CustomClaims.Add(claim);
+                }
+            }
+
+            // Set current template ID for update functionality
+            CurrentTemplateId = template.Id;
+
+            // Update last used timestamp
+            await _templateRepository.UpdateLastUsedAsync(template.Id);
+
+            ErrorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            ErrorHandler.LogException(ex, "Load JWT Builder template");
+            ErrorMessage = $"Template yükleme hatası: {ex.Message}";
+        }
+    }
+
+    /// <summary>
+    /// Saves current configuration as a new template
+    /// </summary>
+    [RelayCommand]
+    private async Task SaveAsNewTemplate()
+    {
+        if (string.IsNullOrWhiteSpace(TemplateName))
+        {
+            ErrorMessage = "Lütfen template adı girin.";
+            return;
+        }
+
+        try
+        {
+            // Check if template name already exists
+            var exists = await _templateRepository.TemplateNameExistsAsync(TemplateName);
+            if (exists)
+            {
+                ErrorMessage = "Bu isimde bir template zaten mevcut.";
+                return;
+            }
+
+            var template = new JwtBuilderTemplate
+            {
+                TemplateName = TemplateName,
+                Algorithm = Algorithm,
+                Secret = Secret,
+                PublicKey = string.IsNullOrWhiteSpace(PublicKey) ? null : PublicKey,
+                Issuer = string.IsNullOrWhiteSpace(Issuer) ? null : Issuer,
+                Audience = string.IsNullOrWhiteSpace(Audience) ? null : Audience,
+                Subject = string.IsNullOrWhiteSpace(Subject) ? null : Subject,
+                ExpirationMinutes = ExpirationMinutes,
+                IncludeExpiration = IncludeExpiration,
+                CustomClaimsJson = SerializeCustomClaims(),
+                Notes = null
+            };
+
+            var saved = await _templateRepository.SaveAsync(template);
+            
+            // Add to list
+            SavedTemplates.Add(new JwtBuilderTemplateItemViewModel(
+                saved.Id,
+                saved.TemplateName,
+                saved.Algorithm,
+                saved.CreatedAt,
+                saved.LastUsedAt));
+
+            // Set as current template
+            CurrentTemplateId = saved.Id;
+
+            ErrorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            ErrorHandler.LogException(ex, "Save JWT Builder template");
+            ErrorMessage = $"Template kaydetme hatası: {ex.Message}";
+        }
+    }
+
+    /// <summary>
+    /// Updates the currently loaded template with current configuration
+    /// </summary>
+    [RelayCommand]
+    private async Task UpdateCurrentTemplate()
+    {
+        if (!CurrentTemplateId.HasValue)
+        {
+            ErrorMessage = "Güncellenecek template yok.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(TemplateName))
+        {
+            ErrorMessage = "Lütfen template adı girin.";
+            return;
+        }
+
+        try
+        {
+            // Check if template name already exists (excluding current template)
+            var exists = await _templateRepository.TemplateNameExistsAsync(TemplateName, CurrentTemplateId.Value);
+            if (exists)
+            {
+                ErrorMessage = "Bu isimde başka bir template zaten mevcut.";
+                return;
+            }
+
+            var template = new JwtBuilderTemplate
+            {
+                Id = CurrentTemplateId.Value,
+                TemplateName = TemplateName,
+                Algorithm = Algorithm,
+                Secret = Secret,
+                PublicKey = string.IsNullOrWhiteSpace(PublicKey) ? null : PublicKey,
+                Issuer = string.IsNullOrWhiteSpace(Issuer) ? null : Issuer,
+                Audience = string.IsNullOrWhiteSpace(Audience) ? null : Audience,
+                Subject = string.IsNullOrWhiteSpace(Subject) ? null : Subject,
+                ExpirationMinutes = ExpirationMinutes,
+                IncludeExpiration = IncludeExpiration,
+                CustomClaimsJson = SerializeCustomClaims(),
+                Notes = null
+            };
+
+            var success = await _templateRepository.UpdateAsync(template);
+            if (success)
+            {
+                // Update in list
+                var existing = SavedTemplates.FirstOrDefault(t => t.Id == CurrentTemplateId.Value);
+                if (existing != null)
+                {
+                    existing.TemplateName = TemplateName;
+                    existing.Algorithm = Algorithm;
+                }
+
+                ErrorMessage = null;
+            }
+            else
+            {
+                ErrorMessage = "Template güncellenemedi.";
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorHandler.LogException(ex, "Update JWT Builder template");
+            ErrorMessage = $"Template güncelleme hatası: {ex.Message}";
+        }
+    }
+
+    /// <summary>
+    /// Deletes a template from the database
+    /// </summary>
+    [RelayCommand]
+    private async Task DeleteTemplate()
+    {
+        if (SelectedTemplate == null)
+            return;
+
+        try
+        {
+            await _templateRepository.DeleteAsync(SelectedTemplate.Id);
+            
+            // Remove from list
+            SavedTemplates.Remove(SelectedTemplate);
+
+            // Clear current template ID if it was the deleted one
+            if (CurrentTemplateId == SelectedTemplate.Id)
+            {
+                CurrentTemplateId = null;
+            }
+
+            SelectedTemplate = null;
+            ErrorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            ErrorHandler.LogException(ex, "Delete JWT Builder template");
+            ErrorMessage = $"Template silme hatası: {ex.Message}";
+        }
+    }
+
+    /// <summary>
+    /// Serializes custom claims to JSON string
+    /// </summary>
+    private string? SerializeCustomClaims()
+    {
+        if (CustomClaims.Count == 0)
+            return null;
+
+        try
+        {
+            var claimsList = CustomClaims
+                .Select(c => new { Key = c.Key, Value = c.Value })
+                .ToList();
+
+            return JsonSerializer.Serialize(claimsList);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Deserializes custom claims from JSON string
+    /// </summary>
+    private List<CustomClaimItem> DeserializeCustomClaims(string json)
+    {
+        var result = new List<CustomClaimItem>();
+
+        try
+        {
+            var claimsList = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
+            if (claimsList != null)
+            {
+                foreach (var claim in claimsList)
+                {
+                    if (claim.TryGetValue("Key", out var key) && claim.TryGetValue("Value", out var value))
+                    {
+                        result.Add(new CustomClaimItem { Key = key, Value = value });
+                    }
+                }
+            }
+        }
+        catch
+        {
+            // Return empty list on error
+        }
+
+        return result;
+    }
+
+    #endregion
 }
 
 /// <summary>

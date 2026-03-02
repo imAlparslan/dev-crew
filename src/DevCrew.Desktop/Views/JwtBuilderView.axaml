@@ -434,6 +434,103 @@
                         </Border>
                     </StackPanel>
                 </Border>
+
+                <!-- Template Management -->
+                <Border Background="{StaticResource BrushTertiaryBackground}"
+                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12"
+                        Margin="0,12,0,0">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Template Yönetimi"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushPrimaryText}" />
+                        
+                        <TextBlock Text="JWT yapılandırmanızı template olarak kaydedin ve daha sonra kullanın"
+                                   FontSize="12"
+                                   Foreground="{StaticResource BrushSecondaryText}"
+                                   TextWrapping="Wrap" />
+                        
+                        <!-- Load Template Section -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Template Yükle"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushSecondaryText}" />
+                            
+                            <Grid ColumnDefinitions="*,Auto,Auto">
+                                <ComboBox Grid.Column="0"
+                                          SelectedItem="{Binding SelectedTemplate}"
+                                          ItemsSource="{Binding SavedTemplates}"
+                                          Height="36"
+                                          Padding="8"
+                                          Margin="0,0,4,0"
+                                          PlaceholderText="Template seçin...">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding TemplateName}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                
+                                <Button Grid.Column="1"
+                                        Content="📂 Yükle"
+                                        Height="36"
+                                        Padding="12,0"
+                                        Margin="0,0,4,0"
+                                        Classes="ActionButton"
+                                        ToolTip.Tip="Seçili template'i forma yükle"
+                                        Command="{Binding LoadTemplateCommand}" />
+                                
+                                <Button Grid.Column="2"
+                                        Content="🗑️"
+                                        Width="36"
+                                        Height="36"
+                                        Padding="0"
+                                        Classes="DangerActionButton"
+                                        ToolTip.Tip="Seçili template'i sil"
+                                        Command="{Binding DeleteTemplateCommand}" />
+                            </Grid>
+                        </StackPanel>
+                        
+                        <!-- Save Template Section -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Template Kaydet"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushSecondaryText}" />
+                            
+                            <Grid ColumnDefinitions="*,Auto,Auto">
+                                <TextBox Grid.Column="0"
+                                         Text="{Binding TemplateName}"
+                                         Height="36"
+                                         Padding="8"
+                                         Margin="0,0,4,0"
+                                         Watermark="Template adı..." />
+                                
+                                <Button Grid.Column="1"
+                                        Content="💾 Yeni Kaydet"
+                                        Height="36"
+                                        Padding="12,0"
+                                        Margin="0,0,4,0"
+                                        Classes="ActionButton AccentActionButton"
+                                        ToolTip.Tip="Yeni template olarak kaydet"
+                                        Command="{Binding SaveAsNewTemplateCommand}" />
+                                
+                                <Button Grid.Column="2"
+                                        Content="✏️ Güncelle"
+                                        Height="36"
+                                        Padding="12,0"
+                                        Classes="ActionButton"
+                                        ToolTip.Tip="Mevcut template'i güncelle"
+                                        Command="{Binding UpdateCurrentTemplateCommand}"
+                                        IsEnabled="{Binding CanUpdateTemplate}" />
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </Border>
     </ScrollViewer>

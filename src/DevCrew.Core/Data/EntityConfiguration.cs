@@ -30,4 +30,9 @@ public static class EntityConfiguration
     /// Maximum length for generic string fields
     /// </summary>
     public const int StringFieldMaxLength = 255;
+
+    /// <summary>
+    /// Maximum length for JWT Builder template names
+    /// </summary>
+    public const int TemplateNameMaxLength = 100;
 }

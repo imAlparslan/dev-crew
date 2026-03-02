@@ -26,6 +26,11 @@ public class AppDbContext : DbContext
     /// </summary>
     public DbSet<JwtHistory> JwtHistories { get; set; }
 
+    /// <summary>
+    /// Gets or sets the JWT Builder templates
+    /// </summary>
+    public DbSet<JwtBuilderTemplate> JwtBuilderTemplates { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -50,6 +55,27 @@ public class AppDbContext : DbContext
             entity.Property(e => e.DecodedAt).IsRequired();
             entity.Property(e => e.Notes).HasMaxLength(EntityConfiguration.NotesMaxLength);
             entity.HasIndex(e => e.DecodedAt).IsDescending();
+        });
+
+        // Configure JwtBuilderTemplate entity
+        modelBuilder.Entity<JwtBuilderTemplate>(entity =>
+        {
+            entity.ToTable("JwtBuilderTemplates");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.TemplateName).IsRequired().HasMaxLength(EntityConfiguration.TemplateNameMaxLength);
+            entity.Property(e => e.Algorithm).IsRequired().HasMaxLength(10);
+            entity.Property(e => e.Secret).IsRequired().HasMaxLength(EntityConfiguration.JwtTokenMaxLength);
+            entity.Property(e => e.PublicKey).HasMaxLength(EntityConfiguration.JwtTokenMaxLength);
+            entity.Property(e => e.Issuer).HasMaxLength(EntityConfiguration.StringFieldMaxLength);
+            entity.Property(e => e.Audience).HasMaxLength(EntityConfiguration.StringFieldMaxLength);
+            entity.Property(e => e.Subject).HasMaxLength(EntityConfiguration.StringFieldMaxLength);
+            entity.Property(e => e.ExpirationMinutes).IsRequired();
+            entity.Property(e => e.IncludeExpiration).IsRequired();
+            entity.Property(e => e.CustomClaimsJson).HasMaxLength(EntityConfiguration.JwtPayloadMaxLength);
+            entity.Property(e => e.Notes).HasMaxLength(EntityConfiguration.NotesMaxLength);
+            entity.Property(e => e.CreatedAt).IsRequired();
+            entity.HasIndex(e => e.CreatedAt).IsDescending();
+            entity.HasIndex(e => e.TemplateName);
         });
     }
 }
