@@ -12,6 +12,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
 {
     private readonly IJsonFormatterService _jsonFormatterService;
     private readonly IClipboardService _clipboardService;
+    private string _lastFormatMode = "prettify"; // Track whether user used prettify or minify
 
     [ObservableProperty]
     private string inputJson = string.Empty;
@@ -56,7 +57,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
     }
 
     /// <summary>
-    /// Called when InputJson property changes - automatically validates the input
+    /// Called when InputJson property changes - automatically validates and formats the input
     /// </summary>
     partial void OnInputJsonChanged(string value)
     {
@@ -66,11 +67,58 @@ public partial class JsonFormatterViewModel : BaseViewModel
             IsValid = false;
             IsError = false;
             SourceFileExtension = null;
+            OutputJson = string.Empty;
+            OnPropertyChanged(nameof(HasOutput));
             return;
         }
 
         var result = _jsonFormatterService.Validate(value);
         UpdateValidationState(result);
+        
+        // Auto-format using the last used mode
+        if (result.IsValid)
+        {
+            FormatWithCurrentMode();
+        }
+        else
+        {
+            OutputJson = string.Empty;
+            OnPropertyChanged(nameof(HasOutput));
+        }
+    }
+
+    /// <summary>
+    /// Called when IsSortKeysEnabled property changes - reformat output if it exists
+    /// </summary>
+    partial void OnIsSortKeysEnabledChanged(bool value)
+    {
+        // Reformat using the last used mode if we have valid input
+        if (!string.IsNullOrWhiteSpace(InputJson) && IsValid)
+        {
+            FormatWithCurrentMode();
+        }
+    }
+
+    /// <summary>
+    /// Formats the input using the last mode that was used (prettify or minify)
+    /// </summary>
+    private void FormatWithCurrentMode()
+    {
+        var result = _lastFormatMode == "minify"
+            ? _jsonFormatterService.Minify(InputJson, IsSortKeysEnabled)
+            : _jsonFormatterService.Prettify(InputJson, IsSortKeysEnabled);
+
+        if (result.IsValid)
+        {
+            OutputJson = result.Output;
+            UpdateValidationState(result);
+        }
+        else
+        {
+            OutputJson = string.Empty;
+            UpdateValidationState(result);
+        }
+        OnPropertyChanged(nameof(HasOutput));
     }
 
     /// <summary>
@@ -79,6 +127,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
     [RelayCommand]
     private void Prettify()
     {
+        _lastFormatMode = "prettify";
         var result = _jsonFormatterService.Prettify(InputJson, IsSortKeysEnabled);
         UpdateValidationState(result);
         
@@ -95,6 +144,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
     [RelayCommand]
     private void Minify()
     {
+        _lastFormatMode = "minify";
         var result = _jsonFormatterService.Minify(InputJson, IsSortKeysEnabled);
         UpdateValidationState(result);
         
