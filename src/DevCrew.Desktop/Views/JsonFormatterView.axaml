@@ -64,7 +64,9 @@
                             BorderBrush="{StaticResource BrushBorderSecondary}"
                             BorderThickness="1"
                             CornerRadius="6"
-                            Padding="12">
+                            Padding="12"
+                            DragDrop.AllowDrop="True"
+                            x:Name="InputBorder">
                         <Grid RowDefinitions="Auto,*">
                             <TextBlock Grid.Row="0"
                                        Text="Girdi (Input)"
@@ -73,7 +75,8 @@
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        Margin="0,0,0,8" />
                             
-                            <TextBox Grid.Row="1"
+                            <TextBox x:Name="InputTextBox"
+                                     Grid.Row="1"
                                      Text="{Binding InputJson}"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
@@ -99,7 +102,7 @@
                             CornerRadius="6"
                             Padding="12">
                         <Grid RowDefinitions="Auto,Auto,*">
-                            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                            <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
                                            Text="Çıktı (Output)"
                                            FontSize="13"
@@ -113,11 +116,28 @@
                                         Width="32"
                                         Height="32"
                                         Padding="0"
+                                        Margin="0,0,8,0"
                                         Background="Transparent"
                                         BorderThickness="0"
                                         ToolTip.Tip="Çıktıyı kopyala"
                                         Cursor="Hand">
                                     <TextBlock Text="📋"
+                                               FontSize="16"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Button>
+
+                                <Button Grid.Column="2"
+                                        Command="{Binding SaveOutputCommand}"
+                                        IsEnabled="{Binding HasOutput}"
+                                        Width="32"
+                                        Height="32"
+                                        Padding="0"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        ToolTip.Tip="Çıktıyı dosyaya kaydet"
+                                        Cursor="Hand">
+                                    <TextBlock Text="💾"
                                                FontSize="16"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />

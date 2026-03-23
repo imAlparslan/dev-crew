@@ -31,6 +31,9 @@ public partial class JsonFormatterViewModel : BaseViewModel
     [ObservableProperty]
     private bool isSortKeysEnabled;
 
+    [ObservableProperty]
+    private string? sourceFileExtension;
+
     /// <summary>
     /// Indicates whether output has content
     /// </summary>
@@ -62,6 +65,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
             ValidationMessage = string.Empty;
             IsValid = false;
             IsError = false;
+            SourceFileExtension = null;
             return;
         }
 
@@ -124,6 +128,84 @@ public partial class JsonFormatterViewModel : BaseViewModel
         if (!string.IsNullOrWhiteSpace(OutputJson))
         {
             await _clipboardService.TrySetTextAsync(OutputJson);
+        }
+    }
+
+    /// <summary>
+    /// Saves the output JSON to a file
+    /// </summary>
+    [RelayCommand]
+    private async Task SaveOutputAsync()
+    {
+        if (string.IsNullOrWhiteSpace(OutputJson))
+        {
+            return;
+        }
+
+        try
+        {
+            var topLevel = Avalonia.Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime;
+            if (topLevel?.MainWindow is null)
+            {
+                ValidationMessage = "Ana pencere bulunamadı";
+                IsError = true;
+                return;
+            }
+
+            // Use TopLevel storage provider
+            var storageProvider = Avalonia.Controls.TopLevel.GetTopLevel(topLevel.MainWindow)?.StorageProvider;
+            if (storageProvider is null)
+            {
+                ValidationMessage = "Depolama sağlayıcısı başlatılamadı";
+                IsError = true;
+                return;
+            }
+
+            // Determine the default file extension
+            var defaultExtension = SourceFileExtension ?? ".json";
+            if (!defaultExtension.StartsWith("."))
+            {
+                defaultExtension = "." + defaultExtension;
+            }
+
+            var suggestedLocation = await storageProvider.TryGetWellKnownFolderAsync(
+                Avalonia.Platform.Storage.WellKnownFolder.Documents);
+
+            var file = await storageProvider.SaveFilePickerAsync(
+                new Avalonia.Platform.Storage.FilePickerSaveOptions
+                {
+                    Title = "Dosyayı kaydet",
+                    SuggestedFileName = $"output{defaultExtension}",
+                    DefaultExtension = defaultExtension.TrimStart('.'),
+                    SuggestedStartLocation = suggestedLocation
+                });
+
+            if (file is not null)
+            {
+                try
+                {
+                    await using var stream = await file.OpenWriteAsync();
+                    await using var writer = new System.IO.StreamWriter(stream, System.Text.Encoding.UTF8);
+                    await writer.WriteAsync(OutputJson);
+                    ValidationMessage = "Dosya başarıyla kaydedildi!";
+                    IsValid = true;
+                    IsError = false;
+                }
+                catch (Exception ex)
+                {
+                    ValidationMessage = $"Dosya kaydedilirken hata: {ex.Message}";
+                    IsError = true;
+                    IsValid = false;
+                    ErrorHandler.LogException(ex, "SaveOutput");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ValidationMessage = $"Dosya seçimi sırasında hata: {ex.Message}";
+            IsError = true;
+            IsValid = false;
+            ErrorHandler.LogException(ex, "SaveOutput");
         }
     }
 
