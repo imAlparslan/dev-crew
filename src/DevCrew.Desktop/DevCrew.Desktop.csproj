@@ -2,12 +2,15 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
+    <RuntimeIdentifiers>win-x64;osx-x64;osx-arm64;linux-x64</RuntimeIdentifiers>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>DevCrew.Desktop</AssemblyName>
     <RootNamespace>DevCrew.Desktop</RootNamespace>
+    <ApplicationIcon>Assets/icons/windows/app.ico</ApplicationIcon>
+    <UseAppHost>true</UseAppHost>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,4 +39,37 @@
     <AvaloniaResource Include="Assets\**" />
     <AvaloniaResource Include="**\*.xaml" />
   </ItemGroup>
+
+  <Target Name="CreateMacAppBundle"
+          AfterTargets="Build;Publish"
+          Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <PropertyGroup>
+      <MacAppBundleDir>$(OutDir)$(AssemblyName).app</MacAppBundleDir>
+      <MacAppContentsDir>$(MacAppBundleDir)/Contents</MacAppContentsDir>
+      <MacAppMacOSDir>$(MacAppContentsDir)/MacOS</MacAppMacOSDir>
+      <MacAppResourcesDir>$(MacAppContentsDir)/Resources</MacAppResourcesDir>
+    </PropertyGroup>
+
+    <MakeDir Directories="$(MacAppMacOSDir);$(MacAppResourcesDir)" />
+
+    <ItemGroup>
+      <MacAppBundleFiles Include="$(OutDir)**/*"
+                         Exclude="$(MacAppBundleDir)/**" />
+    </ItemGroup>
+
+    <Copy SourceFiles="Packaging/Info.plist.template"
+          DestinationFiles="$(MacAppContentsDir)/Info.plist"
+          SkipUnchangedFiles="true" />
+
+    <Copy SourceFiles="Assets/icons/macos/AppIcon.icns"
+          DestinationFiles="$(MacAppResourcesDir)/AppIcon.icns"
+          SkipUnchangedFiles="true" />
+
+    <Copy SourceFiles="@(MacAppBundleFiles)"
+          DestinationFolder="$(MacAppMacOSDir)/%(RecursiveDir)"
+          SkipUnchangedFiles="true" />
+
+    <Exec Command="chmod +x &quot;$(MacAppMacOSDir)/$(AssemblyName)&quot;"
+          Condition="Exists('$(MacAppMacOSDir)/$(AssemblyName)')" />
+  </Target>
 </Project>

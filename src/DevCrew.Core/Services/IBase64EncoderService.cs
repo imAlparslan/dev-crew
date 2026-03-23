@@ -22,7 +22,28 @@ public record Base64EncodeResult
 }
 
 /// <summary>
-/// Service for Base64 encoding operations.
+/// Result of Base64 decoding operation.
+/// </summary>
+public record Base64DecodeResult
+{
+    /// <summary>
+    /// Indicates whether operation completed successfully.
+    /// </summary>
+    public bool IsSuccess { get; init; }
+
+    /// <summary>
+    /// Decoded binary output.
+    /// </summary>
+    public byte[]? Output { get; init; }
+
+    /// <summary>
+    /// Error message when decoding fails.
+    /// </summary>
+    public string? ErrorMessage { get; init; }
+}
+
+/// <summary>
+/// Service for Base64 encoding and decoding operations.
 /// </summary>
 public interface IBase64EncoderService
 {
@@ -32,4 +53,11 @@ public interface IBase64EncoderService
     /// <param name="input">Binary input data.</param>
     /// <returns>Encoding result with output or error.</returns>
     Base64EncodeResult Encode(byte[] input);
+
+    /// <summary>
+    /// Decodes a Base64 string back to its original binary form.
+    /// </summary>
+    /// <param name="input">Base64 encoded string.</param>
+    /// <returns>Decoding result with binary output or error.</returns>
+    Base64DecodeResult Decode(string input);
 }

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=DevCrew
+Comment=Developer toolkit desktop app
+Exec=DevCrew.Desktop
+Icon=devcrew
+Terminal=false
+Categories=Development;Utility;
+StartupNotify=true

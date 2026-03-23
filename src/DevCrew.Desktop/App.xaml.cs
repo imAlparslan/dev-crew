@@ -95,6 +95,8 @@ public partial class App : Application
         services.AddTransient<Func<JsonFormatterViewModel>>(sp => () => sp.GetRequiredService<JsonFormatterViewModel>());
         services.AddTransient<Base64EncoderViewModel>();
         services.AddTransient<Func<Base64EncoderViewModel>>(sp => () => sp.GetRequiredService<Base64EncoderViewModel>());
+        services.AddTransient<Base64DecoderViewModel>();
+        services.AddTransient<Func<Base64DecoderViewModel>>(sp => () => sp.GetRequiredService<Base64DecoderViewModel>());
     }
 
     private void InitializeDatabase()

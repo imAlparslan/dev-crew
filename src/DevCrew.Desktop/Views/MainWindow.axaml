@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="DevCrew.Desktop.Views.MainWindow"
+        Icon="avares://DevCrew.Desktop/Assets/icons/windows/app.ico"
         Title="DevCrew"
         MinWidth="480"
         MinHeight="400"

@@ -1,0 +1,234 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DevCrew.Desktop.ViewModels"
+             x:Class="DevCrew.Desktop.Views.Base64DecoderView"
+             x:DataType="vm:Base64DecoderViewModel">
+
+    <ScrollViewer>
+        <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" HorizontalAlignment="Stretch">
+
+                <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
+                    <TextBlock Text="Base64 Decoder"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushPrimaryText}"
+                               HorizontalAlignment="Center" />
+
+                    <TextBlock Text="Base64 formatindaki dosyanizi yukleyin, orijinal binary haline cevirin ve bilgisayariniza kaydedin"
+                               FontSize="14"
+                               Foreground="{StaticResource BrushSecondaryText}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+
+                <Border Grid.Row="1"
+                        Background="{StaticResource BrushTertiaryBackground}"
+                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12"
+                        DragDrop.AllowDrop="True"
+                        x:Name="InputBorder">
+                    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Text="Base64 Girdi"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushSecondaryText}"
+                                   VerticalAlignment="Center" />
+
+                        <Button Grid.Row="0"
+                                Grid.Column="1"
+                                Content="Browse"
+                                Command="{Binding BrowseFileCommand}"
+                                Padding="10,6"
+                                FontWeight="SemiBold"
+                                Classes="ActionButton PrimaryActionButton"
+                                ToolTip.Tip="Bilgisayardan Base64 icerikli dosya sec" />
+
+                        <TextBlock Grid.Row="1"
+                                   Grid.ColumnSpan="2"
+                                   Text="{Binding SelectedFileDisplayName, StringFormat='Yuklenen dosya: {0}'}"
+                                   IsVisible="{Binding HasSelectedFile}"
+                                   FontSize="11"
+                                   Margin="0,6,0,0"
+                                   Foreground="{StaticResource BrushSecondaryText}"
+                                   TextWrapping="Wrap" />
+
+                        <TextBox Grid.Row="2"
+                                 Grid.ColumnSpan="2"
+                                 Text="{Binding InputBase64, Mode=TwoWay}"
+                                 AcceptsReturn="True"
+                                 MinHeight="180"
+                                 MaxHeight="400"
+                                 Margin="0,8,0,0"
+                                 Padding="8"
+                                 Classes="MonospaceInputTextBox"
+                                 FontFamily="{StaticResource FontMonospace}"
+                                 FontSize="{StaticResource FontSizeSmall}"
+                                 TextWrapping="Wrap"
+                                 Watermark="Base64 icerigini buraya yapistirabiliriz veya dosyayi surukleyip birakabilirsiniz" />
+                    </Grid>
+                </Border>
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,16,0,16">
+                    <Button Content="Decode"
+                            Command="{Binding DecodeCommand}"
+                            IsEnabled="{Binding HasInput}"
+                            Classes="ActionButton PrimaryActionButton"
+                            FontWeight="SemiBold"
+                            ToolTip.Tip="Base64 icerigini coz" />
+                </StackPanel>
+
+                <Border Grid.Row="3"
+                        Background="{StaticResource BrushTertiaryBackground}"
+                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12">
+                    <Grid RowDefinitions="Auto,Auto,*">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
+                            <TextBlock Grid.Column="0"
+                                       Text="Cikti"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       VerticalAlignment="Center" />
+
+                            <Button Grid.Column="1"
+                                    Content="Temizle"
+                                    Command="{Binding ClearCommand}"
+                                    Margin="0,0,8,0"
+                                    Padding="10,6"
+                                    FontWeight="SemiBold"
+                                    Classes="ActionButton DangerActionButton"
+                                    ToolTip.Tip="Girdi ve sonucu temizle" />
+
+                            <Button Grid.Column="2"
+                                    Content="Kaydet"
+                                    Command="{Binding SaveBinaryCommand}"
+                                    IsEnabled="{Binding HasDecodedOutput}"
+                                    Padding="10,6"
+                                    FontWeight="SemiBold"
+                                    Classes="ActionButton NeutralActionButton"
+                                    ToolTip.Tip="Cozulmus dosyayi bilgisayara kaydet" />
+                        </Grid>
+
+                        <Border Grid.Row="1"
+                                Padding="8"
+                                CornerRadius="4"
+                                Margin="0,0,0,8"
+                                IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                            <Border.Background>
+                                <SolidColorBrush Color="{Binding IsError, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#5F2D2D|#2D5F2E'}" Opacity="0.2" />
+                            </Border.Background>
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="{Binding IsError, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#F44336|#4CAF50'}" />
+                            </Border.BorderBrush>
+                            <Border.BorderThickness>1</Border.BorderThickness>
+
+                            <TextBlock Text="{Binding StatusMessage}"
+                                       FontSize="12"
+                                       FontWeight="Medium"
+                                       TextWrapping="Wrap">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{Binding IsError, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#F44336|#4CAF50'}" />
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </Border>
+
+                        <Grid Grid.Row="2" MinHeight="80">
+                            <TextBox Text=""
+                                     IsReadOnly="True"
+                                     Padding="8"
+                                     MinHeight="80"
+                                     Classes="MonospaceInputTextBox"
+                                     VerticalContentAlignment="Center"
+                                     IsVisible="{Binding !HasDecodedOutput}"
+                                     Watermark="Decode ile cozulmus dosya bilgileri burada gorunecek" />
+
+                            <StackPanel Spacing="12"
+                                        Margin="4,4,4,8"
+                                        IsVisible="{Binding HasDecodedOutput}">
+
+                                <Grid ColumnDefinitions="*,12,*,12,*">
+
+                                    <!-- MIME Type -->
+                                    <Border Grid.Column="0"
+                                            Background="{StaticResource BrushSecondaryBackground}"
+                                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            Padding="12,10">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="MIME Turu"
+                                                       FontSize="11"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource BrushSecondaryText}" />
+                                            <TextBlock Text="{Binding DetectedMimeType}"
+                                                       FontSize="12"
+                                                       FontWeight="Medium"
+                                                       Foreground="{StaticResource BrushPrimaryText}"
+                                                       TextWrapping="Wrap"
+                                                       FontFamily="{StaticResource FontMonospace}" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Extension -->
+                                    <Border Grid.Column="2"
+                                            Background="{StaticResource BrushSecondaryBackground}"
+                                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            Padding="12,10">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="Uzanti"
+                                                       FontSize="11"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource BrushSecondaryText}" />
+                                            <TextBlock Text="{Binding DetectedExtension}"
+                                                       FontSize="12"
+                                                       FontWeight="Medium"
+                                                       Foreground="{StaticResource BrushPrimaryText}"
+                                                       FontFamily="{StaticResource FontMonospace}" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Size -->
+                                    <Border Grid.Column="4"
+                                            Background="{StaticResource BrushSecondaryBackground}"
+                                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            Padding="12,10">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="Boyut"
+                                                       FontSize="11"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource BrushSecondaryText}" />
+                                            <TextBlock Text="{Binding FormattedFileSize}"
+                                                       FontSize="12"
+                                                       FontWeight="Medium"
+                                                       Foreground="{StaticResource BrushPrimaryText}"
+                                                       FontFamily="{StaticResource FontMonospace}" />
+                                        </StackPanel>
+                                    </Border>
+
+                                </Grid>
+
+                                <TextBlock Text="Kaydet butonuna basarak cozulmus dosyayi bilgisayariniza indirebilirsiniz."
+                                           FontSize="12"
+                                           Foreground="{StaticResource BrushSecondaryText}"
+                                           TextWrapping="Wrap"
+                                           Margin="4,0" />
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </ScrollViewer>
+</UserControl>
