@@ -17,6 +17,7 @@ public partial class MainWindowViewModel : BaseViewModel
     private readonly Func<JwtDecoderViewModel> _jwtDecoderViewModelFactory;
     private readonly Func<JwtBuilderViewModel> _jwtBuilderViewModelFactory;
     private readonly Func<JsonFormatterViewModel> _jsonFormatterViewModelFactory;
+    private readonly Func<Base64EncoderViewModel> _base64EncoderViewModelFactory;
 
     [ObservableProperty]
     private string title = "DevCrew";
@@ -47,6 +48,7 @@ public partial class MainWindowViewModel : BaseViewModel
     /// <param name="jwtDecoderViewModelFactory">Factory for new JWT Decoder view models.</param>
     /// <param name="jwtBuilderViewModelFactory">Factory for new JWT Builder view models.</param>
     /// <param name="jsonFormatterViewModelFactory">Factory for new JSON Formatter view models.</param>
+    /// <param name="base64EncoderViewModelFactory">Factory for new Base64 Encoder view models.</param>
     public MainWindowViewModel(
         IErrorHandler errorHandler,
         IApplicationService applicationService,
@@ -54,7 +56,8 @@ public partial class MainWindowViewModel : BaseViewModel
         Func<CreateGuidViewModel> createGuidViewModelFactory,
         Func<JwtDecoderViewModel> jwtDecoderViewModelFactory,
         Func<JwtBuilderViewModel> jwtBuilderViewModelFactory,
-        Func<JsonFormatterViewModel> jsonFormatterViewModelFactory)
+        Func<JsonFormatterViewModel> jsonFormatterViewModelFactory,
+        Func<Base64EncoderViewModel> base64EncoderViewModelFactory)
         : base(errorHandler)
     {
         _applicationService = applicationService;
@@ -63,6 +66,7 @@ public partial class MainWindowViewModel : BaseViewModel
         _jwtDecoderViewModelFactory = jwtDecoderViewModelFactory;
         _jwtBuilderViewModelFactory = jwtBuilderViewModelFactory;
         _jsonFormatterViewModelFactory = jsonFormatterViewModelFactory;
+        _base64EncoderViewModelFactory = base64EncoderViewModelFactory;
 
         InitializeMenuItems();
 
@@ -77,12 +81,14 @@ public partial class MainWindowViewModel : BaseViewModel
         var jwtDecoderItem = new MenuItemViewModel("jwt-decoder", "JWT Decoder", OpenJwtDecoderTabCommand, "Primary", "🔐");
         var jwtBuilderItem = new MenuItemViewModel("jwt-builder", "JWT Builder", OpenJwtBuilderTabCommand, "Primary", "🔧");
         var jsonFormatterItem = new MenuItemViewModel("json-formatter", "JSON Formatter", OpenJsonFormatterTabCommand, "Primary", "📋");
+        var base64EncoderItem = new MenuItemViewModel("base64-encoder", "Base64 Encoder", OpenBase64EncoderTabCommand, "Primary", "🧬");
 
         MenuItems.Add(dashboardItem);
         MenuItems.Add(createGuidItem);
         MenuItems.Add(jwtDecoderItem);
         MenuItems.Add(jwtBuilderItem);
         MenuItems.Add(jsonFormatterItem);
+        MenuItems.Add(base64EncoderItem);
 
         // Populate Dashboard MenuItems
         _dashboardViewModel.MenuItems.Add(dashboardItem);
@@ -90,6 +96,7 @@ public partial class MainWindowViewModel : BaseViewModel
         _dashboardViewModel.MenuItems.Add(jwtDecoderItem);
         _dashboardViewModel.MenuItems.Add(jwtBuilderItem);
         _dashboardViewModel.MenuItems.Add(jsonFormatterItem);
+        _dashboardViewModel.MenuItems.Add(base64EncoderItem);
     }
 
     [RelayCommand]
@@ -165,6 +172,21 @@ public partial class MainWindowViewModel : BaseViewModel
         OpenOrSelectTab("json-formatter", "JSON Formatter", jsonFormatterViewModel, true, "📋");
     }
 
+    [RelayCommand]
+    private void OpenBase64EncoderTab()
+    {
+        SetSelectedMenuItem("base64-encoder");
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == "base64-encoder");
+        if (existingTab != null)
+        {
+            SelectedTab = existingTab;
+            return;
+        }
+
+        var base64EncoderViewModel = _base64EncoderViewModelFactory();
+        OpenOrSelectTab("base64-encoder", "Base64 Encoder", base64EncoderViewModel, true, "🧬");
+    }
+
     private void SetSelectedMenuItem(string id)
     {
         foreach (var item in MenuItems)
@@ -181,7 +203,7 @@ public partial class MainWindowViewModel : BaseViewModel
             return;
         }
 
-        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder" || value.Id == "jwt-builder" || value.Id == "json-formatter")
+        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder" || value.Id == "jwt-builder" || value.Id == "json-formatter" || value.Id == "base64-encoder")
         {
             SetSelectedMenuItem(value.Id);
             return;
