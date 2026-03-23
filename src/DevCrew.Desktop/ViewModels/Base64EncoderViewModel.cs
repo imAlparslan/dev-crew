@@ -10,6 +10,8 @@ namespace DevCrew.Desktop.ViewModels;
 /// </summary>
 public partial class Base64EncoderViewModel : BaseViewModel
 {
+    private const int PreviewCharacterLimit = 120_000;
+
     private readonly IBase64EncoderService _base64EncoderService;
     private readonly IClipboardService _clipboardService;
 
@@ -22,7 +24,18 @@ public partial class Base64EncoderViewModel : BaseViewModel
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasOutput))]
+    private string fullOutputBase64 = string.Empty;
+
+    [ObservableProperty]
     private string outputBase64 = string.Empty;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanShowFullOutput))]
+    private bool isPreviewMode;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanShowFullOutput))]
+    private bool isFullOutputVisible;
 
     [ObservableProperty]
     private string statusMessage = string.Empty;
@@ -32,7 +45,9 @@ public partial class Base64EncoderViewModel : BaseViewModel
 
     public bool HasSelectedFile => !string.IsNullOrWhiteSpace(SelectedFilePath);
 
-    public bool HasOutput => !string.IsNullOrWhiteSpace(OutputBase64);
+    public bool HasOutput => !string.IsNullOrWhiteSpace(FullOutputBase64);
+
+    public bool CanShowFullOutput => IsPreviewMode && !IsFullOutputVisible;
 
     public Base64EncoderViewModel(
         IErrorHandler errorHandler,
@@ -136,33 +151,32 @@ public partial class Base64EncoderViewModel : BaseViewModel
 
             if (result.IsSuccess)
             {
-                OutputBase64 = result.Output;
-                StatusMessage = "Dosya Base64 formatina cevrildi";
+                SetOutput(result.Output);
                 IsError = false;
             }
             else
             {
-                OutputBase64 = string.Empty;
+                ClearOutput();
                 StatusMessage = result.ErrorMessage ?? "Encoding hatasi";
                 IsError = true;
             }
         }
         catch (UnauthorizedAccessException)
         {
-            OutputBase64 = string.Empty;
+            ClearOutput();
             StatusMessage = "Dosyaya erisim reddedildi";
             IsError = true;
         }
         catch (IOException ex)
         {
-            OutputBase64 = string.Empty;
+            ClearOutput();
             StatusMessage = $"Dosya okuma hatasi: {ex.Message}";
             IsError = true;
             ErrorHandler.LogException(ex, "Read Base64 file");
         }
         catch (Exception ex)
         {
-            OutputBase64 = string.Empty;
+            ClearOutput();
             StatusMessage = $"Encoding hatasi: {ex.Message}";
             IsError = true;
             ErrorHandler.LogException(ex, "Encode Base64 file");
@@ -170,11 +184,58 @@ public partial class Base64EncoderViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private void ShowFullOutput()
+    {
+        if (!HasOutput || IsFullOutputVisible)
+        {
+            return;
+        }
+
+        OutputBase64 = FullOutputBase64;
+        IsFullOutputVisible = true;
+        StatusMessage = $"Tum cikti gosteriliyor ({FullOutputBase64.Length:N0} karakter)";
+        IsError = false;
+    }
+
+    [RelayCommand]
     private async Task CopyOutputAsync()
     {
         if (HasOutput)
         {
-            await _clipboardService.TrySetTextAsync(OutputBase64);
+            await _clipboardService.TrySetTextAsync(FullOutputBase64);
         }
+    }
+
+    private void SetOutput(string output)
+    {
+        FullOutputBase64 = output;
+        IsFullOutputVisible = false;
+
+        if (string.IsNullOrWhiteSpace(output))
+        {
+            OutputBase64 = string.Empty;
+            IsPreviewMode = false;
+            return;
+        }
+
+        if (output.Length > PreviewCharacterLimit)
+        {
+            OutputBase64 = output[..PreviewCharacterLimit];
+            IsPreviewMode = true;
+            StatusMessage = $"Dosya Base64 formatina cevrildi. Onizleme gosteriliyor ({PreviewCharacterLimit:N0}/{output.Length:N0} karakter).";
+            return;
+        }
+
+        OutputBase64 = output;
+        IsPreviewMode = false;
+        StatusMessage = $"Dosya Base64 formatina cevrildi ({output.Length:N0} karakter)";
+    }
+
+    private void ClearOutput()
+    {
+        FullOutputBase64 = string.Empty;
+        OutputBase64 = string.Empty;
+        IsPreviewMode = false;
+        IsFullOutputVisible = false;
     }
 }

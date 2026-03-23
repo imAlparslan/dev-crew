@@ -6,7 +6,7 @@
 
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
-            <Grid RowDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Stretch">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" HorizontalAlignment="Stretch">
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
                     <TextBlock Text="Base64 Encoder"
                                FontSize="20"
@@ -80,7 +80,7 @@
                         CornerRadius="6"
                         Padding="12">
                     <Grid RowDefinitions="Auto,Auto,*">
-                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
                             <TextBlock Grid.Column="0"
                                        Text="Base64 Output"
                                        FontSize="13"
@@ -89,6 +89,16 @@
                                        VerticalAlignment="Center" />
 
                             <Button Grid.Column="1"
+                                    Content="Tamamini Goster"
+                                    Command="{Binding ShowFullOutputCommand}"
+                                    IsVisible="{Binding CanShowFullOutput}"
+                                    Margin="0,0,8,0"
+                                    Padding="10,6"
+                                    FontWeight="SemiBold"
+                                    Classes="ActionButton NeutralActionButton"
+                                    ToolTip.Tip="Onizleme yerine tum ciktiyi goster" />
+
+                            <Button Grid.Column="2"
                                     Command="{Binding CopyOutputCommand}"
                                     IsEnabled="{Binding HasOutput}"
                                     Width="32"
