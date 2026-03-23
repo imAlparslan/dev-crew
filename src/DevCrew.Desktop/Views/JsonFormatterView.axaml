@@ -68,12 +68,22 @@
                             DragDrop.AllowDrop="True"
                             x:Name="InputBorder">
                         <Grid RowDefinitions="Auto,*">
-                            <TextBlock Grid.Row="0"
-                                       Text="Girdi (Input)"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Foreground="{StaticResource BrushSecondaryText}"
-                                       Margin="0,0,0,8" />
+                            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                                <TextBlock Grid.Column="0"
+                                           Text="Girdi (Input)"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrushSecondaryText}"
+                                           VerticalAlignment="Center" />
+                                
+                                <Button Grid.Column="1"
+                                        Content="📁 Browse"
+                                        Command="{Binding BrowseFileCommand}"
+                                        Padding="10,6"
+                                        FontWeight="SemiBold"
+                                        Classes="ActionButton PrimaryActionButton"
+                                        ToolTip.Tip="Bilgisayardan dosya seç" />
+                            </Grid>
                             
                             <TextBox x:Name="InputTextBox"
                                      Grid.Row="1"

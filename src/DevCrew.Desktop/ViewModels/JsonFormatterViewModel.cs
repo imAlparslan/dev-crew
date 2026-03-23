@@ -61,14 +61,16 @@ public partial class JsonFormatterViewModel : BaseViewModel
     /// </summary>
     partial void OnInputJsonChanged(string value)
     {
+        // Always clear output immediately when input changes
+        OutputJson = string.Empty;
+        OnPropertyChanged(nameof(HasOutput));
+
         if (string.IsNullOrWhiteSpace(value))
         {
             ValidationMessage = string.Empty;
             IsValid = false;
             IsError = false;
             SourceFileExtension = null;
-            OutputJson = string.Empty;
-            OnPropertyChanged(nameof(HasOutput));
             return;
         }
 
@@ -79,11 +81,6 @@ public partial class JsonFormatterViewModel : BaseViewModel
         if (result.IsValid)
         {
             FormatWithCurrentMode();
-        }
-        else
-        {
-            OutputJson = string.Empty;
-            OnPropertyChanged(nameof(HasOutput));
         }
     }
 
@@ -256,6 +253,67 @@ public partial class JsonFormatterViewModel : BaseViewModel
             IsError = true;
             IsValid = false;
             ErrorHandler.LogException(ex, "SaveOutput");
+        }
+    }
+
+    /// <summary>
+    /// Opens file picker to browse and load a JSON file
+    /// </summary>
+    [RelayCommand]
+    private async Task BrowseFileAsync()
+    {
+        try
+        {
+            var topLevel = Avalonia.Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime;
+            if (topLevel?.MainWindow is null)
+            {
+                ValidationMessage = "Ana pencere bulunamadı";
+                IsError = true;
+                return;
+            }
+
+            var storageProvider = Avalonia.Controls.TopLevel.GetTopLevel(topLevel.MainWindow)?.StorageProvider;
+            if (storageProvider is null)
+            {
+                ValidationMessage = "Depolama sağlayıcısı başlatılamadı";
+                IsError = true;
+                return;
+            }
+
+            var suggestedLocation = await storageProvider.TryGetWellKnownFolderAsync(
+                Avalonia.Platform.Storage.WellKnownFolder.Documents);
+
+            var files = await storageProvider.OpenFilePickerAsync(
+                new Avalonia.Platform.Storage.FilePickerOpenOptions
+                {
+                    Title = "JSON dosyası seç",
+                    AllowMultiple = false,
+                    SuggestedStartLocation = suggestedLocation,
+                    FileTypeFilter = new[]
+                    {
+                        new Avalonia.Platform.Storage.FilePickerFileType("Tüm Dosyalar") { Patterns = new[] { "*" } }
+                    }
+                });
+
+            if (files.Count > 0)
+            {
+                var selectedFile = files[0];
+                var fileExtension = System.IO.Path.GetExtension(selectedFile.Name);
+                var fileContent = await System.IO.File.ReadAllTextAsync(selectedFile.Path.LocalPath, System.Text.Encoding.UTF8);
+
+                InputJson = fileContent;
+                SourceFileExtension = fileExtension;
+                ValidationMessage = $"Dosya yüklendi: {selectedFile.Name}";
+                IsValid = true;
+                IsError = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            ValidationMessage = $"Dosya yükleme hatası: {ex.Message}";
+            IsError = true;
+            IsValid = false;
+            ErrorHandler.LogException(ex, "BrowseFile");
         }
     }
 
