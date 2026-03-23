@@ -5,7 +5,7 @@
              x:DataType="vm:DashboardViewModel">
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
-            <StackPanel Spacing="24" MaxWidth="1200" HorizontalAlignment="Center">
+            <StackPanel Spacing="24" HorizontalAlignment="Stretch">
                 <TextBlock Text="🎯 DevCrew Dashboard"
                            FontSize="{StaticResource FontSizeXLarge}"
                            FontWeight="Bold"
@@ -13,10 +13,10 @@
                            HorizontalAlignment="Center" />
 
                 
-                <ItemsControl ItemsSource="{Binding MenuItems}" HorizontalAlignment="Center">
+                <ItemsControl ItemsSource="{Binding MenuItems}" HorizontalAlignment="Stretch">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel HorizontalAlignment="Center" />
+                            <WrapPanel HorizontalAlignment="Stretch" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>

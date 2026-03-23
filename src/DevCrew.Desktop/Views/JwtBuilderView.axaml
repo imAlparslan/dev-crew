@@ -6,7 +6,7 @@
     
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
-            <StackPanel Spacing="12" MaxWidth="900" HorizontalAlignment="Center">
+            <StackPanel Spacing="12" HorizontalAlignment="Stretch">
                 <!-- Header -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="JWT Builder"
@@ -47,10 +47,9 @@
                             <ComboBox Grid.Column="1"
                                       SelectedItem="{Binding Algorithm}"
                                       ItemsSource="{Binding AvailableAlgorithms}"
-                                      Width="200"
                                       Height="36"
                                       Padding="8"
-                                      HorizontalAlignment="Left"
+                                      HorizontalAlignment="Stretch"
                                       VerticalAlignment="Center" />
                         </Grid>
                         

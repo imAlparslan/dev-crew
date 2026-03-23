@@ -7,7 +7,7 @@
     
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
-            <Grid RowDefinitions="Auto,Auto,*" MaxWidth="900" HorizontalAlignment="Center">
+            <Grid RowDefinitions="Auto,Auto,*" HorizontalAlignment="Stretch">
                 <!-- Header -->
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
                     <TextBlock Text="JWT Decoder"
@@ -33,12 +33,11 @@
                             BorderThickness="1"
                             CornerRadius="6"
                             Padding="12"
-                            Width="580"
                             Margin="0,0,0,12"
                             MinHeight="208"
                             Height="208"
                             MaxHeight="208"
-                            HorizontalAlignment="Left">
+                            HorizontalAlignment="Stretch">
                         <Grid RowDefinitions="Auto,120,Auto" MinHeight="184" Height="184" MaxHeight="184">
                             <TextBlock Grid.Row="0"
                                        Text="JWT Token"
@@ -51,7 +50,6 @@
                                      Text="{Binding RawToken}"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
-                                     Width="556"
                                      Height="120"
                                      Padding="8"
                                      HorizontalAlignment="Stretch"
@@ -86,11 +84,10 @@
                             BorderThickness="2"
                             CornerRadius="6"
                             Padding="12"
-                            Width="580"
                             Margin="0,0,0,12"
                             MinHeight="128"
                             MaxHeight="200"
-                            HorizontalAlignment="Left"
+                            HorizontalAlignment="Stretch"
                             IsVisible="{Binding DecodedHeader, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                         <Border.BorderBrush>
                             <Binding Path="IsSignatureValid" Converter="{StaticResource SignatureValidBorderConverter}" FallbackValue="{StaticResource BrushBorderSecondary}" />
@@ -133,7 +130,6 @@
                                          PasswordChar="●"
                                          RevealPassword="{Binding IsSecretVisible}"
                                          Padding="8"
-                                         Width="516"
                                          Height="36"
                                          TextWrapping="NoWrap"
                                          MaxLines="1"
@@ -152,7 +148,6 @@
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      Padding="8"
-                                     Width="556"
                                      MinHeight="60"
                                      MaxHeight="100"
                                      HorizontalAlignment="Stretch"

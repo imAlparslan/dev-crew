@@ -6,7 +6,7 @@
     
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
-            <Grid RowDefinitions="Auto,Auto,*" MaxWidth="1200" HorizontalAlignment="Center">
+            <Grid RowDefinitions="Auto,Auto,*" HorizontalAlignment="Stretch">
                 <!-- Header -->
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
                     <TextBlock Text="JSON Formatter"
