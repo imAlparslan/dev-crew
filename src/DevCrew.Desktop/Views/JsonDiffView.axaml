@@ -1,0 +1,346 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DevCrew.Desktop.ViewModels"
+             x:Class="DevCrew.Desktop.Views.JsonDiffView"
+             x:DataType="vm:JsonDiffViewModel">
+
+    <ScrollViewer>
+        <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
+            <Grid RowDefinitions="Auto,Auto,Auto,*,*" HorizontalAlignment="Stretch">
+                <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,12">
+                    <TextBlock Text="JSON Diff"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushPrimaryText}"
+                               HorizontalAlignment="Center" />
+
+                    <TextBlock Text="İki JSON arasındaki farkları path ve satır bazında inceleyin"
+                               FontSize="14"
+                               Foreground="{StaticResource BrushSecondaryText}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+
+                <Border Grid.Row="1"
+                        Background="{StaticResource BrushTertiaryBackground}"
+                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12"
+                        Margin="0,0,0,12">
+                    <StackPanel Spacing="10">
+                        <Grid ColumnDefinitions="Auto,14,Auto,14,Auto,14,Auto,14,Auto">
+                            <CheckBox Grid.Column="0"
+                                      Content="Object key sırası önemsiz"
+                                      IsChecked="{Binding IgnoreObjectPropertyOrder}" />
+                            <CheckBox Grid.Column="2"
+                                      Content="Array sırası önemli"
+                                      IsChecked="{Binding TreatArrayOrderAsSignificant}" />
+                            <CheckBox Grid.Column="4"
+                                      Content="Whitespace farklarını yok say"
+                                      IsChecked="{Binding IgnoreWhitespaceDifferences}" />
+                            <CheckBox Grid.Column="6"
+                                      Content="null ve boş string eşit"
+                                      IsChecked="{Binding TreatNullAndEmptyStringAsEqual}" />
+                            <CheckBox Grid.Column="8"
+                                      Content="Azalan sırala"
+                                      IsChecked="{Binding SortDescending}" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="Auto,8,Auto,8,Auto,8,Auto,8,*,8,Auto,8,Auto,8,Auto">
+                            <CheckBox Grid.Column="0" Content="Added" IsChecked="{Binding ShowAdded}" />
+                            <CheckBox Grid.Column="2" Content="Removed" IsChecked="{Binding ShowRemoved}" />
+                            <CheckBox Grid.Column="4" Content="Changed" IsChecked="{Binding ShowChanged}" />
+                            <CheckBox Grid.Column="6" Content="Unchanged" IsChecked="{Binding ShowUnchanged}" />
+
+                            <TextBox Grid.Column="8"
+                                     Text="{Binding PathFilter}"
+                                     Classes="CompactInputTextBox"
+                                     Watermark="Path filtresi (örn: $.users)"
+                                     MinWidth="220" />
+
+                            <TextBlock Grid.Column="10"
+                                       Text="Sırala:"
+                                       VerticalAlignment="Center"
+                                       Foreground="{StaticResource BrushSecondaryText}" />
+                            <ComboBox Grid.Column="12"
+                                      ItemsSource="{Binding SortFields}"
+                                      SelectedItem="{Binding SelectedSortField}"
+                                      MinWidth="120" />
+
+                            <Button Grid.Column="14"
+                                    Content="Karşılaştır"
+                                    Command="{Binding CompareCommand}"
+                                    IsEnabled="{Binding CanCompare}"
+                                    Classes="ActionButton PrimaryActionButton" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="2"
+                        Padding="10"
+                        CornerRadius="4"
+                        Margin="0,0,0,12"
+                        IsVisible="{Binding ValidationMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <Border.Background>
+                        <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#2D5F2E|#5F2D2D'}" Opacity="0.2" />
+                    </Border.Background>
+                    <Border.BorderBrush>
+                        <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#4CAF50|#F44336'}" />
+                    </Border.BorderBrush>
+                    <Border.BorderThickness>1</Border.BorderThickness>
+
+                    <TextBlock Text="{Binding ValidationMessage}"
+                               FontSize="12"
+                               FontWeight="Medium"
+                               TextWrapping="Wrap">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#4CAF50|#F44336'}" />
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </Border>
+
+                <Grid Grid.Row="3" ColumnDefinitions="*,16,*" Margin="0,0,0,12">
+                    <Border Grid.Column="0"
+                            Background="{StaticResource BrushTertiaryBackground}"
+                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12"
+                            DragDrop.AllowDrop="True"
+                            x:Name="LeftInputBorder">
+                        <Grid RowDefinitions="Auto,*">
+                            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                                <TextBlock Grid.Column="0"
+                                           Text="JSON A"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrushSecondaryText}"
+                                           VerticalAlignment="Center" />
+                                <Button Grid.Column="1"
+                                        Content="📁 Browse"
+                                        Command="{Binding BrowseLeftFileCommand}"
+                                        Classes="ActionButton PrimaryActionButton"
+                                        Padding="10,6" />
+                            </Grid>
+
+                            <TextBox Grid.Row="1"
+                                     Text="{Binding LeftJson}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MinHeight="280"
+                                     Padding="8"
+                                     VerticalContentAlignment="Top"
+                                     Classes="MonospaceInputTextBox"
+                                     FontFamily="{StaticResource FontMonospace}"
+                                     FontSize="{StaticResource FontSizeSmall}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="2"
+                            Background="{StaticResource BrushTertiaryBackground}"
+                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12"
+                            DragDrop.AllowDrop="True"
+                            x:Name="RightInputBorder">
+                        <Grid RowDefinitions="Auto,*">
+                            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                                <TextBlock Grid.Column="0"
+                                           Text="JSON B"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrushSecondaryText}"
+                                           VerticalAlignment="Center" />
+                                <Button Grid.Column="1"
+                                        Content="📁 Browse"
+                                        Command="{Binding BrowseRightFileCommand}"
+                                        Classes="ActionButton PrimaryActionButton"
+                                        Padding="10,6" />
+                            </Grid>
+
+                            <TextBox Grid.Row="1"
+                                     Text="{Binding RightJson}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MinHeight="280"
+                                     Padding="8"
+                                     VerticalContentAlignment="Top"
+                                     Classes="MonospaceInputTextBox"
+                                     FontFamily="{StaticResource FontMonospace}"
+                                     FontSize="{StaticResource FontSizeSmall}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="4" ColumnDefinitions="*,16,*">
+                    <Border Grid.Column="0"
+                            Background="{StaticResource BrushTertiaryBackground}"
+                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12"
+                            Margin="0,0,0,8">
+                        <Grid RowDefinitions="Auto,Auto,*">
+                            <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,10">
+                                <TextBlock Grid.Column="0"
+                                           Text="Path Diff Sonuçları"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrushSecondaryText}"
+                                           VerticalAlignment="Center" />
+                                <Button Grid.Column="1"
+                                        Content="📋"
+                                        Command="{Binding CopyPathDiffsCommand}"
+                                        IsEnabled="{Binding HasPathDiffs}"
+                                        Width="32"
+                                        Height="32"
+                                        Margin="0,0,8,0"
+                                        Background="Transparent"
+                                        BorderThickness="0" />
+                                <Button Grid.Column="2"
+                                        Content="✕"
+                                        Command="{Binding ClearCommand}"
+                                        Width="32"
+                                        Height="32"
+                                        Background="Transparent"
+                                        BorderThickness="0" />
+                            </Grid>
+
+                            <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*,*" Margin="0,0,0,10">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="Toplam:" Foreground="{StaticResource BrushSecondaryText}" />
+                                    <TextBlock Text="{Binding TotalDiffCount}" Foreground="{StaticResource BrushPrimaryText}" FontWeight="SemiBold" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="Added:" Foreground="{StaticResource BrushSecondaryText}" />
+                                    <TextBlock Text="{Binding AddedCount}" Foreground="{StaticResource BrushPrimaryText}" FontWeight="SemiBold" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="Removed:" Foreground="{StaticResource BrushSecondaryText}" />
+                                    <TextBlock Text="{Binding RemovedCount}" Foreground="{StaticResource BrushPrimaryText}" FontWeight="SemiBold" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="Changed:" Foreground="{StaticResource BrushSecondaryText}" />
+                                    <TextBlock Text="{Binding ChangedCount}" Foreground="{StaticResource BrushPrimaryText}" FontWeight="SemiBold" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="Unchanged:" Foreground="{StaticResource BrushSecondaryText}" />
+                                    <TextBlock Text="{Binding UnchangedCount}" Foreground="{StaticResource BrushPrimaryText}" FontWeight="SemiBold" />
+                                </StackPanel>
+                            </Grid>
+
+                            <Border Grid.Row="2"
+                                    Background="{StaticResource BrushPrimaryBackground}"
+                                    BorderBrush="{StaticResource BrushBorderSecondary}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="8">
+                                <ScrollViewer>
+                                    <ItemsControl ItemsSource="{Binding FilteredPathDiffs}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="{StaticResource BrushTertiaryBackground}"
+                                                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                                                        BorderThickness="1"
+                                                        CornerRadius="4"
+                                                        Padding="8"
+                                                        Margin="0,0,0,6">
+                                                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="140,8,*,8,*">
+                                                        <TextBlock Grid.Row="0"
+                                                                   Grid.Column="0"
+                                                                   Text="{Binding Kind}"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="{StaticResource BrushPrimaryText}" />
+                                                        <TextBlock Grid.Row="0"
+                                                                   Grid.Column="2"
+                                                                   Grid.ColumnSpan="2"
+                                                                   Text="{Binding Path}"
+                                                                   FontFamily="{StaticResource FontMonospace}"
+                                                                   Foreground="{StaticResource BrushSecondaryText}" />
+
+                                                        <TextBlock Grid.Row="1"
+                                                                   Grid.Column="2"
+                                                                   Text="{Binding LeftValue}"
+                                                                   TextWrapping="Wrap"
+                                                                   Foreground="{StaticResource BrushPrimaryText}" />
+                                                        <TextBlock Grid.Row="1"
+                                                                   Grid.Column="4"
+                                                                   Text="{Binding RightValue}"
+                                                                   TextWrapping="Wrap"
+                                                                   Foreground="{StaticResource BrushPrimaryText}" />
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="2"
+                            Background="{StaticResource BrushTertiaryBackground}"
+                            BorderBrush="{StaticResource BrushBorderSecondary}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12"
+                            Margin="0,0,0,8">
+                        <Grid RowDefinitions="Auto,*">
+                            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+                                <TextBlock Grid.Column="0"
+                                           Text="Line Diff"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource BrushSecondaryText}"
+                                           VerticalAlignment="Center" />
+                                <Button Grid.Column="1"
+                                        Content="📋"
+                                        Command="{Binding CopyLineDiffCommand}"
+                                        IsEnabled="{Binding HasLineDiffOutput}"
+                                        Width="32"
+                                        Height="32"
+                                        Background="Transparent"
+                                        BorderThickness="0" />
+                            </Grid>
+
+                            <Border Grid.Row="1"
+                                    Background="{StaticResource BrushPrimaryBackground}"
+                                    BorderBrush="{StaticResource BrushBorderSecondary}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="6"
+                                    MinHeight="320">
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                              VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding LineDiffItems}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Margin="0,0,0,4"
+                                                        Padding="8,4"
+                                                        CornerRadius="4"
+                                                        Background="{Binding Kind, Converter={StaticResource JsonDiffKindToBrushConverter}, ConverterParameter=Background}">
+                                                    <TextBlock Text="{Binding Text}"
+                                                               FontFamily="{StaticResource FontMonospace}"
+                                                               FontSize="{StaticResource FontSizeSmall}"
+                                                               TextWrapping="NoWrap"
+                                                               Foreground="{Binding Kind, Converter={StaticResource JsonDiffKindToBrushConverter}}" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+    </ScrollViewer>
+</UserControl>

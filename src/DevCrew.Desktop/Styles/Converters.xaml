@@ -9,6 +9,9 @@
     
     <!-- Boolean to Color -->
     <conv:BoolToColorConverter x:Key="BoolToColorConverter" />
+
+    <!-- JSON Diff Converters -->
+    <conv:JsonDiffKindToBrushConverter x:Key="JsonDiffKindToBrushConverter" />
     
     <!-- GUID View Converters -->
     <conv:BooleanToBrushConverter x:Key="GuidBackgroundConverter"

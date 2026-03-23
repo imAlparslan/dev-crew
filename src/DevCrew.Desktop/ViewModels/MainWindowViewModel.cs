@@ -17,6 +17,7 @@ public partial class MainWindowViewModel : BaseViewModel
     private readonly Func<JwtDecoderViewModel> _jwtDecoderViewModelFactory;
     private readonly Func<JwtBuilderViewModel> _jwtBuilderViewModelFactory;
     private readonly Func<JsonFormatterViewModel> _jsonFormatterViewModelFactory;
+    private readonly Func<JsonDiffViewModel> _jsonDiffViewModelFactory;
     private readonly Func<Base64EncoderViewModel> _base64EncoderViewModelFactory;
     private readonly Func<Base64DecoderViewModel> _base64DecoderViewModelFactory;
 
@@ -49,6 +50,7 @@ public partial class MainWindowViewModel : BaseViewModel
     /// <param name="jwtDecoderViewModelFactory">Factory for new JWT Decoder view models.</param>
     /// <param name="jwtBuilderViewModelFactory">Factory for new JWT Builder view models.</param>
     /// <param name="jsonFormatterViewModelFactory">Factory for new JSON Formatter view models.</param>
+    /// <param name="jsonDiffViewModelFactory">Factory for new JSON Diff view models.</param>
     /// <param name="base64EncoderViewModelFactory">Factory for new Base64 Encoder view models.</param>
     /// <param name="base64DecoderViewModelFactory">Factory for new Base64 Decoder view models.</param>
     public MainWindowViewModel(
@@ -59,6 +61,7 @@ public partial class MainWindowViewModel : BaseViewModel
         Func<JwtDecoderViewModel> jwtDecoderViewModelFactory,
         Func<JwtBuilderViewModel> jwtBuilderViewModelFactory,
         Func<JsonFormatterViewModel> jsonFormatterViewModelFactory,
+        Func<JsonDiffViewModel> jsonDiffViewModelFactory,
         Func<Base64EncoderViewModel> base64EncoderViewModelFactory,
         Func<Base64DecoderViewModel> base64DecoderViewModelFactory)
         : base(errorHandler)
@@ -69,6 +72,7 @@ public partial class MainWindowViewModel : BaseViewModel
         _jwtDecoderViewModelFactory = jwtDecoderViewModelFactory;
         _jwtBuilderViewModelFactory = jwtBuilderViewModelFactory;
         _jsonFormatterViewModelFactory = jsonFormatterViewModelFactory;
+        _jsonDiffViewModelFactory = jsonDiffViewModelFactory;
         _base64EncoderViewModelFactory = base64EncoderViewModelFactory;
         _base64DecoderViewModelFactory = base64DecoderViewModelFactory;
 
@@ -85,6 +89,7 @@ public partial class MainWindowViewModel : BaseViewModel
         var jwtDecoderItem = new MenuItemViewModel("jwt-decoder", "JWT Decoder", OpenJwtDecoderTabCommand, "Primary", "🔐");
         var jwtBuilderItem = new MenuItemViewModel("jwt-builder", "JWT Builder", OpenJwtBuilderTabCommand, "Primary", "🔧");
         var jsonFormatterItem = new MenuItemViewModel("json-formatter", "JSON Formatter", OpenJsonFormatterTabCommand, "Primary", "📋");
+        var jsonDiffItem = new MenuItemViewModel("json-diff", "JSON Diff", OpenJsonDiffTabCommand, "Primary", "🧩");
         var base64EncoderItem = new MenuItemViewModel("base64-encoder", "Base64 Encoder", OpenBase64EncoderTabCommand, "Primary", "🧬");
         var base64DecoderItem = new MenuItemViewModel("base64-decoder", "Base64 Decoder", OpenBase64DecoderTabCommand, "Primary", "🔓");
 
@@ -93,6 +98,7 @@ public partial class MainWindowViewModel : BaseViewModel
         MenuItems.Add(jwtDecoderItem);
         MenuItems.Add(jwtBuilderItem);
         MenuItems.Add(jsonFormatterItem);
+        MenuItems.Add(jsonDiffItem);
         MenuItems.Add(base64EncoderItem);
         MenuItems.Add(base64DecoderItem);
 
@@ -102,6 +108,7 @@ public partial class MainWindowViewModel : BaseViewModel
         _dashboardViewModel.MenuItems.Add(jwtDecoderItem);
         _dashboardViewModel.MenuItems.Add(jwtBuilderItem);
         _dashboardViewModel.MenuItems.Add(jsonFormatterItem);
+        _dashboardViewModel.MenuItems.Add(jsonDiffItem);
         _dashboardViewModel.MenuItems.Add(base64EncoderItem);
         _dashboardViewModel.MenuItems.Add(base64DecoderItem);
     }
@@ -180,6 +187,21 @@ public partial class MainWindowViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private void OpenJsonDiffTab()
+    {
+        SetSelectedMenuItem("json-diff");
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == "json-diff");
+        if (existingTab != null)
+        {
+            SelectedTab = existingTab;
+            return;
+        }
+
+        var jsonDiffViewModel = _jsonDiffViewModelFactory();
+        OpenOrSelectTab("json-diff", "JSON Diff", jsonDiffViewModel, true, "🧩");
+    }
+
+    [RelayCommand]
     private void OpenBase64EncoderTab()
     {
         SetSelectedMenuItem("base64-encoder");
@@ -225,7 +247,7 @@ public partial class MainWindowViewModel : BaseViewModel
             return;
         }
 
-        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder" || value.Id == "jwt-builder" || value.Id == "json-formatter" || value.Id == "base64-encoder" || value.Id == "base64-decoder")
+        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder" || value.Id == "jwt-builder" || value.Id == "json-formatter" || value.Id == "json-diff" || value.Id == "base64-encoder" || value.Id == "base64-decoder")
         {
             SetSelectedMenuItem(value.Id);
             return;

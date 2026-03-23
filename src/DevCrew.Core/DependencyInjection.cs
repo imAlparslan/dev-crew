@@ -35,6 +35,7 @@ public static class DependencyInjection
         services.AddSingleton<IGuidService, GuidService>();
         services.AddSingleton<IJwtService, JwtService>();
         services.AddSingleton<IJsonFormatterService, JsonFormatterService>();
+        services.AddSingleton<IJsonDiffService, JsonDiffService>();
         services.AddSingleton<IBase64EncoderService, Base64EncoderService>();
 
         return services;

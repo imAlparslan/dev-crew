@@ -93,6 +93,8 @@ public partial class App : Application
         services.AddTransient<Func<JwtBuilderViewModel>>(sp => () => sp.GetRequiredService<JwtBuilderViewModel>());
         services.AddTransient<JsonFormatterViewModel>();
         services.AddTransient<Func<JsonFormatterViewModel>>(sp => () => sp.GetRequiredService<JsonFormatterViewModel>());
+        services.AddTransient<JsonDiffViewModel>();
+        services.AddTransient<Func<JsonDiffViewModel>>(sp => () => sp.GetRequiredService<JsonDiffViewModel>());
         services.AddTransient<Base64EncoderViewModel>();
         services.AddTransient<Func<Base64EncoderViewModel>>(sp => () => sp.GetRequiredService<Base64EncoderViewModel>());
         services.AddTransient<Base64DecoderViewModel>();
