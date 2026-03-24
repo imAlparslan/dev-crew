@@ -2,6 +2,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using DevCrew.Core.Services;
+using DevCrew.Core.Enums;
 
 namespace DevCrew.Desktop.Converters;
 

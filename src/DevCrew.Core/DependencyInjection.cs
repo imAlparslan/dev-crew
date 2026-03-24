@@ -1,5 +1,6 @@
 using DevCrew.Core.Data;
 using DevCrew.Core.Services;
+using DevCrew.Core.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

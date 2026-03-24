@@ -1,6 +1,6 @@
 using DevCrew.Core.Models;
 
-namespace DevCrew.Core.Services;
+namespace DevCrew.Core.Services.Repositories;
 
 /// <summary>
 /// Repository interface for JWT history data access operations.

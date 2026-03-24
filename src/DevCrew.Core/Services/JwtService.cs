@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using DevCrew.Core.Models;
+using DevCrew.Core.Constants;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DevCrew.Core.Services;

@@ -3,6 +3,8 @@ using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
+using DevCrew.Core.Models.Results;
+using DevCrew.Core.Enums;
 using DevCrew.Core.ViewModels;
 using DevCrew.Desktop.Services;
 

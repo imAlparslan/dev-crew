@@ -1,13 +1,12 @@
 namespace DevCrew.Core.Services;
 
 /// <summary>
-/// Default GUID generation service.
+/// Abstraction for GUID generation.
 /// </summary>
-public class GuidService : IGuidService
+public interface IGuidService
 {
     /// <summary>
     /// Generates a new GUID string.
     /// </summary>
-    public string Generate() => Guid.NewGuid().ToString();
+    string Generate();
 }
-

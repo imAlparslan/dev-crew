@@ -1,5 +1,8 @@
 namespace DevCrew.Core.Services;
 
+using DevCrew.Core.Models.Results;
+using DevCrew.Core.Constants;
+
 /// <summary>
 /// Default Base64 encoder implementation.
 /// </summary>

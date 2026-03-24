@@ -1,4 +1,4 @@
-namespace DevCrew.Core.Services;
+namespace DevCrew.Core.Constants;
 
 public static class ErrorKeys
 {

@@ -2,7 +2,7 @@ using DevCrew.Core.Data;
 using DevCrew.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DevCrew.Core.Services;
+namespace DevCrew.Core.Services.Repositories;
 
 /// <summary>
 /// Repository implementation for JWT Builder template data access.

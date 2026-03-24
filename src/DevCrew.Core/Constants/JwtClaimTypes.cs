@@ -1,4 +1,4 @@
-namespace DevCrew.Core.Services;
+namespace DevCrew.Core.Constants;
 
 /// <summary>
 /// Standard JWT claim type constants for type-safe access to common JWT claims.
