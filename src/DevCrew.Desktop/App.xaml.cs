@@ -99,6 +99,8 @@ public partial class App : Application
         services.AddTransient<Func<Base64EncoderViewModel>>(sp => () => sp.GetRequiredService<Base64EncoderViewModel>());
         services.AddTransient<Base64DecoderViewModel>();
         services.AddTransient<Func<Base64DecoderViewModel>>(sp => () => sp.GetRequiredService<Base64DecoderViewModel>());
+        services.AddTransient<SettingsViewModel>();
+        services.AddTransient<Func<SettingsViewModel>>(sp => () => sp.GetRequiredService<SettingsViewModel>());
     }
 
     private void InitializeDatabase()

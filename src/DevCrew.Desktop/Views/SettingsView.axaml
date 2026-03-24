@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:DevCrew.Desktop.ViewModels"
+             x:Class="DevCrew.Desktop.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+    <ScrollViewer>
+        <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
+            <StackPanel Spacing="16" MaxWidth="900" HorizontalAlignment="Center">
+                <TextBlock Text="Ayarlar"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource BrushPrimaryText}" />
+
+                <TextBlock Text="{Binding Description}"
+                           FontSize="14"
+                           Foreground="{StaticResource BrushSecondaryText}"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>

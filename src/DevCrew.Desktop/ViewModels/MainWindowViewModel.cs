@@ -20,6 +20,7 @@ public partial class MainWindowViewModel : BaseViewModel
     private readonly Func<JsonDiffViewModel> _jsonDiffViewModelFactory;
     private readonly Func<Base64EncoderViewModel> _base64EncoderViewModelFactory;
     private readonly Func<Base64DecoderViewModel> _base64DecoderViewModelFactory;
+    private readonly Func<SettingsViewModel> _settingsViewModelFactory;
 
     [ObservableProperty]
     private string title = "DevCrew";
@@ -34,6 +35,11 @@ public partial class MainWindowViewModel : BaseViewModel
     /// Sidebar menu items.
     /// </summary>
     public ObservableCollection<MenuItemViewModel> MenuItems { get; } = new();
+
+    /// <summary>
+    /// Sidebar bottom menu items.
+    /// </summary>
+    public ObservableCollection<MenuItemViewModel> BottomMenuItems { get; } = new();
 
     /// <summary>
     /// Collection of open tabs.
@@ -53,6 +59,7 @@ public partial class MainWindowViewModel : BaseViewModel
     /// <param name="jsonDiffViewModelFactory">Factory for new JSON Diff view models.</param>
     /// <param name="base64EncoderViewModelFactory">Factory for new Base64 Encoder view models.</param>
     /// <param name="base64DecoderViewModelFactory">Factory for new Base64 Decoder view models.</param>
+    /// <param name="settingsViewModelFactory">Factory for new Settings view models.</param>
     public MainWindowViewModel(
         IErrorHandler errorHandler,
         IApplicationService applicationService,
@@ -63,7 +70,8 @@ public partial class MainWindowViewModel : BaseViewModel
         Func<JsonFormatterViewModel> jsonFormatterViewModelFactory,
         Func<JsonDiffViewModel> jsonDiffViewModelFactory,
         Func<Base64EncoderViewModel> base64EncoderViewModelFactory,
-        Func<Base64DecoderViewModel> base64DecoderViewModelFactory)
+        Func<Base64DecoderViewModel> base64DecoderViewModelFactory,
+        Func<SettingsViewModel> settingsViewModelFactory)
         : base(errorHandler)
     {
         _applicationService = applicationService;
@@ -75,6 +83,7 @@ public partial class MainWindowViewModel : BaseViewModel
         _jsonDiffViewModelFactory = jsonDiffViewModelFactory;
         _base64EncoderViewModelFactory = base64EncoderViewModelFactory;
         _base64DecoderViewModelFactory = base64DecoderViewModelFactory;
+        _settingsViewModelFactory = settingsViewModelFactory;
 
         InitializeMenuItems();
 
@@ -92,6 +101,7 @@ public partial class MainWindowViewModel : BaseViewModel
         var jsonDiffItem = new MenuItemViewModel("json-diff", "JSON Diff", OpenJsonDiffTabCommand, "Primary", "🧩");
         var base64EncoderItem = new MenuItemViewModel("base64-encoder", "Base64 Encoder", OpenBase64EncoderTabCommand, "Primary", "🧬");
         var base64DecoderItem = new MenuItemViewModel("base64-decoder", "Base64 Decoder", OpenBase64DecoderTabCommand, "Primary", "🔓");
+        var settingsItem = new MenuItemViewModel("settings", "Ayarlar", OpenSettingsTabCommand, "Secondary", "⚙️");
 
         MenuItems.Add(dashboardItem);
         MenuItems.Add(createGuidItem);
@@ -101,6 +111,8 @@ public partial class MainWindowViewModel : BaseViewModel
         MenuItems.Add(jsonDiffItem);
         MenuItems.Add(base64EncoderItem);
         MenuItems.Add(base64DecoderItem);
+
+        BottomMenuItems.Add(settingsItem);
 
         // Populate Dashboard MenuItems
         _dashboardViewModel.MenuItems.Add(dashboardItem);
@@ -231,9 +243,29 @@ public partial class MainWindowViewModel : BaseViewModel
         OpenOrSelectTab("base64-decoder", "Base64 Decoder", base64DecoderViewModel, true, "🔓");
     }
 
+    [RelayCommand]
+    private void OpenSettingsTab()
+    {
+        SetSelectedMenuItem("settings");
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == "settings");
+        if (existingTab != null)
+        {
+            SelectedTab = existingTab;
+            return;
+        }
+
+        var settingsViewModel = _settingsViewModelFactory();
+        OpenOrSelectTab("settings", "Ayarlar", settingsViewModel, true, "⚙️");
+    }
+
     private void SetSelectedMenuItem(string id)
     {
         foreach (var item in MenuItems)
+        {
+            item.IsSelected = item.Id == id;
+        }
+
+        foreach (var item in BottomMenuItems)
         {
             item.IsSelected = item.Id == id;
         }
@@ -247,7 +279,7 @@ public partial class MainWindowViewModel : BaseViewModel
             return;
         }
 
-        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder" || value.Id == "jwt-builder" || value.Id == "json-formatter" || value.Id == "json-diff" || value.Id == "base64-encoder" || value.Id == "base64-decoder")
+        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder" || value.Id == "jwt-builder" || value.Id == "json-formatter" || value.Id == "json-diff" || value.Id == "base64-encoder" || value.Id == "base64-decoder" || value.Id == "settings")
         {
             SetSelectedMenuItem(value.Id);
             return;
