@@ -128,7 +128,13 @@ public partial class App : Application
             {
                 try
                 {
-                    await dbContext.GuidHistories.AsNoTracking().Take(1).ToListAsync();
+                    using var warmupScope = _serviceProvider?.CreateScope();
+                    var warmupDbContext = warmupScope?.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                    if (warmupDbContext != null)
+                    {
+                        await warmupDbContext.GuidHistories.AsNoTracking().Take(1).ToListAsync();
+                    }
                 }
                 catch
                 {
