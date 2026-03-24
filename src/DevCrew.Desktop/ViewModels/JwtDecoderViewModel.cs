@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
 using DevCrew.Core.ViewModels;
+using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -12,6 +13,7 @@ public partial class JwtDecoderViewModel : BaseViewModel
 {
     private readonly IJwtService _jwtService;
     private readonly IClipboardService _clipboardService;
+    private readonly ILocalizationService _localizationService;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasToken), nameof(CanDecode))]
@@ -72,11 +74,13 @@ public partial class JwtDecoderViewModel : BaseViewModel
     public JwtDecoderViewModel(
         IErrorHandler errorHandler,
         IJwtService jwtService, 
-        IClipboardService clipboardService)
+        IClipboardService clipboardService,
+        ILocalizationService localizationService)
         : base(errorHandler)
     {
         _jwtService = jwtService;
         _clipboardService = clipboardService;
+        _localizationService = localizationService;
     }
 
     [RelayCommand(CanExecute = nameof(CanDecode))]
@@ -102,7 +106,10 @@ public partial class JwtDecoderViewModel : BaseViewModel
         }
         else
         {
-            ErrorMessage = result.ErrorMessage;
+            ErrorMessage = _localizationService.GetStringOrFallback(
+                result.ErrorKey,
+                result.ErrorMessage ?? _localizationService.GetString("common.error_unknown"),
+                result.ErrorArgs ?? []);
             ClearDecodedData();
         }
     }

@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
 using DevCrew.Core.ViewModels;
+using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -14,6 +15,7 @@ public partial class Base64EncoderViewModel : BaseViewModel
 
     private readonly IBase64EncoderService _base64EncoderService;
     private readonly IClipboardService _clipboardService;
+    private readonly ILocalizationService _localizationService;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasSelectedFile))]
@@ -52,11 +54,13 @@ public partial class Base64EncoderViewModel : BaseViewModel
     public Base64EncoderViewModel(
         IErrorHandler errorHandler,
         IBase64EncoderService base64EncoderService,
-        IClipboardService clipboardService)
+        IClipboardService clipboardService,
+        ILocalizationService localizationService)
         : base(errorHandler)
     {
         _base64EncoderService = base64EncoderService;
         _clipboardService = clipboardService;
+        _localizationService = localizationService;
     }
 
     public void SetSelectedFile(string filePath)
@@ -74,7 +78,7 @@ public partial class Base64EncoderViewModel : BaseViewModel
             ? fileName
             : $"{fileName} ({extension})";
 
-        StatusMessage = $"Dosya secildi: {fileName}";
+        StatusMessage = _localizationService.GetString("base64encoder.file_selected", fileName);
         IsError = false;
     }
 
@@ -86,7 +90,7 @@ public partial class Base64EncoderViewModel : BaseViewModel
             var topLevel = Avalonia.Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime;
             if (topLevel?.MainWindow is null)
             {
-                StatusMessage = "Ana pencere bulunamadi";
+                StatusMessage = _localizationService.GetString("base64encoder.window_not_found");
                 IsError = true;
                 return;
             }
@@ -94,7 +98,7 @@ public partial class Base64EncoderViewModel : BaseViewModel
             var storageProvider = Avalonia.Controls.TopLevel.GetTopLevel(topLevel.MainWindow)?.StorageProvider;
             if (storageProvider is null)
             {
-                StatusMessage = "Depolama saglayicisi baslatilamadi";
+                StatusMessage = _localizationService.GetString("base64encoder.storage_not_available");
                 IsError = true;
                 return;
             }
@@ -105,12 +109,12 @@ public partial class Base64EncoderViewModel : BaseViewModel
             var files = await storageProvider.OpenFilePickerAsync(
                 new Avalonia.Platform.Storage.FilePickerOpenOptions
                 {
-                    Title = "Dosya sec",
+                    Title = _localizationService.GetString("base64encoder.open_dialog_title"),
                     AllowMultiple = false,
                     SuggestedStartLocation = suggestedLocation,
                     FileTypeFilter = new[]
                     {
-                        new Avalonia.Platform.Storage.FilePickerFileType("Tum Dosyalar") { Patterns = new[] { "*" } }
+                        new Avalonia.Platform.Storage.FilePickerFileType(_localizationService.GetString("base64encoder.all_files")) { Patterns = new[] { "*" } }
                     }
                 });
 
@@ -121,7 +125,7 @@ public partial class Base64EncoderViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Dosya secme hatasi: {ex.Message}";
+            StatusMessage = _localizationService.GetString("base64encoder.file_select_failed", ex.Message);
             IsError = true;
             ErrorHandler.LogException(ex, "Browse Base64 file");
         }
@@ -132,7 +136,7 @@ public partial class Base64EncoderViewModel : BaseViewModel
     {
         if (!HasSelectedFile)
         {
-            StatusMessage = "Lutfen once bir dosya secin";
+            StatusMessage = _localizationService.GetString("base64encoder.select_file_first");
             IsError = true;
             return;
         }
@@ -141,7 +145,7 @@ public partial class Base64EncoderViewModel : BaseViewModel
         {
             if (!File.Exists(SelectedFilePath))
             {
-                StatusMessage = "Secilen dosya bulunamadi";
+                StatusMessage = _localizationService.GetString("base64encoder.selected_file_missing");
                 IsError = true;
                 return;
             }
@@ -157,27 +161,30 @@ public partial class Base64EncoderViewModel : BaseViewModel
             else
             {
                 ClearOutput();
-                StatusMessage = result.ErrorMessage ?? "Encoding hatasi";
+                StatusMessage = _localizationService.GetStringOrFallback(
+                    result.ErrorKey,
+                    result.ErrorMessage ?? _localizationService.GetString("common.error_unknown"),
+                    result.ErrorArgs ?? []);
                 IsError = true;
             }
         }
         catch (UnauthorizedAccessException)
         {
             ClearOutput();
-            StatusMessage = "Dosyaya erisim reddedildi";
+            StatusMessage = _localizationService.GetString("base64encoder.access_denied");
             IsError = true;
         }
         catch (IOException ex)
         {
             ClearOutput();
-            StatusMessage = $"Dosya okuma hatasi: {ex.Message}";
+            StatusMessage = _localizationService.GetString("base64encoder.file_read_failed", ex.Message);
             IsError = true;
             ErrorHandler.LogException(ex, "Read Base64 file");
         }
         catch (Exception ex)
         {
             ClearOutput();
-            StatusMessage = $"Encoding hatasi: {ex.Message}";
+            StatusMessage = _localizationService.GetString("base64encoder.encode_failed", ex.Message);
             IsError = true;
             ErrorHandler.LogException(ex, "Encode Base64 file");
         }
@@ -193,7 +200,7 @@ public partial class Base64EncoderViewModel : BaseViewModel
 
         OutputBase64 = FullOutputBase64;
         IsFullOutputVisible = true;
-        StatusMessage = $"Tum cikti gosteriliyor ({FullOutputBase64.Length:N0} karakter)";
+        StatusMessage = _localizationService.GetString("base64encoder.showing_full_output", FullOutputBase64.Length);
         IsError = false;
     }
 
@@ -222,13 +229,13 @@ public partial class Base64EncoderViewModel : BaseViewModel
         {
             OutputBase64 = output[..PreviewCharacterLimit];
             IsPreviewMode = true;
-            StatusMessage = $"Dosya Base64 formatina cevrildi. Onizleme gosteriliyor ({PreviewCharacterLimit:N0}/{output.Length:N0} karakter).";
+            StatusMessage = _localizationService.GetString("base64encoder.preview_status", PreviewCharacterLimit, output.Length);
             return;
         }
 
         OutputBase64 = output;
         IsPreviewMode = false;
-        StatusMessage = $"Dosya Base64 formatina cevrildi ({output.Length:N0} karakter)";
+        StatusMessage = _localizationService.GetString("base64encoder.completed_status", output.Length);
     }
 
     private void ClearOutput()

@@ -19,7 +19,8 @@ public partial class MenuItemViewModel : ObservableObject
 
     public string Id { get; }
 
-    public string Header { get; }
+    [ObservableProperty]
+    private string header = string.Empty;
 
     public IRelayCommand Command { get; }
 

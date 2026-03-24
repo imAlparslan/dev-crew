@@ -8,13 +8,13 @@
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
             <Grid RowDefinitions="Auto,Auto,Auto,*,*" HorizontalAlignment="Stretch">
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,12">
-                    <TextBlock Text="JSON Diff"
+                    <TextBlock Text="{Binding [jsondiff.title], Source={StaticResource Loc}}"
                                FontSize="20"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
 
-                    <TextBlock Text="İki JSON arasındaki farkları path ve satır bazında inceleyin"
+                    <TextBlock Text="{Binding [jsondiff.subtitle], Source={StaticResource Loc}}"
                                FontSize="14"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
@@ -32,36 +32,36 @@
                     <StackPanel Spacing="10">
                         <Grid ColumnDefinitions="Auto,14,Auto,14,Auto,14,Auto,14,Auto">
                             <CheckBox Grid.Column="0"
-                                      Content="Object key sırası önemsiz"
+                                      Content="{Binding [jsondiff.ignore_object_order], Source={StaticResource Loc}}"
                                       IsChecked="{Binding IgnoreObjectPropertyOrder}" />
                             <CheckBox Grid.Column="2"
-                                      Content="Array sırası önemli"
+                                      Content="{Binding [jsondiff.array_order_significant], Source={StaticResource Loc}}"
                                       IsChecked="{Binding TreatArrayOrderAsSignificant}" />
                             <CheckBox Grid.Column="4"
-                                      Content="Whitespace farklarını yok say"
+                                      Content="{Binding [jsondiff.ignore_whitespace], Source={StaticResource Loc}}"
                                       IsChecked="{Binding IgnoreWhitespaceDifferences}" />
                             <CheckBox Grid.Column="6"
-                                      Content="null ve boş string eşit"
+                                      Content="{Binding [jsondiff.null_empty_equal], Source={StaticResource Loc}}"
                                       IsChecked="{Binding TreatNullAndEmptyStringAsEqual}" />
                             <CheckBox Grid.Column="8"
-                                      Content="Azalan sırala"
+                                      Content="{Binding [jsondiff.sort_descending], Source={StaticResource Loc}}"
                                       IsChecked="{Binding SortDescending}" />
                         </Grid>
 
                         <Grid ColumnDefinitions="Auto,8,Auto,8,Auto,8,Auto,8,*,8,Auto,8,Auto,8,Auto">
-                            <CheckBox Grid.Column="0" Content="Added" IsChecked="{Binding ShowAdded}" />
-                            <CheckBox Grid.Column="2" Content="Removed" IsChecked="{Binding ShowRemoved}" />
-                            <CheckBox Grid.Column="4" Content="Changed" IsChecked="{Binding ShowChanged}" />
-                            <CheckBox Grid.Column="6" Content="Unchanged" IsChecked="{Binding ShowUnchanged}" />
+                            <CheckBox Grid.Column="0" Content="{Binding [jsondiff.added], Source={StaticResource Loc}}" IsChecked="{Binding ShowAdded}" />
+                            <CheckBox Grid.Column="2" Content="{Binding [jsondiff.removed], Source={StaticResource Loc}}" IsChecked="{Binding ShowRemoved}" />
+                            <CheckBox Grid.Column="4" Content="{Binding [jsondiff.changed], Source={StaticResource Loc}}" IsChecked="{Binding ShowChanged}" />
+                            <CheckBox Grid.Column="6" Content="{Binding [jsondiff.unchanged], Source={StaticResource Loc}}" IsChecked="{Binding ShowUnchanged}" />
 
                             <TextBox Grid.Column="8"
                                      Text="{Binding PathFilter}"
                                      Classes="CompactInputTextBox"
-                                     Watermark="Path filtresi (örn: $.users)"
+                                     Watermark="{Binding [jsondiff.path_filter], Source={StaticResource Loc}}"
                                      MinWidth="220" />
 
                             <TextBlock Grid.Column="10"
-                                       Text="Sırala:"
+                                       Text="{Binding [jsondiff.sort_by], Source={StaticResource Loc}}"
                                        VerticalAlignment="Center"
                                        Foreground="{StaticResource BrushSecondaryText}" />
                             <ComboBox Grid.Column="12"
@@ -70,7 +70,7 @@
                                       MinWidth="120" />
 
                             <Button Grid.Column="14"
-                                    Content="Karşılaştır"
+                                    Content="{Binding [jsondiff.compare], Source={StaticResource Loc}}"
                                     Command="{Binding CompareCommand}"
                                     IsEnabled="{Binding CanCompare}"
                                     Classes="ActionButton PrimaryActionButton" />
@@ -113,13 +113,13 @@
                         <Grid RowDefinitions="Auto,*">
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
-                                           Text="JSON A"
+                                           Text="{Binding [jsondiff.left_title], Source={StaticResource Loc}}"
                                            FontSize="13"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
                                 <Button Grid.Column="1"
-                                        Content="📁 Browse"
+                                    Content="{Binding [jsonformatter.browse], Source={StaticResource Loc}}"
                                         Command="{Binding BrowseLeftFileCommand}"
                                         Classes="ActionButton PrimaryActionButton"
                                         Padding="10,6" />
@@ -151,13 +151,13 @@
                         <Grid RowDefinitions="Auto,*">
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
-                                           Text="JSON B"
+                                           Text="{Binding [jsondiff.right_title], Source={StaticResource Loc}}"
                                            FontSize="13"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
                                 <Button Grid.Column="1"
-                                        Content="📁 Browse"
+                                    Content="{Binding [jsonformatter.browse], Source={StaticResource Loc}}"
                                         Command="{Binding BrowseRightFileCommand}"
                                         Classes="ActionButton PrimaryActionButton"
                                         Padding="10,6" />
@@ -190,7 +190,7 @@
                         <Grid RowDefinitions="Auto,Auto,*">
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,10">
                                 <TextBlock Grid.Column="0"
-                                           Text="Path Diff Sonuçları"
+                                           Text="{Binding [jsondiff.path_results], Source={StaticResource Loc}}"
                                            FontSize="13"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
@@ -215,23 +215,23 @@
 
                             <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*,*" Margin="0,0,0,10">
                                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4">
-                                    <TextBlock Text="Toplam:" Foreground="{StaticResource BrushSecondaryText}" />
+                                    <TextBlock Text="{Binding [jsondiff.total], Source={StaticResource Loc}}" Foreground="{StaticResource BrushSecondaryText}" />
                                     <TextBlock Text="{Binding TotalDiffCount}" Foreground="{StaticResource BrushPrimaryText}" FontWeight="SemiBold" />
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
-                                    <TextBlock Text="Added:" Foreground="{StaticResource BrushSecondaryText}" />
+                                    <TextBlock Text="{Binding [jsondiff.added], Source={StaticResource Loc}, StringFormat='{}{0}:'}" Foreground="{StaticResource BrushSecondaryText}" />
                                     <TextBlock Text="{Binding AddedCount}" Foreground="{StaticResource BrushPrimaryText}" FontWeight="SemiBold" />
                                 </StackPanel>
                                 <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4">
-                                    <TextBlock Text="Removed:" Foreground="{StaticResource BrushSecondaryText}" />
+                                    <TextBlock Text="{Binding [jsondiff.removed], Source={StaticResource Loc}, StringFormat='{}{0}:'}" Foreground="{StaticResource BrushSecondaryText}" />
                                     <TextBlock Text="{Binding RemovedCount}" Foreground="{StaticResource BrushPrimaryText}" FontWeight="SemiBold" />
                                 </StackPanel>
                                 <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="4">
-                                    <TextBlock Text="Changed:" Foreground="{StaticResource BrushSecondaryText}" />
+                                    <TextBlock Text="{Binding [jsondiff.changed], Source={StaticResource Loc}, StringFormat='{}{0}:'}" Foreground="{StaticResource BrushSecondaryText}" />
                                     <TextBlock Text="{Binding ChangedCount}" Foreground="{StaticResource BrushPrimaryText}" FontWeight="SemiBold" />
                                 </StackPanel>
                                 <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="4">
-                                    <TextBlock Text="Unchanged:" Foreground="{StaticResource BrushSecondaryText}" />
+                                    <TextBlock Text="{Binding [jsondiff.unchanged], Source={StaticResource Loc}, StringFormat='{}{0}:'}" Foreground="{StaticResource BrushSecondaryText}" />
                                     <TextBlock Text="{Binding UnchangedCount}" Foreground="{StaticResource BrushPrimaryText}" FontWeight="SemiBold" />
                                 </StackPanel>
                             </Grid>
@@ -295,7 +295,7 @@
                         <Grid RowDefinitions="Auto,*">
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
                                 <TextBlock Grid.Column="0"
-                                           Text="Line Diff"
+                                           Text="{Binding [jsondiff.line_results], Source={StaticResource Loc}}"
                                            FontSize="13"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"

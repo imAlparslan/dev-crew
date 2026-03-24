@@ -13,7 +13,8 @@ public class Base64EncoderService : IBase64EncoderService
             return new Base64EncodeResult
             {
                 IsSuccess = false,
-                ErrorMessage = "Kodlanacak dosya verisi bulunamadi"
+                ErrorMessage = "Kodlanacak dosya verisi bulunamadi",
+                ErrorKey = ErrorKeys.Base64.EncodeInputRequired
             };
         }
 
@@ -32,7 +33,9 @@ public class Base64EncoderService : IBase64EncoderService
             return new Base64EncodeResult
             {
                 IsSuccess = false,
-                ErrorMessage = $"Base64 encoding hatasi: {ex.Message}"
+                ErrorMessage = $"Base64 encoding hatasi: {ex.Message}",
+                ErrorKey = ErrorKeys.Base64.EncodeFailed,
+                ErrorArgs = [ex.Message]
             };
         }
     }
@@ -45,7 +48,8 @@ public class Base64EncoderService : IBase64EncoderService
             return new Base64DecodeResult
             {
                 IsSuccess = false,
-                ErrorMessage = "Cozulecek Base64 verisi bulunamadi"
+                ErrorMessage = "Cozulecek Base64 verisi bulunamadi",
+                ErrorKey = ErrorKeys.Base64.DecodeInputRequired
             };
         }
 
@@ -64,7 +68,8 @@ public class Base64EncoderService : IBase64EncoderService
             return new Base64DecodeResult
             {
                 IsSuccess = false,
-                ErrorMessage = "Gecersiz Base64 formati"
+                ErrorMessage = "Gecersiz Base64 formati",
+                ErrorKey = ErrorKeys.Base64.DecodeInvalidFormat
             };
         }
         catch (Exception ex)
@@ -72,7 +77,9 @@ public class Base64EncoderService : IBase64EncoderService
             return new Base64DecodeResult
             {
                 IsSuccess = false,
-                ErrorMessage = $"Base64 cozme hatasi: {ex.Message}"
+                ErrorMessage = $"Base64 cozme hatasi: {ex.Message}",
+                ErrorKey = ErrorKeys.Base64.DecodeFailed,
+                ErrorArgs = [ex.Message]
             };
         }
     }

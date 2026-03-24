@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="app.title" xml:space="preserve"><value>DevCrew</value></data>
+  <data name="main.menu" xml:space="preserve"><value>Menü</value></data>
+  <data name="main.close_tab" xml:space="preserve"><value>Kapat</value></data>
+
+  <data name="menu.dashboard" xml:space="preserve"><value>Panel</value></data>
+  <data name="menu.create_guid" xml:space="preserve"><value>GUID Üret</value></data>
+  <data name="menu.jwt_decoder" xml:space="preserve"><value>JWT Çözücü</value></data>
+  <data name="menu.jwt_builder" xml:space="preserve"><value>JWT Üretici</value></data>
+  <data name="menu.json_formatter" xml:space="preserve"><value>JSON Biçimlendirici</value></data>
+  <data name="menu.json_diff" xml:space="preserve"><value>JSON Karşılaştırma</value></data>
+  <data name="menu.base64_encoder" xml:space="preserve"><value>Base64 Kodlayıcı</value></data>
+  <data name="menu.base64_decoder" xml:space="preserve"><value>Base64 Çözücü</value></data>
+  <data name="menu.settings" xml:space="preserve"><value>Ayarlar</value></data>
+
+  <data name="settings.title" xml:space="preserve"><value>Ayarlar</value></data>
+  <data name="settings.description" xml:space="preserve"><value>Yapılandırma seçenekleri bu sayfaya eklenecek.</value></data>
+  <data name="settings.language" xml:space="preserve"><value>Uygulama dili</value></data>
+
+  <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Paneli</value></data>
+
+  <data name="createguid.title" xml:space="preserve"><value>GUID Oluşturucu</value></data>
+  <data name="createguid.subtitle" xml:space="preserve"><value>Yeni bir GUID üretmek için butona tıklayın</value></data>
+  <data name="createguid.generate" xml:space="preserve"><value>🎲 Yeni GUID Üret</value></data>
+  <data name="createguid.copy" xml:space="preserve"><value>Kopyala</value></data>
+  <data name="createguid.clear" xml:space="preserve"><value>Temizle</value></data>
+  <data name="createguid.current_guid_watermark" xml:space="preserve"><value>GUID burada görünecek</value></data>
+  <data name="createguid.recent_title" xml:space="preserve"><value>Son Üretilen GUID'ler</value></data>
+  <data name="createguid.search_watermark" xml:space="preserve"><value>Açıklamada ara...</value></data>
+  <data name="createguid.saved_only" xml:space="preserve"><value>Kayıtlılar</value></data>
+  <data name="createguid.notes_watermark" xml:space="preserve"><value>Not ekle (opsiyonel)</value></data>
+  <data name="createguid.save" xml:space="preserve"><value>Kaydet</value></data>
+  <data name="createguid.delete" xml:space="preserve"><value>Sil</value></data>
+
+  <data name="jsonformatter.title" xml:space="preserve"><value>JSON Biçimlendirici</value></data>
+  <data name="jsonformatter.subtitle" xml:space="preserve"><value>JSON verilerinizi doğrulayın, biçimlendirin veya sıkıştırın</value></data>
+  <data name="jsonformatter.prettify" xml:space="preserve"><value>Biçimlendir</value></data>
+  <data name="jsonformatter.prettify_tooltip" xml:space="preserve"><value>JSON'u biçimlendir</value></data>
+  <data name="jsonformatter.minify" xml:space="preserve"><value>Sıkıştır</value></data>
+  <data name="jsonformatter.minify_tooltip" xml:space="preserve"><value>JSON'u sıkıştır</value></data>
+  <data name="jsonformatter.sort_keys" xml:space="preserve"><value>Anahtarları Sırala</value></data>
+  <data name="jsonformatter.sort_keys_tooltip" xml:space="preserve"><value>Anahtarları alfabetik sırala</value></data>
+  <data name="jsonformatter.clear" xml:space="preserve"><value>✕ Temizle</value></data>
+  <data name="jsonformatter.clear_tooltip" xml:space="preserve"><value>Temizle</value></data>
+  <data name="jsonformatter.input_title" xml:space="preserve"><value>Girdi</value></data>
+  <data name="jsonformatter.browse" xml:space="preserve"><value>📁 Gözat</value></data>
+  <data name="jsonformatter.browse_tooltip" xml:space="preserve"><value>Bilgisayardan dosya seç</value></data>
+  <data name="jsonformatter.input_watermark" xml:space="preserve"><value>{
+  "ad": "DevCrew",
+  "sürüm": "1.0.0",
+  "araçlar": ["GUID", "JWT", "JSON"]
+}</value></data>
+  <data name="jsonformatter.output_title" xml:space="preserve"><value>Çıktı</value></data>
+  <data name="jsonformatter.copy_output_tooltip" xml:space="preserve"><value>Çıktıyı kopyala</value></data>
+  <data name="jsonformatter.save_output_tooltip" xml:space="preserve"><value>Çıktıyı dosyaya kaydet</value></data>
+  <data name="jsonformatter.output_watermark" xml:space="preserve"><value>Çıktı burada görünecek...</value></data>
+  <data name="jsonformatter.window_not_found" xml:space="preserve"><value>Ana pencere bulunamadı</value></data>
+  <data name="jsonformatter.storage_not_available" xml:space="preserve"><value>Depolama sağlayıcısı başlatılamadı</value></data>
+  <data name="jsonformatter.save_dialog_title" xml:space="preserve"><value>Dosyayı kaydet</value></data>
+  <data name="jsonformatter.file_saved" xml:space="preserve"><value>Dosya başarıyla kaydedildi!</value></data>
+  <data name="jsonformatter.save_failed" xml:space="preserve"><value>Dosya kaydedilirken hata: {0}</value></data>
+  <data name="jsonformatter.file_picker_failed" xml:space="preserve"><value>Dosya seçimi sırasında hata: {0}</value></data>
+  <data name="jsonformatter.open_dialog_title" xml:space="preserve"><value>JSON dosyası seç</value></data>
+  <data name="jsonformatter.all_files" xml:space="preserve"><value>Tüm Dosyalar</value></data>
+  <data name="jsonformatter.file_loaded" xml:space="preserve"><value>Dosya yüklendi: {0}</value></data>
+  <data name="jsonformatter.load_failed" xml:space="preserve"><value>Dosya yükleme hatası: {0}</value></data>
+
+  <data name="jsondiff.title" xml:space="preserve"><value>JSON Karşılaştırma</value></data>
+  <data name="jsondiff.subtitle" xml:space="preserve"><value>İki JSON arasındaki farkları yol ve satır bazında inceleyin</value></data>
+  <data name="jsondiff.ignore_object_order" xml:space="preserve"><value>Nesne key sırası önemsiz</value></data>
+  <data name="jsondiff.array_order_significant" xml:space="preserve"><value>Dizi sırası önemli</value></data>
+  <data name="jsondiff.ignore_whitespace" xml:space="preserve"><value>Boşluk farklarını yok say</value></data>
+  <data name="jsondiff.null_empty_equal" xml:space="preserve"><value>null ve boş string eşit</value></data>
+  <data name="jsondiff.sort_descending" xml:space="preserve"><value>Azalan sırala</value></data>
+  <data name="jsondiff.added" xml:space="preserve"><value>Eklendi</value></data>
+  <data name="jsondiff.removed" xml:space="preserve"><value>Kaldırıldı</value></data>
+  <data name="jsondiff.changed" xml:space="preserve"><value>Değişti</value></data>
+  <data name="jsondiff.unchanged" xml:space="preserve"><value>Aynı</value></data>
+  <data name="jsondiff.path_filter" xml:space="preserve"><value>Yol filtresi (örn: $.users)</value></data>
+  <data name="jsondiff.sort_by" xml:space="preserve"><value>Sırala:</value></data>
+  <data name="jsondiff.compare" xml:space="preserve"><value>Karşılaştır</value></data>
+  <data name="jsondiff.left_title" xml:space="preserve"><value>JSON A</value></data>
+  <data name="jsondiff.right_title" xml:space="preserve"><value>JSON B</value></data>
+  <data name="jsondiff.path_results" xml:space="preserve"><value>Yol Farkı Sonuçları</value></data>
+  <data name="jsondiff.total" xml:space="preserve"><value>Toplam:</value></data>
+  <data name="jsondiff.line_results" xml:space="preserve"><value>Satır Farkı</value></data>
+  <data name="jsondiff.compare_inputs_required" xml:space="preserve"><value>Karşılaştırma için iki JSON da zorunludur</value></data>
+  <data name="jsondiff.compare_complete" xml:space="preserve"><value>Karşılaştırma tamamlandi. Toplam fark: {0}</value></data>
+  <data name="jsondiff.window_not_found" xml:space="preserve"><value>Ana pencere bulunamadı</value></data>
+  <data name="jsondiff.storage_not_available" xml:space="preserve"><value>Depolama sağlayıcısı başlatılamadı</value></data>
+  <data name="jsondiff.select_file" xml:space="preserve"><value>JSON dosyası seç</value></data>
+  <data name="jsondiff.all_files" xml:space="preserve"><value>Tüm Dosyalar</value></data>
+
+  <data name="base64encoder.title" xml:space="preserve"><value>Base64 Kodlayıcı</value></data>
+  <data name="base64encoder.subtitle" xml:space="preserve"><value>Dosyanızı yükleyin, Kodla ile Base64 çıktısı oluşturun</value></data>
+  <data name="base64encoder.input_title" xml:space="preserve"><value>Girdi Dosyası</value></data>
+  <data name="base64encoder.browse" xml:space="preserve"><value>Gözat</value></data>
+  <data name="base64encoder.browse_tooltip" xml:space="preserve"><value>Bilgisayardan dosya seç</value></data>
+  <data name="base64encoder.input_watermark" xml:space="preserve"><value>Dosyayı sürükleyip bırakın veya Gözat ile seçin</value></data>
+  <data name="base64encoder.encode" xml:space="preserve"><value>Kodla</value></data>
+  <data name="base64encoder.encode_tooltip" xml:space="preserve"><value>Seçilen dosyayı Base64 formatına çevir</value></data>
+  <data name="base64encoder.output_title" xml:space="preserve"><value>Base64 Çıktı</value></data>
+  <data name="base64encoder.show_all" xml:space="preserve"><value>Tamamını Göster</value></data>
+  <data name="base64encoder.show_all_tooltip" xml:space="preserve"><value>Önizleme yerine tüm çıktıyı göster</value></data>
+  <data name="base64encoder.copy_tooltip" xml:space="preserve"><value>Çıktıyı kopyala</value></data>
+  <data name="base64encoder.output_watermark" xml:space="preserve"><value>Encode sonucu burada görünecek</value></data>
+  <data name="base64encoder.file_selected" xml:space="preserve"><value>Dosya seçildi: {0}</value></data>
+  <data name="base64encoder.window_not_found" xml:space="preserve"><value>Ana pencere bulunamadı</value></data>
+  <data name="base64encoder.storage_not_available" xml:space="preserve"><value>Depolama sağlayıcısı başlatılamadı</value></data>
+  <data name="base64encoder.open_dialog_title" xml:space="preserve"><value>Dosya seç</value></data>
+  <data name="base64encoder.all_files" xml:space="preserve"><value>Tüm Dosyalar</value></data>
+  <data name="base64encoder.select_file_first" xml:space="preserve"><value>Lütfen önce bir dosya seçin</value></data>
+  <data name="base64encoder.selected_file_missing" xml:space="preserve"><value>Seçilen dosya bulunamadı</value></data>
+  <data name="base64encoder.access_denied" xml:space="preserve"><value>Dosyaya erişim reddedildi</value></data>
+  <data name="base64encoder.file_select_failed" xml:space="preserve"><value>Dosya seçme hatası: {0}</value></data>
+  <data name="base64encoder.file_read_failed" xml:space="preserve"><value>Dosya okuma hatası: {0}</value></data>
+  <data name="base64encoder.encode_failed" xml:space="preserve"><value>Kodlama hatası: {0}</value></data>
+  <data name="base64encoder.showing_full_output" xml:space="preserve"><value>Tüm çıktı gösteriliyor ({0:N0} karakter)</value></data>
+  <data name="base64encoder.preview_status" xml:space="preserve"><value>Dosya Base64 formatına çevrildi. Önizleme gösteriliyor ({0:N0}/{1:N0} karakter).</value></data>
+  <data name="base64encoder.completed_status" xml:space="preserve"><value>Dosya Base64 formatına çevrildi ({0:N0} karakter)</value></data>
+
+  <data name="base64decoder.title" xml:space="preserve"><value>Base64 Çözücü</value></data>
+  <data name="base64decoder.subtitle" xml:space="preserve"><value>Base64 formatındaki dosyanızı yükleyin, orijinal ikili biçime çevirin ve bilgisayarınıza kaydedin</value></data>
+  <data name="base64decoder.input_title" xml:space="preserve"><value>Base64 Girişi</value></data>
+  <data name="base64decoder.browse" xml:space="preserve"><value>Gözat</value></data>
+  <data name="base64decoder.browse_tooltip" xml:space="preserve"><value>Bilgisayardan Base64 içerikli dosya seç</value></data>
+  <data name="base64decoder.loaded_file" xml:space="preserve"><value>Yüklenen dosya: {0}</value></data>
+  <data name="base64decoder.input_watermark" xml:space="preserve"><value>Base64 içeriğini buraya yapıştırın veya dosyayı sürükleyip bırakın</value></data>
+  <data name="base64decoder.decode" xml:space="preserve"><value>Çöz</value></data>
+  <data name="base64decoder.decode_tooltip" xml:space="preserve"><value>Base64 içeriğini çöz</value></data>
+  <data name="base64decoder.output_title" xml:space="preserve"><value>Çıktı</value></data>
+  <data name="base64decoder.clear" xml:space="preserve"><value>Temizle</value></data>
+  <data name="base64decoder.clear_tooltip" xml:space="preserve"><value>Girdi ve sonucu temizle</value></data>
+  <data name="base64decoder.save" xml:space="preserve"><value>Kaydet</value></data>
+  <data name="base64decoder.save_tooltip" xml:space="preserve"><value>Çözülmüş dosyayı bilgisayara kaydet</value></data>
+  <data name="base64decoder.output_watermark" xml:space="preserve"><value>Çözülmüş dosya bilgileri burada görünecek</value></data>
+  <data name="base64decoder.mime_type" xml:space="preserve"><value>MIME Türü</value></data>
+  <data name="base64decoder.extension" xml:space="preserve"><value>Uzantı</value></data>
+  <data name="base64decoder.size" xml:space="preserve"><value>Boyut</value></data>
+  <data name="base64decoder.save_hint" xml:space="preserve"><value>Kaydet butonuna basarak çözülmüş dosyayı bilgisayarınıza indirebilirsiniz.</value></data>
+  <data name="base64decoder.file_loaded" xml:space="preserve"><value>Dosya yüklendi: {0}</value></data>
+  <data name="base64decoder.access_denied" xml:space="preserve"><value>Dosyaya erişim reddedildi</value></data>
+  <data name="base64decoder.file_read_failed" xml:space="preserve"><value>Dosya okuma hatası: {0}</value></data>
+  <data name="base64decoder.window_not_found" xml:space="preserve"><value>Ana pencere bulunamadı</value></data>
+  <data name="base64decoder.storage_not_available" xml:space="preserve"><value>Depolama sağlayıcısı başlatılamadı</value></data>
+  <data name="base64decoder.open_dialog_title" xml:space="preserve"><value>Base64 dosyası seç</value></data>
+  <data name="base64decoder.all_files" xml:space="preserve"><value>Tüm Dosyalar</value></data>
+  <data name="base64decoder.input_required" xml:space="preserve"><value>Lütfen Base64 içeriği girin veya bir dosya seçin</value></data>
+  <data name="base64decoder.completed_status" xml:space="preserve"><value>Başarıyla çözüldü ({0})</value></data>
+  <data name="base64decoder.save_dialog_title" xml:space="preserve"><value>Çözülmüş dosyayı kaydet</value></data>
+  <data name="base64decoder.file_saved" xml:space="preserve"><value>Dosya başarıyla kaydedildi!</value></data>
+  <data name="base64decoder.save_failed" xml:space="preserve"><value>Dosya kaydedilirken hata: {0}</value></data>
+  <data name="base64decoder.file_picker_failed" xml:space="preserve"><value>Dosya seçimi sırasında hata: {0}</value></data>
+
+  <data name="jwtdecoder.subtitle" xml:space="preserve"><value>JWT token'inizi yapıştırın, otomatik olarak decode edilecek</value></data>
+  <data name="jwtdecoder.token_watermark" xml:space="preserve"><value>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkF5c2UiLCJpYXQiOjE1MTYyMzkwMjJ9...</value></data>
+  <data name="jwtdecoder.title" xml:space="preserve"><value>JWT Çözücü</value></data>
+  <data name="jwtdecoder.token_title" xml:space="preserve"><value>JWT Token</value></data>
+  <data name="jwtdecoder.decode" xml:space="preserve"><value>🔍 Çöz</value></data>
+  <data name="jwtdecoder.clear" xml:space="preserve"><value>✕ Temizle</value></data>
+  <data name="jwtdecoder.secret_title" xml:space="preserve"><value>Gizli Anahtar (İmza Doğrulama)</value></data>
+  <data name="jwtdecoder.public_key_title" xml:space="preserve"><value>Açık Anahtar (İmza Doğrulama - RSA)</value></data>
+  <data name="jwtdecoder.toggle_secret" xml:space="preserve"><value>Göster/Gizle</value></data>
+  <data name="jwtdecoder.secret_watermark" xml:space="preserve"><value>Gizli anahtarınızı girin</value></data>
+  <data name="jwtdecoder.public_key_watermark" xml:space="preserve"><value>-----BEGIN PUBLIC KEY-----
+...
+-----END PUBLIC KEY-----</value></data>
+  <data name="jwtdecoder.signature_status" xml:space="preserve"><value>İmza Durumu: </value></data>
+  <data name="jwtdecoder.validate" xml:space="preserve"><value>🔐 Doğrula</value></data>
+  <data name="jwtdecoder.token_info" xml:space="preserve"><value>Token Bilgileri</value></data>
+  <data name="jwtdecoder.issuer" xml:space="preserve"><value>Yayıncı: </value></data>
+  <data name="jwtdecoder.subject" xml:space="preserve"><value>Konu: </value></data>
+  <data name="jwtdecoder.audience" xml:space="preserve"><value>Hedef Kitle: </value></data>
+  <data name="jwtdecoder.issued_at" xml:space="preserve"><value>Oluşturulma: </value></data>
+  <data name="jwtdecoder.expires_at" xml:space="preserve"><value>Sona Erme: </value></data>
+  <data name="jwtdecoder.decoded_header" xml:space="preserve"><value>Çözülen Header</value></data>
+  <data name="jwtdecoder.decoded_payload" xml:space="preserve"><value>Çözülen Payload</value></data>
+
+  <data name="jwtbuilder.title" xml:space="preserve"><value>JWT Üretici</value></data>
+  <data name="jwtbuilder.subtitle" xml:space="preserve"><value>JWT token oluşturun - claim, algoritma ve gizli anahtar belirleyin</value></data>
+  <data name="jwtbuilder.algorithm_secret_title" xml:space="preserve"><value>Algoritma ve Gizli Anahtar</value></data>
+  <data name="jwtbuilder.algorithm" xml:space="preserve"><value>Algoritma:</value></data>
+  <data name="jwtbuilder.secret_key" xml:space="preserve"><value>Gizli Anahtar:</value></data>
+  <data name="jwtbuilder.toggle_secret" xml:space="preserve"><value>Göster/Gizle</value></data>
+  <data name="jwtbuilder.generate_secret" xml:space="preserve"><value>🔑 Üret</value></data>
+  <data name="jwtbuilder.generate_secret_tooltip" xml:space="preserve"><value>Seçilen algoritma için örnek gizli anahtar oluştur</value></data>
+  <data name="jwtbuilder.copy_secret_tooltip" xml:space="preserve"><value>Gizli anahtarı kopyala</value></data>
+  <data name="jwtbuilder.secret_watermark" xml:space="preserve"><value>Gizli anahtar veya RSA private key</value></data>
+  <data name="jwtbuilder.public_key" xml:space="preserve"><value>Açık Anahtar:</value></data>
+  <data name="jwtbuilder.copy_public_key_tooltip" xml:space="preserve"><value>Public key'i kopyala (JWT.io doğrulama için)</value></data>
+  <data name="jwtbuilder.public_key_watermark" xml:space="preserve"><value>Public key - JWT.io doğrulama için gerekli</value></data>
+  <data name="jwtbuilder.hmac_hint" xml:space="preserve"><value>💡 HMAC (HS256/384/512) için string gizli anahtar, RSA (RS256/384/512) için PEM formatında private key kullanın</value></data>
+  <data name="jwtbuilder.rsa_hint" xml:space="preserve"><value>🔐 RSA: Private key ile token imzalanır, Public key ile doğrulanır (JWT.io'da doğrulama için Açık Anahtar kullanın)</value></data>
+  <data name="jwtbuilder.standard_claims" xml:space="preserve"><value>Standart Claim'ler</value></data>
+  <data name="jwtbuilder.issuer" xml:space="preserve"><value>Yayıncı (iss):</value></data>
+  <data name="jwtbuilder.issuer_watermark" xml:space="preserve"><value>Token issuer (örn: https://myapi.com)</value></data>
+  <data name="jwtbuilder.audience" xml:space="preserve"><value>Hedef Kitle (aud):</value></data>
+  <data name="jwtbuilder.audience_watermark" xml:space="preserve"><value>Token audience (örn: myapp)</value></data>
+  <data name="jwtbuilder.subject" xml:space="preserve"><value>Konu (sub):</value></data>
+  <data name="jwtbuilder.subject_watermark" xml:space="preserve"><value>Token subject (örn: user-id-123)</value></data>
+  <data name="jwtbuilder.expiration" xml:space="preserve"><value>Süre Sonu (exp)</value></data>
+  <data name="jwtbuilder.minutes_later" xml:space="preserve"><value>dakika sonra</value></data>
+  <data name="jwtbuilder.issued_at_hint" xml:space="preserve"><value>💡 IssuedAt (iat) ve NotBefore (nbf) otomatik olarak mevcut zaman ile eklenir</value></data>
+  <data name="jwtbuilder.custom_claims" xml:space="preserve"><value>Özel Claim'ler</value></data>
+  <data name="jwtbuilder.claim_key_watermark" xml:space="preserve"><value>Claim anahtarı</value></data>
+  <data name="jwtbuilder.claim_value_watermark" xml:space="preserve"><value>Claim değeri</value></data>
+  <data name="jwtbuilder.add_claim" xml:space="preserve"><value>➕ Ekle</value></data>
+  <data name="jwtbuilder.empty_claims" xml:space="preserve"><value>Claim listesi boş</value></data>
+  <data name="jwtbuilder.build_token" xml:space="preserve"><value>🔧 Token Oluştur</value></data>
+  <data name="jwtbuilder.clear" xml:space="preserve"><value>✕ Temizle</value></data>
+  <data name="jwtbuilder.generated_token" xml:space="preserve"><value>Oluşturulan JWT Token</value></data>
+  <data name="jwtbuilder.template_management" xml:space="preserve"><value>Şablon Yönetimi</value></data>
+  <data name="jwtbuilder.template_management_subtitle" xml:space="preserve"><value>JWT yapılandırmanızı template olarak kaydedin ve daha sonra kullanın</value></data>
+  <data name="jwtbuilder.load_template" xml:space="preserve"><value>Şablon Yükle</value></data>
+  <data name="jwtbuilder.template_placeholder" xml:space="preserve"><value>Şablon seçin...</value></data>
+  <data name="jwtbuilder.template_load" xml:space="preserve"><value>📂 Yükle</value></data>
+  <data name="jwtbuilder.template_load_tooltip" xml:space="preserve"><value>Seçili template'i forma yükle</value></data>
+  <data name="jwtbuilder.template_delete_tooltip" xml:space="preserve"><value>Seçili template'i sil</value></data>
+  <data name="jwtbuilder.save_template" xml:space="preserve"><value>Şablon Kaydet</value></data>
+  <data name="jwtbuilder.template_name_watermark" xml:space="preserve"><value>Şablon adı...</value></data>
+  <data name="jwtbuilder.template_save_new" xml:space="preserve"><value>💾 Yeni Kaydet</value></data>
+  <data name="jwtbuilder.template_save_new_tooltip" xml:space="preserve"><value>Yeni template olarak kaydet</value></data>
+  <data name="jwtbuilder.template_update" xml:space="preserve"><value>✏️ Güncelle</value></data>
+  <data name="jwtbuilder.template_update_tooltip" xml:space="preserve"><value>Mevcut template'i güncelle</value></data>
+  <data name="jwtbuilder.template_not_found" xml:space="preserve"><value>Şablon bulunamadı.</value></data>
+  <data name="jwtbuilder.template_name_required" xml:space="preserve"><value>Lütfen template adi girin.</value></data>
+  <data name="jwtbuilder.template_name_exists" xml:space="preserve"><value>Bu isimde bir template zaten mevcut.</value></data>
+  <data name="jwtbuilder.template_name_exists_other" xml:space="preserve"><value>Bu isimde başka bir template zaten mevcut.</value></data>
+  <data name="jwtbuilder.template_none_to_update" xml:space="preserve"><value>Güncellenecek template yok.</value></data>
+  <data name="jwtbuilder.template_update_failed" xml:space="preserve"><value>Şablon güncellenemedi.</value></data>
+
+  <data name="common.error_unknown" xml:space="preserve"><value>Beklenmeyen bir hata oluştu</value></data>
+
+  <data name="jsonformatter.input_required" xml:space="preserve"><value>JSON girişi boş olamaz</value></data>
+  <data name="jsonformatter.invalid_json" xml:space="preserve"><value>Geçersiz JSON: {0}</value></data>
+
+  <data name="jsondiff.inputs_required" xml:space="preserve"><value>Her iki JSON girişi de zorunludur</value></data>
+  <data name="jsondiff.left_invalid" xml:space="preserve"><value>Sol JSON geçersiz: {0}</value></data>
+  <data name="jsondiff.right_invalid" xml:space="preserve"><value>Sağ JSON geçersiz: {0}</value></data>
+
+  <data name="base64.encode_input_required" xml:space="preserve"><value>Kodlanacak dosya verisi bulunamadı</value></data>
+  <data name="base64.encode_failed" xml:space="preserve"><value>Base64 kodlama hatası: {0}</value></data>
+  <data name="base64.decode_input_required" xml:space="preserve"><value>Çözülecek Base64 verisi bulunamadı</value></data>
+  <data name="base64.decode_invalid_format" xml:space="preserve"><value>Geçersiz Base64 formatı</value></data>
+  <data name="base64.decode_failed" xml:space="preserve"><value>Base64 çözme hatası: {0}</value></data>
+
+  <data name="jwt.token_empty" xml:space="preserve"><value>Token boş olamaz</value></data>
+  <data name="jwt.token_format_invalid" xml:space="preserve"><value>Geçersiz JWT token formatı</value></data>
+  <data name="jwt.decode_failed" xml:space="preserve"><value>Token çözülürken hata: {0}</value></data>
+  <data name="jwt.build_secret_required" xml:space="preserve"><value>Gizli anahtar boş olamaz</value></data>
+  <data name="jwt.build_unsupported_algorithm" xml:space="preserve"><value>Desteklenmeyen algoritma: {0}. Desteklenen: {1}</value></data>
+  <data name="jwt.build_invalid_rsa_private_key" xml:space="preserve"><value>Geçersiz RSA private key formatı: {0}</value></data>
+  <data name="jwt.build_failed" xml:space="preserve"><value>Token üretilirken hata: {0}</value></data>
+</root>
+
+

@@ -9,13 +9,13 @@
             <Grid RowDefinitions="Auto,Auto,Auto,Auto" HorizontalAlignment="Stretch">
 
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
-                    <TextBlock Text="Base64 Decoder"
+                    <TextBlock Text="{Binding [base64decoder.title], Source={StaticResource Loc}}"
                                FontSize="20"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
 
-                    <TextBlock Text="Base64 formatindaki dosyanizi yukleyin, orijinal binary haline cevirin ve bilgisayariniza kaydedin"
+                    <TextBlock Text="{Binding [base64decoder.subtitle], Source={StaticResource Loc}}"
                                FontSize="14"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
@@ -34,24 +34,24 @@
                     <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
                         <TextBlock Grid.Row="0"
                                    Grid.Column="0"
-                                   Text="Base64 Girdi"
+                                   Text="{Binding [base64decoder.input_title], Source={StaticResource Loc}}"
                                    FontSize="13"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    VerticalAlignment="Center" />
 
                         <Button Grid.Row="0"
-                                Grid.Column="1"
-                                Content="Browse"
+                            Grid.Column="1"
+                            Content="{Binding [base64decoder.browse], Source={StaticResource Loc}}"
                                 Command="{Binding BrowseFileCommand}"
                                 Padding="10,6"
                                 FontWeight="SemiBold"
                                 Classes="ActionButton PrimaryActionButton"
-                                ToolTip.Tip="Bilgisayardan Base64 icerikli dosya sec" />
+                                ToolTip.Tip="{Binding [base64decoder.browse_tooltip], Source={StaticResource Loc}}" />
 
                         <TextBlock Grid.Row="1"
                                    Grid.ColumnSpan="2"
-                                   Text="{Binding SelectedFileDisplayName, StringFormat='Yuklenen dosya: {0}'}"
+                                   Text="{Binding SelectedFileDisplayName}"
                                    IsVisible="{Binding HasSelectedFile}"
                                    FontSize="11"
                                    Margin="0,6,0,0"
@@ -70,17 +70,17 @@
                                  FontFamily="{StaticResource FontMonospace}"
                                  FontSize="{StaticResource FontSizeSmall}"
                                  TextWrapping="Wrap"
-                                 Watermark="Base64 icerigini buraya yapistirabiliriz veya dosyayi surukleyip birakabilirsiniz" />
+                                 Watermark="{Binding [base64decoder.input_watermark], Source={StaticResource Loc}}" />
                     </Grid>
                 </Border>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,16,0,16">
-                    <Button Content="Decode"
+                    <Button Content="{Binding [base64decoder.decode], Source={StaticResource Loc}}"
                             Command="{Binding DecodeCommand}"
                             IsEnabled="{Binding HasInput}"
                             Classes="ActionButton PrimaryActionButton"
                             FontWeight="SemiBold"
-                            ToolTip.Tip="Base64 icerigini coz" />
+                            ToolTip.Tip="{Binding [base64decoder.decode_tooltip], Source={StaticResource Loc}}" />
                 </StackPanel>
 
                 <Border Grid.Row="3"
@@ -92,29 +92,29 @@
                     <Grid RowDefinitions="Auto,Auto,*">
                         <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
                             <TextBlock Grid.Column="0"
-                                       Text="Cikti"
+                                       Text="{Binding [base64decoder.output_title], Source={StaticResource Loc}}"
                                        FontSize="13"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        VerticalAlignment="Center" />
 
-                            <Button Grid.Column="1"
-                                    Content="Temizle"
+                                <Button Grid.Column="1"
+                                    Content="{Binding [base64decoder.clear], Source={StaticResource Loc}}"
                                     Command="{Binding ClearCommand}"
                                     Margin="0,0,8,0"
                                     Padding="10,6"
                                     FontWeight="SemiBold"
                                     Classes="ActionButton DangerActionButton"
-                                    ToolTip.Tip="Girdi ve sonucu temizle" />
+                                    ToolTip.Tip="{Binding [base64decoder.clear_tooltip], Source={StaticResource Loc}}" />
 
-                            <Button Grid.Column="2"
-                                    Content="Kaydet"
+                                <Button Grid.Column="2"
+                                    Content="{Binding [base64decoder.save], Source={StaticResource Loc}}"
                                     Command="{Binding SaveBinaryCommand}"
                                     IsEnabled="{Binding HasDecodedOutput}"
                                     Padding="10,6"
                                     FontWeight="SemiBold"
                                     Classes="ActionButton NeutralActionButton"
-                                    ToolTip.Tip="Cozulmus dosyayi bilgisayara kaydet" />
+                                    ToolTip.Tip="{Binding [base64decoder.save_tooltip], Source={StaticResource Loc}}" />
                         </Grid>
 
                         <Border Grid.Row="1"
@@ -148,7 +148,7 @@
                                      Classes="MonospaceInputTextBox"
                                      VerticalContentAlignment="Center"
                                      IsVisible="{Binding !HasDecodedOutput}"
-                                     Watermark="Decode ile cozulmus dosya bilgileri burada gorunecek" />
+                                     Watermark="{Binding [base64decoder.output_watermark], Source={StaticResource Loc}}" />
 
                             <StackPanel Spacing="12"
                                         Margin="4,4,4,8"
@@ -164,7 +164,7 @@
                                             CornerRadius="6"
                                             Padding="12,10">
                                         <StackPanel Spacing="4">
-                                            <TextBlock Text="MIME Turu"
+                                            <TextBlock Text="{Binding [base64decoder.mime_type], Source={StaticResource Loc}}"
                                                        FontSize="11"
                                                        FontWeight="SemiBold"
                                                        Foreground="{StaticResource BrushSecondaryText}" />
@@ -185,7 +185,7 @@
                                             CornerRadius="6"
                                             Padding="12,10">
                                         <StackPanel Spacing="4">
-                                            <TextBlock Text="Uzanti"
+                                            <TextBlock Text="{Binding [base64decoder.extension], Source={StaticResource Loc}}"
                                                        FontSize="11"
                                                        FontWeight="SemiBold"
                                                        Foreground="{StaticResource BrushSecondaryText}" />
@@ -205,7 +205,7 @@
                                             CornerRadius="6"
                                             Padding="12,10">
                                         <StackPanel Spacing="4">
-                                            <TextBlock Text="Boyut"
+                                            <TextBlock Text="{Binding [base64decoder.size], Source={StaticResource Loc}}"
                                                        FontSize="11"
                                                        FontWeight="SemiBold"
                                                        Foreground="{StaticResource BrushSecondaryText}" />
@@ -219,7 +219,7 @@
 
                                 </Grid>
 
-                                <TextBlock Text="Kaydet butonuna basarak cozulmus dosyayi bilgisayariniza indirebilirsiniz."
+                                <TextBlock Text="{Binding [base64decoder.save_hint], Source={StaticResource Loc}}"
                                            FontSize="12"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            TextWrapping="Wrap"

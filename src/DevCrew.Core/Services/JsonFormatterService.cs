@@ -17,7 +17,8 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = "JSON girişi boş olamaz"
+                ErrorMessage = "JSON girişi boş olamaz",
+                ErrorKey = ErrorKeys.JsonFormatter.InputRequired
             };
         }
 
@@ -35,7 +36,9 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = $"Geçersiz JSON: {ex.Message}"
+                ErrorMessage = $"Geçersiz JSON: {ex.Message}",
+                ErrorKey = ErrorKeys.JsonFormatter.InvalidJson,
+                ErrorArgs = [ex.Message]
             };
         }
     }
@@ -50,7 +53,8 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = "JSON girişi boş olamaz"
+                ErrorMessage = "JSON girişi boş olamaz",
+                ErrorKey = ErrorKeys.JsonFormatter.InputRequired
             };
         }
 
@@ -76,7 +80,9 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = $"Geçersiz JSON: {ex.Message}"
+                ErrorMessage = $"Geçersiz JSON: {ex.Message}",
+                ErrorKey = ErrorKeys.JsonFormatter.InvalidJson,
+                ErrorArgs = [ex.Message]
             };
         }
     }
@@ -91,7 +97,8 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = "JSON girişi boş olamaz"
+                ErrorMessage = "JSON girişi boş olamaz",
+                ErrorKey = ErrorKeys.JsonFormatter.InputRequired
             };
         }
 
@@ -117,7 +124,9 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = $"Geçersiz JSON: {ex.Message}"
+                ErrorMessage = $"Geçersiz JSON: {ex.Message}",
+                ErrorKey = ErrorKeys.JsonFormatter.InvalidJson,
+                ErrorArgs = [ex.Message]
             };
         }
     }
@@ -132,7 +141,8 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = "JSON girişi boş olamaz"
+                ErrorMessage = "JSON girişi boş olamaz",
+                ErrorKey = ErrorKeys.JsonFormatter.InputRequired
             };
         }
 
@@ -158,7 +168,9 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = $"Geçersiz JSON: {ex.Message}"
+                ErrorMessage = $"Geçersiz JSON: {ex.Message}",
+                ErrorKey = ErrorKeys.JsonFormatter.InvalidJson,
+                ErrorArgs = [ex.Message]
             };
         }
     }

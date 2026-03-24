@@ -6,7 +6,7 @@
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
             <StackPanel Spacing="16" MaxWidth="900" HorizontalAlignment="Center">
-                <TextBlock Text="Ayarlar"
+                <TextBlock Text="{Binding Title}"
                            FontSize="24"
                            FontWeight="Bold"
                            Foreground="{StaticResource BrushPrimaryText}" />
@@ -15,6 +15,21 @@
                            FontSize="14"
                            Foreground="{StaticResource BrushSecondaryText}"
                            TextWrapping="Wrap" />
+
+                <StackPanel Spacing="8" Width="320">
+                    <TextBlock Text="{Binding LanguageLabel}"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BrushPrimaryText}" />
+                    <ComboBox ItemsSource="{Binding SupportedLanguages}"
+                              SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DisplayName}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
             </StackPanel>
         </Border>
     </ScrollViewer>

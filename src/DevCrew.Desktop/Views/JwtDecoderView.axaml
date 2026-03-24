@@ -10,13 +10,13 @@
             <Grid RowDefinitions="Auto,Auto,*" HorizontalAlignment="Stretch">
                 <!-- Header -->
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
-                    <TextBlock Text="JWT Decoder"
+                    <TextBlock Text="{Binding [jwtdecoder.title], Source={StaticResource Loc}}"
                                FontSize="20"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
                     
-                    <TextBlock Text="JWT token'ınızı yapıştırın, otomatik olarak decode edilecek"
+                    <TextBlock Text="{Binding [jwtdecoder.subtitle], Source={StaticResource Loc}}"
                                FontSize="14"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
@@ -40,7 +40,7 @@
                             HorizontalAlignment="Stretch">
                         <Grid RowDefinitions="Auto,120,Auto" MinHeight="184" Height="184" MaxHeight="184">
                             <TextBlock Grid.Row="0"
-                                       Text="JWT Token"
+                                       Text="{Binding [jwtdecoder.token_title], Source={StaticResource Loc}}"
                                        FontSize="12"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource BrushSecondaryText}"
@@ -57,7 +57,7 @@
                                      VerticalContentAlignment="Top"
                                      Classes="MonospaceInputTextBox"
                                      FontSize="{StaticResource FontSizeSmall}"
-                                     Watermark="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ..."
+                                     Watermark="{Binding [jwtdecoder.token_watermark], Source={StaticResource Loc}}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto" />
                             
@@ -66,12 +66,12 @@
                                         Spacing="8"
                                         HorizontalAlignment="Right"
                                         Margin="0,8,0,0">
-                                <Button Content="🔍 Decode"
+                                <Button Content="{Binding [jwtdecoder.decode], Source={StaticResource Loc}}"
                                         Command="{Binding DecodeTokenCommand}"
                                     Classes="ActionButton AccentActionButton"
                                     FontWeight="SemiBold" />
                                 
-                                <Button Content="✕ Clear"
+                                <Button Content="{Binding [jwtdecoder.clear], Source={StaticResource Loc}}"
                                         Command="{Binding ClearCommand}"
                                     Classes="ActionButton DangerActionButton" />
                             </StackPanel>
@@ -96,7 +96,7 @@
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
                                 <!-- HMAC Title -->
                                 <TextBlock Grid.Column="0"
-                                           Text="Secret Key (İmza Doğrulama)"
+                                           Text="{Binding [jwtdecoder.secret_title], Source={StaticResource Loc}}"
                                            FontSize="12"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
@@ -105,7 +105,7 @@
                                 
                                 <!-- RSA Title -->
                                 <TextBlock Grid.Column="0"
-                                           Text="Public Key (İmza Doğrulama - RSA)"
+                                           Text="{Binding [jwtdecoder.public_key_title], Source={StaticResource Loc}}"
                                            FontSize="12"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
@@ -122,7 +122,7 @@
                                         Padding="0"
                                         Margin="0,0,4,0"
                                     Classes="NeutralActionButton"
-                                        ToolTip.Tip="Göster/Gizle"
+                                        ToolTip.Tip="{Binding [jwtdecoder.toggle_secret], Source={StaticResource Loc}}"
                                         Command="{Binding ToggleSecretVisibilityCommand}" />
                                 
                                 <TextBox Grid.Column="1"
@@ -137,7 +137,7 @@
                                          VerticalAlignment="Top"
                                          VerticalContentAlignment="Center"
                                          Classes="MonospaceInputTextBox"
-                                         Watermark="Secret key'inizi girin"
+                                         Watermark="{Binding [jwtdecoder.secret_watermark], Source={StaticResource Loc}}"
                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                          ScrollViewer.VerticalScrollBarVisibility="Disabled" />
                             </Grid>
@@ -153,7 +153,7 @@
                                      HorizontalAlignment="Stretch"
                                      Classes="MonospaceInputTextBox"
                                      FontSize="{StaticResource FontSizeSmall}"
-                                     Watermark="-----BEGIN PUBLIC KEY-----&#x0a;...&#x0a;-----END PUBLIC KEY-----"
+                                     Watermark="{Binding [jwtdecoder.public_key_watermark], Source={StaticResource Loc}}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                                      IsVisible="{Binding IsRsaAlgorithm}" />
@@ -161,7 +161,7 @@
                             <Grid Grid.Row="3" Margin="0,8,0,0" ColumnDefinitions="*,Auto">
                                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4"
                                             IsVisible="{Binding IsSignatureValid, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                    <TextBlock Text="İmza Durumu: "
+                                    <TextBlock Text="{Binding [jwtdecoder.signature_status], Source={StaticResource Loc}}"
                                                FontSize="12"
                                                Foreground="{StaticResource BrushSecondaryText}"
                                                VerticalAlignment="Center" />
@@ -176,7 +176,7 @@
                                 </StackPanel>
                                 
                                 <Button Grid.Column="1"
-                                        Content="🔐 Validate"
+                                    Content="{Binding [jwtdecoder.validate], Source={StaticResource Loc}}"
                                         Command="{Binding ValidateSignatureCommand}"
                                     Classes="ActionButton AccentActionButton" />
                             </Grid>
@@ -214,7 +214,7 @@
                             Margin="0,0,0,12">
                         <Grid RowDefinitions="Auto,Auto">
                             <TextBlock Grid.Row="0"
-                                       Text="Token Bilgileri"
+                                       Text="{Binding [jwtdecoder.token_info], Source={StaticResource Loc}}"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource BrushPrimaryText}"
@@ -223,26 +223,26 @@
                             <Grid Grid.Row="1" ColumnDefinitions="*,*">
                                 <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
                                     <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
-                                        <Run Text="Issuer: " />
+                                        <Run Text="{Binding [jwtdecoder.issuer], Source={StaticResource Loc}}" />
                                         <Run Text="{Binding Issuer, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
                                     </TextBlock>
                                     <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
-                                        <Run Text="Subject: " />
+                                        <Run Text="{Binding [jwtdecoder.subject], Source={StaticResource Loc}}" />
                                         <Run Text="{Binding Subject, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
                                     </TextBlock>
                                     <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
-                                        <Run Text="Audience: " />
+                                        <Run Text="{Binding [jwtdecoder.audience], Source={StaticResource Loc}}" />
                                         <Run Text="{Binding Audience, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
                                     </TextBlock>
                                 </StackPanel>
                                 
                                 <StackPanel Grid.Column="1" Spacing="4">
                                     <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
-                                        <Run Text="Issued At: " />
+                                        <Run Text="{Binding [jwtdecoder.issued_at], Source={StaticResource Loc}}" />
                                         <Run Text="{Binding IssuedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
                                     </TextBlock>
                                     <TextBlock FontSize="11" TextWrapping="Wrap">
-                                        <Run Text="Expires At: " Foreground="{StaticResource BrushSecondaryText}" />
+                                        <Run Text="{Binding [jwtdecoder.expires_at], Source={StaticResource Loc}}" Foreground="{StaticResource BrushSecondaryText}" />
                                         <Run Text="{Binding ExpiresAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', FallbackValue='N/A'}" 
                                              Foreground="{StaticResource BrushPrimaryText}" />
                                     </TextBlock>
@@ -264,7 +264,7 @@
                                   ColumnDefinitions="*,Auto"
                                   Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
-                                           Text="Decoded Header"
+                                           Text="{Binding [jwtdecoder.decoded_header], Source={StaticResource Loc}}"
                                            FontSize="14"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushPrimaryText}"
@@ -311,7 +311,7 @@
                                   ColumnDefinitions="*,Auto"
                                   Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
-                                           Text="Decoded Payload"
+                                           Text="{Binding [jwtdecoder.decoded_payload], Source={StaticResource Loc}}"
                                            FontSize="14"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushPrimaryText}"

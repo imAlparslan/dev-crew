@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="app.title" xml:space="preserve"><value>DevCrew</value></data>
+  <data name="main.menu" xml:space="preserve"><value>Menu</value></data>
+  <data name="main.close_tab" xml:space="preserve"><value>Close</value></data>
+
+  <data name="menu.dashboard" xml:space="preserve"><value>Dashboard</value></data>
+  <data name="menu.create_guid" xml:space="preserve"><value>Create Guid</value></data>
+  <data name="menu.jwt_decoder" xml:space="preserve"><value>JWT Decoder</value></data>
+  <data name="menu.jwt_builder" xml:space="preserve"><value>JWT Builder</value></data>
+  <data name="menu.json_formatter" xml:space="preserve"><value>JSON Formatter</value></data>
+  <data name="menu.json_diff" xml:space="preserve"><value>JSON Diff</value></data>
+  <data name="menu.base64_encoder" xml:space="preserve"><value>Base64 Encoder</value></data>
+  <data name="menu.base64_decoder" xml:space="preserve"><value>Base64 Decoder</value></data>
+  <data name="menu.settings" xml:space="preserve"><value>Settings</value></data>
+
+  <data name="settings.title" xml:space="preserve"><value>Settings</value></data>
+  <data name="settings.description" xml:space="preserve"><value>Configuration options will be added on this page.</value></data>
+  <data name="settings.language" xml:space="preserve"><value>Application language</value></data>
+
+  <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Dashboard</value></data>
+
+  <data name="createguid.title" xml:space="preserve"><value>GUID Generator</value></data>
+  <data name="createguid.subtitle" xml:space="preserve"><value>Click the button to generate a new GUID</value></data>
+  <data name="createguid.generate" xml:space="preserve"><value>🎲 Generate New GUID</value></data>
+  <data name="createguid.copy" xml:space="preserve"><value>Copy</value></data>
+  <data name="createguid.clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="createguid.current_guid_watermark" xml:space="preserve"><value>GUID will appear here</value></data>
+  <data name="createguid.recent_title" xml:space="preserve"><value>Recently Generated GUIDs</value></data>
+  <data name="createguid.search_watermark" xml:space="preserve"><value>Search in notes...</value></data>
+  <data name="createguid.saved_only" xml:space="preserve"><value>Saved only</value></data>
+  <data name="createguid.notes_watermark" xml:space="preserve"><value>Add notes (optional)</value></data>
+  <data name="createguid.save" xml:space="preserve"><value>Save</value></data>
+  <data name="createguid.delete" xml:space="preserve"><value>Delete</value></data>
+
+  <data name="jsonformatter.title" xml:space="preserve"><value>JSON Formatter</value></data>
+  <data name="jsonformatter.subtitle" xml:space="preserve"><value>Validate your JSON and prettify or minify it</value></data>
+  <data name="jsonformatter.prettify" xml:space="preserve"><value>Prettify</value></data>
+  <data name="jsonformatter.prettify_tooltip" xml:space="preserve"><value>Format JSON</value></data>
+  <data name="jsonformatter.minify" xml:space="preserve"><value>Minify</value></data>
+  <data name="jsonformatter.minify_tooltip" xml:space="preserve"><value>Minify JSON</value></data>
+  <data name="jsonformatter.sort_keys" xml:space="preserve"><value>Sort Keys</value></data>
+  <data name="jsonformatter.sort_keys_tooltip" xml:space="preserve"><value>Sort keys alphabetically</value></data>
+  <data name="jsonformatter.clear" xml:space="preserve"><value>✕ Clear</value></data>
+  <data name="jsonformatter.clear_tooltip" xml:space="preserve"><value>Clear</value></data>
+  <data name="jsonformatter.input_title" xml:space="preserve"><value>Input</value></data>
+  <data name="jsonformatter.browse" xml:space="preserve"><value>📁 Browse</value></data>
+  <data name="jsonformatter.browse_tooltip" xml:space="preserve"><value>Select a file from your computer</value></data>
+  <data name="jsonformatter.input_watermark" xml:space="preserve"><value>{
+  "name": "DevCrew",
+  "version": "1.0.0",
+  "tools": ["GUID", "JWT", "JSON"]
+}</value></data>
+  <data name="jsonformatter.output_title" xml:space="preserve"><value>Output</value></data>
+  <data name="jsonformatter.copy_output_tooltip" xml:space="preserve"><value>Copy output</value></data>
+  <data name="jsonformatter.save_output_tooltip" xml:space="preserve"><value>Save output to file</value></data>
+  <data name="jsonformatter.output_watermark" xml:space="preserve"><value>Output will appear here...</value></data>
+  <data name="jsonformatter.window_not_found" xml:space="preserve"><value>Main window not found</value></data>
+  <data name="jsonformatter.storage_not_available" xml:space="preserve"><value>Storage provider could not be initialized</value></data>
+  <data name="jsonformatter.save_dialog_title" xml:space="preserve"><value>Save file</value></data>
+  <data name="jsonformatter.file_saved" xml:space="preserve"><value>File saved successfully!</value></data>
+  <data name="jsonformatter.save_failed" xml:space="preserve"><value>Error saving file: {0}</value></data>
+  <data name="jsonformatter.file_picker_failed" xml:space="preserve"><value>Error while selecting file: {0}</value></data>
+  <data name="jsonformatter.open_dialog_title" xml:space="preserve"><value>Select JSON file</value></data>
+  <data name="jsonformatter.all_files" xml:space="preserve"><value>All Files</value></data>
+  <data name="jsonformatter.file_loaded" xml:space="preserve"><value>File loaded: {0}</value></data>
+  <data name="jsonformatter.load_failed" xml:space="preserve"><value>File loading error: {0}</value></data>
+
+  <data name="jsondiff.title" xml:space="preserve"><value>JSON Diff</value></data>
+  <data name="jsondiff.subtitle" xml:space="preserve"><value>Inspect differences between two JSON documents by path and line</value></data>
+  <data name="jsondiff.ignore_object_order" xml:space="preserve"><value>Ignore object key order</value></data>
+  <data name="jsondiff.array_order_significant" xml:space="preserve"><value>Array order matters</value></data>
+  <data name="jsondiff.ignore_whitespace" xml:space="preserve"><value>Ignore whitespace differences</value></data>
+  <data name="jsondiff.null_empty_equal" xml:space="preserve"><value>Treat null and empty string as equal</value></data>
+  <data name="jsondiff.sort_descending" xml:space="preserve"><value>Sort descending</value></data>
+  <data name="jsondiff.added" xml:space="preserve"><value>Added</value></data>
+  <data name="jsondiff.removed" xml:space="preserve"><value>Removed</value></data>
+  <data name="jsondiff.changed" xml:space="preserve"><value>Changed</value></data>
+  <data name="jsondiff.unchanged" xml:space="preserve"><value>Unchanged</value></data>
+  <data name="jsondiff.path_filter" xml:space="preserve"><value>Path filter (e.g. $.users)</value></data>
+  <data name="jsondiff.sort_by" xml:space="preserve"><value>Sort by:</value></data>
+  <data name="jsondiff.compare" xml:space="preserve"><value>Compare</value></data>
+  <data name="jsondiff.left_title" xml:space="preserve"><value>JSON A</value></data>
+  <data name="jsondiff.right_title" xml:space="preserve"><value>JSON B</value></data>
+  <data name="jsondiff.path_results" xml:space="preserve"><value>Path Diff Results</value></data>
+  <data name="jsondiff.total" xml:space="preserve"><value>Total:</value></data>
+  <data name="jsondiff.line_results" xml:space="preserve"><value>Line Diff</value></data>
+  <data name="jsondiff.compare_inputs_required" xml:space="preserve"><value>Both JSON inputs are required for comparison</value></data>
+  <data name="jsondiff.compare_complete" xml:space="preserve"><value>Comparison completed. Total differences: {0}</value></data>
+  <data name="jsondiff.window_not_found" xml:space="preserve"><value>Main window not found</value></data>
+  <data name="jsondiff.storage_not_available" xml:space="preserve"><value>Storage provider could not be initialized</value></data>
+  <data name="jsondiff.select_file" xml:space="preserve"><value>Select JSON file</value></data>
+  <data name="jsondiff.all_files" xml:space="preserve"><value>All Files</value></data>
+
+  <data name="base64encoder.title" xml:space="preserve"><value>Base64 Encoder</value></data>
+  <data name="base64encoder.subtitle" xml:space="preserve"><value>Upload your file and create Base64 output with Encode</value></data>
+  <data name="base64encoder.input_title" xml:space="preserve"><value>Input File</value></data>
+  <data name="base64encoder.browse" xml:space="preserve"><value>Browse</value></data>
+  <data name="base64encoder.browse_tooltip" xml:space="preserve"><value>Select a file from your computer</value></data>
+  <data name="base64encoder.input_watermark" xml:space="preserve"><value>Drag and drop a file or select it with Browse</value></data>
+  <data name="base64encoder.encode" xml:space="preserve"><value>Encode</value></data>
+  <data name="base64encoder.encode_tooltip" xml:space="preserve"><value>Convert selected file to Base64</value></data>
+  <data name="base64encoder.output_title" xml:space="preserve"><value>Base64 Output</value></data>
+  <data name="base64encoder.show_all" xml:space="preserve"><value>Show Full Output</value></data>
+  <data name="base64encoder.show_all_tooltip" xml:space="preserve"><value>Show complete output instead of preview</value></data>
+  <data name="base64encoder.copy_tooltip" xml:space="preserve"><value>Copy output</value></data>
+  <data name="base64encoder.output_watermark" xml:space="preserve"><value>Encoded result will appear here</value></data>
+  <data name="base64encoder.file_selected" xml:space="preserve"><value>File selected: {0}</value></data>
+  <data name="base64encoder.window_not_found" xml:space="preserve"><value>Main window not found</value></data>
+  <data name="base64encoder.storage_not_available" xml:space="preserve"><value>Storage provider could not be initialized</value></data>
+  <data name="base64encoder.open_dialog_title" xml:space="preserve"><value>Select file</value></data>
+  <data name="base64encoder.all_files" xml:space="preserve"><value>All Files</value></data>
+  <data name="base64encoder.select_file_first" xml:space="preserve"><value>Please select a file first</value></data>
+  <data name="base64encoder.selected_file_missing" xml:space="preserve"><value>Selected file was not found</value></data>
+  <data name="base64encoder.access_denied" xml:space="preserve"><value>Access to the file was denied</value></data>
+  <data name="base64encoder.file_select_failed" xml:space="preserve"><value>File selection error: {0}</value></data>
+  <data name="base64encoder.file_read_failed" xml:space="preserve"><value>File read error: {0}</value></data>
+  <data name="base64encoder.encode_failed" xml:space="preserve"><value>Encoding error: {0}</value></data>
+  <data name="base64encoder.showing_full_output" xml:space="preserve"><value>Showing full output ({0:N0} characters)</value></data>
+  <data name="base64encoder.preview_status" xml:space="preserve"><value>File converted to Base64. Showing preview ({0:N0}/{1:N0} characters).</value></data>
+  <data name="base64encoder.completed_status" xml:space="preserve"><value>File converted to Base64 ({0:N0} characters)</value></data>
+
+  <data name="base64decoder.title" xml:space="preserve"><value>Base64 Decoder</value></data>
+  <data name="base64decoder.subtitle" xml:space="preserve"><value>Load a Base64 file, convert it back to its original binary form and save it to your computer</value></data>
+  <data name="base64decoder.input_title" xml:space="preserve"><value>Base64 Input</value></data>
+  <data name="base64decoder.browse" xml:space="preserve"><value>Browse</value></data>
+  <data name="base64decoder.browse_tooltip" xml:space="preserve"><value>Select a file containing Base64 content</value></data>
+  <data name="base64decoder.loaded_file" xml:space="preserve"><value>Loaded file: {0}</value></data>
+  <data name="base64decoder.input_watermark" xml:space="preserve"><value>Paste Base64 content here or drag and drop a file</value></data>
+  <data name="base64decoder.decode" xml:space="preserve"><value>Decode</value></data>
+  <data name="base64decoder.decode_tooltip" xml:space="preserve"><value>Decode Base64 content</value></data>
+  <data name="base64decoder.output_title" xml:space="preserve"><value>Output</value></data>
+  <data name="base64decoder.clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="base64decoder.clear_tooltip" xml:space="preserve"><value>Clear input and output</value></data>
+  <data name="base64decoder.save" xml:space="preserve"><value>Save</value></data>
+  <data name="base64decoder.save_tooltip" xml:space="preserve"><value>Save decoded file to computer</value></data>
+  <data name="base64decoder.output_watermark" xml:space="preserve"><value>Decoded file information will appear here</value></data>
+  <data name="base64decoder.mime_type" xml:space="preserve"><value>MIME Type</value></data>
+  <data name="base64decoder.extension" xml:space="preserve"><value>Extension</value></data>
+  <data name="base64decoder.size" xml:space="preserve"><value>Size</value></data>
+  <data name="base64decoder.save_hint" xml:space="preserve"><value>Use the Save button to download the decoded file to your computer.</value></data>
+  <data name="base64decoder.file_loaded" xml:space="preserve"><value>File loaded: {0}</value></data>
+  <data name="base64decoder.access_denied" xml:space="preserve"><value>Access to the file was denied</value></data>
+  <data name="base64decoder.file_read_failed" xml:space="preserve"><value>File read error: {0}</value></data>
+  <data name="base64decoder.window_not_found" xml:space="preserve"><value>Main window not found</value></data>
+  <data name="base64decoder.storage_not_available" xml:space="preserve"><value>Storage provider could not be initialized</value></data>
+  <data name="base64decoder.open_dialog_title" xml:space="preserve"><value>Select Base64 file</value></data>
+  <data name="base64decoder.all_files" xml:space="preserve"><value>All Files</value></data>
+  <data name="base64decoder.input_required" xml:space="preserve"><value>Please enter Base64 content or select a file</value></data>
+  <data name="base64decoder.completed_status" xml:space="preserve"><value>Decoded successfully ({0})</value></data>
+  <data name="base64decoder.save_dialog_title" xml:space="preserve"><value>Save decoded file</value></data>
+  <data name="base64decoder.file_saved" xml:space="preserve"><value>File saved successfully!</value></data>
+  <data name="base64decoder.save_failed" xml:space="preserve"><value>Error saving file: {0}</value></data>
+  <data name="base64decoder.file_picker_failed" xml:space="preserve"><value>Error while selecting file: {0}</value></data>
+
+  <data name="jwtdecoder.title" xml:space="preserve"><value>JWT Decoder</value></data>
+  <data name="jwtdecoder.subtitle" xml:space="preserve"><value>Paste your JWT token and it will be decoded automatically</value></data>
+  <data name="jwtdecoder.token_title" xml:space="preserve"><value>JWT Token</value></data>
+  <data name="jwtdecoder.token_watermark" xml:space="preserve"><value>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ...</value></data>
+  <data name="jwtdecoder.decode" xml:space="preserve"><value>🔍 Decode</value></data>
+  <data name="jwtdecoder.clear" xml:space="preserve"><value>✕ Clear</value></data>
+  <data name="jwtdecoder.secret_title" xml:space="preserve"><value>Secret Key (Signature Validation)</value></data>
+  <data name="jwtdecoder.public_key_title" xml:space="preserve"><value>Public Key (Signature Validation - RSA)</value></data>
+  <data name="jwtdecoder.toggle_secret" xml:space="preserve"><value>Show/Hide</value></data>
+  <data name="jwtdecoder.secret_watermark" xml:space="preserve"><value>Enter your secret key</value></data>
+  <data name="jwtdecoder.public_key_watermark" xml:space="preserve"><value>-----BEGIN PUBLIC KEY-----
+...
+-----END PUBLIC KEY-----</value></data>
+  <data name="jwtdecoder.signature_status" xml:space="preserve"><value>Signature Status: </value></data>
+  <data name="jwtdecoder.validate" xml:space="preserve"><value>🔐 Validate</value></data>
+  <data name="jwtdecoder.token_info" xml:space="preserve"><value>Token Information</value></data>
+  <data name="jwtdecoder.issuer" xml:space="preserve"><value>Issuer: </value></data>
+  <data name="jwtdecoder.subject" xml:space="preserve"><value>Subject: </value></data>
+  <data name="jwtdecoder.audience" xml:space="preserve"><value>Audience: </value></data>
+  <data name="jwtdecoder.issued_at" xml:space="preserve"><value>Issued At: </value></data>
+  <data name="jwtdecoder.expires_at" xml:space="preserve"><value>Expires At: </value></data>
+  <data name="jwtdecoder.decoded_header" xml:space="preserve"><value>Decoded Header</value></data>
+  <data name="jwtdecoder.decoded_payload" xml:space="preserve"><value>Decoded Payload</value></data>
+
+  <data name="jwtbuilder.title" xml:space="preserve"><value>JWT Builder</value></data>
+  <data name="jwtbuilder.subtitle" xml:space="preserve"><value>Create JWT tokens by specifying claims, algorithm and secret key</value></data>
+  <data name="jwtbuilder.algorithm_secret_title" xml:space="preserve"><value>Algorithm and Secret Key</value></data>
+  <data name="jwtbuilder.algorithm" xml:space="preserve"><value>Algorithm:</value></data>
+  <data name="jwtbuilder.secret_key" xml:space="preserve"><value>Secret Key:</value></data>
+  <data name="jwtbuilder.toggle_secret" xml:space="preserve"><value>Show/Hide</value></data>
+  <data name="jwtbuilder.generate_secret" xml:space="preserve"><value>🔑 Generate</value></data>
+  <data name="jwtbuilder.generate_secret_tooltip" xml:space="preserve"><value>Generate an example secret key for the selected algorithm</value></data>
+  <data name="jwtbuilder.copy_secret_tooltip" xml:space="preserve"><value>Copy secret key</value></data>
+  <data name="jwtbuilder.secret_watermark" xml:space="preserve"><value>Secret key or RSA private key</value></data>
+  <data name="jwtbuilder.public_key" xml:space="preserve"><value>Public Key:</value></data>
+  <data name="jwtbuilder.copy_public_key_tooltip" xml:space="preserve"><value>Copy public key (for JWT.io validation)</value></data>
+  <data name="jwtbuilder.public_key_watermark" xml:space="preserve"><value>Public key required for JWT.io validation</value></data>
+  <data name="jwtbuilder.hmac_hint" xml:space="preserve"><value>💡 Use a string secret for HMAC (HS256/384/512), and a PEM-formatted private key for RSA (RS256/384/512)</value></data>
+  <data name="jwtbuilder.rsa_hint" xml:space="preserve"><value>🔐 RSA: Sign the token with a private key, validate it with the public key (use Public Key on JWT.io)</value></data>
+  <data name="jwtbuilder.standard_claims" xml:space="preserve"><value>Standard Claims</value></data>
+  <data name="jwtbuilder.issuer" xml:space="preserve"><value>Issuer (iss):</value></data>
+  <data name="jwtbuilder.issuer_watermark" xml:space="preserve"><value>Token issuer (e.g. https://myapi.com)</value></data>
+  <data name="jwtbuilder.audience" xml:space="preserve"><value>Audience (aud):</value></data>
+  <data name="jwtbuilder.audience_watermark" xml:space="preserve"><value>Token audience (e.g. myapp)</value></data>
+  <data name="jwtbuilder.subject" xml:space="preserve"><value>Subject (sub):</value></data>
+  <data name="jwtbuilder.subject_watermark" xml:space="preserve"><value>Token subject (e.g. user-id-123)</value></data>
+  <data name="jwtbuilder.expiration" xml:space="preserve"><value>Expiration (exp)</value></data>
+  <data name="jwtbuilder.minutes_later" xml:space="preserve"><value>minutes later</value></data>
+  <data name="jwtbuilder.issued_at_hint" xml:space="preserve"><value>💡 IssuedAt (iat) and NotBefore (nbf) are added automatically with the current time</value></data>
+  <data name="jwtbuilder.custom_claims" xml:space="preserve"><value>Custom Claims</value></data>
+  <data name="jwtbuilder.claim_key_watermark" xml:space="preserve"><value>Claim key</value></data>
+  <data name="jwtbuilder.claim_value_watermark" xml:space="preserve"><value>Claim value</value></data>
+  <data name="jwtbuilder.add_claim" xml:space="preserve"><value>➕ Add</value></data>
+  <data name="jwtbuilder.empty_claims" xml:space="preserve"><value>Claim list is empty</value></data>
+  <data name="jwtbuilder.build_token" xml:space="preserve"><value>🔧 Build Token</value></data>
+  <data name="jwtbuilder.clear" xml:space="preserve"><value>✕ Clear</value></data>
+  <data name="jwtbuilder.generated_token" xml:space="preserve"><value>Generated JWT Token</value></data>
+  <data name="jwtbuilder.template_management" xml:space="preserve"><value>Template Management</value></data>
+  <data name="jwtbuilder.template_management_subtitle" xml:space="preserve"><value>Save your JWT configuration as a template and reuse it later</value></data>
+  <data name="jwtbuilder.load_template" xml:space="preserve"><value>Load Template</value></data>
+  <data name="jwtbuilder.template_placeholder" xml:space="preserve"><value>Select template...</value></data>
+  <data name="jwtbuilder.template_load" xml:space="preserve"><value>📂 Load</value></data>
+  <data name="jwtbuilder.template_load_tooltip" xml:space="preserve"><value>Load selected template into the form</value></data>
+  <data name="jwtbuilder.template_delete_tooltip" xml:space="preserve"><value>Delete selected template</value></data>
+  <data name="jwtbuilder.save_template" xml:space="preserve"><value>Save Template</value></data>
+  <data name="jwtbuilder.template_name_watermark" xml:space="preserve"><value>Template name...</value></data>
+  <data name="jwtbuilder.template_save_new" xml:space="preserve"><value>💾 Save New</value></data>
+  <data name="jwtbuilder.template_save_new_tooltip" xml:space="preserve"><value>Save as a new template</value></data>
+  <data name="jwtbuilder.template_update" xml:space="preserve"><value>✏️ Update</value></data>
+  <data name="jwtbuilder.template_update_tooltip" xml:space="preserve"><value>Update current template</value></data>
+  <data name="jwtbuilder.template_not_found" xml:space="preserve"><value>Template not found.</value></data>
+  <data name="jwtbuilder.template_name_required" xml:space="preserve"><value>Please enter a template name.</value></data>
+  <data name="jwtbuilder.template_name_exists" xml:space="preserve"><value>A template with this name already exists.</value></data>
+  <data name="jwtbuilder.template_name_exists_other" xml:space="preserve"><value>Another template with this name already exists.</value></data>
+  <data name="jwtbuilder.template_none_to_update" xml:space="preserve"><value>No template to update.</value></data>
+  <data name="jwtbuilder.template_update_failed" xml:space="preserve"><value>Template could not be updated.</value></data>
+
+  <data name="common.error_unknown" xml:space="preserve"><value>An unexpected error occurred</value></data>
+
+  <data name="jsonformatter.input_required" xml:space="preserve"><value>JSON input cannot be empty</value></data>
+  <data name="jsonformatter.invalid_json" xml:space="preserve"><value>Invalid JSON: {0}</value></data>
+
+  <data name="jsondiff.inputs_required" xml:space="preserve"><value>Both JSON inputs are required</value></data>
+  <data name="jsondiff.left_invalid" xml:space="preserve"><value>Left JSON is invalid: {0}</value></data>
+  <data name="jsondiff.right_invalid" xml:space="preserve"><value>Right JSON is invalid: {0}</value></data>
+
+  <data name="base64.encode_input_required" xml:space="preserve"><value>No file content was provided for encoding</value></data>
+  <data name="base64.encode_failed" xml:space="preserve"><value>Base64 encoding failed: {0}</value></data>
+  <data name="base64.decode_input_required" xml:space="preserve"><value>No Base64 content was provided for decoding</value></data>
+  <data name="base64.decode_invalid_format" xml:space="preserve"><value>Invalid Base64 format</value></data>
+  <data name="base64.decode_failed" xml:space="preserve"><value>Base64 decode failed: {0}</value></data>
+
+  <data name="jwt.token_empty" xml:space="preserve"><value>Token cannot be empty</value></data>
+  <data name="jwt.token_format_invalid" xml:space="preserve"><value>Invalid JWT token format</value></data>
+  <data name="jwt.decode_failed" xml:space="preserve"><value>Error decoding token: {0}</value></data>
+  <data name="jwt.build_secret_required" xml:space="preserve"><value>Secret key cannot be empty</value></data>
+  <data name="jwt.build_unsupported_algorithm" xml:space="preserve"><value>Unsupported algorithm: {0}. Supported: {1}</value></data>
+  <data name="jwt.build_invalid_rsa_private_key" xml:space="preserve"><value>Invalid RSA private key format: {0}</value></data>
+  <data name="jwt.build_failed" xml:space="preserve"><value>Error building token: {0}</value></data>
+</root>

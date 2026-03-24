@@ -38,6 +38,7 @@ public class JwtService : IJwtService
             if (string.IsNullOrWhiteSpace(token))
             {
                 result.ErrorMessage = "Token cannot be empty";
+                result.ErrorKey = ErrorKeys.Jwt.TokenEmpty;
                 return result;
             }
 
@@ -46,6 +47,7 @@ public class JwtService : IJwtService
             if (!_tokenHandler.CanReadToken(token))
             {
                 result.ErrorMessage = "Invalid JWT token format";
+                result.ErrorKey = ErrorKeys.Jwt.TokenFormatInvalid;
                 return result;
             }
 
@@ -126,6 +128,8 @@ public class JwtService : IJwtService
         catch (Exception ex)
         {
             result.ErrorMessage = $"Error decoding token: {ex.Message}";
+            result.ErrorKey = ErrorKeys.Jwt.DecodeFailed;
+            result.ErrorArgs = [ex.Message];
             result.IsValid = false;
         }
 
@@ -229,7 +233,7 @@ public class JwtService : IJwtService
         return token.Trim();
     }
 
-    public (bool Success, string? Token, string? ErrorMessage) BuildToken(
+    public (bool Success, string? Token, string? ErrorMessage, string? ErrorKey, object[]? ErrorArgs) BuildToken(
         Dictionary<string, object> claims,
         string secret,
         string algorithm = "HS256",
@@ -242,7 +246,7 @@ public class JwtService : IJwtService
         {
             if (string.IsNullOrWhiteSpace(secret))
             {
-                return (false, null, "Secret key cannot be empty");
+                return (false, null, "Secret key cannot be empty", ErrorKeys.Jwt.BuildSecretRequired, null);
             }
 
             // Claims dictionary can be empty - we'll add standard claims below
@@ -258,7 +262,8 @@ public class JwtService : IJwtService
             var supportedAlgorithms = new[] { "HS256", "HS384", "HS512", "RS256", "RS384", "RS512" };
             if (!supportedAlgorithms.Contains(algorithm))
             {
-                return (false, null, $"Unsupported algorithm: {algorithm}. Supported: {string.Join(", ", supportedAlgorithms)}");
+                var supported = string.Join(", ", supportedAlgorithms);
+                return (false, null, $"Unsupported algorithm: {algorithm}. Supported: {supported}", ErrorKeys.Jwt.BuildUnsupportedAlgorithm, [algorithm, supported]);
             }
 
             // Create security key based on algorithm
@@ -313,7 +318,7 @@ public class JwtService : IJwtService
                 }
                 catch (Exception ex)
                 {
-                    return (false, null, $"Invalid RSA private key format: {ex.Message}");
+                    return (false, null, $"Invalid RSA private key format: {ex.Message}", ErrorKeys.Jwt.BuildInvalidRsaPrivateKey, [ex.Message]);
                 }
             }
 
@@ -378,11 +383,11 @@ public class JwtService : IJwtService
             var token = _tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = _tokenHandler.WriteToken(token);
 
-            return (true, tokenString, null);
+            return (true, tokenString, null, null, null);
         }
         catch (Exception ex)
         {
-            return (false, null, $"Error building token: {ex.Message}");
+            return (false, null, $"Error building token: {ex.Message}", ErrorKeys.Jwt.BuildFailed, [ex.Message]);
         }
     }
 

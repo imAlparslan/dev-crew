@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
 using DevCrew.Core.ViewModels;
+using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -11,6 +12,7 @@ public partial class JsonDiffViewModel : BaseViewModel
 {
     private readonly IJsonDiffService _jsonDiffService;
     private readonly IClipboardService _clipboardService;
+    private readonly ILocalizationService _localizationService;
 
     private List<JsonPathDiffEntry> _allPathDiffs = [];
     private List<JsonLineDiffEntry> _allLineDiffs = [];
@@ -100,11 +102,13 @@ public partial class JsonDiffViewModel : BaseViewModel
     public JsonDiffViewModel(
         IErrorHandler errorHandler,
         IJsonDiffService jsonDiffService,
-        IClipboardService clipboardService)
+        IClipboardService clipboardService,
+        ILocalizationService localizationService)
         : base(errorHandler)
     {
         _jsonDiffService = jsonDiffService;
         _clipboardService = clipboardService;
+        _localizationService = localizationService;
 
         FilteredPathDiffs.CollectionChanged += (_, __) => OnPropertyChanged(nameof(HasPathDiffs));
         LineDiffItems.CollectionChanged += (_, __) => OnPropertyChanged(nameof(HasLineDiffOutput));
@@ -115,7 +119,7 @@ public partial class JsonDiffViewModel : BaseViewModel
     {
         if (!CanCompare)
         {
-            ValidationMessage = "Karşılaştırma için iki JSON da zorunludur";
+            ValidationMessage = _localizationService.GetString("jsondiff.compare_inputs_required");
             IsError = true;
             IsValid = false;
             return;
@@ -132,7 +136,10 @@ public partial class JsonDiffViewModel : BaseViewModel
         var result = _jsonDiffService.Compare(LeftJson, RightJson, options);
         if (!result.IsValid)
         {
-            ValidationMessage = result.ErrorMessage ?? "JSON karşılaştırması başarısız";
+            ValidationMessage = _localizationService.GetStringOrFallback(
+                result.ErrorKey,
+                result.ErrorMessage ?? _localizationService.GetString("common.error_unknown"),
+                result.ErrorArgs ?? []);
             IsError = true;
             IsValid = false;
             _allPathDiffs = [];
@@ -149,7 +156,7 @@ public partial class JsonDiffViewModel : BaseViewModel
         _allLineDiffs = [.. result.LineDiffs];
         _summary = result.Summary;
 
-        ValidationMessage = $"Karşılaştırma tamamlandı. Toplam fark: {result.Summary.TotalDifferences}";
+        ValidationMessage = _localizationService.GetString("jsondiff.compare_complete", result.Summary.TotalDifferences);
         IsError = false;
         IsValid = true;
 
@@ -398,7 +405,7 @@ public partial class JsonDiffViewModel : BaseViewModel
             var desktopLifetime = Avalonia.Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime;
             if (desktopLifetime?.MainWindow is null)
             {
-                ValidationMessage = "Ana pencere bulunamadı";
+                ValidationMessage = _localizationService.GetString("jsondiff.window_not_found");
                 IsError = true;
                 IsValid = false;
                 return (null, null, null);
@@ -407,7 +414,7 @@ public partial class JsonDiffViewModel : BaseViewModel
             var storageProvider = Avalonia.Controls.TopLevel.GetTopLevel(desktopLifetime.MainWindow)?.StorageProvider;
             if (storageProvider is null)
             {
-                ValidationMessage = "Depolama sağlayıcısı başlatılamadı";
+                ValidationMessage = _localizationService.GetString("jsondiff.storage_not_available");
                 IsError = true;
                 IsValid = false;
                 return (null, null, null);
@@ -416,12 +423,12 @@ public partial class JsonDiffViewModel : BaseViewModel
             var suggestedLocation = await storageProvider.TryGetWellKnownFolderAsync(Avalonia.Platform.Storage.WellKnownFolder.Documents);
             var files = await storageProvider.OpenFilePickerAsync(new Avalonia.Platform.Storage.FilePickerOpenOptions
             {
-                Title = "JSON dosyası seç",
+                Title = _localizationService.GetString("jsondiff.select_file"),
                 AllowMultiple = false,
                 SuggestedStartLocation = suggestedLocation,
                 FileTypeFilter =
                 [
-                    new Avalonia.Platform.Storage.FilePickerFileType("Tüm Dosyalar")
+                    new Avalonia.Platform.Storage.FilePickerFileType(_localizationService.GetString("jsondiff.all_files"))
                     {
                         Patterns = ["*"]
                     }

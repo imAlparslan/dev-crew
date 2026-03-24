@@ -19,6 +19,16 @@ public record Base64EncodeResult
     /// Error message when encoding fails.
     /// </summary>
     public string? ErrorMessage { get; init; }
+
+    /// <summary>
+    /// Language-independent error key for localization.
+    /// </summary>
+    public string? ErrorKey { get; init; }
+
+    /// <summary>
+    /// Optional format arguments for localized error templates.
+    /// </summary>
+    public object[]? ErrorArgs { get; init; }
 }
 
 /// <summary>
@@ -40,6 +50,16 @@ public record Base64DecodeResult
     /// Error message when decoding fails.
     /// </summary>
     public string? ErrorMessage { get; init; }
+
+    /// <summary>
+    /// Language-independent error key for localization.
+    /// </summary>
+    public string? ErrorKey { get; init; }
+
+    /// <summary>
+    /// Optional format arguments for localized error templates.
+    /// </summary>
+    public object[]? ErrorArgs { get; init; }
 }
 
 /// <summary>

@@ -14,7 +14,8 @@ public class JsonDiffService : IJsonDiffService
             return new JsonDiffResult
             {
                 IsValid = false,
-                ErrorMessage = "Her iki JSON girişi de zorunludur"
+                ErrorMessage = "Her iki JSON girişi de zorunludur",
+                ErrorKey = ErrorKeys.JsonDiff.InputsRequired
             };
         }
 
@@ -32,7 +33,9 @@ public class JsonDiffService : IJsonDiffService
             return new JsonDiffResult
             {
                 IsValid = false,
-                ErrorMessage = $"Sol JSON geçersiz: {ex.Message}"
+                ErrorMessage = $"Sol JSON geçersiz: {ex.Message}",
+                ErrorKey = ErrorKeys.JsonDiff.LeftInvalid,
+                ErrorArgs = [ex.Message]
             };
         }
 
@@ -46,7 +49,9 @@ public class JsonDiffService : IJsonDiffService
             return new JsonDiffResult
             {
                 IsValid = false,
-                ErrorMessage = $"Sağ JSON geçersiz: {ex.Message}"
+                ErrorMessage = $"Sağ JSON geçersiz: {ex.Message}",
+                ErrorKey = ErrorKeys.JsonDiff.RightInvalid,
+                ErrorArgs = [ex.Message]
             };
         }
 

@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="DevCrew.Desktop.Views.MainWindow"
         Icon="avares://DevCrew.Desktop/Assets/icons/windows/app.ico"
-        Title="DevCrew"
+    Title="{Binding Title}"
         MinWidth="480"
         MinHeight="400"
         WindowStartupLocation="CenterScreen">
@@ -24,7 +24,7 @@
                         BorderThickness="0"
                         FontSize="16"
                         VerticalAlignment="Center"
-                        ToolTip.Tip="Kapat" />
+                        ToolTip.Tip="{Binding $parent[Window].DataContext.CloseTabTooltip}" />
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
@@ -97,7 +97,7 @@
                         Padding="16">
                       <Grid RowDefinitions="Auto,*,Auto,Auto">
                         <TextBlock Grid.Row="0"
-                                   Text="Menü"
+                                   Text="{Binding MenuTitle}"
                                    FontSize="16"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushPrimaryText}"

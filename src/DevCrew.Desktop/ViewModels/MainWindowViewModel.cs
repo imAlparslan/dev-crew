@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
 using DevCrew.Core.ViewModels;
+using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -21,9 +22,26 @@ public partial class MainWindowViewModel : BaseViewModel
     private readonly Func<Base64EncoderViewModel> _base64EncoderViewModelFactory;
     private readonly Func<Base64DecoderViewModel> _base64DecoderViewModelFactory;
     private readonly Func<SettingsViewModel> _settingsViewModelFactory;
+    private readonly ILocalizationService _localizationService;
+
+    private MenuItemViewModel? _dashboardItem;
+    private MenuItemViewModel? _createGuidItem;
+    private MenuItemViewModel? _jwtDecoderItem;
+    private MenuItemViewModel? _jwtBuilderItem;
+    private MenuItemViewModel? _jsonFormatterItem;
+    private MenuItemViewModel? _jsonDiffItem;
+    private MenuItemViewModel? _base64EncoderItem;
+    private MenuItemViewModel? _base64DecoderItem;
+    private MenuItemViewModel? _settingsItem;
 
     [ObservableProperty]
-    private string title = "DevCrew";
+    private string title = string.Empty;
+
+    [ObservableProperty]
+    private string menuTitle = string.Empty;
+
+    [ObservableProperty]
+    private string closeTabTooltip = string.Empty;
 
     [ObservableProperty]
     private bool isSidebarOpen = true;
@@ -60,6 +78,7 @@ public partial class MainWindowViewModel : BaseViewModel
     /// <param name="base64EncoderViewModelFactory">Factory for new Base64 Encoder view models.</param>
     /// <param name="base64DecoderViewModelFactory">Factory for new Base64 Decoder view models.</param>
     /// <param name="settingsViewModelFactory">Factory for new Settings view models.</param>
+    /// <param name="localizationService">Localization service for runtime language switching.</param>
     public MainWindowViewModel(
         IErrorHandler errorHandler,
         IApplicationService applicationService,
@@ -71,7 +90,8 @@ public partial class MainWindowViewModel : BaseViewModel
         Func<JsonDiffViewModel> jsonDiffViewModelFactory,
         Func<Base64EncoderViewModel> base64EncoderViewModelFactory,
         Func<Base64DecoderViewModel> base64DecoderViewModelFactory,
-        Func<SettingsViewModel> settingsViewModelFactory)
+        Func<SettingsViewModel> settingsViewModelFactory,
+        ILocalizationService localizationService)
         : base(errorHandler)
     {
         _applicationService = applicationService;
@@ -84,8 +104,11 @@ public partial class MainWindowViewModel : BaseViewModel
         _base64EncoderViewModelFactory = base64EncoderViewModelFactory;
         _base64DecoderViewModelFactory = base64DecoderViewModelFactory;
         _settingsViewModelFactory = settingsViewModelFactory;
+        _localizationService = localizationService;
+        _localizationService.LanguageChanged += OnLanguageChanged;
 
         InitializeMenuItems();
+        RefreshLocalizedText();
 
         // Open Dashboard tab on startup
         OpenDashboard();
@@ -93,36 +116,36 @@ public partial class MainWindowViewModel : BaseViewModel
 
     private void InitializeMenuItems()
     {
-        var dashboardItem = new MenuItemViewModel("dashboard", "Dashboard", OpenDashboardCommand, "Primary", "🎯");
-        var createGuidItem = new MenuItemViewModel("create-guid", "Create Guid", OpenCreateGuidTabCommand, "Primary", "🎲");
-        var jwtDecoderItem = new MenuItemViewModel("jwt-decoder", "JWT Decoder", OpenJwtDecoderTabCommand, "Primary", "🔐");
-        var jwtBuilderItem = new MenuItemViewModel("jwt-builder", "JWT Builder", OpenJwtBuilderTabCommand, "Primary", "🔧");
-        var jsonFormatterItem = new MenuItemViewModel("json-formatter", "JSON Formatter", OpenJsonFormatterTabCommand, "Primary", "📋");
-        var jsonDiffItem = new MenuItemViewModel("json-diff", "JSON Diff", OpenJsonDiffTabCommand, "Primary", "🧩");
-        var base64EncoderItem = new MenuItemViewModel("base64-encoder", "Base64 Encoder", OpenBase64EncoderTabCommand, "Primary", "🧬");
-        var base64DecoderItem = new MenuItemViewModel("base64-decoder", "Base64 Decoder", OpenBase64DecoderTabCommand, "Primary", "🔓");
-        var settingsItem = new MenuItemViewModel("settings", "Ayarlar", OpenSettingsTabCommand, "Secondary", "⚙️");
+        _dashboardItem = new MenuItemViewModel("dashboard", GetMenuHeader("dashboard"), OpenDashboardCommand, "Primary", "🎯");
+        _createGuidItem = new MenuItemViewModel("create-guid", GetMenuHeader("create-guid"), OpenCreateGuidTabCommand, "Primary", "🎲");
+        _jwtDecoderItem = new MenuItemViewModel("jwt-decoder", GetMenuHeader("jwt-decoder"), OpenJwtDecoderTabCommand, "Primary", "🔐");
+        _jwtBuilderItem = new MenuItemViewModel("jwt-builder", GetMenuHeader("jwt-builder"), OpenJwtBuilderTabCommand, "Primary", "🔧");
+        _jsonFormatterItem = new MenuItemViewModel("json-formatter", GetMenuHeader("json-formatter"), OpenJsonFormatterTabCommand, "Primary", "📋");
+        _jsonDiffItem = new MenuItemViewModel("json-diff", GetMenuHeader("json-diff"), OpenJsonDiffTabCommand, "Primary", "🧩");
+        _base64EncoderItem = new MenuItemViewModel("base64-encoder", GetMenuHeader("base64-encoder"), OpenBase64EncoderTabCommand, "Primary", "🧬");
+        _base64DecoderItem = new MenuItemViewModel("base64-decoder", GetMenuHeader("base64-decoder"), OpenBase64DecoderTabCommand, "Primary", "🔓");
+        _settingsItem = new MenuItemViewModel("settings", GetMenuHeader("settings"), OpenSettingsTabCommand, "Secondary", "⚙️");
 
-        MenuItems.Add(dashboardItem);
-        MenuItems.Add(createGuidItem);
-        MenuItems.Add(jwtDecoderItem);
-        MenuItems.Add(jwtBuilderItem);
-        MenuItems.Add(jsonFormatterItem);
-        MenuItems.Add(jsonDiffItem);
-        MenuItems.Add(base64EncoderItem);
-        MenuItems.Add(base64DecoderItem);
+        MenuItems.Add(_dashboardItem);
+        MenuItems.Add(_createGuidItem);
+        MenuItems.Add(_jwtDecoderItem);
+        MenuItems.Add(_jwtBuilderItem);
+        MenuItems.Add(_jsonFormatterItem);
+        MenuItems.Add(_jsonDiffItem);
+        MenuItems.Add(_base64EncoderItem);
+        MenuItems.Add(_base64DecoderItem);
 
-        BottomMenuItems.Add(settingsItem);
+        BottomMenuItems.Add(_settingsItem);
 
         // Populate Dashboard MenuItems
-        _dashboardViewModel.MenuItems.Add(dashboardItem);
-        _dashboardViewModel.MenuItems.Add(createGuidItem);
-        _dashboardViewModel.MenuItems.Add(jwtDecoderItem);
-        _dashboardViewModel.MenuItems.Add(jwtBuilderItem);
-        _dashboardViewModel.MenuItems.Add(jsonFormatterItem);
-        _dashboardViewModel.MenuItems.Add(jsonDiffItem);
-        _dashboardViewModel.MenuItems.Add(base64EncoderItem);
-        _dashboardViewModel.MenuItems.Add(base64DecoderItem);
+        _dashboardViewModel.MenuItems.Add(_dashboardItem);
+        _dashboardViewModel.MenuItems.Add(_createGuidItem);
+        _dashboardViewModel.MenuItems.Add(_jwtDecoderItem);
+        _dashboardViewModel.MenuItems.Add(_jwtBuilderItem);
+        _dashboardViewModel.MenuItems.Add(_jsonFormatterItem);
+        _dashboardViewModel.MenuItems.Add(_jsonDiffItem);
+        _dashboardViewModel.MenuItems.Add(_base64EncoderItem);
+        _dashboardViewModel.MenuItems.Add(_base64DecoderItem);
     }
 
     [RelayCommand]
@@ -135,7 +158,7 @@ public partial class MainWindowViewModel : BaseViewModel
     private void OpenDashboard()
     {
         SetSelectedMenuItem("dashboard");
-        OpenOrSelectTab("dashboard", "Dashboard", _dashboardViewModel, false, "🎯");
+        OpenOrSelectTab("dashboard", GetTabHeader("dashboard"), _dashboardViewModel, false, "🎯");
     }
 
     [RelayCommand]
@@ -150,7 +173,7 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var createGuidViewModel = _createGuidViewModelFactory();
-        OpenOrSelectTab("create-guid", "Create Guid", createGuidViewModel, true, "🎲");
+        OpenOrSelectTab("create-guid", GetTabHeader("create-guid"), createGuidViewModel, true, "🎲");
     }
 
     [RelayCommand]
@@ -165,7 +188,7 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var jwtDecoderViewModel = _jwtDecoderViewModelFactory();
-        OpenOrSelectTab("jwt-decoder", "JWT Decoder", jwtDecoderViewModel, true, "🔐");
+        OpenOrSelectTab("jwt-decoder", GetTabHeader("jwt-decoder"), jwtDecoderViewModel, true, "🔐");
     }
 
     [RelayCommand]
@@ -180,7 +203,7 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var jwtBuilderViewModel = _jwtBuilderViewModelFactory();
-        OpenOrSelectTab("jwt-builder", "JWT Builder", jwtBuilderViewModel, true, "🔧");
+        OpenOrSelectTab("jwt-builder", GetTabHeader("jwt-builder"), jwtBuilderViewModel, true, "🔧");
     }
 
     [RelayCommand]
@@ -195,7 +218,7 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var jsonFormatterViewModel = _jsonFormatterViewModelFactory();
-        OpenOrSelectTab("json-formatter", "JSON Formatter", jsonFormatterViewModel, true, "📋");
+        OpenOrSelectTab("json-formatter", GetTabHeader("json-formatter"), jsonFormatterViewModel, true, "📋");
     }
 
     [RelayCommand]
@@ -210,7 +233,7 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var jsonDiffViewModel = _jsonDiffViewModelFactory();
-        OpenOrSelectTab("json-diff", "JSON Diff", jsonDiffViewModel, true, "🧩");
+        OpenOrSelectTab("json-diff", GetTabHeader("json-diff"), jsonDiffViewModel, true, "🧩");
     }
 
     [RelayCommand]
@@ -225,7 +248,7 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var base64EncoderViewModel = _base64EncoderViewModelFactory();
-        OpenOrSelectTab("base64-encoder", "Base64 Encoder", base64EncoderViewModel, true, "🧬");
+        OpenOrSelectTab("base64-encoder", GetTabHeader("base64-encoder"), base64EncoderViewModel, true, "🧬");
     }
 
     [RelayCommand]
@@ -240,7 +263,7 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var base64DecoderViewModel = _base64DecoderViewModelFactory();
-        OpenOrSelectTab("base64-decoder", "Base64 Decoder", base64DecoderViewModel, true, "🔓");
+        OpenOrSelectTab("base64-decoder", GetTabHeader("base64-decoder"), base64DecoderViewModel, true, "🔓");
     }
 
     [RelayCommand]
@@ -255,7 +278,7 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var settingsViewModel = _settingsViewModelFactory();
-        OpenOrSelectTab("settings", "Ayarlar", settingsViewModel, true, "⚙️");
+        OpenOrSelectTab("settings", GetTabHeader("settings"), settingsViewModel, true, "⚙️");
     }
 
     private void SetSelectedMenuItem(string id)
@@ -331,6 +354,56 @@ public partial class MainWindowViewModel : BaseViewModel
 
         Tabs.Add(newTab);
         SelectedTab = newTab;
+    }
+
+    private void OnLanguageChanged(object? sender, EventArgs e)
+    {
+        RefreshLocalizedText();
+    }
+
+    private void RefreshLocalizedText()
+    {
+        Title = _localizationService.GetString("app.title");
+        MenuTitle = _localizationService.GetString("main.menu");
+        CloseTabTooltip = _localizationService.GetString("main.close_tab");
+
+        if (_dashboardItem != null) _dashboardItem.Header = GetMenuHeader("dashboard");
+        if (_createGuidItem != null) _createGuidItem.Header = GetMenuHeader("create-guid");
+        if (_jwtDecoderItem != null) _jwtDecoderItem.Header = GetMenuHeader("jwt-decoder");
+        if (_jwtBuilderItem != null) _jwtBuilderItem.Header = GetMenuHeader("jwt-builder");
+        if (_jsonFormatterItem != null) _jsonFormatterItem.Header = GetMenuHeader("json-formatter");
+        if (_jsonDiffItem != null) _jsonDiffItem.Header = GetMenuHeader("json-diff");
+        if (_base64EncoderItem != null) _base64EncoderItem.Header = GetMenuHeader("base64-encoder");
+        if (_base64DecoderItem != null) _base64DecoderItem.Header = GetMenuHeader("base64-decoder");
+        if (_settingsItem != null) _settingsItem.Header = GetMenuHeader("settings");
+
+        foreach (var tab in Tabs)
+        {
+            tab.Header = GetTabHeader(tab.Id);
+            tab.Tooltip = GetTabHeader(tab.Id);
+        }
+    }
+
+    private string GetMenuHeader(string id)
+    {
+        return id switch
+        {
+            "dashboard" => _localizationService.GetString("menu.dashboard"),
+            "create-guid" => _localizationService.GetString("menu.create_guid"),
+            "jwt-decoder" => _localizationService.GetString("menu.jwt_decoder"),
+            "jwt-builder" => _localizationService.GetString("menu.jwt_builder"),
+            "json-formatter" => _localizationService.GetString("menu.json_formatter"),
+            "json-diff" => _localizationService.GetString("menu.json_diff"),
+            "base64-encoder" => _localizationService.GetString("menu.base64_encoder"),
+            "base64-decoder" => _localizationService.GetString("menu.base64_decoder"),
+            "settings" => _localizationService.GetString("menu.settings"),
+            _ => id
+        };
+    }
+
+    private string GetTabHeader(string id)
+    {
+        return GetMenuHeader(id);
     }
 
     /// <summary>

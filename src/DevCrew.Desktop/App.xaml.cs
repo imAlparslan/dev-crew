@@ -9,6 +9,7 @@ using DevCrew.Desktop.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop;
 
@@ -31,6 +32,9 @@ public partial class App : Application
         var services = new ServiceCollection();
         ConfigureServices(services);
         _serviceProvider = services.BuildServiceProvider();
+
+        var localizationService = _serviceProvider.GetRequiredService<ILocalizationService>();
+        Resources["Loc"] = localizationService;
 
         // Initialize database
         InitializeDatabase();
@@ -75,6 +79,10 @@ public partial class App : Application
         {
             services.AddSingleton(_configuration);
         }
+
+        // Localization
+        var startupCulture = LocalizationService.ResolveOrFallbackCulture(System.Globalization.CultureInfo.CurrentUICulture.Name);
+        services.AddSingleton<ILocalizationService>(_ => new LocalizationService(startupCulture));
 
         // Core Services
         services.AddDevCrewCore(_configuration ?? new ConfigurationBuilder().Build());

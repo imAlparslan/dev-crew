@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Models;
 using DevCrew.Core.Services;
 using DevCrew.Core.ViewModels;
+using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -17,6 +18,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
     private readonly IJwtService _jwtService;
     private readonly IClipboardService _clipboardService;
     private readonly IJwtBuilderTemplateRepository _templateRepository;
+    private readonly ILocalizationService _localizationService;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanBuildToken), nameof(IsRsaAlgorithm))]
@@ -40,13 +42,13 @@ public partial class JwtBuilderViewModel : BaseViewModel
     private string secret = string.Empty;
 
     [ObservableProperty]
-    private string issuer = "DevCrew JWT Builder";
+    private string issuer = string.Empty;
 
     [ObservableProperty]
-    private string audience = "www.example.com";
+    private string audience = string.Empty;
 
     [ObservableProperty]
-    private string subject = "example@example.com";
+    private string subject = string.Empty;
 
     [ObservableProperty]
     private int expirationMinutes = 60;
@@ -113,12 +115,14 @@ public partial class JwtBuilderViewModel : BaseViewModel
         IErrorHandler errorHandler,
         IJwtService jwtService, 
         IClipboardService clipboardService,
-        IJwtBuilderTemplateRepository templateRepository)
+        IJwtBuilderTemplateRepository templateRepository,
+        ILocalizationService localizationService)
         : base(errorHandler)
     {
         _jwtService = jwtService;
         _clipboardService = clipboardService;
         _templateRepository = templateRepository;
+        _localizationService = localizationService;
         
         // Load templates when the view model is created
         _ = LoadTemplatesAsync();
@@ -188,7 +192,10 @@ public partial class JwtBuilderViewModel : BaseViewModel
             }
             else
             {
-                ErrorMessage = result.ErrorMessage;
+                ErrorMessage = _localizationService.GetStringOrFallback(
+                    result.ErrorKey,
+                    result.ErrorMessage ?? _localizationService.GetString("common.error_unknown"),
+                    result.ErrorArgs ?? []);
                 GeneratedToken = null;
             }
         }
@@ -342,7 +349,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
             var template = await _templateRepository.GetByIdAsync(SelectedTemplate.Id);
             if (template == null)
             {
-                ErrorMessage = "Template bulunamadı.";
+                ErrorMessage = _localizationService.GetString("jwtbuilder.template_not_found");
                 return;
             }
 
@@ -391,7 +398,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
     {
         if (string.IsNullOrWhiteSpace(TemplateName))
         {
-            ErrorMessage = "Lütfen template adı girin.";
+            ErrorMessage = _localizationService.GetString("jwtbuilder.template_name_required");
             return;
         }
 
@@ -401,7 +408,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
             var exists = await _templateRepository.TemplateNameExistsAsync(TemplateName);
             if (exists)
             {
-                ErrorMessage = "Bu isimde bir template zaten mevcut.";
+                ErrorMessage = _localizationService.GetString("jwtbuilder.template_name_exists");
                 return;
             }
 
@@ -450,13 +457,13 @@ public partial class JwtBuilderViewModel : BaseViewModel
     {
         if (!CurrentTemplateId.HasValue)
         {
-            ErrorMessage = "Güncellenecek template yok.";
+            ErrorMessage = _localizationService.GetString("jwtbuilder.template_none_to_update");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(TemplateName))
         {
-            ErrorMessage = "Lütfen template adı girin.";
+            ErrorMessage = _localizationService.GetString("jwtbuilder.template_name_required");
             return;
         }
 
@@ -466,7 +473,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
             var exists = await _templateRepository.TemplateNameExistsAsync(TemplateName, CurrentTemplateId.Value);
             if (exists)
             {
-                ErrorMessage = "Bu isimde başka bir template zaten mevcut.";
+                ErrorMessage = _localizationService.GetString("jwtbuilder.template_name_exists_other");
                 return;
             }
 
@@ -501,7 +508,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
             }
             else
             {
-                ErrorMessage = "Template güncellenemedi.";
+                ErrorMessage = _localizationService.GetString("jwtbuilder.template_update_failed");
             }
         }
         catch (Exception ex)

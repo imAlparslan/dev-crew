@@ -64,6 +64,10 @@ public record JsonDiffResult
 
     public string? ErrorMessage { get; init; }
 
+    public string? ErrorKey { get; init; }
+
+    public object[]? ErrorArgs { get; init; }
+
     public JsonDiffSummary Summary { get; init; } = new();
 
     public IReadOnlyList<JsonPathDiffEntry> PathDiffs { get; init; } = [];

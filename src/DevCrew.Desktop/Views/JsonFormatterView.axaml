@@ -9,13 +9,13 @@
             <Grid RowDefinitions="Auto,Auto,*" HorizontalAlignment="Stretch">
                 <!-- Header -->
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
-                    <TextBlock Text="JSON Formatter"
+                    <TextBlock Text="{Binding [jsonformatter.title], Source={StaticResource Loc}}"
                                FontSize="20"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
                     
-                    <TextBlock Text="JSON verilerinizi validate edin, prettify veya minify yapın"
+                    <TextBlock Text="{Binding [jsonformatter.subtitle], Source={StaticResource Loc}}"
                                FontSize="14"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
@@ -29,31 +29,31 @@
                             Spacing="8"
                             HorizontalAlignment="Center"
                             Margin="0,0,0,16">
-                    <Button Content="Prettify"
+                    <Button Content="{Binding [jsonformatter.prettify], Source={StaticResource Loc}}"
                             Command="{Binding PrettifyCommand}"
                             Classes="ActionButton PrimaryActionButton"
                             FontWeight="SemiBold"
-                            ToolTip.Tip="JSON'u biçimlendir" />
+                            ToolTip.Tip="{Binding [jsonformatter.prettify_tooltip], Source={StaticResource Loc}}" />
                     
-                    <Button Content="Minify"
+                    <Button Content="{Binding [jsonformatter.minify], Source={StaticResource Loc}}"
                             Command="{Binding MinifyCommand}"
                             Classes="ActionButton PrimaryActionButton"
                             FontWeight="SemiBold"
-                            ToolTip.Tip="JSON'u sıkıştır" />
+                            ToolTip.Tip="{Binding [jsonformatter.minify_tooltip], Source={StaticResource Loc}}" />
                     
-                    <CheckBox Content="Sort Keys"
+                    <CheckBox Content="{Binding [jsonformatter.sort_keys], Source={StaticResource Loc}}"
                               IsChecked="{Binding IsSortKeysEnabled}"
                               FontWeight="SemiBold"
                               Foreground="{StaticResource BrushPrimaryText}"
                               VerticalAlignment="Center"
                               Margin="8,0"
-                              ToolTip.Tip="Anahtarları alfabetik sırala" />
+                              ToolTip.Tip="{Binding [jsonformatter.sort_keys_tooltip], Source={StaticResource Loc}}" />
                     
-                    <Button Content="✕ Clear"
+                    <Button Content="{Binding [jsonformatter.clear], Source={StaticResource Loc}}"
                             Command="{Binding ClearCommand}"
                             Classes="ActionButton DangerActionButton"
                             FontWeight="SemiBold"
-                            ToolTip.Tip="Temizle" />
+                            ToolTip.Tip="{Binding [jsonformatter.clear_tooltip], Source={StaticResource Loc}}" />
                 </StackPanel>
 
                 <!-- Input/Output Section -->
@@ -70,19 +70,19 @@
                         <Grid RowDefinitions="Auto,*">
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
-                                           Text="Girdi (Input)"
+                                           Text="{Binding [jsonformatter.input_title], Source={StaticResource Loc}}"
                                            FontSize="13"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
                                 
                                 <Button Grid.Column="1"
-                                        Content="📁 Browse"
+                                    Content="{Binding [jsonformatter.browse], Source={StaticResource Loc}}"
                                         Command="{Binding BrowseFileCommand}"
                                         Padding="10,6"
                                         FontWeight="SemiBold"
                                         Classes="ActionButton PrimaryActionButton"
-                                        ToolTip.Tip="Bilgisayardan dosya seç" />
+                                        ToolTip.Tip="{Binding [jsonformatter.browse_tooltip], Source={StaticResource Loc}}" />
                             </Grid>
                             
                             <TextBox x:Name="InputTextBox"
@@ -98,7 +98,7 @@
                                      Classes="MonospaceInputTextBox"
                                      FontFamily="{StaticResource FontMonospace}"
                                      FontSize="{StaticResource FontSizeSmall}"
-                                     Watermark="{}{&#x0a;  &quot;name&quot;: &quot;DevCrew&quot;,&#x0a;  &quot;version&quot;: &quot;1.0.0&quot;,&#x0a;  &quot;tools&quot;: [&quot;GUID&quot;, &quot;JWT&quot;, &quot;JSON&quot;]&#x0a;}"
+                                     Watermark="{Binding [jsonformatter.input_watermark], Source={StaticResource Loc}}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto" />
                         </Grid>
@@ -114,7 +114,7 @@
                         <Grid RowDefinitions="Auto,Auto,*">
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
-                                           Text="Çıktı (Output)"
+                                           Text="{Binding [jsonformatter.output_title], Source={StaticResource Loc}}"
                                            FontSize="13"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
@@ -129,7 +129,7 @@
                                         Margin="0,0,8,0"
                                         Background="Transparent"
                                         BorderThickness="0"
-                                        ToolTip.Tip="Çıktıyı kopyala"
+                                        ToolTip.Tip="{Binding [jsonformatter.copy_output_tooltip], Source={StaticResource Loc}}"
                                         Cursor="Hand">
                                     <TextBlock Text="📋"
                                                FontSize="16"
@@ -145,7 +145,7 @@
                                         Padding="0"
                                         Background="Transparent"
                                         BorderThickness="0"
-                                        ToolTip.Tip="Çıktıyı dosyaya kaydet"
+                                        ToolTip.Tip="{Binding [jsonformatter.save_output_tooltip], Source={StaticResource Loc}}"
                                         Cursor="Hand">
                                     <TextBlock Text="💾"
                                                FontSize="16"
@@ -191,7 +191,7 @@
                                      Classes="MonospaceInputTextBox"
                                      FontFamily="{StaticResource FontMonospace}"
                                      FontSize="{StaticResource FontSizeSmall}"
-                                     Watermark="Çıktı burada görünecek..."
+                                     Watermark="{Binding [jsonformatter.output_watermark], Source={StaticResource Loc}}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto" />
                         </Grid>

@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
 using DevCrew.Core.ViewModels;
+using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -12,6 +13,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
 {
     private readonly IJsonFormatterService _jsonFormatterService;
     private readonly IClipboardService _clipboardService;
+    private readonly ILocalizationService _localizationService;
     private string _lastFormatMode = "prettify"; // Track whether user used prettify or minify
 
     [ObservableProperty]
@@ -44,16 +46,19 @@ public partial class JsonFormatterViewModel : BaseViewModel
     /// Initializes a new instance of the <see cref="JsonFormatterViewModel"/> class.
     /// </summary>
     /// <param name="errorHandler">Error handler for centralized logging.</param>
-    /// <param name="jsonFormatterService">JSON formatter service.</param>
-    /// <param name="clipboardService">Clipboard service.</param>
+    /// <param name="jsonFormatterService">JSON formatting service.</param>
+    /// <param name="clipboardService">Clipboard access service.</param>
+    /// <param name="localizationService">Localization service for user-facing text.</param>
     public JsonFormatterViewModel(
         IErrorHandler errorHandler,
         IJsonFormatterService jsonFormatterService,
-        IClipboardService clipboardService)
+        IClipboardService clipboardService,
+        ILocalizationService localizationService)
         : base(errorHandler)
     {
         _jsonFormatterService = jsonFormatterService;
         _clipboardService = clipboardService;
+        _localizationService = localizationService;
     }
 
     /// <summary>
@@ -194,7 +199,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
             var topLevel = Avalonia.Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime;
             if (topLevel?.MainWindow is null)
             {
-                ValidationMessage = "Ana pencere bulunamadı";
+                ValidationMessage = _localizationService.GetString("jsonformatter.window_not_found");
                 IsError = true;
                 return;
             }
@@ -203,7 +208,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
             var storageProvider = Avalonia.Controls.TopLevel.GetTopLevel(topLevel.MainWindow)?.StorageProvider;
             if (storageProvider is null)
             {
-                ValidationMessage = "Depolama sağlayıcısı başlatılamadı";
+                ValidationMessage = _localizationService.GetString("jsonformatter.storage_not_available");
                 IsError = true;
                 return;
             }
@@ -221,7 +226,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
             var file = await storageProvider.SaveFilePickerAsync(
                 new Avalonia.Platform.Storage.FilePickerSaveOptions
                 {
-                    Title = "Dosyayı kaydet",
+                    Title = _localizationService.GetString("jsonformatter.save_dialog_title"),
                     SuggestedFileName = $"output{defaultExtension}",
                     DefaultExtension = defaultExtension.TrimStart('.'),
                     SuggestedStartLocation = suggestedLocation
@@ -234,13 +239,13 @@ public partial class JsonFormatterViewModel : BaseViewModel
                     await using var stream = await file.OpenWriteAsync();
                     await using var writer = new System.IO.StreamWriter(stream, System.Text.Encoding.UTF8);
                     await writer.WriteAsync(OutputJson);
-                    ValidationMessage = "Dosya başarıyla kaydedildi!";
+                    ValidationMessage = _localizationService.GetString("jsonformatter.file_saved");
                     IsValid = true;
                     IsError = false;
                 }
                 catch (Exception ex)
                 {
-                    ValidationMessage = $"Dosya kaydedilirken hata: {ex.Message}";
+                    ValidationMessage = _localizationService.GetString("jsonformatter.save_failed", ex.Message);
                     IsError = true;
                     IsValid = false;
                     ErrorHandler.LogException(ex, "SaveOutput");
@@ -249,7 +254,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            ValidationMessage = $"Dosya seçimi sırasında hata: {ex.Message}";
+            ValidationMessage = _localizationService.GetString("jsonformatter.file_picker_failed", ex.Message);
             IsError = true;
             IsValid = false;
             ErrorHandler.LogException(ex, "SaveOutput");
@@ -267,7 +272,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
             var topLevel = Avalonia.Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime;
             if (topLevel?.MainWindow is null)
             {
-                ValidationMessage = "Ana pencere bulunamadı";
+                ValidationMessage = _localizationService.GetString("jsonformatter.window_not_found");
                 IsError = true;
                 return;
             }
@@ -275,7 +280,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
             var storageProvider = Avalonia.Controls.TopLevel.GetTopLevel(topLevel.MainWindow)?.StorageProvider;
             if (storageProvider is null)
             {
-                ValidationMessage = "Depolama sağlayıcısı başlatılamadı";
+                ValidationMessage = _localizationService.GetString("jsonformatter.storage_not_available");
                 IsError = true;
                 return;
             }
@@ -286,12 +291,12 @@ public partial class JsonFormatterViewModel : BaseViewModel
             var files = await storageProvider.OpenFilePickerAsync(
                 new Avalonia.Platform.Storage.FilePickerOpenOptions
                 {
-                    Title = "JSON dosyası seç",
+                    Title = _localizationService.GetString("jsonformatter.open_dialog_title"),
                     AllowMultiple = false,
                     SuggestedStartLocation = suggestedLocation,
                     FileTypeFilter = new[]
                     {
-                        new Avalonia.Platform.Storage.FilePickerFileType("Tüm Dosyalar") { Patterns = new[] { "*" } }
+                        new Avalonia.Platform.Storage.FilePickerFileType(_localizationService.GetString("jsonformatter.all_files")) { Patterns = new[] { "*" } }
                     }
                 });
 
@@ -303,14 +308,14 @@ public partial class JsonFormatterViewModel : BaseViewModel
 
                 InputJson = fileContent;
                 SourceFileExtension = fileExtension;
-                ValidationMessage = $"Dosya yüklendi: {selectedFile.Name}";
+                ValidationMessage = _localizationService.GetString("jsonformatter.file_loaded", selectedFile.Name);
                 IsValid = true;
                 IsError = false;
             }
         }
         catch (Exception ex)
         {
-            ValidationMessage = $"Dosya yükleme hatası: {ex.Message}";
+            ValidationMessage = _localizationService.GetString("jsonformatter.load_failed", ex.Message);
             IsError = true;
             IsValid = false;
             ErrorHandler.LogException(ex, "BrowseFile");
@@ -331,7 +336,10 @@ public partial class JsonFormatterViewModel : BaseViewModel
         }
         else
         {
-            ValidationMessage = result.ErrorMessage ?? "Hata oluştu";
+            ValidationMessage = _localizationService.GetStringOrFallback(
+                result.ErrorKey,
+                result.ErrorMessage ?? _localizationService.GetString("common.error_unknown"),
+                result.ErrorArgs ?? []);
         }
     }
 }

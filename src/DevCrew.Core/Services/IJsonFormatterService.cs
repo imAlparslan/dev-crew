@@ -19,6 +19,16 @@ public record JsonFormatterResult
     /// Error message if validation failed
     /// </summary>
     public string? ErrorMessage { get; init; }
+
+    /// <summary>
+    /// Language-independent error key for localization.
+    /// </summary>
+    public string? ErrorKey { get; init; }
+
+    /// <summary>
+    /// Optional format arguments for localized error templates.
+    /// </summary>
+    public object[]? ErrorArgs { get; init; }
 }
 
 /// <summary>

@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Services;
 using DevCrew.Core.ViewModels;
+using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -16,6 +17,7 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
     private readonly IGuidService _guidService;
     private readonly IClipboardService _clipboardService;
     private readonly IGuidRepository _guidRepository;
+    private readonly ILocalizationService _localizationService;
     private readonly HashSet<GuidItemViewModel> _trackedGuidItems = new();
     private CancellationTokenSource? _loadCancellationTokenSource;
 
@@ -74,16 +76,19 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
     /// <param name="guidService">GUID generation service.</param>
     /// <param name="clipboardService">Clipboard access service.</param>
     /// <param name="guidRepository">Repository for GUID data access.</param>
+    /// <param name="localizationService">Localization service for user-facing text.</param>
     public CreateGuidViewModel(
         IErrorHandler errorHandler,
         IGuidService guidService, 
         IClipboardService clipboardService, 
-        IGuidRepository guidRepository)
+        IGuidRepository guidRepository,
+        ILocalizationService localizationService)
         : base(errorHandler)
     {
         _guidService = guidService;
         _clipboardService = clipboardService;
         _guidRepository = guidRepository;
+        _localizationService = localizationService;
 
         RecentGuids.CollectionChanged += (_, __) => OnPropertyChanged(nameof(HasRecentGuids));
         FilteredGuidsByPage.CollectionChanged += (_, __) => OnPropertyChanged(nameof(HasFilteredGuids));
@@ -168,7 +173,7 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
         catch (Exception ex)
         {
             ErrorHandler.LogException(ex, "Save GUID");
-            ErrorMessage = $"Failed to save GUID: {ex.Message}";
+            ErrorMessage = $"{_localizationService.GetString("createguid.save")}: {ex.Message}";
         }
     }
 
@@ -200,7 +205,7 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
         catch (Exception ex)
         {
             ErrorHandler.LogException(ex, "Delete GUID");
-            ErrorMessage = $"Failed to delete GUID: {ex.Message}";
+            ErrorMessage = $"{_localizationService.GetString("createguid.delete")}: {ex.Message}";
         }
     }
 
@@ -315,7 +320,7 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
         catch (Exception ex)
         {
             ErrorHandler.LogException(ex, "Load saved GUIDs page");
-            ErrorMessage = $"Failed to load GUIDs: {ex.Message}";
+            ErrorMessage = $"{_localizationService.GetString("createguid.recent_title")}: {ex.Message}";
         }
         finally
         {
@@ -355,7 +360,7 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
         catch (Exception ex)
         {
             ErrorHandler.LogException(ex, "Load and filter saved GUIDs");
-            ErrorMessage = $"Failed to load saved GUIDs: {ex.Message}";
+            ErrorMessage = $"{_localizationService.GetString("createguid.saved_only")}: {ex.Message}";
         }
     }
 
@@ -391,7 +396,7 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
         catch (Exception ex)
         {
             ErrorHandler.LogException(ex, "Update GUID notes");
-            ErrorMessage = $"Failed to update notes: {ex.Message}";
+            ErrorMessage = $"{_localizationService.GetString("createguid.notes_watermark")}: {ex.Message}";
         }
     }
 

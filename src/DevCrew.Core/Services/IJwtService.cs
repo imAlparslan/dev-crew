@@ -25,7 +25,7 @@ public interface IJwtService
     /// <param name="audience">Token audience (optional)</param>
     /// <param name="subject">Token subject (optional)</param>
     /// <returns>Generated JWT token or error message</returns>
-    (bool Success, string? Token, string? ErrorMessage) BuildToken(
+    (bool Success, string? Token, string? ErrorMessage, string? ErrorKey, object[]? ErrorArgs) BuildToken(
         Dictionary<string, object> claims,
         string secret,
         string algorithm = "HS256",

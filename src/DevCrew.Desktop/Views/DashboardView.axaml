@@ -6,7 +6,7 @@
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
             <StackPanel Spacing="24" HorizontalAlignment="Stretch">
-                <TextBlock Text="🎯 DevCrew Dashboard"
+                <TextBlock Text="{Binding [dashboard.title], Source={StaticResource Loc}}"
                            FontSize="{StaticResource FontSizeXLarge}"
                            FontWeight="Bold"
                            Foreground="{StaticResource BrushPrimaryText}"
