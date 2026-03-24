@@ -142,27 +142,69 @@ public class JsonDiffService : IJsonDiffService
         List<JsonPathDiffEntry> diffs,
         ref JsonDiffSummary summary)
     {
-        var leftProps = left.EnumerateObject().ToDictionary(x => x.Name, x => x.Value, StringComparer.Ordinal);
-        var rightProps = right.EnumerateObject().ToDictionary(x => x.Name, x => x.Value, StringComparer.Ordinal);
-
-        var allNames = leftProps.Keys
-            .Union(rightProps.Keys, StringComparer.Ordinal)
-            .OrderBy(name => name, StringComparer.Ordinal);
-
-        foreach (var propertyName in allNames)
+        if (options.IgnoreObjectPropertyOrder)
         {
-            var propertyPath = BuildPropertyPath(path, propertyName);
+            var leftProps = left.EnumerateObject().ToDictionary(x => x.Name, x => x.Value, StringComparer.Ordinal);
+            var rightProps = right.EnumerateObject().ToDictionary(x => x.Name, x => x.Value, StringComparer.Ordinal);
 
-            var hasLeft = leftProps.TryGetValue(propertyName, out var leftValue);
-            var hasRight = rightProps.TryGetValue(propertyName, out var rightValue);
+            var allNames = leftProps.Keys
+                .Union(rightProps.Keys, StringComparer.Ordinal)
+                .OrderBy(name => name, StringComparer.Ordinal);
+
+            foreach (var propertyName in allNames)
+            {
+                var propertyPath = BuildPropertyPath(path, propertyName);
+
+                var hasLeft = leftProps.TryGetValue(propertyName, out var leftValue);
+                var hasRight = rightProps.TryGetValue(propertyName, out var rightValue);
+
+                if (!hasLeft)
+                {
+                    diffs.Add(new JsonPathDiffEntry
+                    {
+                        Path = propertyPath,
+                        Kind = JsonDiffKind.Added,
+                        RightValue = SerializeCompact(rightValue)
+                    });
+                    summary = summary with { AddedCount = summary.AddedCount + 1 };
+                    continue;
+                }
+
+                if (!hasRight)
+                {
+                    diffs.Add(new JsonPathDiffEntry
+                    {
+                        Path = propertyPath,
+                        Kind = JsonDiffKind.Removed,
+                        LeftValue = SerializeCompact(leftValue)
+                    });
+                    summary = summary with { RemovedCount = summary.RemovedCount + 1 };
+                    continue;
+                }
+
+                CompareElements(propertyPath, leftValue, rightValue, options, diffs, ref summary);
+            }
+
+            return;
+        }
+
+        var leftProperties = left.EnumerateObject().ToList();
+        var rightProperties = right.EnumerateObject().ToList();
+        var max = Math.Max(leftProperties.Count, rightProperties.Count);
+
+        for (var i = 0; i < max; i++)
+        {
+            var hasLeft = i < leftProperties.Count;
+            var hasRight = i < rightProperties.Count;
 
             if (!hasLeft)
             {
+                var addedProperty = rightProperties[i];
                 diffs.Add(new JsonPathDiffEntry
                 {
-                    Path = propertyPath,
+                    Path = BuildPropertyPath(path, addedProperty.Name),
                     Kind = JsonDiffKind.Added,
-                    RightValue = SerializeCompact(rightValue)
+                    RightValue = SerializeCompact(addedProperty.Value)
                 });
                 summary = summary with { AddedCount = summary.AddedCount + 1 };
                 continue;
@@ -170,17 +212,41 @@ public class JsonDiffService : IJsonDiffService
 
             if (!hasRight)
             {
+                var removedProperty = leftProperties[i];
                 diffs.Add(new JsonPathDiffEntry
                 {
-                    Path = propertyPath,
+                    Path = BuildPropertyPath(path, removedProperty.Name),
                     Kind = JsonDiffKind.Removed,
-                    LeftValue = SerializeCompact(leftValue)
+                    LeftValue = SerializeCompact(removedProperty.Value)
                 });
                 summary = summary with { RemovedCount = summary.RemovedCount + 1 };
                 continue;
             }
 
-            CompareElements(propertyPath, leftValue, rightValue, options, diffs, ref summary);
+            var leftProperty = leftProperties[i];
+            var rightProperty = rightProperties[i];
+
+            if (!string.Equals(leftProperty.Name, rightProperty.Name, StringComparison.Ordinal))
+            {
+                diffs.Add(new JsonPathDiffEntry
+                {
+                    Path = BuildPropertyPath(path, leftProperty.Name),
+                    Kind = JsonDiffKind.Removed,
+                    LeftValue = SerializeCompact(leftProperty.Value)
+                });
+                summary = summary with { RemovedCount = summary.RemovedCount + 1 };
+
+                diffs.Add(new JsonPathDiffEntry
+                {
+                    Path = BuildPropertyPath(path, rightProperty.Name),
+                    Kind = JsonDiffKind.Added,
+                    RightValue = SerializeCompact(rightProperty.Value)
+                });
+                summary = summary with { AddedCount = summary.AddedCount + 1 };
+                continue;
+            }
+
+            CompareElements(BuildPropertyPath(path, leftProperty.Name), leftProperty.Value, rightProperty.Value, options, diffs, ref summary);
         }
     }
 
