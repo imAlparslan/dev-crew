@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/tests/" />
+  <Project Path="src/DevCrew.Core/DevCrew.Core.csproj" Type="9a19103f-16f7-4668-be54-9a1e7a4f7558">
+    <BuildType Project="?" />
+    <Platform Project="?" />
+    <Build Project="false" />
+  </Project>
+  <Project Path="src/DevCrew.Desktop/DevCrew.Desktop.csproj" Type="9a19103f-16f7-4668-be54-9a1e7a4f7558">
+    <BuildType Project="?" />
+    <Platform Project="?" />
+    <Build Project="false" />
+  </Project>
+  <Project Path="tests/DevCrew.Core.Tests/DevCrew.Core.Tests.csproj" Type="9a19103f-16f7-4668-be54-9a1e7a4f7558" />
+</Solution>
