@@ -20,7 +20,7 @@
   <data name="menu.settings" xml:space="preserve"><value>Einstellungen</value></data>
 
   <data name="settings.title" xml:space="preserve"><value>Einstellungen</value></data>
-  <data name="settings.description" xml:space="preserve"><value>Konfigurationsoptionen werden auf dieser Seite hinzugefuegt.</value></data>
+  <data name="settings.description" xml:space="preserve"><value>Konfigurationsoptionen werden auf dieser Seite hinzugefügt.</value></data>
   <data name="settings.language" xml:space="preserve"><value>Anwendungssprache</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Übersicht</value></data>
@@ -39,7 +39,7 @@
   <data name="createguid.delete" xml:space="preserve"><value>Löschen</value></data>
 
   <data name="jsonformatter.title" xml:space="preserve"><value>JSON-Formatter</value></data>
-  <data name="jsonformatter.subtitle" xml:space="preserve"><value>JSON pruefen und formatiert oder kompakt ausgeben</value></data>
+  <data name="jsonformatter.subtitle" xml:space="preserve"><value>JSON prüfen und formatiert oder kompakt ausgeben</value></data>
   <data name="jsonformatter.prettify" xml:space="preserve"><value>Formatieren</value></data>
   <data name="jsonformatter.prettify_tooltip" xml:space="preserve"><value>JSON formatieren</value></data>
   <data name="jsonformatter.minify" xml:space="preserve"><value>Komprimieren</value></data>
@@ -72,13 +72,13 @@
   <data name="jsonformatter.load_failed" xml:space="preserve"><value>Fehler beim Laden der Datei: {0}</value></data>
 
   <data name="jsondiff.title" xml:space="preserve"><value>JSON-Vergleich</value></data>
-  <data name="jsondiff.subtitle" xml:space="preserve"><value>Unterschiede zwischen zwei JSON-Dokumenten nach Pfad und Zeile pruefen</value></data>
+  <data name="jsondiff.subtitle" xml:space="preserve"><value>Unterschiede zwischen zwei JSON-Dokumenten nach Pfad und Zeile prüfen</value></data>
   <data name="jsondiff.ignore_object_order" xml:space="preserve"><value>Reihenfolge von Objekt-Schlüsseln ignorieren</value></data>
   <data name="jsondiff.array_order_significant" xml:space="preserve"><value>Array-Reihenfolge beachten</value></data>
   <data name="jsondiff.ignore_whitespace" xml:space="preserve"><value>Leerraum-Unterschiede ignorieren</value></data>
   <data name="jsondiff.null_empty_equal" xml:space="preserve"><value>null und leerer String als gleich behandeln</value></data>
   <data name="jsondiff.sort_descending" xml:space="preserve"><value>Absteigend sortieren</value></data>
-  <data name="jsondiff.added" xml:space="preserve"><value>Hinzugefuegt</value></data>
+  <data name="jsondiff.added" xml:space="preserve"><value>Hinzugefügt</value></data>
   <data name="jsondiff.removed" xml:space="preserve"><value>Entfernt</value></data>
   <data name="jsondiff.changed" xml:space="preserve"><value>Geändert</value></data>
   <data name="jsondiff.unchanged" xml:space="preserve"><value>Unverändert</value></data>
@@ -98,19 +98,19 @@
   <data name="jsondiff.all_files" xml:space="preserve"><value>Alle Dateien</value></data>
 
   <data name="base64encoder.title" xml:space="preserve"><value>Base64-Kodierer</value></data>
-  <data name="base64encoder.subtitle" xml:space="preserve"><value>Datei hochladen und mit Encode eine Base64-Ausgabe erzeugen</value></data>
+  <data name="base64encoder.subtitle" xml:space="preserve"><value>Datei hochladen und mit Kodieren eine Base64-Ausgabe erzeugen</value></data>
   <data name="base64encoder.input_title" xml:space="preserve"><value>Eingabedatei</value></data>
   <data name="base64encoder.browse" xml:space="preserve"><value>Durchsuchen</value></data>
   <data name="base64encoder.browse_tooltip" xml:space="preserve"><value>Datei vom Computer auswählen</value></data>
-  <data name="base64encoder.input_watermark" xml:space="preserve"><value>Datei hierher ziehen oder ueber Durchsuchen auswählen</value></data>
-  <data name="base64encoder.encode" xml:space="preserve"><value>Encode</value></data>
-  <data name="base64encoder.encode_tooltip" xml:space="preserve"><value>Ausgewaehlte Datei in Base64 umwandeln</value></data>
+  <data name="base64encoder.input_watermark" xml:space="preserve"><value>Datei hierher ziehen oder über Durchsuchen auswählen</value></data>
+  <data name="base64encoder.encode" xml:space="preserve"><value>Kodieren</value></data>
+  <data name="base64encoder.encode_tooltip" xml:space="preserve"><value>Ausgewählte Datei in Base64 umwandeln</value></data>
   <data name="base64encoder.output_title" xml:space="preserve"><value>Base64-Ausgabe</value></data>
-  <data name="base64encoder.show_all" xml:space="preserve"><value>Vollstaendige Ausgabe</value></data>
+  <data name="base64encoder.show_all" xml:space="preserve"><value>Vollständige Ausgabe</value></data>
   <data name="base64encoder.show_all_tooltip" xml:space="preserve"><value>Komplette Ausgabe statt Vorschau anzeigen</value></data>
   <data name="base64encoder.copy_tooltip" xml:space="preserve"><value>Ausgabe kopieren</value></data>
   <data name="base64encoder.output_watermark" xml:space="preserve"><value>Das kodierte Ergebnis erscheint hier</value></data>
-  <data name="base64encoder.file_selected" xml:space="preserve"><value>Datei ausgewaehlt: {0}</value></data>
+  <data name="base64encoder.file_selected" xml:space="preserve"><value>Datei ausgewählt: {0}</value></data>
   <data name="base64encoder.window_not_found" xml:space="preserve"><value>Hauptfenster wurde nicht gefunden</value></data>
   <data name="base64encoder.storage_not_available" xml:space="preserve"><value>Speicheranbieter konnte nicht initialisiert werden</value></data>
   <data name="base64encoder.open_dialog_title" xml:space="preserve"><value>Datei auswählen</value></data>
@@ -121,18 +121,18 @@
   <data name="base64encoder.file_select_failed" xml:space="preserve"><value>Fehler bei der Dateiauswahl: {0}</value></data>
   <data name="base64encoder.file_read_failed" xml:space="preserve"><value>Fehler beim Lesen der Datei: {0}</value></data>
   <data name="base64encoder.encode_failed" xml:space="preserve"><value>Fehler bei der Kodierung: {0}</value></data>
-  <data name="base64encoder.showing_full_output" xml:space="preserve"><value>Vollstaendige Ausgabe wird angezeigt ({0:N0} Zeichen)</value></data>
+  <data name="base64encoder.showing_full_output" xml:space="preserve"><value>Vollständige Ausgabe wird angezeigt ({0:N0} Zeichen)</value></data>
   <data name="base64encoder.preview_status" xml:space="preserve"><value>Datei wurde in Base64 umgewandelt. Vorschau wird angezeigt ({0:N0}/{1:N0} Zeichen).</value></data>
   <data name="base64encoder.completed_status" xml:space="preserve"><value>Datei wurde in Base64 umgewandelt ({0:N0} Zeichen)</value></data>
 
   <data name="base64decoder.title" xml:space="preserve"><value>Base64-Dekodierer</value></data>
-  <data name="base64decoder.subtitle" xml:space="preserve"><value>Eine Base64-Datei laden, in die originale Binardatei umwandeln und speichern</value></data>
+  <data name="base64decoder.subtitle" xml:space="preserve"><value>Eine Base64-Datei laden, in die ursprüngliche Binärdatei umwandeln und speichern</value></data>
   <data name="base64decoder.input_title" xml:space="preserve"><value>Base64-Eingabe</value></data>
   <data name="base64decoder.browse" xml:space="preserve"><value>Durchsuchen</value></data>
   <data name="base64decoder.browse_tooltip" xml:space="preserve"><value>Datei mit Base64-Inhalt auswählen</value></data>
   <data name="base64decoder.loaded_file" xml:space="preserve"><value>Geladene Datei: {0}</value></data>
-  <data name="base64decoder.input_watermark" xml:space="preserve"><value>Base64-Inhalt hier einfuegen oder eine Datei hineinziehen</value></data>
-  <data name="base64decoder.decode" xml:space="preserve"><value>Decode</value></data>
+  <data name="base64decoder.input_watermark" xml:space="preserve"><value>Base64-Inhalt hier einfügen oder eine Datei hineinziehen</value></data>
+  <data name="base64decoder.decode" xml:space="preserve"><value>Dekodieren</value></data>
   <data name="base64decoder.decode_tooltip" xml:space="preserve"><value>Base64-Inhalt dekodieren</value></data>
   <data name="base64decoder.output_title" xml:space="preserve"><value>Ausgabe</value></data>
   <data name="base64decoder.clear" xml:space="preserve"><value>Leeren</value></data>
@@ -143,7 +143,7 @@
   <data name="base64decoder.mime_type" xml:space="preserve"><value>MIME-Typ</value></data>
   <data name="base64decoder.extension" xml:space="preserve"><value>Dateiendung</value></data>
   <data name="base64decoder.size" xml:space="preserve"><value>Größe</value></data>
-  <data name="base64decoder.save_hint" xml:space="preserve"><value>Mit Speichern koennen Sie die dekodierte Datei herunterladen.</value></data>
+  <data name="base64decoder.save_hint" xml:space="preserve"><value>Mit Speichern können Sie die dekodierte Datei herunterladen.</value></data>
   <data name="base64decoder.file_loaded" xml:space="preserve"><value>Datei geladen: {0}</value></data>
   <data name="base64decoder.access_denied" xml:space="preserve"><value>Zugriff auf die Datei wurde verweigert</value></data>
   <data name="base64decoder.file_read_failed" xml:space="preserve"><value>Fehler beim Lesen der Datei: {0}</value></data>
@@ -159,58 +159,58 @@
   <data name="base64decoder.file_picker_failed" xml:space="preserve"><value>Fehler bei der Dateiauswahl: {0}</value></data>
 
   <data name="jwtdecoder.title" xml:space="preserve"><value>JWT-Decoder</value></data>
-  <data name="jwtdecoder.subtitle" xml:space="preserve"><value>JWT-Token einfuegen und automatisch dekodieren</value></data>
+  <data name="jwtdecoder.subtitle" xml:space="preserve"><value>JWT-Token einfügen und automatisch dekodieren</value></data>
   <data name="jwtdecoder.token_title" xml:space="preserve"><value>JWT-Token</value></data>
   <data name="jwtdecoder.token_watermark" xml:space="preserve"><value>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ik1heCBNdXN0ZXJtYW5uIiwiaWF0IjoxNTE2MjM5MDIyfQ...</value></data>
   <data name="jwtdecoder.decode" xml:space="preserve"><value>🔍 Dekodieren</value></data>
   <data name="jwtdecoder.clear" xml:space="preserve"><value>✕ Leeren</value></data>
-  <data name="jwtdecoder.secret_title" xml:space="preserve"><value>Secret Key (Signaturpruefung)</value></data>
-  <data name="jwtdecoder.public_key_title" xml:space="preserve"><value>Public Key (Signaturpruefung - RSA)</value></data>
+  <data name="jwtdecoder.secret_title" xml:space="preserve"><value>Geheimer Schlüssel (Signaturprüfung)</value></data>
+  <data name="jwtdecoder.public_key_title" xml:space="preserve"><value>Öffentlicher Schlüssel (Signaturprüfung - RSA)</value></data>
   <data name="jwtdecoder.toggle_secret" xml:space="preserve"><value>Anzeigen/Verbergen</value></data>
-  <data name="jwtdecoder.secret_watermark" xml:space="preserve"><value>Secret Key eingeben</value></data>
+  <data name="jwtdecoder.secret_watermark" xml:space="preserve"><value>Geheimen Schlüssel eingeben</value></data>
   <data name="jwtdecoder.public_key_watermark" xml:space="preserve"><value>-----BEGIN PUBLIC KEY-----
 ...
 -----END PUBLIC KEY-----</value></data>
   <data name="jwtdecoder.signature_status" xml:space="preserve"><value>Signaturstatus: </value></data>
   <data name="jwtdecoder.validate" xml:space="preserve"><value>🔐 Validieren</value></data>
   <data name="jwtdecoder.token_info" xml:space="preserve"><value>Token-Informationen</value></data>
-  <data name="jwtdecoder.issuer" xml:space="preserve"><value>Issuer: </value></data>
-  <data name="jwtdecoder.subject" xml:space="preserve"><value>Subject: </value></data>
-  <data name="jwtdecoder.audience" xml:space="preserve"><value>Audience: </value></data>
+  <data name="jwtdecoder.issuer" xml:space="preserve"><value>Aussteller: </value></data>
+  <data name="jwtdecoder.subject" xml:space="preserve"><value>Betreff: </value></data>
+  <data name="jwtdecoder.audience" xml:space="preserve"><value>Zielgruppe: </value></data>
   <data name="jwtdecoder.issued_at" xml:space="preserve"><value>Ausgestellt am: </value></data>
   <data name="jwtdecoder.expires_at" xml:space="preserve"><value>Läuft ab am: </value></data>
   <data name="jwtdecoder.decoded_header" xml:space="preserve"><value>Dekodierter Header</value></data>
   <data name="jwtdecoder.decoded_payload" xml:space="preserve"><value>Dekodierte Payload</value></data>
 
   <data name="jwtbuilder.title" xml:space="preserve"><value>JWT-Generator</value></data>
-  <data name="jwtbuilder.subtitle" xml:space="preserve"><value>JWT-Token mit Claims, Algorithmus und Secret Key erzeugen</value></data>
-  <data name="jwtbuilder.algorithm_secret_title" xml:space="preserve"><value>Algorithmus und Secret Key</value></data>
+  <data name="jwtbuilder.subtitle" xml:space="preserve"><value>JWT-Token mit Claims, Algorithmus und geheimem Schlüssel erzeugen</value></data>
+  <data name="jwtbuilder.algorithm_secret_title" xml:space="preserve"><value>Algorithmus und geheimer Schlüssel</value></data>
   <data name="jwtbuilder.algorithm" xml:space="preserve"><value>Algorithmus:</value></data>
-  <data name="jwtbuilder.secret_key" xml:space="preserve"><value>Secret Key:</value></data>
+  <data name="jwtbuilder.secret_key" xml:space="preserve"><value>Geheimer Schlüssel:</value></data>
   <data name="jwtbuilder.toggle_secret" xml:space="preserve"><value>Anzeigen/Verbergen</value></data>
   <data name="jwtbuilder.generate_secret" xml:space="preserve"><value>🔑 Generieren</value></data>
-  <data name="jwtbuilder.generate_secret_tooltip" xml:space="preserve"><value>Beispiel-Secret für den ausgewählten Algorithmus erzeugen</value></data>
-  <data name="jwtbuilder.copy_secret_tooltip" xml:space="preserve"><value>Secret Key kopieren</value></data>
-  <data name="jwtbuilder.secret_watermark" xml:space="preserve"><value>Secret Key oder RSA-Private-Key</value></data>
-  <data name="jwtbuilder.public_key" xml:space="preserve"><value>Public Key:</value></data>
-  <data name="jwtbuilder.copy_public_key_tooltip" xml:space="preserve"><value>Public Key für JWT.io kopieren</value></data>
-  <data name="jwtbuilder.public_key_watermark" xml:space="preserve"><value>Public Key für die Validierung in JWT.io</value></data>
-  <data name="jwtbuilder.hmac_hint" xml:space="preserve"><value>💡 Für HMAC (HS256/384/512) einen String-Secret verwenden, für RSA (RS256/384/512) einen Private Key im PEM-Format</value></data>
-  <data name="jwtbuilder.rsa_hint" xml:space="preserve"><value>🔐 RSA: Token mit dem Private Key signieren und mit dem Public Key pruefen (in JWT.io den Public Key verwenden)</value></data>
-  <data name="jwtbuilder.standard_claims" xml:space="preserve"><value>Standard-Claims</value></data>
-  <data name="jwtbuilder.issuer" xml:space="preserve"><value>Issuer (iss):</value></data>
+  <data name="jwtbuilder.generate_secret_tooltip" xml:space="preserve"><value>Beispiel-Geheimnis für den ausgewählten Algorithmus erzeugen</value></data>
+  <data name="jwtbuilder.copy_secret_tooltip" xml:space="preserve"><value>Geheimen Schlüssel kopieren</value></data>
+  <data name="jwtbuilder.secret_watermark" xml:space="preserve"><value>Geheimer Schlüssel oder RSA-Privatschlüssel</value></data>
+  <data name="jwtbuilder.public_key" xml:space="preserve"><value>Öffentlicher Schlüssel:</value></data>
+  <data name="jwtbuilder.copy_public_key_tooltip" xml:space="preserve"><value>Öffentlichen Schlüssel für JWT.io kopieren</value></data>
+  <data name="jwtbuilder.public_key_watermark" xml:space="preserve"><value>Öffentlicher Schlüssel für die Validierung in JWT.io</value></data>
+  <data name="jwtbuilder.hmac_hint" xml:space="preserve"><value>💡 Für HMAC (HS256/384/512) ein String-Geheimnis verwenden, für RSA (RS256/384/512) einen Privatschlüssel im PEM-Format</value></data>
+  <data name="jwtbuilder.rsa_hint" xml:space="preserve"><value>🔐 RSA: Token mit dem Privatschlüssel signieren und mit dem öffentlichen Schlüssel prüfen (in JWT.io den öffentlichen Schlüssel verwenden)</value></data>
+  <data name="jwtbuilder.standard_claims" xml:space="preserve"><value>Standard Claims</value></data>
+  <data name="jwtbuilder.issuer" xml:space="preserve"><value>Aussteller (iss):</value></data>
   <data name="jwtbuilder.issuer_watermark" xml:space="preserve"><value>Token-Aussteller (z. B. https://meine-api.de)</value></data>
-  <data name="jwtbuilder.audience" xml:space="preserve"><value>Audience (aud):</value></data>
-  <data name="jwtbuilder.audience_watermark" xml:space="preserve"><value>Token-Empfaenger (z. B. meine-app)</value></data>
-  <data name="jwtbuilder.subject" xml:space="preserve"><value>Subject (sub):</value></data>
+  <data name="jwtbuilder.audience" xml:space="preserve"><value>Zielgruppe (aud):</value></data>
+  <data name="jwtbuilder.audience_watermark" xml:space="preserve"><value>Token-Empfänger (z. B. meine-app)</value></data>
+  <data name="jwtbuilder.subject" xml:space="preserve"><value>Betreff (sub):</value></data>
   <data name="jwtbuilder.subject_watermark" xml:space="preserve"><value>Token-Betreff (z. B. benutzer-123)</value></data>
   <data name="jwtbuilder.expiration" xml:space="preserve"><value>Ablaufzeit (exp)</value></data>
   <data name="jwtbuilder.minutes_later" xml:space="preserve"><value>Minuten später</value></data>
   <data name="jwtbuilder.issued_at_hint" xml:space="preserve"><value>💡 IssuedAt (iat) und NotBefore (nbf) werden automatisch mit der aktuellen Zeit gesetzt</value></data>
-  <data name="jwtbuilder.custom_claims" xml:space="preserve"><value>Benutzerdefinierte Claims</value></data>
-  <data name="jwtbuilder.claim_key_watermark" xml:space="preserve"><value>Claim-Schlüssel</value></data>
-  <data name="jwtbuilder.claim_value_watermark" xml:space="preserve"><value>Claim-Wert</value></data>
-  <data name="jwtbuilder.add_claim" xml:space="preserve"><value>➕ Hinzufuegen</value></data>
+  <data name="jwtbuilder.custom_claims" xml:space="preserve"><value>Custom Claims</value></data>
+  <data name="jwtbuilder.claim_key_watermark" xml:space="preserve"><value>Claim key</value></data>
+  <data name="jwtbuilder.claim_value_watermark" xml:space="preserve"><value>Claim value</value></data>
+  <data name="jwtbuilder.add_claim" xml:space="preserve"><value>➕ Hinzufügen</value></data>
   <data name="jwtbuilder.empty_claims" xml:space="preserve"><value>Die Claim-Liste ist leer</value></data>
   <data name="jwtbuilder.build_token" xml:space="preserve"><value>🔧 Token erzeugen</value></data>
   <data name="jwtbuilder.clear" xml:space="preserve"><value>✕ Leeren</value></data>
@@ -220,8 +220,8 @@
   <data name="jwtbuilder.load_template" xml:space="preserve"><value>Vorlage laden</value></data>
   <data name="jwtbuilder.template_placeholder" xml:space="preserve"><value>Vorlage auswählen...</value></data>
   <data name="jwtbuilder.template_load" xml:space="preserve"><value>📂 Laden</value></data>
-  <data name="jwtbuilder.template_load_tooltip" xml:space="preserve"><value>Ausgewaehlte Vorlage in das Formular laden</value></data>
-  <data name="jwtbuilder.template_delete_tooltip" xml:space="preserve"><value>Ausgewaehlte Vorlage loeschen</value></data>
+  <data name="jwtbuilder.template_load_tooltip" xml:space="preserve"><value>Ausgewählte Vorlage in das Formular laden</value></data>
+  <data name="jwtbuilder.template_delete_tooltip" xml:space="preserve"><value>Ausgewählte Vorlage löschen</value></data>
   <data name="jwtbuilder.save_template" xml:space="preserve"><value>Vorlage speichern</value></data>
   <data name="jwtbuilder.template_name_watermark" xml:space="preserve"><value>Name der Vorlage...</value></data>
   <data name="jwtbuilder.template_save_new" xml:space="preserve"><value>💾 Neu speichern</value></data>
@@ -253,7 +253,7 @@
   <data name="jwt.token_empty" xml:space="preserve"><value>Token darf nicht leer sein</value></data>
   <data name="jwt.token_format_invalid" xml:space="preserve"><value>Ungültiges JWT-Token-Format</value></data>
   <data name="jwt.decode_failed" xml:space="preserve"><value>Fehler beim Dekodieren des Tokens: {0}</value></data>
-  <data name="jwt.build_secret_required" xml:space="preserve"><value>Secret Key darf nicht leer sein</value></data>
+  <data name="jwt.build_secret_required" xml:space="preserve"><value>Geheimer Schlüssel darf nicht leer sein</value></data>
   <data name="jwt.build_unsupported_algorithm" xml:space="preserve"><value>Nicht unterstützter Algorithmus: {0}. Unterstützt: {1}</value></data>
   <data name="jwt.build_invalid_rsa_private_key" xml:space="preserve"><value>Ungültiges RSA-Private-Key-Format: {0}</value></data>
   <data name="jwt.build_failed" xml:space="preserve"><value>Fehler beim Erzeugen des Tokens: {0}</value></data>

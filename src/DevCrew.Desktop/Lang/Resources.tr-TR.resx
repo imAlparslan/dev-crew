@@ -174,9 +174,9 @@
   <data name="jwtdecoder.signature_status" xml:space="preserve"><value>İmza Durumu: </value></data>
   <data name="jwtdecoder.validate" xml:space="preserve"><value>🔐 Doğrula</value></data>
   <data name="jwtdecoder.token_info" xml:space="preserve"><value>Token Bilgileri</value></data>
-  <data name="jwtdecoder.issuer" xml:space="preserve"><value>Yayıncı: </value></data>
-  <data name="jwtdecoder.subject" xml:space="preserve"><value>Konu: </value></data>
-  <data name="jwtdecoder.audience" xml:space="preserve"><value>Hedef Kitle: </value></data>
+  <data name="jwtdecoder.issuer" xml:space="preserve"><value>Issuer: </value></data>
+  <data name="jwtdecoder.subject" xml:space="preserve"><value>Subject: </value></data>
+  <data name="jwtdecoder.audience" xml:space="preserve"><value>Audience: </value></data>
   <data name="jwtdecoder.issued_at" xml:space="preserve"><value>Oluşturulma: </value></data>
   <data name="jwtdecoder.expires_at" xml:space="preserve"><value>Sona Erme: </value></data>
   <data name="jwtdecoder.decoded_header" xml:space="preserve"><value>Çözülen Header</value></data>
@@ -191,48 +191,48 @@
   <data name="jwtbuilder.generate_secret" xml:space="preserve"><value>🔑 Üret</value></data>
   <data name="jwtbuilder.generate_secret_tooltip" xml:space="preserve"><value>Seçilen algoritma için örnek gizli anahtar oluştur</value></data>
   <data name="jwtbuilder.copy_secret_tooltip" xml:space="preserve"><value>Gizli anahtarı kopyala</value></data>
-  <data name="jwtbuilder.secret_watermark" xml:space="preserve"><value>Gizli anahtar veya RSA private key</value></data>
+  <data name="jwtbuilder.secret_watermark" xml:space="preserve"><value>Gizli anahtar veya RSA özel anahtarı</value></data>
   <data name="jwtbuilder.public_key" xml:space="preserve"><value>Açık Anahtar:</value></data>
-  <data name="jwtbuilder.copy_public_key_tooltip" xml:space="preserve"><value>Public key'i kopyala (JWT.io doğrulama için)</value></data>
-  <data name="jwtbuilder.public_key_watermark" xml:space="preserve"><value>Public key - JWT.io doğrulama için gerekli</value></data>
-  <data name="jwtbuilder.hmac_hint" xml:space="preserve"><value>💡 HMAC (HS256/384/512) için string gizli anahtar, RSA (RS256/384/512) için PEM formatında private key kullanın</value></data>
-  <data name="jwtbuilder.rsa_hint" xml:space="preserve"><value>🔐 RSA: Private key ile token imzalanır, Public key ile doğrulanır (JWT.io'da doğrulama için Açık Anahtar kullanın)</value></data>
-  <data name="jwtbuilder.standard_claims" xml:space="preserve"><value>Standart Claim'ler</value></data>
-  <data name="jwtbuilder.issuer" xml:space="preserve"><value>Yayıncı (iss):</value></data>
-  <data name="jwtbuilder.issuer_watermark" xml:space="preserve"><value>Token issuer (örn: https://myapi.com)</value></data>
-  <data name="jwtbuilder.audience" xml:space="preserve"><value>Hedef Kitle (aud):</value></data>
-  <data name="jwtbuilder.audience_watermark" xml:space="preserve"><value>Token audience (örn: myapp)</value></data>
-  <data name="jwtbuilder.subject" xml:space="preserve"><value>Konu (sub):</value></data>
-  <data name="jwtbuilder.subject_watermark" xml:space="preserve"><value>Token subject (örn: user-id-123)</value></data>
+  <data name="jwtbuilder.copy_public_key_tooltip" xml:space="preserve"><value>Açık anahtarı kopyala (JWT.io doğrulaması için)</value></data>
+  <data name="jwtbuilder.public_key_watermark" xml:space="preserve"><value>Açık anahtar - JWT.io doğrulaması için gerekli</value></data>
+  <data name="jwtbuilder.hmac_hint" xml:space="preserve"><value>💡 HMAC (HS256/384/512) için metin tabanlı gizli anahtar, RSA (RS256/384/512) için PEM formatında özel anahtar kullanın</value></data>
+  <data name="jwtbuilder.rsa_hint" xml:space="preserve"><value>🔐 RSA: Token özel anahtar ile imzalanır, açık anahtar ile doğrulanır (JWT.io'da doğrulama için Açık Anahtar kullanın)</value></data>
+  <data name="jwtbuilder.standard_claims" xml:space="preserve"><value>Standart Claims</value></data>
+  <data name="jwtbuilder.issuer" xml:space="preserve"><value>Issuer (iss):</value></data>
+  <data name="jwtbuilder.issuer_watermark" xml:space="preserve"><value>Token yayıcısı (örn: https://myapi.com)</value></data>
+  <data name="jwtbuilder.audience" xml:space="preserve"><value>Audience (aud):</value></data>
+  <data name="jwtbuilder.audience_watermark" xml:space="preserve"><value>Token hedef kitlesi (örn: myapp)</value></data>
+  <data name="jwtbuilder.subject" xml:space="preserve"><value>Subject (sub):</value></data>
+  <data name="jwtbuilder.subject_watermark" xml:space="preserve"><value>Token konusu (örn: user-id-123)</value></data>
   <data name="jwtbuilder.expiration" xml:space="preserve"><value>Süre Sonu (exp)</value></data>
   <data name="jwtbuilder.minutes_later" xml:space="preserve"><value>dakika sonra</value></data>
   <data name="jwtbuilder.issued_at_hint" xml:space="preserve"><value>💡 IssuedAt (iat) ve NotBefore (nbf) otomatik olarak mevcut zaman ile eklenir</value></data>
-  <data name="jwtbuilder.custom_claims" xml:space="preserve"><value>Özel Claim'ler</value></data>
-  <data name="jwtbuilder.claim_key_watermark" xml:space="preserve"><value>Claim anahtarı</value></data>
-  <data name="jwtbuilder.claim_value_watermark" xml:space="preserve"><value>Claim değeri</value></data>
+  <data name="jwtbuilder.custom_claims" xml:space="preserve"><value>Claim Ekle</value></data>
+  <data name="jwtbuilder.claim_key_watermark" xml:space="preserve"><value>Claim key</value></data>
+  <data name="jwtbuilder.claim_value_watermark" xml:space="preserve"><value>Claim value</value></data>
   <data name="jwtbuilder.add_claim" xml:space="preserve"><value>➕ Ekle</value></data>
   <data name="jwtbuilder.empty_claims" xml:space="preserve"><value>Claim listesi boş</value></data>
   <data name="jwtbuilder.build_token" xml:space="preserve"><value>🔧 Token Oluştur</value></data>
   <data name="jwtbuilder.clear" xml:space="preserve"><value>✕ Temizle</value></data>
   <data name="jwtbuilder.generated_token" xml:space="preserve"><value>Oluşturulan JWT Token</value></data>
   <data name="jwtbuilder.template_management" xml:space="preserve"><value>Şablon Yönetimi</value></data>
-  <data name="jwtbuilder.template_management_subtitle" xml:space="preserve"><value>JWT yapılandırmanızı template olarak kaydedin ve daha sonra kullanın</value></data>
+  <data name="jwtbuilder.template_management_subtitle" xml:space="preserve"><value>JWT yapılandırmanızı şablon olarak kaydedin ve daha sonra kullanın</value></data>
   <data name="jwtbuilder.load_template" xml:space="preserve"><value>Şablon Yükle</value></data>
   <data name="jwtbuilder.template_placeholder" xml:space="preserve"><value>Şablon seçin...</value></data>
   <data name="jwtbuilder.template_load" xml:space="preserve"><value>📂 Yükle</value></data>
-  <data name="jwtbuilder.template_load_tooltip" xml:space="preserve"><value>Seçili template'i forma yükle</value></data>
-  <data name="jwtbuilder.template_delete_tooltip" xml:space="preserve"><value>Seçili template'i sil</value></data>
+  <data name="jwtbuilder.template_load_tooltip" xml:space="preserve"><value>Seçili şablonu forma yükle</value></data>
+  <data name="jwtbuilder.template_delete_tooltip" xml:space="preserve"><value>Seçili şablonu sil</value></data>
   <data name="jwtbuilder.save_template" xml:space="preserve"><value>Şablon Kaydet</value></data>
   <data name="jwtbuilder.template_name_watermark" xml:space="preserve"><value>Şablon adı...</value></data>
   <data name="jwtbuilder.template_save_new" xml:space="preserve"><value>💾 Yeni Kaydet</value></data>
-  <data name="jwtbuilder.template_save_new_tooltip" xml:space="preserve"><value>Yeni template olarak kaydet</value></data>
+  <data name="jwtbuilder.template_save_new_tooltip" xml:space="preserve"><value>Yeni şablon olarak kaydet</value></data>
   <data name="jwtbuilder.template_update" xml:space="preserve"><value>✏️ Güncelle</value></data>
-  <data name="jwtbuilder.template_update_tooltip" xml:space="preserve"><value>Mevcut template'i güncelle</value></data>
+  <data name="jwtbuilder.template_update_tooltip" xml:space="preserve"><value>Mevcut şablonu güncelle</value></data>
   <data name="jwtbuilder.template_not_found" xml:space="preserve"><value>Şablon bulunamadı.</value></data>
-  <data name="jwtbuilder.template_name_required" xml:space="preserve"><value>Lütfen template adi girin.</value></data>
-  <data name="jwtbuilder.template_name_exists" xml:space="preserve"><value>Bu isimde bir template zaten mevcut.</value></data>
-  <data name="jwtbuilder.template_name_exists_other" xml:space="preserve"><value>Bu isimde başka bir template zaten mevcut.</value></data>
-  <data name="jwtbuilder.template_none_to_update" xml:space="preserve"><value>Güncellenecek template yok.</value></data>
+  <data name="jwtbuilder.template_name_required" xml:space="preserve"><value>Lütfen şablon adı girin.</value></data>
+  <data name="jwtbuilder.template_name_exists" xml:space="preserve"><value>Bu isimde bir şablon zaten mevcut.</value></data>
+  <data name="jwtbuilder.template_name_exists_other" xml:space="preserve"><value>Bu isimde başka bir şablon zaten mevcut.</value></data>
+  <data name="jwtbuilder.template_none_to_update" xml:space="preserve"><value>Güncellenecek şablon yok.</value></data>
   <data name="jwtbuilder.template_update_failed" xml:space="preserve"><value>Şablon güncellenemedi.</value></data>
 
   <data name="common.error_unknown" xml:space="preserve"><value>Beklenmeyen bir hata oluştu</value></data>
@@ -255,7 +255,7 @@
   <data name="jwt.decode_failed" xml:space="preserve"><value>Token çözülürken hata: {0}</value></data>
   <data name="jwt.build_secret_required" xml:space="preserve"><value>Gizli anahtar boş olamaz</value></data>
   <data name="jwt.build_unsupported_algorithm" xml:space="preserve"><value>Desteklenmeyen algoritma: {0}. Desteklenen: {1}</value></data>
-  <data name="jwt.build_invalid_rsa_private_key" xml:space="preserve"><value>Geçersiz RSA private key formatı: {0}</value></data>
+  <data name="jwt.build_invalid_rsa_private_key" xml:space="preserve"><value>Geçersiz RSA özel anahtar formatı: {0}</value></data>
   <data name="jwt.build_failed" xml:space="preserve"><value>Token üretilirken hata: {0}</value></data>
 </root>
 
