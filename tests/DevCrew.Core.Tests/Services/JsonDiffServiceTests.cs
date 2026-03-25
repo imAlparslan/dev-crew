@@ -1,4 +1,6 @@
 using System;
+using DevCrew.Core.Enums;
+using DevCrew.Core.Models.Results;
 using DevCrew.Core.Services;
 using Shouldly;
 using Xunit;
