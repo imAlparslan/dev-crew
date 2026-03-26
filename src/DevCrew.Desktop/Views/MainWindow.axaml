@@ -95,7 +95,7 @@
                         BorderBrush="{StaticResource BrushBorder}"
                         BorderThickness="0,0,1,0"
                         Padding="16">
-                      <Grid RowDefinitions="Auto,*,Auto,Auto">
+                    <Grid RowDefinitions="Auto,*,Auto,Auto">
                         <TextBlock Grid.Row="0"
                                    Text="{Binding MenuTitle}"
                                    FontSize="16"
@@ -130,7 +130,7 @@
                                 Opacity="0.8" />
 
                         <StackPanel Grid.Row="3"
-                                Margin="0,12,0,0"
+                                    Margin="0,12,0,0"
                                     Spacing="8">
                             <ItemsControl ItemsSource="{Binding BottomMenuItems}">
                                 <ItemsControl.ItemTemplate>
