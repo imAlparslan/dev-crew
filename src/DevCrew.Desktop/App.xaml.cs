@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 using DevCrew.Core;
 using DevCrew.Core.Data;
 using DevCrew.Core.Services;
+using DevCrew.Core.Services.Repositories;
 using DevCrew.Desktop.ViewModels;
 using DevCrew.Desktop.Views;
 using Microsoft.EntityFrameworkCore;
@@ -33,11 +34,11 @@ public partial class App : Application
         ConfigureServices(services);
         _serviceProvider = services.BuildServiceProvider();
 
+        // Initialize database before resolving services that depend on persisted settings.
+        InitializeDatabase();
+
         var localizationService = _serviceProvider.GetRequiredService<ILocalizationService>();
         Resources["Loc"] = localizationService;
-
-        // Initialize database
-        InitializeDatabase();
 
         var mainWindowViewModel = _serviceProvider?.GetRequiredService<MainWindowViewModel>();
 
@@ -80,12 +81,28 @@ public partial class App : Application
             services.AddSingleton(_configuration);
         }
 
-        // Localization
-        var startupCulture = LocalizationService.ResolveOrFallbackCulture(System.Globalization.CultureInfo.CurrentUICulture.Name);
-        services.AddSingleton<ILocalizationService>(_ => new LocalizationService(startupCulture));
-
         // Core Services
         services.AddDevCrewCore(_configuration ?? new ConfigurationBuilder().Build());
+
+        // Localization
+        services.AddSingleton<ILocalizationService>(sp =>
+        {
+            var startupCulture = LocalizationService.ResolveOrFallbackCulture(System.Globalization.CultureInfo.CurrentUICulture.Name);
+
+            try
+            {
+                using var scope = sp.GetRequiredService<IServiceScopeFactory>().CreateScope();
+                var appSettingsRepository = scope.ServiceProvider.GetRequiredService<IAppSettingsRepository>();
+                var settings = appSettingsRepository.GetOrCreateAsync().GetAwaiter().GetResult();
+                startupCulture = LocalizationService.ResolveOrFallbackCulture(settings.LanguageCultureName);
+            }
+            catch
+            {
+                // Keep startupCulture resolved from OS culture when DB access fails.
+            }
+
+            return new LocalizationService(startupCulture);
+        });
         
         // Desktop-specific services
         services.AddScoped<IClipboardService, Services.ClipboardService>();
@@ -118,8 +135,7 @@ public partial class App : Application
 
         if (dbContext != null)
         {
-            // Create database if it doesn't exist
-            dbContext.Database.EnsureCreated();
+            DatabaseSchemaInitializer.EnsureCompatibilitySchema(dbContext);
 
             // Warm up the database connection to avoid first query delay
             // This asynchronous operation is intentionally fire-and-forget

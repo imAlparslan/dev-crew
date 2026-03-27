@@ -35,4 +35,9 @@ public static class EntityConfiguration
     /// Maximum length for JWT Builder template names
     /// </summary>
     public const int TemplateNameMaxLength = 100;
+
+    /// <summary>
+    /// Maximum length for culture name values (for example: en-US)
+    /// </summary>
+    public const int CultureNameMaxLength = 10;
 }

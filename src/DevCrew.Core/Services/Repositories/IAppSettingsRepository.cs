@@ -1,0 +1,19 @@
+using DevCrew.Core.Models;
+
+namespace DevCrew.Core.Services.Repositories;
+
+/// <summary>
+/// Repository contract for persisted application settings.
+/// </summary>
+public interface IAppSettingsRepository
+{
+    /// <summary>
+    /// Gets the singleton settings row, creating it when missing.
+    /// </summary>
+    Task<AppSettings> GetOrCreateAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates only the language preference.
+    /// </summary>
+    Task<bool> UpdateLanguageAsync(string languageCultureName, CancellationToken cancellationToken = default);
+}

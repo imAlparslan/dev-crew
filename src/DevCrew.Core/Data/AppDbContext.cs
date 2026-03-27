@@ -31,6 +31,11 @@ public class AppDbContext : DbContext
     /// </summary>
     public DbSet<JwtBuilderTemplate> JwtBuilderTemplates { get; set; }
 
+    /// <summary>
+    /// Gets or sets application-wide user settings
+    /// </summary>
+    public DbSet<AppSettings> AppSettings { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -76,6 +81,17 @@ public class AppDbContext : DbContext
             entity.Property(e => e.CreatedAt).IsRequired();
             entity.HasIndex(e => e.CreatedAt).IsDescending();
             entity.HasIndex(e => e.TemplateName);
+        });
+
+        // Configure AppSettings entity
+        modelBuilder.Entity<AppSettings>(entity =>
+        {
+            entity.ToTable("AppSettings");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.LanguageCultureName).IsRequired().HasMaxLength(EntityConfiguration.CultureNameMaxLength);
+            entity.Property(e => e.CreatedAt).IsRequired();
+            entity.Property(e => e.UpdatedAt).IsRequired();
         });
     }
 }
