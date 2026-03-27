@@ -28,7 +28,6 @@
   <data name="menu.settings" xml:space="preserve"><value>Settings</value></data>
 
   <data name="settings.title" xml:space="preserve"><value>Settings</value></data>
-  <data name="settings.description" xml:space="preserve"><value>Configuration options will be added on this page.</value></data>
   <data name="settings.language" xml:space="preserve"><value>Application language</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Dashboard</value></data>

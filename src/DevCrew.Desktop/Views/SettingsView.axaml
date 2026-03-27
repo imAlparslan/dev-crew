@@ -5,31 +5,35 @@
              x:DataType="vm:SettingsViewModel">
     <ScrollViewer>
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
-            <StackPanel Spacing="16" MaxWidth="900" HorizontalAlignment="Center">
+            <StackPanel Spacing="24" HorizontalAlignment="Stretch">
                 <TextBlock Text="{Binding Title}"
                            FontSize="24"
                            FontWeight="Bold"
                            Foreground="{StaticResource BrushPrimaryText}" />
 
-                <TextBlock Text="{Binding Description}"
-                           FontSize="14"
-                           Foreground="{StaticResource BrushSecondaryText}"
-                           TextWrapping="Wrap" />
-
-                <StackPanel Spacing="8" Width="320">
-                    <TextBlock Text="{Binding LanguageLabel}"
-                               FontSize="13"
-                               FontWeight="SemiBold"
-                               Foreground="{StaticResource BrushPrimaryText}" />
-                    <ComboBox ItemsSource="{Binding SupportedLanguages}"
-                              SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding DisplayName}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
+                <!-- Application Language Setting Card -->
+                <Border BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="16"
+                        Background="{StaticResource BrushTertiaryBackground}"
+                        HorizontalAlignment="Stretch">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="{Binding LanguageLabel}"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushPrimaryText}" />
+                        <ComboBox ItemsSource="{Binding SupportedLanguages}"
+                                  SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
+                                  Height="36">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DisplayName}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </Border>
     </ScrollViewer>

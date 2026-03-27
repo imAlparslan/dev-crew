@@ -20,7 +20,6 @@
   <data name="menu.settings" xml:space="preserve"><value>Ayarlar</value></data>
 
   <data name="settings.title" xml:space="preserve"><value>Ayarlar</value></data>
-  <data name="settings.description" xml:space="preserve"><value>Yapılandırma seçenekleri bu sayfaya eklenecek.</value></data>
   <data name="settings.language" xml:space="preserve"><value>Uygulama dili</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Paneli</value></data>

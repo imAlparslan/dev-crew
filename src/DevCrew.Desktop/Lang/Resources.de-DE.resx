@@ -20,7 +20,6 @@
   <data name="menu.settings" xml:space="preserve"><value>Einstellungen</value></data>
 
   <data name="settings.title" xml:space="preserve"><value>Einstellungen</value></data>
-  <data name="settings.description" xml:space="preserve"><value>Konfigurationsoptionen werden auf dieser Seite hinzugefügt.</value></data>
   <data name="settings.language" xml:space="preserve"><value>Anwendungssprache</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Übersicht</value></data>

@@ -39,8 +39,6 @@ public class SettingsViewModel : BaseViewModel
 
     public string Title => _localizationService.GetString("settings.title");
 
-    public string Description => _localizationService.GetString("settings.description");
-
     public string LanguageLabel => _localizationService.GetString("settings.language");
 
     private void OnLanguageChanged(object? sender, EventArgs e)
@@ -53,7 +51,6 @@ public class SettingsViewModel : BaseViewModel
         }
 
         OnPropertyChanged(nameof(Title));
-        OnPropertyChanged(nameof(Description));
         OnPropertyChanged(nameof(LanguageLabel));
     }
 }

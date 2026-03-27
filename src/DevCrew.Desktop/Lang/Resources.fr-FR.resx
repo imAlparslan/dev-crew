@@ -51,9 +51,6 @@
   <data name="settings.title" xml:space="preserve">
     <value>Paramètres</value>
   </data>
-  <data name="settings.description" xml:space="preserve">
-    <value>Les options de configuration seront ajoutées sur cette page.</value>
-  </data>
   <data name="settings.language" xml:space="preserve">
     <value>Langue de l'application</value>
   </data>
