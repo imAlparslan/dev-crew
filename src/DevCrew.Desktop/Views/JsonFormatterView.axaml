@@ -10,13 +10,13 @@
                 <!-- Header -->
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
                     <TextBlock Text="{Binding [jsonformatter.title], Source={StaticResource Loc}}"
-                               FontSize="20"
+                               FontSize="{DynamicResource FontSizeHeading}"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
                     
                     <TextBlock Text="{Binding [jsonformatter.subtitle], Source={StaticResource Loc}}"
-                               FontSize="14"
+                               FontSize="{DynamicResource FontSizeMedium}"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
@@ -71,7 +71,7 @@
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
                                            Text="{Binding [jsonformatter.input_title], Source={StaticResource Loc}}"
-                                           FontSize="13"
+                                           FontSize="{DynamicResource FontSizeLabel}"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
@@ -96,8 +96,8 @@
                                      VerticalAlignment="Stretch"
                                      VerticalContentAlignment="Top"
                                      Classes="MonospaceInputTextBox"
-                                     FontFamily="{StaticResource FontMonospace}"
-                                     FontSize="{StaticResource FontSizeSmall}"
+                                     FontFamily="{DynamicResource FontMonospace}"
+                                     FontSize="{DynamicResource FontSizeSmall}"
                                      Watermark="{Binding [jsonformatter.input_watermark], Source={StaticResource Loc}}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto" />
@@ -115,7 +115,7 @@
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
                                            Text="{Binding [jsonformatter.output_title], Source={StaticResource Loc}}"
-                                           FontSize="13"
+                                           FontSize="{DynamicResource FontSizeLabel}"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
@@ -132,7 +132,7 @@
                                         ToolTip.Tip="{Binding [jsonformatter.copy_output_tooltip], Source={StaticResource Loc}}"
                                         Cursor="Hand">
                                     <TextBlock Text="📋"
-                                               FontSize="16"
+                                               FontSize="{DynamicResource FontSizeLarge}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                 </Button>
@@ -148,7 +148,7 @@
                                         ToolTip.Tip="{Binding [jsonformatter.save_output_tooltip], Source={StaticResource Loc}}"
                                         Cursor="Hand">
                                     <TextBlock Text="💾"
-                                               FontSize="16"
+                                               FontSize="{DynamicResource FontSizeLarge}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                 </Button>
@@ -169,7 +169,7 @@
                                 <Border.BorderThickness>1</Border.BorderThickness>
                                 
                                 <TextBlock Text="{Binding ValidationMessage}"
-                                           FontSize="12"
+                                           FontSize="{DynamicResource FontSizeDefault}"
                                            FontWeight="Medium"
                                            TextWrapping="Wrap">
                                     <TextBlock.Foreground>
@@ -189,8 +189,8 @@
                                      VerticalAlignment="Stretch"
                                      VerticalContentAlignment="Top"
                                      Classes="MonospaceInputTextBox"
-                                     FontFamily="{StaticResource FontMonospace}"
-                                     FontSize="{StaticResource FontSizeSmall}"
+                                     FontFamily="{DynamicResource FontMonospace}"
+                                     FontSize="{DynamicResource FontSizeSmall}"
                                      Watermark="{Binding [jsonformatter.output_watermark], Source={StaticResource Loc}}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto" />

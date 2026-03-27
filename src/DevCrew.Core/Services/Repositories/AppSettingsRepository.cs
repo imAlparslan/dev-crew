@@ -59,4 +59,23 @@ public class AppSettingsRepository : IAppSettingsRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
+
+    public async Task<bool> UpdateFontSettingsAsync(string fontSizePreference, string uiFontFamily, string contentFontFamily, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(fontSizePreference))
+            throw new ArgumentException("Font size preference cannot be empty", nameof(fontSizePreference));
+        if (string.IsNullOrWhiteSpace(uiFontFamily))
+            throw new ArgumentException("UI font family cannot be empty", nameof(uiFontFamily));
+        if (string.IsNullOrWhiteSpace(contentFontFamily))
+            throw new ArgumentException("Content font family cannot be empty", nameof(contentFontFamily));
+
+        var settings = await GetOrCreateAsync(cancellationToken);
+        settings.FontSizePreference = fontSizePreference;
+        settings.UiFontFamily = uiFontFamily;
+        settings.ContentFontFamily = contentFontFamily;
+        settings.UpdatedAt = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return true;
+    }
 }

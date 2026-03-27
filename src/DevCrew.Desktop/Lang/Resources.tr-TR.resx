@@ -21,6 +21,13 @@
 
   <data name="settings.title" xml:space="preserve"><value>Ayarlar</value></data>
   <data name="settings.language" xml:space="preserve"><value>Uygulama dili</value></data>
+  <data name="settings.font_section" xml:space="preserve"><value>Yazı Tipi</value></data>
+  <data name="settings.font_size" xml:space="preserve"><value>Yazı Tipi Boyutu</value></data>
+  <data name="settings.font_size_small" xml:space="preserve"><value>Küçük</value></data>
+  <data name="settings.font_size_medium" xml:space="preserve"><value>Orta</value></data>
+  <data name="settings.font_size_large" xml:space="preserve"><value>Büyük</value></data>
+  <data name="settings.ui_font" xml:space="preserve"><value>Arayüz Yazı Tipi</value></data>
+  <data name="settings.code_font" xml:space="preserve"><value>Kod Yazı Tipi</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Paneli</value></data>
 

@@ -21,6 +21,13 @@
 
   <data name="settings.title" xml:space="preserve"><value>Einstellungen</value></data>
   <data name="settings.language" xml:space="preserve"><value>Anwendungssprache</value></data>
+  <data name="settings.font_section" xml:space="preserve"><value>Schriftart</value></data>
+  <data name="settings.font_size" xml:space="preserve"><value>Schriftgröße</value></data>
+  <data name="settings.font_size_small" xml:space="preserve"><value>Klein</value></data>
+  <data name="settings.font_size_medium" xml:space="preserve"><value>Mittel</value></data>
+  <data name="settings.font_size_large" xml:space="preserve"><value>Groß</value></data>
+  <data name="settings.ui_font" xml:space="preserve"><value>UI-Schriftart</value></data>
+  <data name="settings.code_font" xml:space="preserve"><value>Code-Schriftart</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Übersicht</value></data>
 

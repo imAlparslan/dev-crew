@@ -7,7 +7,7 @@
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
             <StackPanel Spacing="24" HorizontalAlignment="Stretch">
                 <TextBlock Text="{Binding Title}"
-                           FontSize="24"
+                           FontSize="{DynamicResource FontSizeHeading}"
                            FontWeight="Bold"
                            Foreground="{StaticResource BrushPrimaryText}" />
 
@@ -20,7 +20,7 @@
                         HorizontalAlignment="Stretch">
                     <StackPanel Spacing="8">
                         <TextBlock Text="{Binding LanguageLabel}"
-                                   FontSize="13"
+                                   FontSize="{DynamicResource FontSizeLabel}"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushPrimaryText}" />
                         <ComboBox ItemsSource="{Binding SupportedLanguages}"
@@ -34,7 +34,70 @@
                         </ComboBox>
                     </StackPanel>
                 </Border>
+
+                <!-- Font Settings Card -->
+                <Border BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="16"
+                        Background="{StaticResource BrushTertiaryBackground}"
+                        HorizontalAlignment="Stretch">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="{Binding FontSectionTitle}"
+                                   FontSize="{DynamicResource FontSizeLabel}"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushPrimaryText}" />
+
+                        <!-- Font Size -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="{Binding FontSizeLabel}"
+                                       FontSize="{DynamicResource FontSizeDefault}"
+                                       Foreground="{StaticResource BrushSecondaryText}" />
+                            <ComboBox ItemsSource="{Binding FontSizeOptions}"
+                                      SelectedItem="{Binding SelectedFontSize, Mode=TwoWay}"
+                                      Height="36"
+                                      HorizontalAlignment="Stretch" />
+                        </StackPanel>
+
+                        <!-- UI Font and Code Font -->
+                        <Grid ColumnDefinitions="*,16,*">
+                            <StackPanel Grid.Column="0" Spacing="8">
+                                <TextBlock Text="{Binding UiFontLabel}"
+                                           FontSize="{DynamicResource FontSizeDefault}"
+                                           Foreground="{StaticResource BrushSecondaryText}" />
+                                <ComboBox ItemsSource="{Binding AvailableUiFonts}"
+                                          SelectedItem="{Binding SelectedUiFont, Mode=TwoWay}"
+                                          Height="36"
+                                          HorizontalAlignment="Stretch">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DisplayName}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Spacing="8">
+                                <TextBlock Text="{Binding CodeFontLabel}"
+                                           FontSize="{DynamicResource FontSizeDefault}"
+                                           Foreground="{StaticResource BrushSecondaryText}" />
+                                <ComboBox ItemsSource="{Binding AvailableContentFonts}"
+                                          SelectedItem="{Binding SelectedContentFont, Mode=TwoWay}"
+                                          Height="36"
+                                          HorizontalAlignment="Stretch">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DisplayName}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
             </StackPanel>
         </Border>
     </ScrollViewer>
 </UserControl>
+

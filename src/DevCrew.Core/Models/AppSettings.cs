@@ -10,6 +10,9 @@ public class AppSettings
 {
     public const int SingletonId = 1;
     public const string DefaultLanguageCultureName = "en-US";
+    public const string DefaultFontSizePreference = "Medium";
+    public const string DefaultUiFontFamily = "Inter";
+    public const string DefaultContentFontFamily = "Consolas";
 
     [Key]
     public int Id { get; set; } = SingletonId;
@@ -17,6 +20,18 @@ public class AppSettings
     [Required]
     [MaxLength(10)]
     public string LanguageCultureName { get; set; } = DefaultLanguageCultureName;
+
+    [Required]
+    [MaxLength(10)]
+    public string FontSizePreference { get; set; } = DefaultFontSizePreference;
+
+    [Required]
+    [MaxLength(50)]
+    public string UiFontFamily { get; set; } = DefaultUiFontFamily;
+
+    [Required]
+    [MaxLength(50)]
+    public string ContentFontFamily { get; set; } = DefaultContentFontFamily;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

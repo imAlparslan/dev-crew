@@ -16,4 +16,9 @@ public interface IAppSettingsRepository
     /// Updates only the language preference.
     /// </summary>
     Task<bool> UpdateLanguageAsync(string languageCultureName, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates font-related preferences.
+    /// </summary>
+    Task<bool> UpdateFontSettingsAsync(string fontSizePreference, string uiFontFamily, string contentFontFamily, CancellationToken cancellationToken = default);
 }

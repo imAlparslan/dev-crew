@@ -9,13 +9,13 @@
             <Grid RowDefinitions="Auto,Auto,Auto,Auto" HorizontalAlignment="Stretch">
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
                     <TextBlock Text="{Binding [base64encoder.title], Source={StaticResource Loc}}"
-                               FontSize="20"
+                               FontSize="{DynamicResource FontSizeHeading}"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
 
                     <TextBlock Text="{Binding [base64encoder.subtitle], Source={StaticResource Loc}}"
-                               FontSize="14"
+                               FontSize="{DynamicResource FontSizeMedium}"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
@@ -34,7 +34,7 @@
                         <TextBlock Grid.Row="0"
                                    Grid.Column="0"
                                    Text="{Binding [base64encoder.input_title], Source={StaticResource Loc}}"
-                                   FontSize="13"
+                                   FontSize="{DynamicResource FontSizeLabel}"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    VerticalAlignment="Center" />
@@ -56,8 +56,8 @@
                                  Margin="0,10,0,0"
                                  Padding="8"
                                  Classes="MonospaceInputTextBox"
-                                 FontFamily="{StaticResource FontMonospace}"
-                                 FontSize="{StaticResource FontSizeSmall}"
+                                 FontFamily="{DynamicResource FontMonospace}"
+                                 FontSize="{DynamicResource FontSizeSmall}"
                                  VerticalContentAlignment="Center"
                                  TextWrapping="Wrap"
                                  Watermark="{Binding [base64encoder.input_watermark], Source={StaticResource Loc}}" />
@@ -83,7 +83,7 @@
                         <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
                             <TextBlock Grid.Column="0"
                                        Text="{Binding [base64encoder.output_title], Source={StaticResource Loc}}"
-                                       FontSize="13"
+                                       FontSize="{DynamicResource FontSizeLabel}"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        VerticalAlignment="Center" />
@@ -109,7 +109,7 @@
                                     ToolTip.Tip="{Binding [base64encoder.copy_tooltip], Source={StaticResource Loc}}"
                                     Cursor="Hand">
                                 <TextBlock Text="📋"
-                                           FontSize="16"
+                                           FontSize="{DynamicResource FontSizeLarge}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center" />
                             </Button>
@@ -129,7 +129,7 @@
                             <Border.BorderThickness>1</Border.BorderThickness>
 
                             <TextBlock Text="{Binding StatusMessage}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        FontWeight="Medium"
                                        TextWrapping="Wrap">
                                 <TextBlock.Foreground>
@@ -150,8 +150,8 @@
                                  VerticalAlignment="Stretch"
                                  VerticalContentAlignment="Top"
                                  Classes="MonospaceInputTextBox"
-                                 FontFamily="{StaticResource FontMonospace}"
-                                 FontSize="{StaticResource FontSizeSmall}"
+                                 FontFamily="{DynamicResource FontMonospace}"
+                                 FontSize="{DynamicResource FontSizeSmall}"
                                  Watermark="{Binding [base64encoder.output_watermark], Source={StaticResource Loc}}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto" />

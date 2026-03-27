@@ -10,13 +10,13 @@
                 <!-- Header -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="{Binding [jwtbuilder.title], Source={StaticResource Loc}}"
-                               FontSize="20"
+                               FontSize="{DynamicResource FontSizeHeading}"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
                     
                     <TextBlock Text="{Binding [jwtbuilder.subtitle], Source={StaticResource Loc}}"
-                               FontSize="14"
+                               FontSize="{DynamicResource FontSizeMedium}"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
@@ -31,7 +31,7 @@
                         Padding="12">
                     <StackPanel Spacing="12">
                         <TextBlock Text="{Binding [jwtbuilder.algorithm_secret_title], Source={StaticResource Loc}}"
-                                   FontSize="14"
+                                   FontSize="{DynamicResource FontSizeMedium}"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushPrimaryText}" />
                         
@@ -39,7 +39,7 @@
                         <Grid ColumnDefinitions="120,*" RowDefinitions="Auto">
                             <TextBlock Grid.Column="0"
                                        Text="{Binding [jwtbuilder.algorithm], Source={StaticResource Loc}}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        VerticalAlignment="Center"
                                        Margin="0,0,8,0" />
@@ -57,7 +57,7 @@
                         <Grid ColumnDefinitions="120,Auto,Auto,Auto,*" RowDefinitions="Auto">
                             <TextBlock Grid.Column="0"
                                        Text="{Binding [jwtbuilder.secret_key], Source={StaticResource Loc}}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        VerticalAlignment="Center"
                                        Margin="0,0,8,0" />
@@ -113,7 +113,7 @@
                               IsVisible="{Binding IsRsaAlgorithm}">
                             <TextBlock Grid.Column="0"
                                        Text="{Binding [jwtbuilder.public_key], Source={StaticResource Loc}}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        VerticalAlignment="Center"
                                        Margin="0,0,8,0" />
@@ -144,12 +144,12 @@
                         </Grid>
                         
                         <TextBlock Text="{Binding [jwtbuilder.hmac_hint], Source={StaticResource Loc}}"
-                                   FontSize="11"
+                                   FontSize="{DynamicResource FontSizeSmall}"
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    TextWrapping="Wrap" />
                         
                         <TextBlock Text="{Binding [jwtbuilder.rsa_hint], Source={StaticResource Loc}}"
-                                   FontSize="11"
+                                   FontSize="{DynamicResource FontSizeSmall}"
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    TextWrapping="Wrap"
                                    IsVisible="{Binding IsRsaAlgorithm}" />
@@ -164,7 +164,7 @@
                         Padding="12">
                     <StackPanel Spacing="12">
                         <TextBlock Text="{Binding [jwtbuilder.standard_claims], Source={StaticResource Loc}}"
-                                   FontSize="14"
+                                   FontSize="{DynamicResource FontSizeMedium}"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushPrimaryText}" />
                         
@@ -172,7 +172,7 @@
                         <Grid ColumnDefinitions="120,*" RowDefinitions="Auto">
                             <TextBlock Grid.Column="0"
                                        Text="{Binding [jwtbuilder.issuer], Source={StaticResource Loc}}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        VerticalAlignment="Center"
                                        Margin="0,0,8,0" />
@@ -189,7 +189,7 @@
                         <Grid ColumnDefinitions="120,*" RowDefinitions="Auto">
                             <TextBlock Grid.Column="0"
                                        Text="{Binding [jwtbuilder.audience], Source={StaticResource Loc}}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        VerticalAlignment="Center"
                                        Margin="0,0,8,0" />
@@ -206,7 +206,7 @@
                         <Grid ColumnDefinitions="120,*" RowDefinitions="Auto">
                             <TextBlock Grid.Column="0"
                                        Text="{Binding [jwtbuilder.subject], Source={StaticResource Loc}}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        VerticalAlignment="Center"
                                        Margin="0,0,8,0" />
@@ -225,7 +225,7 @@
                                       IsChecked="{Binding IncludeExpiration}"
                                       Content="{Binding [jwtbuilder.expiration], Source={StaticResource Loc}}"
                                       MinWidth="120"
-                                      FontSize="12"
+                                      FontSize="{DynamicResource FontSizeDefault}"
                                       Foreground="{StaticResource BrushSecondaryText}"
                                       VerticalAlignment="Center" />
                             
@@ -243,13 +243,13 @@
                             
                             <TextBlock Grid.Column="2"
                                        Text="{Binding [jwtbuilder.minutes_later], Source={StaticResource Loc}}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        VerticalAlignment="Center" />
                         </Grid>
                         
                         <TextBlock Text="{Binding [jwtbuilder.issued_at_hint], Source={StaticResource Loc}}"
-                                   FontSize="11"
+                                   FontSize="{DynamicResource FontSizeSmall}"
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    TextWrapping="Wrap" />
                     </StackPanel>
@@ -263,7 +263,7 @@
                         Padding="12">
                     <StackPanel Spacing="12">
                         <TextBlock Text="{Binding [jwtbuilder.custom_claims], Source={StaticResource Loc}}"
-                                   FontSize="14"
+                                   FontSize="{DynamicResource FontSizeMedium}"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushPrimaryText}" />
                         
@@ -306,16 +306,16 @@
                                         <Grid ColumnDefinitions="*,*,Auto">
                                             <TextBlock Grid.Column="0"
                                                        Text="{Binding Key}"
-                                                       FontSize="12"
-                                                       FontFamily="{StaticResource FontMonospace}"
+                                                       FontSize="{DynamicResource FontSizeDefault}"
+                                                       FontFamily="{DynamicResource FontMonospace}"
                                                        Foreground="{StaticResource BrushPrimaryText}"
                                                        VerticalAlignment="Center"
                                                        Margin="0,0,8,0" />
                                             
                                             <TextBlock Grid.Column="1"
                                                        Text="{Binding Value}"
-                                                       FontSize="12"
-                                                       FontFamily="{StaticResource FontMonospace}"
+                                                       FontSize="{DynamicResource FontSizeDefault}"
+                                                       FontFamily="{DynamicResource FontMonospace}"
                                                        Foreground="{StaticResource BrushSecondaryText}"
                                                        VerticalAlignment="Center"
                                                        TextTrimming="CharacterEllipsis"
@@ -329,7 +329,7 @@
                                                     Width="28"
                                                     Height="28"
                                                     Padding="0"
-                                                    FontSize="12" />
+                                                    FontSize="{DynamicResource FontSizeDefault}" />
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -337,7 +337,7 @@
                         </ItemsControl>
                         
                         <TextBlock Text="{Binding [jwtbuilder.empty_claims], Source={StaticResource Loc}}"
-                                   FontSize="12"
+                                   FontSize="{DynamicResource FontSizeDefault}"
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    FontStyle="Italic"
                                    HorizontalAlignment="Center"
@@ -358,13 +358,13 @@
                                 Command="{Binding BuildTokenCommand}"
                                 Classes="ActionButton AccentActionButton"
                                 FontWeight="SemiBold"
-                                FontSize="14"
+                                FontSize="{DynamicResource FontSizeMedium}"
                                 Padding="16,8" />
                         
                         <Button Content="{Binding [jwtbuilder.clear], Source={StaticResource Loc}}"
                                 Command="{Binding ClearCommand}"
                                 Classes="ActionButton DangerActionButton"
-                                FontSize="14"
+                                FontSize="{DynamicResource FontSizeMedium}"
                                 Padding="16,8" />
                     </StackPanel>
                 </Border>
@@ -377,7 +377,7 @@
                         Padding="12"
                         IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                     <TextBlock Text="{Binding ErrorMessage}"
-                               FontSize="12"
+                               FontSize="{DynamicResource FontSizeDefault}"
                                Foreground="White"
                                TextWrapping="Wrap" />
                 </Border>
@@ -393,7 +393,7 @@
                         <Grid ColumnDefinitions="*,Auto">
                             <TextBlock Grid.Column="0"
                                        Text="{Binding [jwtbuilder.generated_token], Source={StaticResource Loc}}"
-                                       FontSize="14"
+                                       FontSize="{DynamicResource FontSizeMedium}"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource BrushPrimaryText}"
                                        VerticalAlignment="Center" />
@@ -403,7 +403,7 @@
                                     Classes="ActionButton AccentActionButton"
                                     Height="32"
                                     Padding="12,0"
-                                    FontSize="12">
+                                    FontSize="{DynamicResource FontSizeDefault}">
                                 <TextBlock>
                                     <TextBlock.Text>
                                         <Binding Path="IsTokenCopied"
@@ -424,8 +424,8 @@
                                      TextWrapping="Wrap"
                                      MinHeight="120"
                                      MaxHeight="300"
-                                     FontFamily="{StaticResource FontMonospace}"
-                                     FontSize="{StaticResource FontSizeSmall}"
+                                     FontFamily="{DynamicResource FontMonospace}"
+                                     FontSize="{DynamicResource FontSizeSmall}"
                                      Foreground="{StaticResource BrushPrimaryText}"
                                      Background="Transparent"
                                      BorderThickness="0"
@@ -443,19 +443,19 @@
                         Margin="0,12,0,0">
                     <StackPanel Spacing="12">
                         <TextBlock Text="{Binding [jwtbuilder.template_management], Source={StaticResource Loc}}"
-                                   FontSize="14"
+                                   FontSize="{DynamicResource FontSizeMedium}"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushPrimaryText}" />
                         
                         <TextBlock Text="{Binding [jwtbuilder.template_management_subtitle], Source={StaticResource Loc}}"
-                                   FontSize="12"
+                                   FontSize="{DynamicResource FontSizeDefault}"
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    TextWrapping="Wrap" />
                         
                         <!-- Load Template Section -->
                         <StackPanel Spacing="8">
                             <TextBlock Text="{Binding [jwtbuilder.load_template], Source={StaticResource Loc}}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource BrushSecondaryText}" />
                             
@@ -497,7 +497,7 @@
                         <!-- Save Template Section -->
                         <StackPanel Spacing="8">
                             <TextBlock Text="{Binding [jwtbuilder.save_template], Source={StaticResource Loc}}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource BrushSecondaryText}" />
                             

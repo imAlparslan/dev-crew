@@ -10,13 +10,13 @@
 
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
                     <TextBlock Text="{Binding [base64decoder.title], Source={StaticResource Loc}}"
-                               FontSize="20"
+                               FontSize="{DynamicResource FontSizeHeading}"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
 
                     <TextBlock Text="{Binding [base64decoder.subtitle], Source={StaticResource Loc}}"
-                               FontSize="14"
+                               FontSize="{DynamicResource FontSizeMedium}"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
@@ -35,7 +35,7 @@
                         <TextBlock Grid.Row="0"
                                    Grid.Column="0"
                                    Text="{Binding [base64decoder.input_title], Source={StaticResource Loc}}"
-                                   FontSize="13"
+                                   FontSize="{DynamicResource FontSizeLabel}"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    VerticalAlignment="Center" />
@@ -53,7 +53,7 @@
                                    Grid.ColumnSpan="2"
                                    Text="{Binding SelectedFileDisplayName}"
                                    IsVisible="{Binding HasSelectedFile}"
-                                   FontSize="11"
+                                   FontSize="{DynamicResource FontSizeSmall}"
                                    Margin="0,6,0,0"
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    TextWrapping="Wrap" />
@@ -67,8 +67,8 @@
                                  Margin="0,8,0,0"
                                  Padding="8"
                                  Classes="MonospaceInputTextBox"
-                                 FontFamily="{StaticResource FontMonospace}"
-                                 FontSize="{StaticResource FontSizeSmall}"
+                                 FontFamily="{DynamicResource FontMonospace}"
+                                 FontSize="{DynamicResource FontSizeSmall}"
                                  TextWrapping="Wrap"
                                  Watermark="{Binding [base64decoder.input_watermark], Source={StaticResource Loc}}" />
                     </Grid>
@@ -93,7 +93,7 @@
                         <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
                             <TextBlock Grid.Column="0"
                                        Text="{Binding [base64decoder.output_title], Source={StaticResource Loc}}"
-                                       FontSize="13"
+                                       FontSize="{DynamicResource FontSizeLabel}"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        VerticalAlignment="Center" />
@@ -131,7 +131,7 @@
                             <Border.BorderThickness>1</Border.BorderThickness>
 
                             <TextBlock Text="{Binding StatusMessage}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        FontWeight="Medium"
                                        TextWrapping="Wrap">
                                 <TextBlock.Foreground>
@@ -165,15 +165,15 @@
                                             Padding="12,10">
                                         <StackPanel Spacing="4">
                                             <TextBlock Text="{Binding [base64decoder.mime_type], Source={StaticResource Loc}}"
-                                                       FontSize="11"
+                                                       FontSize="{DynamicResource FontSizeSmall}"
                                                        FontWeight="SemiBold"
                                                        Foreground="{StaticResource BrushSecondaryText}" />
                                             <TextBlock Text="{Binding DetectedMimeType}"
-                                                       FontSize="12"
+                                                       FontSize="{DynamicResource FontSizeDefault}"
                                                        FontWeight="Medium"
                                                        Foreground="{StaticResource BrushPrimaryText}"
                                                        TextWrapping="Wrap"
-                                                       FontFamily="{StaticResource FontMonospace}" />
+                                                       FontFamily="{DynamicResource FontMonospace}" />
                                         </StackPanel>
                                     </Border>
 
@@ -186,14 +186,14 @@
                                             Padding="12,10">
                                         <StackPanel Spacing="4">
                                             <TextBlock Text="{Binding [base64decoder.extension], Source={StaticResource Loc}}"
-                                                       FontSize="11"
+                                                       FontSize="{DynamicResource FontSizeSmall}"
                                                        FontWeight="SemiBold"
                                                        Foreground="{StaticResource BrushSecondaryText}" />
                                             <TextBlock Text="{Binding DetectedExtension}"
-                                                       FontSize="12"
+                                                       FontSize="{DynamicResource FontSizeDefault}"
                                                        FontWeight="Medium"
                                                        Foreground="{StaticResource BrushPrimaryText}"
-                                                       FontFamily="{StaticResource FontMonospace}" />
+                                                       FontFamily="{DynamicResource FontMonospace}" />
                                         </StackPanel>
                                     </Border>
 
@@ -206,21 +206,21 @@
                                             Padding="12,10">
                                         <StackPanel Spacing="4">
                                             <TextBlock Text="{Binding [base64decoder.size], Source={StaticResource Loc}}"
-                                                       FontSize="11"
+                                                       FontSize="{DynamicResource FontSizeSmall}"
                                                        FontWeight="SemiBold"
                                                        Foreground="{StaticResource BrushSecondaryText}" />
                                             <TextBlock Text="{Binding FormattedFileSize}"
-                                                       FontSize="12"
+                                                       FontSize="{DynamicResource FontSizeDefault}"
                                                        FontWeight="Medium"
                                                        Foreground="{StaticResource BrushPrimaryText}"
-                                                       FontFamily="{StaticResource FontMonospace}" />
+                                                       FontFamily="{DynamicResource FontMonospace}" />
                                         </StackPanel>
                                     </Border>
 
                                 </Grid>
 
                                 <TextBlock Text="{Binding [base64decoder.save_hint], Source={StaticResource Loc}}"
-                                           FontSize="12"
+                                           FontSize="{DynamicResource FontSizeDefault}"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            TextWrapping="Wrap"
                                            Margin="4,0" />

@@ -16,7 +16,7 @@
                       Margin="{DynamicResource ResponsiveMarginSmall}">
                     <TextBlock Grid.Row="0"
                                Text="{Binding [createguid.title], Source={StaticResource Loc}}"
-                               FontSize="20"
+                               FontSize="{DynamicResource FontSizeHeading}"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center"
@@ -24,7 +24,7 @@
                     
                     <TextBlock Grid.Row="1"
                                Text="{Binding [createguid.subtitle], Source={StaticResource Loc}}"
-                               FontSize="14"
+                               FontSize="{DynamicResource FontSizeMedium}"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
@@ -70,7 +70,7 @@
                              Width="488"
                                 Classes="GuidDisplayTextBox"
                              HorizontalAlignment="Stretch"
-                             FontFamily="{StaticResource FontMonospace}"
+                             FontFamily="{DynamicResource FontMonospace}"
                              Watermark="{Binding [createguid.current_guid_watermark], Source={StaticResource Loc}}"
                                 />
 
@@ -106,7 +106,7 @@
                           Margin="0,0,0,8">
                         <TextBlock Grid.Column="0"
                                    Text="{Binding [createguid.recent_title], Source={StaticResource Loc}}"
-                                   FontSize="14"
+                                   FontSize="{DynamicResource FontSizeMedium}"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushPrimaryText}"
                                    VerticalAlignment="Center" />
@@ -114,7 +114,7 @@
                         <TextBox Grid.Column="1"
                                  Text="{Binding SearchQuery}"
                                  Watermark="{Binding [createguid.search_watermark], Source={StaticResource Loc}}"
-                                 FontSize="12"
+                                 FontSize="{DynamicResource FontSizeDefault}"
                                  Padding="8,6"
                                  MinHeight="32"
                                  Height="32"
@@ -155,8 +155,8 @@
                                         <!-- Column 1: GUID Value -->
                                         <TextBlock Grid.Column="0"
                                                    Text="{Binding GuidValue}"
-                                                   FontFamily="{StaticResource FontMonospace}"
-                                                   FontSize="{StaticResource FontSizeDefault}"
+                                                   FontFamily="{DynamicResource FontMonospace}"
+                                                   FontSize="{DynamicResource FontSizeDefault}"
                                                    Foreground="{StaticResource BrushSecondaryText}"
                                                    VerticalAlignment="Center"
                                                    MinWidth="250"
@@ -168,7 +168,7 @@
                                         <TextBox Grid.Column="1"
                                                  Text="{Binding Notes}"
                                                  Watermark="{Binding [createguid.notes_watermark], Source={StaticResource Loc}}"
-                                                 FontSize="11"
+                                                 FontSize="{DynamicResource FontSizeSmall}"
                                                  Padding="6,4"
                                                  MinHeight="28"
                                                  Height="28"

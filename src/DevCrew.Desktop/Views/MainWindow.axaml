@@ -22,7 +22,7 @@
                         Padding="0"
                         Background="Transparent"
                         BorderThickness="0"
-                        FontSize="16"
+                        FontSize="{DynamicResource FontSizeLarge}"
                         VerticalAlignment="Center"
                         ToolTip.Tip="{Binding $parent[Window].DataContext.CloseTabTooltip}" />
             </StackPanel>
@@ -68,7 +68,7 @@
                         Margin="8,0,0,0"
                         VerticalAlignment="Center">
                     <TextBlock Text="{Binding Title}"
-                           FontSize="20"
+                           FontSize="{DynamicResource FontSizeHeading}"
                            FontWeight="SemiBold"
                            Foreground="{StaticResource BrushPrimaryText}" />
                 </StackPanel>
@@ -98,7 +98,7 @@
                     <Grid RowDefinitions="Auto,*,Auto,Auto">
                         <TextBlock Grid.Row="0"
                                    Text="{Binding MenuTitle}"
-                                   FontSize="16"
+                                   FontSize="{DynamicResource FontSizeLarge}"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushPrimaryText}"
                                    Margin="0,0,0,8" />

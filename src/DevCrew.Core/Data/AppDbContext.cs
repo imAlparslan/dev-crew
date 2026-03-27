@@ -90,6 +90,9 @@ public class AppDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.LanguageCultureName).IsRequired().HasMaxLength(EntityConfiguration.CultureNameMaxLength);
+            entity.Property(e => e.FontSizePreference).IsRequired().HasMaxLength(10).HasDefaultValue(Models.AppSettings.DefaultFontSizePreference);
+            entity.Property(e => e.UiFontFamily).IsRequired().HasMaxLength(EntityConfiguration.FontFamilyKeyMaxLength).HasDefaultValue(Models.AppSettings.DefaultUiFontFamily);
+            entity.Property(e => e.ContentFontFamily).IsRequired().HasMaxLength(EntityConfiguration.FontFamilyKeyMaxLength).HasDefaultValue(Models.AppSettings.DefaultContentFontFamily);
             entity.Property(e => e.CreatedAt).IsRequired();
             entity.Property(e => e.UpdatedAt).IsRequired();
         });

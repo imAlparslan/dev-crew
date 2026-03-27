@@ -29,6 +29,13 @@
 
   <data name="settings.title" xml:space="preserve"><value>Settings</value></data>
   <data name="settings.language" xml:space="preserve"><value>Application language</value></data>
+  <data name="settings.font_section" xml:space="preserve"><value>Font</value></data>
+  <data name="settings.font_size" xml:space="preserve"><value>Font Size</value></data>
+  <data name="settings.font_size_small" xml:space="preserve"><value>Small</value></data>
+  <data name="settings.font_size_medium" xml:space="preserve"><value>Medium</value></data>
+  <data name="settings.font_size_large" xml:space="preserve"><value>Large</value></data>
+  <data name="settings.ui_font" xml:space="preserve"><value>UI Font</value></data>
+  <data name="settings.code_font" xml:space="preserve"><value>Code Font</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Dashboard</value></data>
 

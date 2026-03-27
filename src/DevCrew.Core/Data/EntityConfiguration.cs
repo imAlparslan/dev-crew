@@ -40,4 +40,9 @@ public static class EntityConfiguration
     /// Maximum length for culture name values (for example: en-US)
     /// </summary>
     public const int CultureNameMaxLength = 10;
+
+    /// <summary>
+    /// Maximum length for font family key identifiers
+    /// </summary>
+    public const int FontFamilyKeyMaxLength = 50;
 }

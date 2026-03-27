@@ -37,7 +37,7 @@
 
         <Style Selector="TabStrip.top-tabs TabStripItem">
             <Setter Property="FontSize"
-                    Value="14"/>
+                    Value="{DynamicResource FontSizeMedium}"/>
             <Setter Property="Padding"
                     Value="16,10"/>
             <Setter Property="Margin"

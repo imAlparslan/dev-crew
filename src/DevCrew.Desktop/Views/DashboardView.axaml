@@ -7,7 +7,7 @@
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
             <StackPanel Spacing="24" HorizontalAlignment="Stretch">
                 <TextBlock Text="{Binding [dashboard.title], Source={StaticResource Loc}}"
-                           FontSize="{StaticResource FontSizeXLarge}"
+                           FontSize="{DynamicResource FontSizeXLarge}"
                            FontWeight="Bold"
                            Foreground="{StaticResource BrushPrimaryText}"
                            HorizontalAlignment="Center" />
@@ -25,11 +25,11 @@
                                     Classes="DashboardTile">
                                 <StackPanel Spacing="8" HorizontalAlignment="Center">
                                     <TextBlock Text="{Binding Icon}"
-                                               FontSize="32"
+                                               FontSize="{DynamicResource FontSizeXLarge}"
                                                HorizontalAlignment="Center"
                                                IsVisible="{Binding Icon, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                                     <TextBlock Text="{Binding Header}"
-                                               FontSize="{StaticResource FontSizeLarge}"
+                                               FontSize="{DynamicResource FontSizeLarge}"
                                                FontWeight="SemiBold"
                                                Foreground="{StaticResource BrushPrimaryText}"
                                                HorizontalAlignment="Center"

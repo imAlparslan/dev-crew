@@ -9,13 +9,13 @@
             <Grid RowDefinitions="Auto,Auto,Auto,*,*" HorizontalAlignment="Stretch">
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,12">
                     <TextBlock Text="{Binding [jsondiff.title], Source={StaticResource Loc}}"
-                               FontSize="20"
+                               FontSize="{DynamicResource FontSizeHeading}"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
 
                     <TextBlock Text="{Binding [jsondiff.subtitle], Source={StaticResource Loc}}"
-                               FontSize="14"
+                               FontSize="{DynamicResource FontSizeMedium}"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
@@ -92,7 +92,7 @@
                     <Border.BorderThickness>1</Border.BorderThickness>
 
                     <TextBlock Text="{Binding ValidationMessage}"
-                               FontSize="12"
+                               FontSize="{DynamicResource FontSizeDefault}"
                                FontWeight="Medium"
                                TextWrapping="Wrap">
                         <TextBlock.Foreground>
@@ -114,7 +114,7 @@
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
                                            Text="{Binding [jsondiff.left_title], Source={StaticResource Loc}}"
-                                           FontSize="13"
+                                           FontSize="{DynamicResource FontSizeLabel}"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
@@ -133,8 +133,8 @@
                                      Padding="8"
                                      VerticalContentAlignment="Top"
                                      Classes="MonospaceInputTextBox"
-                                     FontFamily="{StaticResource FontMonospace}"
-                                     FontSize="{StaticResource FontSizeSmall}"
+                                     FontFamily="{DynamicResource FontMonospace}"
+                                     FontSize="{DynamicResource FontSizeSmall}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto" />
                         </Grid>
@@ -152,7 +152,7 @@
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
                                            Text="{Binding [jsondiff.right_title], Source={StaticResource Loc}}"
-                                           FontSize="13"
+                                           FontSize="{DynamicResource FontSizeLabel}"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
@@ -171,8 +171,8 @@
                                      Padding="8"
                                      VerticalContentAlignment="Top"
                                      Classes="MonospaceInputTextBox"
-                                     FontFamily="{StaticResource FontMonospace}"
-                                     FontSize="{StaticResource FontSizeSmall}"
+                                     FontFamily="{DynamicResource FontMonospace}"
+                                     FontSize="{DynamicResource FontSizeSmall}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto" />
                         </Grid>
@@ -191,7 +191,7 @@
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,10">
                                 <TextBlock Grid.Column="0"
                                            Text="{Binding [jsondiff.path_results], Source={StaticResource Loc}}"
-                                           FontSize="13"
+                                           FontSize="{DynamicResource FontSizeLabel}"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
@@ -262,7 +262,7 @@
                                                                    Grid.Column="2"
                                                                    Grid.ColumnSpan="2"
                                                                    Text="{Binding Path}"
-                                                                   FontFamily="{StaticResource FontMonospace}"
+                                                                   FontFamily="{DynamicResource FontMonospace}"
                                                                    Foreground="{StaticResource BrushSecondaryText}" />
 
                                                         <TextBlock Grid.Row="1"
@@ -296,7 +296,7 @@
                             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
                                 <TextBlock Grid.Column="0"
                                            Text="{Binding [jsondiff.line_results], Source={StaticResource Loc}}"
-                                           FontSize="13"
+                                           FontSize="{DynamicResource FontSizeLabel}"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
@@ -327,8 +327,8 @@
                                                         CornerRadius="4"
                                                         Background="{Binding Kind, Converter={StaticResource JsonDiffKindToBrushConverter}, ConverterParameter=Background}">
                                                     <TextBlock Text="{Binding Text}"
-                                                               FontFamily="{StaticResource FontMonospace}"
-                                                               FontSize="{StaticResource FontSizeSmall}"
+                                                               FontFamily="{DynamicResource FontMonospace}"
+                                                               FontSize="{DynamicResource FontSizeSmall}"
                                                                TextWrapping="NoWrap"
                                                                Foreground="{Binding Kind, Converter={StaticResource JsonDiffKindToBrushConverter}}" />
                                                 </Border>

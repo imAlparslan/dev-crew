@@ -11,13 +11,13 @@
                 <!-- Header -->
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
                     <TextBlock Text="{Binding [jwtdecoder.title], Source={StaticResource Loc}}"
-                               FontSize="20"
+                               FontSize="{DynamicResource FontSizeHeading}"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
                     
                     <TextBlock Text="{Binding [jwtdecoder.subtitle], Source={StaticResource Loc}}"
-                               FontSize="14"
+                               FontSize="{DynamicResource FontSizeMedium}"
                                Foreground="{StaticResource BrushSecondaryText}"
                                HorizontalAlignment="Center"
                                TextAlignment="Center"
@@ -41,7 +41,7 @@
                         <Grid RowDefinitions="Auto,120,Auto" MinHeight="184" Height="184" MaxHeight="184">
                             <TextBlock Grid.Row="0"
                                        Text="{Binding [jwtdecoder.token_title], Source={StaticResource Loc}}"
-                                       FontSize="12"
+                                       FontSize="{DynamicResource FontSizeDefault}"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        Margin="0,0,0,8" />
@@ -56,7 +56,7 @@
                                      VerticalAlignment="Stretch"
                                      VerticalContentAlignment="Top"
                                      Classes="MonospaceInputTextBox"
-                                     FontSize="{StaticResource FontSizeSmall}"
+                                     FontSize="{DynamicResource FontSizeSmall}"
                                      Watermark="{Binding [jwtdecoder.token_watermark], Source={StaticResource Loc}}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto" />
@@ -97,7 +97,7 @@
                                 <!-- HMAC Title -->
                                 <TextBlock Grid.Column="0"
                                            Text="{Binding [jwtdecoder.secret_title], Source={StaticResource Loc}}"
-                                           FontSize="12"
+                                           FontSize="{DynamicResource FontSizeDefault}"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center"
@@ -106,7 +106,7 @@
                                 <!-- RSA Title -->
                                 <TextBlock Grid.Column="0"
                                            Text="{Binding [jwtdecoder.public_key_title], Source={StaticResource Loc}}"
-                                           FontSize="12"
+                                           FontSize="{DynamicResource FontSizeDefault}"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center"
@@ -152,7 +152,7 @@
                                      MaxHeight="100"
                                      HorizontalAlignment="Stretch"
                                      Classes="MonospaceInputTextBox"
-                                     FontSize="{StaticResource FontSizeSmall}"
+                                     FontSize="{DynamicResource FontSizeSmall}"
                                      Watermark="{Binding [jwtdecoder.public_key_watermark], Source={StaticResource Loc}}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -162,10 +162,10 @@
                                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4"
                                             IsVisible="{Binding IsSignatureValid, Converter={x:Static ObjectConverters.IsNotNull}}">
                                     <TextBlock Text="{Binding [jwtdecoder.signature_status], Source={StaticResource Loc}}"
-                                               FontSize="12"
+                                               FontSize="{DynamicResource FontSizeDefault}"
                                                Foreground="{StaticResource BrushSecondaryText}"
                                                VerticalAlignment="Center" />
-                                    <TextBlock FontSize="12"
+                                    <TextBlock FontSize="{DynamicResource FontSizeDefault}"
                                                VerticalAlignment="Center"
                                                Foreground="{Binding IsSignatureValid, Converter={StaticResource SignatureValidBackgroundConverter}}">
                                         <TextBlock.Text>
@@ -192,7 +192,7 @@
                             Padding="12"
                             IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                         <TextBlock Text="{Binding ErrorMessage}"
-                                   FontSize="12"
+                                   FontSize="{DynamicResource FontSizeDefault}"
                                    Foreground="{StaticResource BrushPrimaryText}"
                                    TextWrapping="Wrap" />
                     </Border>
@@ -215,33 +215,33 @@
                         <Grid RowDefinitions="Auto,Auto">
                             <TextBlock Grid.Row="0"
                                        Text="{Binding [jwtdecoder.token_info], Source={StaticResource Loc}}"
-                                       FontSize="14"
+                                       FontSize="{DynamicResource FontSizeMedium}"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource BrushPrimaryText}"
                                        Margin="0,0,0,8" />
                             
                             <Grid Grid.Row="1" ColumnDefinitions="*,*">
                                 <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
-                                    <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
+                                    <TextBlock FontSize="{DynamicResource FontSizeSmall}" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
                                         <Run Text="{Binding [jwtdecoder.issuer], Source={StaticResource Loc}}" />
                                         <Run Text="{Binding Issuer, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
                                     </TextBlock>
-                                    <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
+                                    <TextBlock FontSize="{DynamicResource FontSizeSmall}" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
                                         <Run Text="{Binding [jwtdecoder.subject], Source={StaticResource Loc}}" />
                                         <Run Text="{Binding Subject, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
                                     </TextBlock>
-                                    <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
+                                    <TextBlock FontSize="{DynamicResource FontSizeSmall}" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
                                         <Run Text="{Binding [jwtdecoder.audience], Source={StaticResource Loc}}" />
                                         <Run Text="{Binding Audience, FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
                                     </TextBlock>
                                 </StackPanel>
                                 
                                 <StackPanel Grid.Column="1" Spacing="4">
-                                    <TextBlock FontSize="11" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
+                                    <TextBlock FontSize="{DynamicResource FontSizeSmall}" Foreground="{StaticResource BrushSecondaryText}" TextWrapping="Wrap">
                                         <Run Text="{Binding [jwtdecoder.issued_at], Source={StaticResource Loc}}" />
                                         <Run Text="{Binding IssuedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', FallbackValue='N/A'}" Foreground="{StaticResource BrushPrimaryText}" />
                                     </TextBlock>
-                                    <TextBlock FontSize="11" TextWrapping="Wrap">
+                                    <TextBlock FontSize="{DynamicResource FontSizeSmall}" TextWrapping="Wrap">
                                         <Run Text="{Binding [jwtdecoder.expires_at], Source={StaticResource Loc}}" Foreground="{StaticResource BrushSecondaryText}" />
                                         <Run Text="{Binding ExpiresAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', FallbackValue='N/A'}" 
                                              Foreground="{StaticResource BrushPrimaryText}" />
@@ -265,7 +265,7 @@
                                   Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
                                            Text="{Binding [jwtdecoder.decoded_header], Source={StaticResource Loc}}"
-                                           FontSize="14"
+                                           FontSize="{DynamicResource FontSizeMedium}"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushPrimaryText}"
                                            VerticalAlignment="Center" />
@@ -290,8 +290,8 @@
                                     Padding="8">
                                 <ScrollViewer MaxHeight="200">
                                     <TextBlock Text="{Binding DecodedHeader}"
-                                               FontFamily="{StaticResource FontMonospace}"
-                                               FontSize="{StaticResource FontSizeSmall}"
+                                               FontFamily="{DynamicResource FontMonospace}"
+                                               FontSize="{DynamicResource FontSizeSmall}"
                                                Foreground="{StaticResource BrushPrimaryText}"
                                                TextWrapping="Wrap" />
                                 </ScrollViewer>
@@ -312,7 +312,7 @@
                                   Margin="0,0,0,8">
                                 <TextBlock Grid.Column="0"
                                            Text="{Binding [jwtdecoder.decoded_payload], Source={StaticResource Loc}}"
-                                           FontSize="14"
+                                           FontSize="{DynamicResource FontSizeMedium}"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushPrimaryText}"
                                            VerticalAlignment="Center" />
@@ -337,8 +337,8 @@
                                     Padding="8">
                                 <ScrollViewer MaxHeight="300">
                                     <TextBlock Text="{Binding DecodedPayload}"
-                                               FontFamily="{StaticResource FontMonospace}"
-                                               FontSize="{StaticResource FontSizeSmall}"
+                                               FontFamily="{DynamicResource FontMonospace}"
+                                               FontSize="{DynamicResource FontSizeSmall}"
                                                Foreground="{StaticResource BrushPrimaryText}"
                                                TextWrapping="Wrap" />
                                 </ScrollViewer>

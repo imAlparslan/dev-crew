@@ -40,6 +40,9 @@ public partial class App : Application
         var localizationService = _serviceProvider.GetRequiredService<ILocalizationService>();
         Resources["Loc"] = localizationService;
 
+        // Apply persisted font settings before the main window is created.
+        ApplyPersistedFontSettings();
+
         var mainWindowViewModel = _serviceProvider?.GetRequiredService<MainWindowViewModel>();
 
         var mainWindow = new MainWindow
@@ -103,6 +106,9 @@ public partial class App : Application
 
             return new LocalizationService(startupCulture);
         });
+
+        // Font service
+        services.AddSingleton<IFontService, FontService>();
         
         // Desktop-specific services
         services.AddScoped<IClipboardService, Services.ClipboardService>();
@@ -126,6 +132,26 @@ public partial class App : Application
         services.AddTransient<Func<Base64DecoderViewModel>>(sp => () => sp.GetRequiredService<Base64DecoderViewModel>());
         services.AddTransient<SettingsViewModel>();
         services.AddTransient<Func<SettingsViewModel>>(sp => () => sp.GetRequiredService<SettingsViewModel>());
+    }
+
+    private void ApplyPersistedFontSettings()
+    {
+        try
+        {
+            using var scope = _serviceProvider?.CreateScope();
+            if (scope == null) return;
+
+            var repo = scope.ServiceProvider.GetRequiredService<IAppSettingsRepository>();
+            var settings = repo.GetOrCreateAsync().GetAwaiter().GetResult();
+            var fontService = _serviceProvider!.GetRequiredService<IFontService>();
+            fontService.ApplyFontSettings(settings.FontSizePreference, settings.UiFontFamily, settings.ContentFontFamily);
+        }
+        catch
+        {
+            // Apply defaults when DB access fails at startup.
+            _serviceProvider?.GetRequiredService<IFontService>()
+                .ApplyFontSettings("Medium", "Inter", "Consolas");
+        }
     }
 
     private void InitializeDatabase()
