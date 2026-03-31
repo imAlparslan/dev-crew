@@ -23,6 +23,10 @@
                 <StyleInclude Source="/Styles/CommonStyles.xaml" />
                 <StyleInclude Source="/Styles/CreateGuidStyles.xaml" />
 
+        <Style Selector="Window">
+            <Setter Property="FontFamily" Value="{DynamicResource FontDefault}"/>
+        </Style>
+
         <Style Selector="TabStrip">
             <Setter Property="Padding"
                     Value="0"/>
