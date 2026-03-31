@@ -1,8 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DevCrew.Core.Services;
-using DevCrew.Core.Models.Results;
-using DevCrew.Core.ViewModels;
+using DevCrew.Core.Application.Services;
+using DevCrew.Core.Domain.Results;
+using DevCrew.Core.Presentation.ViewModels;
 using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;

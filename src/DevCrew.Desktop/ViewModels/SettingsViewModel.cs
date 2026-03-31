@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.Input;
-using DevCrew.Core.Services;
-using DevCrew.Core.Services.Repositories;
-using DevCrew.Core.ViewModels;
+using DevCrew.Core.Application.Services;
+using DevCrew.Core.Infrastructure.Persistence.Repositories;
+using DevCrew.Core.Presentation.ViewModels;
 using DevCrew.Desktop.Services;
 using Avalonia.Media;
 

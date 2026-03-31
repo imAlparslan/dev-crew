@@ -1,6 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using DevCrew.Core.Services;
+using DevCrew.Core.Application.Services;
 
 namespace DevCrew.Desktop.Services;
 

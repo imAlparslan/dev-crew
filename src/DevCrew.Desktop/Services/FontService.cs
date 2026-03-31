@@ -1,6 +1,6 @@
 using Avalonia;
 using Avalonia.Media;
-using DevCrew.Core.Models;
+using DevCrew.Core.Domain.Models;
 
 namespace DevCrew.Desktop.Services;
 
