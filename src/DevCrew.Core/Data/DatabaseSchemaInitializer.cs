@@ -12,15 +12,6 @@ CREATE TABLE IF NOT EXISTS AppSettings (
     UpdatedAt TEXT NOT NULL
 );";
 
-    private const string AddFontSizePreferenceColumnSql =
-        "ALTER TABLE AppSettings ADD COLUMN FontSizePreference TEXT NOT NULL DEFAULT 'Medium';";
-
-    private const string AddUiFontFamilyColumnSql =
-        "ALTER TABLE AppSettings ADD COLUMN UiFontFamily TEXT NOT NULL DEFAULT 'Inter';";
-
-    private const string AddContentFontFamilyColumnSql =
-        "ALTER TABLE AppSettings ADD COLUMN ContentFontFamily TEXT NOT NULL DEFAULT 'Consolas';";
-
     public static void EnsureCompatibilitySchema(AppDbContext dbContext)
     {
         if (dbContext == null)
@@ -30,21 +21,5 @@ CREATE TABLE IF NOT EXISTS AppSettings (
 
         dbContext.Database.EnsureCreated();
         dbContext.Database.ExecuteSqlRaw(EnsureAppSettingsTableSql);
-
-        TryAddColumn(dbContext, AddFontSizePreferenceColumnSql);
-        TryAddColumn(dbContext, AddUiFontFamilyColumnSql);
-        TryAddColumn(dbContext, AddContentFontFamilyColumnSql);
-    }
-
-    private static void TryAddColumn(AppDbContext dbContext, string sql)
-    {
-        try
-        {
-            dbContext.Database.ExecuteSqlRaw(sql);
-        }
-        catch
-        {
-            // Column already exists — safe to ignore.
-        }
     }
 }
