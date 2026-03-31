@@ -59,9 +59,18 @@
   <data name="settings.font_size_small" xml:space="preserve"><value>Petite</value></data>
   <data name="settings.font_size_medium" xml:space="preserve"><value>Moyenne</value></data>
   <data name="settings.font_size_large" xml:space="preserve"><value>Grande</value></data>
-  <data name="settings.ui_font" xml:space="preserve"><value>Police d'interface</value></data>
+  <data name="settings.ui_font" xml:space="preserve"><value>Police de base</value></data>
+  <data name="settings.heading_font" xml:space="preserve"><value>Police de titre</value></data>
+  <data name="settings.button_font" xml:space="preserve"><value>Police de bouton</value></data>
+  <data name="settings.apply" xml:space="preserve"><value>Appliquer</value></data>
+  <data name="settings.code_font" xml:space="preserve"><value>Police de code</value></data>
+  <data name="settings.font_search_watermark" xml:space="preserve"><value>Rechercher les polices UI/titre/bouton...</value></data>
+  <data name="settings.code_font_search_watermark" xml:space="preserve"><value>Rechercher les polices de code...</value></data>
   <data name="settings.preview_label" xml:space="preserve"><value>Aperçu</value></data>
+  <data name="settings.preview_heading_text" xml:space="preserve"><value>Exemple de titre</value></data>
   <data name="settings.preview_ui_text" xml:space="preserve"><value>Exemple de texte</value></data>
+  <data name="settings.preview_button_text" xml:space="preserve"><value>Libellé du bouton</value></data>
+  <data name="settings.preview_code_text" xml:space="preserve"><value>const token = &quot;abc123&quot;;</value></data>
   <data name="dashboard.title" xml:space="preserve">
     <value>🎯 Tableau de bord DevCrew</value>
   </data>

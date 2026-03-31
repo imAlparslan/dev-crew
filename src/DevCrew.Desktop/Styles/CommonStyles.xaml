@@ -6,21 +6,25 @@
         <Setter Property="Padding" Value="6,4" />
         <Setter Property="Foreground" Value="{StaticResource BrushPrimaryText}" />
         <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="FontFamily" Value="{DynamicResource FontButton}" />
     </Style>
 
     <Style Selector="Button.SuccessActionButton">
         <Setter Property="Background" Value="{StaticResource BrushSuccess}" />
         <Setter Property="BorderBrush" Value="{StaticResource BrushSuccessDark}" />
+        <Setter Property="FontFamily" Value="{DynamicResource FontButton}" />
     </Style>
 
     <Style Selector="Button.AccentActionButton">
         <Setter Property="Background" Value="{StaticResource BrushAccent}" />
         <Setter Property="BorderBrush" Value="{StaticResource BrushAccentDark}" />
+        <Setter Property="FontFamily" Value="{DynamicResource FontButton}" />
     </Style>
 
     <Style Selector="Button.DangerActionButton">
         <Setter Property="Background" Value="{StaticResource BrushDanger}" />
         <Setter Property="BorderBrush" Value="{StaticResource BrushDangerDark}" />
+        <Setter Property="FontFamily" Value="{DynamicResource FontButton}" />
     </Style>
 
     <Style Selector="Button.NeutralActionButton">
@@ -28,12 +32,14 @@
         <Setter Property="BorderBrush" Value="{StaticResource BrushBorderSecondary}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="FontFamily" Value="{DynamicResource FontButton}" />
     </Style>
 
     <Style Selector="Button.ActionButton">
         <Setter Property="Padding" Value="12,6" />
         <Setter Property="Foreground" Value="{StaticResource BrushPrimaryText}" />
         <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="FontFamily" Value="{DynamicResource FontButton}" />
     </Style>
 
     <Style Selector="Button.ActionButtonCompact">
@@ -41,6 +47,7 @@
         <Setter Property="Foreground" Value="{StaticResource BrushPrimaryText}" />
         <Setter Property="CornerRadius" Value="4" />
         <Setter Property="FontSize" Value="{DynamicResource FontSizeSmall}" />
+        <Setter Property="FontFamily" Value="{DynamicResource FontButton}" />
     </Style>
 
     <!-- Shared compact input textboxes -->

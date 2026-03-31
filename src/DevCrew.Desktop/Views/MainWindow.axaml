@@ -69,6 +69,7 @@
                         VerticalAlignment="Center">
                     <TextBlock Text="{Binding Title}"
                            FontSize="{DynamicResource FontSizeHeading}"
+                              FontFamily="{DynamicResource FontHeading}"
                            FontWeight="SemiBold"
                            Foreground="{StaticResource BrushPrimaryText}" />
                 </StackPanel>

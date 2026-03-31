@@ -12,6 +12,8 @@ public class AppSettings
     public const string DefaultLanguageCultureName = "en-US";
     public const string DefaultFontSizePreference = "Medium";
     public const string DefaultUiFontFamily = "Inter";
+    public const string DefaultHeadingFontFamily = "Inter";
+    public const string DefaultButtonFontFamily = "Inter";
     public const string DefaultContentFontFamily = "Consolas";
 
     [Key]
@@ -28,6 +30,14 @@ public class AppSettings
     [Required]
     [MaxLength(50)]
     public string UiFontFamily { get; set; } = DefaultUiFontFamily;
+
+    [Required]
+    [MaxLength(50)]
+    public string HeadingFontFamily { get; set; } = DefaultHeadingFontFamily;
+
+    [Required]
+    [MaxLength(50)]
+    public string ButtonFontFamily { get; set; } = DefaultButtonFontFamily;
 
     [Required]
     [MaxLength(50)]

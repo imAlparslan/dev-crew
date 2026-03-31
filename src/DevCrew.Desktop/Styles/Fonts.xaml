@@ -5,6 +5,7 @@
     <FontFamily x:Key="FontMonospace">Consolas, Courier New, monospace</FontFamily>
     <FontFamily x:Key="FontDefault">Inter, Segoe UI, sans-serif</FontFamily>
     <FontFamily x:Key="FontHeading">Inter, Segoe UI, sans-serif</FontFamily>
+    <FontFamily x:Key="FontButton">Inter, Segoe UI, sans-serif</FontFamily>
     
     <!-- Font Sizes -->
     <x:Double x:Key="FontSizeSmall">11</x:Double>

@@ -10,6 +10,7 @@
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
                     <TextBlock Text="{Binding [base64encoder.title], Source={StaticResource Loc}}"
                                FontSize="{DynamicResource FontSizeHeading}"
+                               FontFamily="{DynamicResource FontHeading}"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />

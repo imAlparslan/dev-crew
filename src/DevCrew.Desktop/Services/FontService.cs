@@ -27,6 +27,8 @@ public class FontService : IFontService
 
     public string CurrentFontSizePreference { get; private set; } = AppSettings.DefaultFontSizePreference;
     public string CurrentUiFontFamily { get; private set; } = AppSettings.DefaultUiFontFamily;
+    public string CurrentHeadingFontFamily { get; private set; } = AppSettings.DefaultHeadingFontFamily;
+    public string CurrentButtonFontFamily { get; private set; } = AppSettings.DefaultButtonFontFamily;
     public string CurrentContentFontFamily { get; private set; } = AppSettings.DefaultContentFontFamily;
 
     public IReadOnlyList<string> FontSizeOptions { get; } = ["Small", "Medium", "Large"];
@@ -58,14 +60,23 @@ public class FontService : IFontService
         AvailableUiFonts = result.AsReadOnly();
     }
 
-    public void ApplyFontSettings(string fontSizePreference, string uiFontFamily, string contentFontFamily)
+    public void ApplyFontSettings(
+        string fontSizePreference,
+        string uiFontFamily,
+        string headingFontFamily,
+        string buttonFontFamily,
+        string contentFontFamily)
     {
         CurrentFontSizePreference = fontSizePreference;
         CurrentUiFontFamily = uiFontFamily;
+        CurrentHeadingFontFamily = headingFontFamily;
+        CurrentButtonFontFamily = buttonFontFamily;
         CurrentContentFontFamily = contentFontFamily;
 
         var scale = Scales.TryGetValue(fontSizePreference, out var s) ? s : 1.0;
         var uiFont = ResolveUiFontFamily(uiFontFamily);
+        var headingFont = ResolveUiFontFamily(headingFontFamily);
+        var buttonFont = ResolveUiFontFamily(buttonFontFamily);
         var contentFont = ResolveContentFontFamily(contentFontFamily);
 
         var resources = Application.Current!.Resources;
@@ -76,7 +87,8 @@ public class FontService : IFontService
         }
 
         resources["FontDefault"] = uiFont;
-        resources["FontHeading"] = uiFont;
+        resources["FontHeading"] = headingFont;
+        resources["FontButton"] = buttonFont;
         resources["FontMonospace"] = contentFont;
     }
 

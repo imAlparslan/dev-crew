@@ -17,6 +17,7 @@
                     <TextBlock Grid.Row="0"
                                Text="{Binding [createguid.title], Source={StaticResource Loc}}"
                                FontSize="{DynamicResource FontSizeHeading}"
+                               FontFamily="{DynamicResource FontHeading}"
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center"

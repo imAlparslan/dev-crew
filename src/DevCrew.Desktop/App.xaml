@@ -25,6 +25,7 @@
 
         <Style Selector="Window">
             <Setter Property="FontFamily" Value="{DynamicResource FontDefault}"/>
+                        <Setter Property="FontSize" Value="{DynamicResource FontSizeDefault}"/>
         </Style>
 
         <Style Selector="TabStrip">

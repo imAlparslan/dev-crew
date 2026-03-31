@@ -20,5 +20,11 @@ public interface IAppSettingsRepository
     /// <summary>
     /// Updates font-related preferences.
     /// </summary>
-    Task<bool> UpdateFontSettingsAsync(string fontSizePreference, string uiFontFamily, string contentFontFamily, CancellationToken cancellationToken = default);
+    Task<bool> UpdateFontSettingsAsync(
+        string fontSizePreference,
+        string uiFontFamily,
+        string headingFontFamily,
+        string buttonFontFamily,
+        string contentFontFamily,
+        CancellationToken cancellationToken = default);
 }

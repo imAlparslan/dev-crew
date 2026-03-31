@@ -12,6 +12,7 @@
             <StackPanel Spacing="24" HorizontalAlignment="Stretch">
                 <TextBlock Text="{Binding Title}"
                            FontSize="{DynamicResource FontSizeHeading}"
+                           FontFamily="{DynamicResource FontHeading}"
                            FontWeight="Bold"
                            Foreground="{StaticResource BrushPrimaryText}" />
 
@@ -63,22 +64,60 @@
                                       HorizontalAlignment="Stretch" />
                         </StackPanel>
 
-                        <!-- UI Font -->
-                        <StackPanel Spacing="8">
-                            <TextBlock Text="{Binding UiFontLabel}"
-                                       FontSize="{DynamicResource FontSizeDefault}"
-                                       Foreground="{StaticResource BrushSecondaryText}" />
-                            <ComboBox ItemsSource="{Binding AvailableUiFonts}"
-                                      SelectedItem="{Binding SelectedUiFont, Mode=TwoWay}"
-                                      Height="36"
-                                      HorizontalAlignment="Stretch">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding DisplayName}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </StackPanel>
+                        <!-- Font Families (Side by Side) -->
+                        <Grid ColumnDefinitions="*,16,*" RowDefinitions="Auto,12,Auto">
+                            <StackPanel Grid.Column="0" Grid.Row="0" Spacing="8">
+                                <TextBlock Text="{Binding UiFontLabel}"
+                                           FontSize="{DynamicResource FontSizeDefault}"
+                                           Foreground="{StaticResource BrushSecondaryText}" />
+                                <ComboBox ItemsSource="{Binding AvailableUiFonts}"
+                                          SelectedItem="{Binding SelectedUiFont, Mode=TwoWay}"
+                                          IsTextSearchEnabled="True"
+                                          Height="36"
+                                          HorizontalAlignment="Stretch">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DisplayName}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Grid.Row="0" Spacing="8">
+                                <TextBlock Text="{Binding HeadingFontLabel}"
+                                           FontSize="{DynamicResource FontSizeDefault}"
+                                           Foreground="{StaticResource BrushSecondaryText}" />
+                                <ComboBox ItemsSource="{Binding AvailableUiFonts}"
+                                          SelectedItem="{Binding SelectedHeadingFont, Mode=TwoWay}"
+                                          IsTextSearchEnabled="True"
+                                          Height="36"
+                                          HorizontalAlignment="Stretch">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DisplayName}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Grid.Row="2" Spacing="8">
+                                <TextBlock Text="{Binding ButtonFontLabel}"
+                                           FontSize="{DynamicResource FontSizeDefault}"
+                                           Foreground="{StaticResource BrushSecondaryText}" />
+                                <ComboBox ItemsSource="{Binding AvailableUiFonts}"
+                                          SelectedItem="{Binding SelectedButtonFont, Mode=TwoWay}"
+                                          IsTextSearchEnabled="True"
+                                          Height="36"
+                                          HorizontalAlignment="Stretch">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DisplayName}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+
+                        </Grid>
 
                         <!-- Preview Section -->
                         <Border BorderBrush="{StaticResource BrushBorderSecondary}"
@@ -94,26 +133,46 @@
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}" />
 
-                                <Grid ColumnDefinitions="*,16,*" RowDefinitions="Auto">
-                                    <!-- UI Font Preview -->
-                                    <StackPanel Grid.Column="0" Spacing="6">
-                                        <TextBlock Text="{Binding UiFontLabel}"
-                                                   FontSize="{DynamicResource FontSizeSmall}"
-                                                   Foreground="{StaticResource BrushTertiaryText}" />
-                                        <Border Background="{StaticResource BrushTertiaryBackground}"
-                                                CornerRadius="4"
-                                                Padding="8">
-                                            <TextBlock Text="{Binding PreviewUiText}"
-                                                       FontFamily="{Binding PreviewUiFontFamily}"
-                                                       FontSize="{Binding PreviewFontSizeScale, Converter={StaticResource FontSizeScaleConverter}}"
-                                                       Foreground="{StaticResource BrushPrimaryText}" />
-                                        </Border>
-                                    </StackPanel>
+                                <Border Background="{StaticResource BrushTertiaryBackground}"
+                                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                                        BorderThickness="1"
+                                        CornerRadius="6"
+                                        Padding="12">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Text="{Binding PreviewHeadingText}"
+                                                   FontFamily="{Binding PreviewHeadingFont}"
+                                                   FontWeight="Bold"
+                                                   FontSize="{Binding PreviewHeadingFontSize}"
+                                                   Foreground="{StaticResource BrushPrimaryText}" />
 
-    
-                                </Grid>
+                                        <TextBlock Text="{Binding PreviewUiText}"
+                                                   FontFamily="{Binding PreviewUiFont}"
+                                                   FontSize="{Binding PreviewFontSizeScale, Converter={StaticResource FontSizeScaleConverter}}"
+                                                   Foreground="{StaticResource BrushSecondaryText}"
+                                                   TextWrapping="Wrap" />
+
+                                        <TextBox AcceptsReturn="True"
+                                                 MinHeight="88"
+                                                 VerticalContentAlignment="Top"
+                                                 TextWrapping="Wrap"
+                                                 FontFamily="{Binding PreviewUiFont}"
+                                                 Watermark="{Binding [createguid.notes_watermark], Source={StaticResource Loc}}"
+                                                 Classes="CompactInputTextBox" />
+
+                                        <Button Content="{Binding PreviewButtonText}"
+                                                HorizontalAlignment="Left"
+                                                Classes="ActionButton AccentActionButton"
+                                                FontFamily="{Binding PreviewButtonFont}"
+                                                FontSize="{Binding PreviewButtonFontSize}" />
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
                         </Border>
+
+                        <Button Content="{Binding ApplyFontSettingsLabel}"
+                                Command="{Binding ApplyFontSettingsCommand}"
+                                HorizontalAlignment="Right"
+                                Classes="ActionButton AccentActionButton" />
                     </StackPanel>
                 </Border>
 

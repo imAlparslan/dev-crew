@@ -9,6 +9,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource BrushSuccessDark}" />
         <Setter Property="CornerRadius" Value="8" />
         <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontFamily" Value="{DynamicResource FontButton}" />
     </Style>
 
     <!-- GUID display textbox -->

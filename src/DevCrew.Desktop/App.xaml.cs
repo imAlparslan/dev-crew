@@ -144,13 +144,18 @@ public partial class App : Application
             var repo = scope.ServiceProvider.GetRequiredService<IAppSettingsRepository>();
             var settings = repo.GetOrCreateAsync().GetAwaiter().GetResult();
             var fontService = _serviceProvider!.GetRequiredService<IFontService>();
-            fontService.ApplyFontSettings(settings.FontSizePreference, settings.UiFontFamily, settings.ContentFontFamily);
+            fontService.ApplyFontSettings(
+                settings.FontSizePreference,
+                settings.UiFontFamily,
+                settings.HeadingFontFamily,
+                settings.ButtonFontFamily,
+                settings.ContentFontFamily);
         }
         catch
         {
             // Apply defaults when DB access fails at startup.
             _serviceProvider?.GetRequiredService<IFontService>()
-                .ApplyFontSettings("Medium", "Inter", "Consolas");
+                .ApplyFontSettings("Medium", "Inter", "Inter", "Inter", "Consolas");
         }
     }
 

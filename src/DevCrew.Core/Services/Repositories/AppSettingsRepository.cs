@@ -60,18 +60,30 @@ public class AppSettingsRepository : IAppSettingsRepository
         return true;
     }
 
-    public async Task<bool> UpdateFontSettingsAsync(string fontSizePreference, string uiFontFamily, string contentFontFamily, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateFontSettingsAsync(
+        string fontSizePreference,
+        string uiFontFamily,
+        string headingFontFamily,
+        string buttonFontFamily,
+        string contentFontFamily,
+        CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(fontSizePreference))
             throw new ArgumentException("Font size preference cannot be empty", nameof(fontSizePreference));
         if (string.IsNullOrWhiteSpace(uiFontFamily))
             throw new ArgumentException("UI font family cannot be empty", nameof(uiFontFamily));
+        if (string.IsNullOrWhiteSpace(headingFontFamily))
+            throw new ArgumentException("Heading font family cannot be empty", nameof(headingFontFamily));
+        if (string.IsNullOrWhiteSpace(buttonFontFamily))
+            throw new ArgumentException("Button font family cannot be empty", nameof(buttonFontFamily));
         if (string.IsNullOrWhiteSpace(contentFontFamily))
             throw new ArgumentException("Content font family cannot be empty", nameof(contentFontFamily));
 
         var settings = await GetOrCreateAsync(cancellationToken);
         settings.FontSizePreference = fontSizePreference;
         settings.UiFontFamily = uiFontFamily;
+        settings.HeadingFontFamily = headingFontFamily;
+        settings.ButtonFontFamily = buttonFontFamily;
         settings.ContentFontFamily = contentFontFamily;
         settings.UpdatedAt = DateTime.UtcNow;
 
