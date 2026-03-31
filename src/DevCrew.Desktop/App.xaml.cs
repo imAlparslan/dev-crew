@@ -5,6 +5,7 @@ using DevCrew.Core;
 using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Application.Services;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
+using DevCrew.Desktop.DependencyInjection;
 using DevCrew.Desktop.ViewModels;
 using DevCrew.Desktop.Views;
 using Microsoft.EntityFrameworkCore;
@@ -37,11 +38,11 @@ public partial class App : Application
         // Initialize database before resolving services that depend on persisted settings.
         InitializeDatabase();
 
+        // Apply persisted runtime settings with a single settings query.
+        ApplyPersistedRuntimeSettings();
+
         var localizationService = _serviceProvider.GetRequiredService<ILocalizationService>();
         Resources["Loc"] = localizationService;
-
-        // Apply persisted font settings before the main window is created.
-        ApplyPersistedFontSettings();
 
         var mainWindowViewModel = _serviceProvider?.GetRequiredService<MainWindowViewModel>();
 
@@ -78,63 +79,10 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
-        // Register configuration
-        if (_configuration != null)
-        {
-            services.AddSingleton(_configuration);
-        }
-
-        // Core Services
-        services.AddDevCrewCore(_configuration ?? new ConfigurationBuilder().Build());
-
-        // Localization
-        services.AddSingleton<ILocalizationService>(sp =>
-        {
-            var startupCulture = LocalizationService.ResolveOrFallbackCulture(System.Globalization.CultureInfo.CurrentUICulture.Name);
-
-            try
-            {
-                using var scope = sp.GetRequiredService<IServiceScopeFactory>().CreateScope();
-                var appSettingsRepository = scope.ServiceProvider.GetRequiredService<IAppSettingsRepository>();
-                var settings = appSettingsRepository.GetOrCreateAsync().GetAwaiter().GetResult();
-                startupCulture = LocalizationService.ResolveOrFallbackCulture(settings.LanguageCultureName);
-            }
-            catch
-            {
-                // Keep startupCulture resolved from OS culture when DB access fails.
-            }
-
-            return new LocalizationService(startupCulture);
-        });
-
-        // Font service
-        services.AddSingleton<IFontService, FontService>();
-        
-        // Desktop-specific services
-        services.AddScoped<IClipboardService, Services.ClipboardService>();
-
-        // ViewModels
-        services.AddScoped<MainWindowViewModel>();
-        services.AddSingleton<DashboardViewModel>();
-        services.AddTransient<CreateGuidViewModel>();
-        services.AddTransient<Func<CreateGuidViewModel>>(sp => () => sp.GetRequiredService<CreateGuidViewModel>());
-        services.AddTransient<JwtDecoderViewModel>();
-        services.AddTransient<Func<JwtDecoderViewModel>>(sp => () => sp.GetRequiredService<JwtDecoderViewModel>());
-        services.AddTransient<JwtBuilderViewModel>();
-        services.AddTransient<Func<JwtBuilderViewModel>>(sp => () => sp.GetRequiredService<JwtBuilderViewModel>());
-        services.AddTransient<JsonFormatterViewModel>();
-        services.AddTransient<Func<JsonFormatterViewModel>>(sp => () => sp.GetRequiredService<JsonFormatterViewModel>());
-        services.AddTransient<JsonDiffViewModel>();
-        services.AddTransient<Func<JsonDiffViewModel>>(sp => () => sp.GetRequiredService<JsonDiffViewModel>());
-        services.AddTransient<Base64EncoderViewModel>();
-        services.AddTransient<Func<Base64EncoderViewModel>>(sp => () => sp.GetRequiredService<Base64EncoderViewModel>());
-        services.AddTransient<Base64DecoderViewModel>();
-        services.AddTransient<Func<Base64DecoderViewModel>>(sp => () => sp.GetRequiredService<Base64DecoderViewModel>());
-        services.AddTransient<SettingsViewModel>();
-        services.AddTransient<Func<SettingsViewModel>>(sp => () => sp.GetRequiredService<SettingsViewModel>());
+        services.AddDesktopServices(_configuration);
     }
 
-    private void ApplyPersistedFontSettings()
+    private void ApplyPersistedRuntimeSettings()
     {
         try
         {
@@ -143,7 +91,10 @@ public partial class App : Application
 
             var repo = scope.ServiceProvider.GetRequiredService<IAppSettingsRepository>();
             var settings = repo.GetOrCreateAsync().GetAwaiter().GetResult();
+            var localization = _serviceProvider!.GetRequiredService<ILocalizationService>();
             var fontService = _serviceProvider!.GetRequiredService<IFontService>();
+
+            localization.SetLanguage(settings.LanguageCultureName);
             fontService.ApplyFontSettings(
                 settings.FontSizePreference,
                 settings.UiFontFamily,
