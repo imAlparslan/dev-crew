@@ -31,11 +31,7 @@ public class FontService : IFontService
 
     public IReadOnlyList<string> FontSizeOptions { get; } = ["Small", "Medium", "Large"];
 
-    public IReadOnlyList<FontOption> AvailableUiFonts { get; } =
-    [
-        new("Inter",          "Inter",          "Inter, Segoe UI, sans-serif"),
-        new("SystemDefault",  "System Default", "sans-serif"),
-    ];
+    public IReadOnlyList<FontOption> AvailableUiFonts { get; }
 
     public IReadOnlyList<FontOption> AvailableContentFonts { get; } =
     [
@@ -43,6 +39,24 @@ public class FontService : IFontService
         new("CourierNew",     "Courier New",    "Courier New, monospace"),
         new("SystemDefault",  "System Default", "monospace"),
     ];
+
+    public FontService()
+    {
+        var systemFonts = FontManager.Current.SystemFonts
+            .Select(f => f.Name)
+            .Where(name => !string.IsNullOrWhiteSpace(name))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
+            .Select(name => new FontOption(name, name, name))
+            .ToList();
+
+        var result = new List<FontOption>(systemFonts.Count + 1)
+        {
+            new("SystemDefault", "System Default", "sans-serif")
+        };
+        result.AddRange(systemFonts);
+        AvailableUiFonts = result.AsReadOnly();
+    }
 
     public void ApplyFontSettings(string fontSizePreference, string uiFontFamily, string contentFontFamily)
     {
@@ -73,7 +87,8 @@ public class FontService : IFontService
             if (opt.Key == key)
                 return new FontFamily(opt.FontFamilyValue);
         }
-        return new FontFamily(AvailableUiFonts[0].FontFamilyValue);
+        // Fall back to treating the key directly as a font family name
+        return new FontFamily(key);
     }
 
     private FontFamily ResolveContentFontFamily(string key)

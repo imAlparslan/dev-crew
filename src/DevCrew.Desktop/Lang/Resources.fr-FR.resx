@@ -60,7 +60,8 @@
   <data name="settings.font_size_medium" xml:space="preserve"><value>Moyenne</value></data>
   <data name="settings.font_size_large" xml:space="preserve"><value>Grande</value></data>
   <data name="settings.ui_font" xml:space="preserve"><value>Police d'interface</value></data>
-  <data name="settings.code_font" xml:space="preserve"><value>Police de code</value></data>
+  <data name="settings.preview_label" xml:space="preserve"><value>Aperçu</value></data>
+  <data name="settings.preview_ui_text" xml:space="preserve"><value>Exemple de texte</value></data>
   <data name="dashboard.title" xml:space="preserve">
     <value>🎯 Tableau de bord DevCrew</value>
   </data>

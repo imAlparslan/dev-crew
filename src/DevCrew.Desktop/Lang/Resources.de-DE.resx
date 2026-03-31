@@ -27,7 +27,8 @@
   <data name="settings.font_size_medium" xml:space="preserve"><value>Mittel</value></data>
   <data name="settings.font_size_large" xml:space="preserve"><value>Groß</value></data>
   <data name="settings.ui_font" xml:space="preserve"><value>UI-Schriftart</value></data>
-  <data name="settings.code_font" xml:space="preserve"><value>Code-Schriftart</value></data>
+  <data name="settings.preview_label" xml:space="preserve"><value>Vorschau</value></data>
+  <data name="settings.preview_ui_text" xml:space="preserve"><value>Beispieltext</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Übersicht</value></data>
 

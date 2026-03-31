@@ -34,11 +34,8 @@ public class SettingsViewModel : BaseViewModel
 
         SelectedUiFont = _fontService.AvailableUiFonts
             .FirstOrDefault(x => x.Key == _fontService.CurrentUiFontFamily)
+            ?? _fontService.AvailableUiFonts.FirstOrDefault(x => x.Key == "SystemDefault")
             ?? _fontService.AvailableUiFonts.FirstOrDefault();
-
-        SelectedContentFont = _fontService.AvailableContentFonts
-            .FirstOrDefault(x => x.Key == _fontService.CurrentContentFontFamily)
-            ?? _fontService.AvailableContentFonts.FirstOrDefault();
 
         _isInitializing = false;
     }
@@ -94,21 +91,7 @@ public class SettingsViewModel : BaseViewModel
         }
     }
 
-    // Content/code font
-    public IReadOnlyList<FontOption> AvailableContentFonts => _fontService.AvailableContentFonts;
 
-    private FontOption? _selectedContentFont;
-    public FontOption? SelectedContentFont
-    {
-        get => _selectedContentFont;
-        set
-        {
-            if (SetProperty(ref _selectedContentFont, value) && value is not null && !_isInitializing)
-            {
-                ApplyAndPersistFontSettings();
-            }
-        }
-    }
 
     // Localized labels
     public string Title => _localizationService.GetString("settings.title");
@@ -116,21 +99,40 @@ public class SettingsViewModel : BaseViewModel
     public string FontSectionTitle => _localizationService.GetString("settings.font_section");
     public string FontSizeLabel => _localizationService.GetString("settings.font_size");
     public string UiFontLabel => _localizationService.GetString("settings.ui_font");
-    public string CodeFontLabel => _localizationService.GetString("settings.code_font");
 
     public string FontSizeSmallLabel => _localizationService.GetString("settings.font_size_small");
     public string FontSizeMediumLabel => _localizationService.GetString("settings.font_size_medium");
     public string FontSizeLargeLabel => _localizationService.GetString("settings.font_size_large");
 
+    // Preview section
+    public string PreviewLabel => _localizationService.GetString("settings.preview_label");
+    public string PreviewUiText => _localizationService.GetString("settings.preview_ui_text");
+
+    public double PreviewFontSizeScale => GetFontSizeScale(SelectedFontSize ?? _fontService.CurrentFontSizePreference);
+
+    public string? PreviewUiFontFamily => SelectedUiFont?.Key ?? _fontService.CurrentUiFontFamily;
+
     private void ApplyAndPersistFontSettings()
     {
         var size = SelectedFontSize ?? _fontService.CurrentFontSizePreference;
         var ui = SelectedUiFont?.Key ?? _fontService.CurrentUiFontFamily;
-        var code = SelectedContentFont?.Key ?? _fontService.CurrentContentFontFamily;
+        var code = _fontService.CurrentContentFontFamily; // Use current content font as fallback
 
         _fontService.ApplyFontSettings(size, ui, code);
+        
+        // Update preview properties
+        OnPropertyChanged(nameof(PreviewFontSizeScale));
+        OnPropertyChanged(nameof(PreviewUiFontFamily));
+        
         _ = PersistFontSettingsAsync(size, ui, code);
     }
+
+    private double GetFontSizeScale(string fontSizePreference) => fontSizePreference switch
+    {
+        "Small" => 0.85,
+        "Large" => 1.2,
+        _ => 1.0
+    };
 
     private async Task PersistLanguagePreferenceAsync(string cultureName)
     {
@@ -160,10 +162,11 @@ public class SettingsViewModel : BaseViewModel
         OnPropertyChanged(nameof(FontSectionTitle));
         OnPropertyChanged(nameof(FontSizeLabel));
         OnPropertyChanged(nameof(UiFontLabel));
-        OnPropertyChanged(nameof(CodeFontLabel));
         OnPropertyChanged(nameof(FontSizeSmallLabel));
         OnPropertyChanged(nameof(FontSizeMediumLabel));
         OnPropertyChanged(nameof(FontSizeLargeLabel));
+        OnPropertyChanged(nameof(PreviewLabel));
+        OnPropertyChanged(nameof(PreviewUiText));
     }
 }
 
