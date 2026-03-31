@@ -52,35 +52,49 @@
                 Padding="8,4"
                 BorderBrush="{StaticResource BrushBorder}"
                 BorderThickness="0,0,0,1">
-            <Grid ColumnDefinitions="Auto,Auto,*"
+            <Grid ColumnDefinitions="232,*"
                   VerticalAlignment="Center">
-                <Button Grid.Column="0"
-                        Width="36"
-                        Height="36"
-                        CornerRadius="8"
-                        Background="{StaticResource BrushButtonSecondary}"
-                        Foreground="White"
-                        Content="☰"
-                        Command="{Binding ToggleSidebarCommand}" />
+                <Grid Grid.Column="0" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                    <Button Grid.Column="0"
+                            Width="36"
+                            Height="36"
+                            CornerRadius="8"
+                            Background="{StaticResource BrushButtonSecondary}"
+                            Foreground="White"
+                            Content="☰"
+                            Command="{Binding ToggleSidebarCommand}" />
 
-                <StackPanel Grid.Column="1"
-                        Orientation="Vertical"
-                        Margin="8,0,0,0"
-                        VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Title}"
-                           FontSize="{DynamicResource FontSizeHeading}"
-                              FontFamily="{DynamicResource FontHeading}"
-                           FontWeight="SemiBold"
-                           Foreground="{StaticResource BrushPrimaryText}" />
-                </StackPanel>
+                    <StackPanel Grid.Column="1"
+                            Orientation="Vertical"
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Title}"
+                               FontSize="{DynamicResource FontSizeHeading}"
+                                  FontFamily="{DynamicResource FontHeading}"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource BrushPrimaryText}" />
+                    </StackPanel>
+                </Grid>
 
-                <TabStrip Grid.Column="2"
-                          ItemsSource="{Binding Tabs}"
-                          SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
-                          ItemTemplate="{StaticResource TabHeaderTemplate}"
-                          Classes="top-tabs"
-                          Margin="100,0,0,0"
-                          VerticalAlignment="Center" />
+                <ScrollViewer Grid.Column="1"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Disabled"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Center"
+                              Padding="0">
+                    <TabStrip ItemsSource="{Binding Tabs}"
+                              SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
+                              ItemTemplate="{StaticResource TabHeaderTemplate}"
+                              Classes="top-tabs"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center">
+                        <TabStrip.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </TabStrip.ItemsPanel>
+                    </TabStrip>
+                </ScrollViewer>
             </Grid>
         </Border>
 
