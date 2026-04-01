@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using DevCrew.Core.Application.Services;
-using DevCrew.Core.Presentation.ViewModels;
 
 namespace DevCrew.Desktop.ViewModels;
 

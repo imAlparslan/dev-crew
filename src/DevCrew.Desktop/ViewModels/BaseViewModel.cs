@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using DevCrew.Core.Application.Services;
 
-namespace DevCrew.Core.Presentation.ViewModels;
+namespace DevCrew.Desktop.ViewModels;
 
 /// <summary>
 /// Base ViewModel class providing common functionality for all ViewModels.

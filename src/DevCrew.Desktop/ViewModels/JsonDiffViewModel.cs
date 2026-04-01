@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Application.Services;
 using DevCrew.Core.Domain.Results;
 using DevCrew.Core.Shared.Enums;
-using DevCrew.Core.Presentation.ViewModels;
 using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;

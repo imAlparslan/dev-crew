@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Application.Services;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
-using DevCrew.Core.Presentation.ViewModels;
 using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
