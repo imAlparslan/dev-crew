@@ -49,6 +49,9 @@ public static class DesktopServiceCollectionExtensions
         services.AddTransient<Base64DecoderViewModel>();
         services.AddTransient<Func<Base64DecoderViewModel>>(sp => () => sp.GetRequiredService<Base64DecoderViewModel>());
 
+        services.AddTransient<RegexViewModel>();
+        services.AddTransient<Func<RegexViewModel>>(sp => () => sp.GetRequiredService<RegexViewModel>());
+
         services.AddTransient<SettingsViewModel>();
         services.AddTransient<Func<SettingsViewModel>>(sp => () => sp.GetRequiredService<SettingsViewModel>());
 

@@ -17,6 +17,7 @@
   <data name="menu.json_diff" xml:space="preserve"><value>JSON-Vergleich</value></data>
   <data name="menu.base64_encoder" xml:space="preserve"><value>Base64-Kodierer</value></data>
   <data name="menu.base64_decoder" xml:space="preserve"><value>Base64-Dekodierer</value></data>
+  <data name="menu.regex" xml:space="preserve"><value>Regex</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Einstellungen</value></data>
 
   <data name="settings.title" xml:space="preserve"><value>Einstellungen</value></data>
@@ -174,6 +175,44 @@
   <data name="base64decoder.save_failed" xml:space="preserve"><value>Fehler beim Speichern der Datei: {0}</value></data>
   <data name="base64decoder.file_picker_failed" xml:space="preserve"><value>Fehler bei der Dateiauswahl: {0}</value></data>
 
+  <data name="regex.title" xml:space="preserve"><value>Regex</value></data>
+  <data name="regex.subtitle" xml:space="preserve"><value>Regex und Text eingeben, um Treffer beim Bearbeiten live hervorzuheben</value></data>
+  <data name="regex.pattern_title" xml:space="preserve"><value>Muster</value></data>
+  <data name="regex.pattern_watermark" xml:space="preserve"><value>(?&lt;word&gt;\w+)</value></data>
+  <data name="regex.ignore_case" xml:space="preserve"><value>Groß/Kleinschreibung ignorieren</value></data>
+  <data name="regex.multiline" xml:space="preserve"><value>Mehrzeilig</value></data>
+  <data name="regex.clear" xml:space="preserve"><value>Leeren</value></data>
+  <data name="regex.clear_tooltip" xml:space="preserve"><value>Muster, Text und Hervorhebungen leeren</value></data>
+  <data name="regex.path_watermark" xml:space="preserve"><value>Dateipfad zum Laden von Text eingeben</value></data>
+  <data name="regex.load_from_path" xml:space="preserve"><value>Pfad laden</value></data>
+  <data name="regex.load_from_path_tooltip" xml:space="preserve"><value>Text aus dem obigen Dateipfad lesen</value></data>
+  <data name="regex.browse" xml:space="preserve"><value>Durchsuchen</value></data>
+  <data name="regex.browse_tooltip" xml:space="preserve"><value>Textdatei vom Computer auswählen</value></data>
+  <data name="regex.text_title" xml:space="preserve"><value>Text</value></data>
+  <data name="regex.input_watermark" xml:space="preserve"><value>Hier tippen, eine Datei ablegen oder Inhalt aus einem Dateipfad laden</value></data>
+  <data name="regex.window_not_found" xml:space="preserve"><value>Hauptfenster wurde nicht gefunden</value></data>
+  <data name="regex.storage_not_available" xml:space="preserve"><value>Speicheranbieter konnte nicht initialisiert werden</value></data>
+  <data name="regex.open_dialog_title" xml:space="preserve"><value>Textdatei auswählen</value></data>
+  <data name="regex.all_files" xml:space="preserve"><value>Alle Dateien</value></data>
+  <data name="regex.path_required" xml:space="preserve"><value>Ein Dateipfad ist erforderlich</value></data>
+  <data name="regex.file_not_found" xml:space="preserve"><value>Datei nicht gefunden: {0}</value></data>
+  <data name="regex.file_loaded" xml:space="preserve"><value>Datei geladen: {0}</value></data>
+  <data name="regex.load_failed" xml:space="preserve"><value>Text konnte nicht geladen werden: {0}</value></data>
+  <data name="regex.access_denied" xml:space="preserve"><value>Zugriff beim Lesen der Datei verweigert: {0}</value></data>
+  <data name="regex.path_too_long" xml:space="preserve"><value>Dateipfad ist zu lang: {0}</value></data>
+  <data name="regex.invalid_path" xml:space="preserve"><value>Ungültiger Dateipfad: {0}</value></data>
+  <data name="regex.io_error" xml:space="preserve"><value>Datei-E/A-Fehler: {0}</value></data>
+  <data name="regex.processing_failed" xml:space="preserve"><value>Regex-Verarbeitung fehlgeschlagen: {0}</value></data>
+  <data name="regex.matches_found" xml:space="preserve"><value>{0} Treffer hervorgehoben</value></data>
+  <data name="regex.no_matches" xml:space="preserve"><value>Keine Treffer gefunden</value></data>
+  <data name="regex.match_count_summary" xml:space="preserve"><value>{0} Treffer</value></data>
+  <data name="regex.hover_pattern" xml:space="preserve"><value>Treffer durch Muster: {0}</value></data>
+  <data name="regex.hover_span" xml:space="preserve"><value>Bereich: Index {0}, Länge {1}</value></data>
+  <data name="regex.hover_value" xml:space="preserve"><value>Treffertext: {0}</value></data>
+  <data name="regex.hover_captures" xml:space="preserve"><value>Capture-Gruppen:</value></data>
+  <data name="regex.hover_capture_item" xml:space="preserve"><value>- {0}: {1} (Index {2}, Länge {3})</value></data>
+  <data name="regex.hover_no_captures" xml:space="preserve"><value>Keine Capture-Gruppen</value></data>
+
   <data name="jwtdecoder.title" xml:space="preserve"><value>JWT-Decoder</value></data>
   <data name="jwtdecoder.subtitle" xml:space="preserve"><value>JWT-Token einfügen und automatisch dekodieren</value></data>
   <data name="jwtdecoder.token_title" xml:space="preserve"><value>JWT-Token</value></data>
@@ -259,6 +298,10 @@
   <data name="jsondiff.inputs_required" xml:space="preserve"><value>Beide JSON-Eingaben sind erforderlich</value></data>
   <data name="jsondiff.left_invalid" xml:space="preserve"><value>Linkes JSON ist ungültig: {0}</value></data>
   <data name="jsondiff.right_invalid" xml:space="preserve"><value>Rechtes JSON ist ungültig: {0}</value></data>
+
+  <data name="regex.pattern_required" xml:space="preserve"><value>Ein Regex-Muster ist erforderlich</value></data>
+  <data name="regex.invalid_pattern" xml:space="preserve"><value>Ungültiges Regex-Muster: {0}</value></data>
+  <data name="regex.match_timeout" xml:space="preserve"><value>Regex-Abgleich hat das Zeitlimit überschritten: {0}</value></data>
 
   <data name="base64.encode_input_required" xml:space="preserve"><value>Es wurden keine Dateidaten zum Kodieren bereitgestellt</value></data>
   <data name="base64.encode_failed" xml:space="preserve"><value>Base64-Kodierung fehlgeschlagen: {0}</value></data>

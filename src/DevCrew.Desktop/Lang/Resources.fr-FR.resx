@@ -45,6 +45,9 @@
   <data name="menu.base64_decoder" xml:space="preserve">
     <value>Décodeur Base64</value>
   </data>
+  <data name="menu.regex" xml:space="preserve">
+    <value>Regex</value>
+  </data>
   <data name="menu.settings" xml:space="preserve">
     <value>Paramètres</value>
   </data>
@@ -315,6 +318,43 @@
   <data name="base64encoder.file_selected" xml:space="preserve">
     <value>Fichier sélectionné : {0}</value>
   </data>
+  <data name="regex.title" xml:space="preserve"><value>Regex</value></data>
+  <data name="regex.subtitle" xml:space="preserve"><value>Saisissez une regex et du texte pour surligner les correspondances en direct pendant l'édition</value></data>
+  <data name="regex.pattern_title" xml:space="preserve"><value>Motif</value></data>
+  <data name="regex.pattern_watermark" xml:space="preserve"><value>(?&lt;word&gt;\w+)</value></data>
+  <data name="regex.ignore_case" xml:space="preserve"><value>Ignorer la casse</value></data>
+  <data name="regex.multiline" xml:space="preserve"><value>Multiligne</value></data>
+  <data name="regex.clear" xml:space="preserve"><value>Effacer</value></data>
+  <data name="regex.clear_tooltip" xml:space="preserve"><value>Effacer le motif, le texte et les surbrillances</value></data>
+  <data name="regex.path_watermark" xml:space="preserve"><value>Collez un chemin de fichier pour charger du texte</value></data>
+  <data name="regex.load_from_path" xml:space="preserve"><value>Charger le chemin</value></data>
+  <data name="regex.load_from_path_tooltip" xml:space="preserve"><value>Lire le texte depuis le chemin de fichier ci-dessus</value></data>
+  <data name="regex.browse" xml:space="preserve"><value>Parcourir</value></data>
+  <data name="regex.browse_tooltip" xml:space="preserve"><value>Sélectionner un fichier texte sur votre ordinateur</value></data>
+  <data name="regex.text_title" xml:space="preserve"><value>Texte</value></data>
+  <data name="regex.input_watermark" xml:space="preserve"><value>Saisissez ici, déposez un fichier ou chargez le contenu depuis un chemin</value></data>
+  <data name="regex.window_not_found" xml:space="preserve"><value>Fenêtre principale introuvable</value></data>
+  <data name="regex.storage_not_available" xml:space="preserve"><value>Le fournisseur de stockage n'a pas pu être initialisé</value></data>
+  <data name="regex.open_dialog_title" xml:space="preserve"><value>Sélectionner un fichier texte</value></data>
+  <data name="regex.all_files" xml:space="preserve"><value>Tous les fichiers</value></data>
+  <data name="regex.path_required" xml:space="preserve"><value>Un chemin de fichier est requis</value></data>
+  <data name="regex.file_not_found" xml:space="preserve"><value>Fichier introuvable : {0}</value></data>
+  <data name="regex.file_loaded" xml:space="preserve"><value>Fichier chargé : {0}</value></data>
+  <data name="regex.load_failed" xml:space="preserve"><value>Impossible de charger le texte : {0}</value></data>
+  <data name="regex.access_denied" xml:space="preserve"><value>Accès refusé lors de la lecture du fichier : {0}</value></data>
+  <data name="regex.path_too_long" xml:space="preserve"><value>Le chemin du fichier est trop long : {0}</value></data>
+  <data name="regex.invalid_path" xml:space="preserve"><value>Chemin de fichier invalide : {0}</value></data>
+  <data name="regex.io_error" xml:space="preserve"><value>Erreur d'E/S fichier : {0}</value></data>
+  <data name="regex.processing_failed" xml:space="preserve"><value>Échec du traitement regex : {0}</value></data>
+  <data name="regex.matches_found" xml:space="preserve"><value>{0} correspondances surlignées</value></data>
+  <data name="regex.no_matches" xml:space="preserve"><value>Aucune correspondance trouvée</value></data>
+  <data name="regex.match_count_summary" xml:space="preserve"><value>{0} correspondances</value></data>
+  <data name="regex.hover_pattern" xml:space="preserve"><value>Correspondance via le motif : {0}</value></data>
+  <data name="regex.hover_span" xml:space="preserve"><value>Plage : index {0}, longueur {1}</value></data>
+  <data name="regex.hover_value" xml:space="preserve"><value>Texte trouvé : {0}</value></data>
+  <data name="regex.hover_captures" xml:space="preserve"><value>Groupes capturés :</value></data>
+  <data name="regex.hover_capture_item" xml:space="preserve"><value>- {0}: {1} (index {2}, longueur {3})</value></data>
+  <data name="regex.hover_no_captures" xml:space="preserve"><value>Aucun groupe capturé</value></data>
   <data name="base64encoder.window_not_found" xml:space="preserve">
     <value>Fenêtre principale introuvable</value>
   </data>
@@ -689,6 +729,9 @@
   <data name="jsondiff.right_invalid" xml:space="preserve">
     <value>Le JSON de droite est invalide : {0}</value>
   </data>
+  <data name="regex.pattern_required" xml:space="preserve"><value>Un motif regex est requis</value></data>
+  <data name="regex.invalid_pattern" xml:space="preserve"><value>Motif regex invalide : {0}</value></data>
+  <data name="regex.match_timeout" xml:space="preserve"><value>La recherche regex a dépassé le délai : {0}</value></data>
   <data name="base64.encode_input_required" xml:space="preserve">
     <value>Aucune donnée de fichier n'a été fournie pour l'encodage</value>
   </data>

@@ -39,6 +39,7 @@ public static class DependencyInjection
         services.AddSingleton<IJsonFormatterService, JsonFormatterService>();
         services.AddSingleton<IJsonDiffService, JsonDiffService>();
         services.AddSingleton<IBase64EncoderService, Base64EncoderService>();
+        services.AddSingleton<IRegexService, RegexService>();
 
         return services;
     }

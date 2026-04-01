@@ -20,6 +20,7 @@ public partial class MainWindowViewModel : BaseViewModel
     private readonly Func<JsonDiffViewModel> _jsonDiffViewModelFactory;
     private readonly Func<Base64EncoderViewModel> _base64EncoderViewModelFactory;
     private readonly Func<Base64DecoderViewModel> _base64DecoderViewModelFactory;
+    private readonly Func<RegexViewModel> _regexViewModelFactory;
     private readonly Func<SettingsViewModel> _settingsViewModelFactory;
     private readonly ILocalizationService _localizationService;
 
@@ -31,6 +32,7 @@ public partial class MainWindowViewModel : BaseViewModel
     private MenuItemViewModel? _jsonDiffItem;
     private MenuItemViewModel? _base64EncoderItem;
     private MenuItemViewModel? _base64DecoderItem;
+    private MenuItemViewModel? _regexItem;
     private MenuItemViewModel? _settingsItem;
 
     [ObservableProperty]
@@ -76,6 +78,7 @@ public partial class MainWindowViewModel : BaseViewModel
     /// <param name="jsonDiffViewModelFactory">Factory for new JSON Diff view models.</param>
     /// <param name="base64EncoderViewModelFactory">Factory for new Base64 Encoder view models.</param>
     /// <param name="base64DecoderViewModelFactory">Factory for new Base64 Decoder view models.</param>
+    /// <param name="regexViewModelFactory">Factory for new Regex view models.</param>
     /// <param name="settingsViewModelFactory">Factory for new Settings view models.</param>
     /// <param name="localizationService">Localization service for runtime language switching.</param>
     public MainWindowViewModel(
@@ -89,6 +92,7 @@ public partial class MainWindowViewModel : BaseViewModel
         Func<JsonDiffViewModel> jsonDiffViewModelFactory,
         Func<Base64EncoderViewModel> base64EncoderViewModelFactory,
         Func<Base64DecoderViewModel> base64DecoderViewModelFactory,
+        Func<RegexViewModel> regexViewModelFactory,
         Func<SettingsViewModel> settingsViewModelFactory,
         ILocalizationService localizationService)
         : base(errorHandler)
@@ -102,6 +106,7 @@ public partial class MainWindowViewModel : BaseViewModel
         _jsonDiffViewModelFactory = jsonDiffViewModelFactory;
         _base64EncoderViewModelFactory = base64EncoderViewModelFactory;
         _base64DecoderViewModelFactory = base64DecoderViewModelFactory;
+        _regexViewModelFactory = regexViewModelFactory;
         _settingsViewModelFactory = settingsViewModelFactory;
         _localizationService = localizationService;
         _localizationService.LanguageChanged += OnLanguageChanged;
@@ -123,6 +128,7 @@ public partial class MainWindowViewModel : BaseViewModel
         _jsonDiffItem = new MenuItemViewModel("json-diff", GetMenuHeader("json-diff"), OpenJsonDiffTabCommand, "Primary", "🧩");
         _base64EncoderItem = new MenuItemViewModel("base64-encoder", GetMenuHeader("base64-encoder"), OpenBase64EncoderTabCommand, "Primary", "🧬");
         _base64DecoderItem = new MenuItemViewModel("base64-decoder", GetMenuHeader("base64-decoder"), OpenBase64DecoderTabCommand, "Primary", "🔓");
+        _regexItem = new MenuItemViewModel("regex", GetMenuHeader("regex"), OpenRegexTabCommand, "Primary", "🔎");
         _settingsItem = new MenuItemViewModel("settings", GetMenuHeader("settings"), OpenSettingsTabCommand, "Secondary", "⚙️");
 
         MenuItems.Add(_dashboardItem);
@@ -133,6 +139,7 @@ public partial class MainWindowViewModel : BaseViewModel
         MenuItems.Add(_jsonDiffItem);
         MenuItems.Add(_base64EncoderItem);
         MenuItems.Add(_base64DecoderItem);
+        MenuItems.Add(_regexItem);
 
         BottomMenuItems.Add(_settingsItem);
 
@@ -145,6 +152,7 @@ public partial class MainWindowViewModel : BaseViewModel
         _dashboardViewModel.MenuItems.Add(_jsonDiffItem);
         _dashboardViewModel.MenuItems.Add(_base64EncoderItem);
         _dashboardViewModel.MenuItems.Add(_base64DecoderItem);
+        _dashboardViewModel.MenuItems.Add(_regexItem);
     }
 
     [RelayCommand]
@@ -266,6 +274,21 @@ public partial class MainWindowViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private void OpenRegexTab()
+    {
+        SetSelectedMenuItem("regex");
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == "regex");
+        if (existingTab != null)
+        {
+            SelectedTab = existingTab;
+            return;
+        }
+
+        var regexViewModel = _regexViewModelFactory();
+        OpenOrSelectTab("regex", GetTabHeader("regex"), regexViewModel, true, "🔎");
+    }
+
+    [RelayCommand]
     private void OpenSettingsTab()
     {
         SetSelectedMenuItem("settings");
@@ -301,7 +324,7 @@ public partial class MainWindowViewModel : BaseViewModel
             return;
         }
 
-        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder" || value.Id == "jwt-builder" || value.Id == "json-formatter" || value.Id == "json-diff" || value.Id == "base64-encoder" || value.Id == "base64-decoder" || value.Id == "settings")
+        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder" || value.Id == "jwt-builder" || value.Id == "json-formatter" || value.Id == "json-diff" || value.Id == "base64-encoder" || value.Id == "base64-decoder" || value.Id == "regex" || value.Id == "settings")
         {
             SetSelectedMenuItem(value.Id);
             return;
@@ -374,6 +397,7 @@ public partial class MainWindowViewModel : BaseViewModel
         if (_jsonDiffItem != null) _jsonDiffItem.Header = GetMenuHeader("json-diff");
         if (_base64EncoderItem != null) _base64EncoderItem.Header = GetMenuHeader("base64-encoder");
         if (_base64DecoderItem != null) _base64DecoderItem.Header = GetMenuHeader("base64-decoder");
+        if (_regexItem != null) _regexItem.Header = GetMenuHeader("regex");
         if (_settingsItem != null) _settingsItem.Header = GetMenuHeader("settings");
 
         foreach (var tab in Tabs)
@@ -395,6 +419,7 @@ public partial class MainWindowViewModel : BaseViewModel
             "json-diff" => _localizationService.GetString("menu.json_diff"),
             "base64-encoder" => _localizationService.GetString("menu.base64_encoder"),
             "base64-decoder" => _localizationService.GetString("menu.base64_decoder"),
+            "regex" => _localizationService.GetString("menu.regex"),
             "settings" => _localizationService.GetString("menu.settings"),
             _ => id
         };

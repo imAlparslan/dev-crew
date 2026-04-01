@@ -25,6 +25,7 @@
   <data name="menu.json_diff" xml:space="preserve"><value>JSON Diff</value></data>
   <data name="menu.base64_encoder" xml:space="preserve"><value>Base64 Encoder</value></data>
   <data name="menu.base64_decoder" xml:space="preserve"><value>Base64 Decoder</value></data>
+  <data name="menu.regex" xml:space="preserve"><value>Regex</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Settings</value></data>
 
   <data name="settings.title" xml:space="preserve"><value>Settings</value></data>
@@ -182,6 +183,44 @@
   <data name="base64decoder.save_failed" xml:space="preserve"><value>Error saving file: {0}</value></data>
   <data name="base64decoder.file_picker_failed" xml:space="preserve"><value>Error while selecting file: {0}</value></data>
 
+  <data name="regex.title" xml:space="preserve"><value>Regex</value></data>
+  <data name="regex.subtitle" xml:space="preserve"><value>Type a regex and text to highlight live matches while you edit</value></data>
+  <data name="regex.pattern_title" xml:space="preserve"><value>Pattern</value></data>
+  <data name="regex.pattern_watermark" xml:space="preserve"><value>(?&lt;word&gt;\w+)</value></data>
+  <data name="regex.ignore_case" xml:space="preserve"><value>Ignore case</value></data>
+  <data name="regex.multiline" xml:space="preserve"><value>Multiline</value></data>
+  <data name="regex.clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="regex.clear_tooltip" xml:space="preserve"><value>Clear pattern, text and highlights</value></data>
+  <data name="regex.path_watermark" xml:space="preserve"><value>Paste a file path to load text</value></data>
+  <data name="regex.load_from_path" xml:space="preserve"><value>Load Path</value></data>
+  <data name="regex.load_from_path_tooltip" xml:space="preserve"><value>Read text from the file path above</value></data>
+  <data name="regex.browse" xml:space="preserve"><value>Browse</value></data>
+  <data name="regex.browse_tooltip" xml:space="preserve"><value>Select a text file from your computer</value></data>
+  <data name="regex.text_title" xml:space="preserve"><value>Text</value></data>
+  <data name="regex.input_watermark" xml:space="preserve"><value>Type text here, drop a file, or load content from a file path</value></data>
+  <data name="regex.window_not_found" xml:space="preserve"><value>Main window not found</value></data>
+  <data name="regex.storage_not_available" xml:space="preserve"><value>Storage provider could not be initialized</value></data>
+  <data name="regex.open_dialog_title" xml:space="preserve"><value>Select text file</value></data>
+  <data name="regex.all_files" xml:space="preserve"><value>All Files</value></data>
+  <data name="regex.path_required" xml:space="preserve"><value>A file path is required</value></data>
+  <data name="regex.file_not_found" xml:space="preserve"><value>File not found: {0}</value></data>
+  <data name="regex.file_loaded" xml:space="preserve"><value>File loaded: {0}</value></data>
+  <data name="regex.load_failed" xml:space="preserve"><value>Text could not be loaded: {0}</value></data>
+  <data name="regex.access_denied" xml:space="preserve"><value>Access denied while reading file: {0}</value></data>
+  <data name="regex.path_too_long" xml:space="preserve"><value>File path is too long: {0}</value></data>
+  <data name="regex.invalid_path" xml:space="preserve"><value>Invalid file path: {0}</value></data>
+  <data name="regex.io_error" xml:space="preserve"><value>File I/O error: {0}</value></data>
+  <data name="regex.processing_failed" xml:space="preserve"><value>Regex processing failed: {0}</value></data>
+  <data name="regex.matches_found" xml:space="preserve"><value>{0} matches highlighted</value></data>
+  <data name="regex.no_matches" xml:space="preserve"><value>No matches found</value></data>
+  <data name="regex.match_count_summary" xml:space="preserve"><value>{0} matches</value></data>
+  <data name="regex.hover_pattern" xml:space="preserve"><value>Matched by pattern: {0}</value></data>
+  <data name="regex.hover_span" xml:space="preserve"><value>Span: index {0}, length {1}</value></data>
+  <data name="regex.hover_value" xml:space="preserve"><value>Matched text: {0}</value></data>
+  <data name="regex.hover_captures" xml:space="preserve"><value>Capture groups:</value></data>
+  <data name="regex.hover_capture_item" xml:space="preserve"><value>- {0}: {1} (index {2}, length {3})</value></data>
+  <data name="regex.hover_no_captures" xml:space="preserve"><value>No capture groups</value></data>
+
   <data name="jwtdecoder.title" xml:space="preserve"><value>JWT Decoder</value></data>
   <data name="jwtdecoder.subtitle" xml:space="preserve"><value>Paste your JWT token and it will be decoded automatically</value></data>
   <data name="jwtdecoder.token_title" xml:space="preserve"><value>JWT Token</value></data>
@@ -267,6 +306,10 @@
   <data name="jsondiff.inputs_required" xml:space="preserve"><value>Both JSON inputs are required</value></data>
   <data name="jsondiff.left_invalid" xml:space="preserve"><value>Left JSON is invalid: {0}</value></data>
   <data name="jsondiff.right_invalid" xml:space="preserve"><value>Right JSON is invalid: {0}</value></data>
+
+  <data name="regex.pattern_required" xml:space="preserve"><value>Regex pattern is required</value></data>
+  <data name="regex.invalid_pattern" xml:space="preserve"><value>Invalid regex pattern: {0}</value></data>
+  <data name="regex.match_timeout" xml:space="preserve"><value>Regex matching timed out: {0}</value></data>
 
   <data name="base64.encode_input_required" xml:space="preserve"><value>No file content was provided for encoding</value></data>
   <data name="base64.encode_failed" xml:space="preserve"><value>Base64 encoding failed: {0}</value></data>

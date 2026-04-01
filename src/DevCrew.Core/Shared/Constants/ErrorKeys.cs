@@ -2,6 +2,14 @@ namespace DevCrew.Core.Shared.Constants;
 
 public static class ErrorKeys
 {
+    public static class Regex
+    {
+        public const string PatternRequired = "regex.pattern_required";
+        public const string InvalidPattern = "regex.invalid_pattern";
+        public const string MatchTimeout = "regex.match_timeout";
+        public const string ProcessingFailed = "regex.processing_failed";
+    }
+
     public static class JsonFormatter
     {
         public const string InputRequired = "jsonformatter.input_required";

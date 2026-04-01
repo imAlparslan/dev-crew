@@ -1,0 +1,149 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:DevCrew.Desktop.Controls"
+             xmlns:vm="using:DevCrew.Desktop.ViewModels"
+             x:Class="DevCrew.Desktop.Views.RegexView"
+             x:DataType="vm:RegexViewModel">
+
+    <ScrollViewer>
+        <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
+            <Grid RowDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Stretch">
+                <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
+                    <TextBlock Text="{Binding [regex.title], Source={StaticResource Loc}}"
+                               FontSize="{DynamicResource FontSizeHeading}"
+                               FontFamily="{DynamicResource FontHeading}"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource BrushPrimaryText}"
+                               HorizontalAlignment="Center" />
+
+                    <TextBlock Text="{Binding [regex.subtitle], Source={StaticResource Loc}}"
+                               FontSize="{DynamicResource FontSizeMedium}"
+                               Foreground="{StaticResource BrushSecondaryText}"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+
+                <Border Grid.Row="1"
+                        Background="{StaticResource BrushTertiaryBackground}"
+                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12"
+                        Margin="0,0,0,12">
+                    <Grid RowDefinitions="Auto,Auto" RowSpacing="0">
+                        <Grid Grid.Row="0" ColumnDefinitions="Auto,8,*,12,Auto,12,Auto,12,Auto" Margin="0,0,0,10">
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding [regex.pattern_title], Source={StaticResource Loc}}"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       VerticalAlignment="Center" />
+                            <TextBox Grid.Column="2"
+                                     Text="{Binding Pattern}"
+                                     Watermark="{Binding [regex.pattern_watermark], Source={StaticResource Loc}}"
+                                     Classes="CompactInputTextBox" />
+                            <CheckBox Grid.Column="4"
+                                      Content="{Binding [regex.ignore_case], Source={StaticResource Loc}}"
+                                      IsChecked="{Binding IgnoreCase}"
+                                      VerticalAlignment="Center" />
+                            <CheckBox Grid.Column="6"
+                                      Content="{Binding [regex.multiline], Source={StaticResource Loc}}"
+                                      IsChecked="{Binding Multiline}"
+                                      VerticalAlignment="Center" />
+                            <Button Grid.Column="8"
+                                    Content="{Binding [regex.clear], Source={StaticResource Loc}}"
+                                    Command="{Binding ClearCommand}"
+                                    Classes="ActionButton DangerActionButton"
+                                    ToolTip.Tip="{Binding [regex.clear_tooltip], Source={StaticResource Loc}}" />
+                        </Grid>
+
+                        <Grid Grid.Row="1" ColumnDefinitions="*,8,Auto,8,Auto" Margin="0,0,0,0">
+                            <TextBox Grid.Column="0"
+                                     Text="{Binding SourcePath}"
+                                     Watermark="{Binding [regex.path_watermark], Source={StaticResource Loc}}"
+                                     Classes="CompactInputTextBox" />
+                            <Button Grid.Column="2"
+                                    Content="{Binding [regex.load_from_path], Source={StaticResource Loc}}"
+                                    Command="{Binding LoadFromPathCommand}"
+                                    Classes="ActionButton PrimaryActionButton"
+                                    ToolTip.Tip="{Binding [regex.load_from_path_tooltip], Source={StaticResource Loc}}" />
+                            <Button Grid.Column="4"
+                                    Content="{Binding [regex.browse], Source={StaticResource Loc}}"
+                                    Command="{Binding BrowseFileCommand}"
+                                    Classes="ActionButton PrimaryActionButton"
+                                    ToolTip.Tip="{Binding [regex.browse_tooltip], Source={StaticResource Loc}}" />
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="2"
+                        Padding="8"
+                        CornerRadius="4"
+                        Margin="0,0,0,12"
+                        IsVisible="{Binding ValidationMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <Border.Background>
+                        <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#2D5F2E|#5F2D2D'}" Opacity="0.2" />
+                    </Border.Background>
+                    <Border.BorderBrush>
+                        <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#4CAF50|#F44336'}" />
+                    </Border.BorderBrush>
+                    <Border.BorderThickness>1</Border.BorderThickness>
+
+                    <TextBlock Text="{Binding ValidationMessage}"
+                               FontSize="{DynamicResource FontSizeDefault}"
+                               FontWeight="Medium"
+                               TextWrapping="Wrap">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#4CAF50|#F44336'}" />
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </Border>
+
+                <Border Grid.Row="3"
+                        Background="{StaticResource BrushTertiaryBackground}"
+                        BorderBrush="{StaticResource BrushBorderSecondary}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12"
+                        DragDrop.AllowDrop="True"
+                        x:Name="InputBorder">
+                    <Grid RowDefinitions="Auto,*">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding [regex.text_title], Source={StaticResource Loc}}"
+                                       FontSize="{DynamicResource FontSizeLabel}"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding MatchCountSummary}"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid Grid.Row="1">
+                            <controls:RegexHighlightOverlay x:Name="HighlightOverlay"
+                                                            IsHitTestVisible="False" />
+                            <TextBox x:Name="InputTextBox"
+                                     Text="{Binding InputText}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MinHeight="420"
+                                     Padding="8"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch"
+                                     VerticalContentAlignment="Top"
+                                     Classes="MonospaceInputTextBox"
+                                     FontFamily="{DynamicResource FontMonospace}"
+                                     FontSize="{DynamicResource FontSizeSmall}"
+                                     Watermark="{Binding [regex.input_watermark], Source={StaticResource Loc}}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </ScrollViewer>
+</UserControl>
