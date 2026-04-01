@@ -1,13 +1,22 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="using:DevCrew.Desktop.Converters"
              xmlns:controls="using:DevCrew.Desktop.Controls"
              xmlns:vm="using:DevCrew.Desktop.ViewModels"
              x:Class="DevCrew.Desktop.Views.RegexView"
              x:DataType="vm:RegexViewModel">
 
-    <ScrollViewer>
-        <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
-            <Grid RowDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Stretch">
+    <UserControl.Resources>
+        <converters:BooleanToBrushConverter x:Key="RegexValidationBackgroundBrushConverter"
+                                            TrueBrush="{StaticResource BrushRegexValidationSuccessBackground}"
+                                            FalseBrush="{StaticResource BrushRegexValidationErrorBackground}" />
+        <converters:BooleanToBrushConverter x:Key="RegexValidationBrushConverter"
+                                            TrueBrush="{StaticResource BrushRegexValidationSuccess}"
+                                            FalseBrush="{StaticResource BrushRegexValidationError}" />
+    </UserControl.Resources>
+
+    <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
+        <Grid RowDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Stretch">
                 <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
                     <TextBlock Text="{Binding [regex.title], Source={StaticResource Loc}}"
                                FontSize="{DynamicResource FontSizeHeading}"
@@ -81,10 +90,10 @@
                         Margin="0,0,0,12"
                         IsVisible="{Binding ValidationMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                     <Border.Background>
-                        <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#2D5F2E|#5F2D2D'}" Opacity="0.2" />
+                        <Binding Path="IsValid" Converter="{StaticResource RegexValidationBackgroundBrushConverter}" />
                     </Border.Background>
                     <Border.BorderBrush>
-                        <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#4CAF50|#F44336'}" />
+                        <Binding Path="IsValid" Converter="{StaticResource RegexValidationBrushConverter}" />
                     </Border.BorderBrush>
                     <Border.BorderThickness>1</Border.BorderThickness>
 
@@ -93,7 +102,7 @@
                                FontWeight="Medium"
                                TextWrapping="Wrap">
                         <TextBlock.Foreground>
-                            <SolidColorBrush Color="{Binding IsValid, Converter={StaticResource BoolToColorConverter}, ConverterParameter='#4CAF50|#F44336'}" />
+                            <Binding Path="IsValid" Converter="{StaticResource RegexValidationBrushConverter}" />
                         </TextBlock.Foreground>
                     </TextBlock>
                 </Border>
@@ -122,12 +131,14 @@
 
                         <Grid Grid.Row="1">
                             <controls:RegexHighlightOverlay x:Name="HighlightOverlay"
+                                                            HighlightBrush="{StaticResource BrushRegexHighlight}"
+                                                            HoverBrush="{StaticResource BrushRegexHighlightHover}"
+                                                            HighlightBorderBrush="{StaticResource BrushRegexHighlightBorder}"
                                                             IsHitTestVisible="False" />
                             <TextBox x:Name="InputTextBox"
                                      Text="{Binding InputText}"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
-                                     MinHeight="420"
                                      Padding="8"
                                      Background="Transparent"
                                      BorderThickness="0"
@@ -138,12 +149,11 @@
                                      FontFamily="{DynamicResource FontMonospace}"
                                      FontSize="{DynamicResource FontSizeSmall}"
                                      Watermark="{Binding [regex.input_watermark], Source={StaticResource Loc}}"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                      ScrollViewer.VerticalScrollBarVisibility="Auto" />
                         </Grid>
                     </Grid>
                 </Border>
             </Grid>
-        </Border>
-    </ScrollViewer>
+    </Border>
 </UserControl>

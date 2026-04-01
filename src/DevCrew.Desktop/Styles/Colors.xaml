@@ -26,6 +26,15 @@
     <Color x:Key="ColorButtonPageDefault">#2D2D2D</Color>
     <Color x:Key="ColorButtonPageDisabled">#3C3C3C</Color>
     <Color x:Key="ColorButtonPageBorderDefault">#1F1F1F</Color>
+
+    <!-- Regex Feature Colors -->
+    <Color x:Key="ColorRegexHighlight">#780EA5E9</Color>
+    <Color x:Key="ColorRegexHighlightHover">#AA38BDF8</Color>
+    <Color x:Key="ColorRegexHighlightBorder">#B47DD3FC</Color>
+    <Color x:Key="ColorRegexValidationSuccess">#4CAF50</Color>
+    <Color x:Key="ColorRegexValidationError">#F44336</Color>
+    <Color x:Key="ColorRegexValidationSuccessBackground">#332D5F2E</Color>
+    <Color x:Key="ColorRegexValidationErrorBackground">#335F2D2D</Color>
     
     <!-- Solid Color Brushes -->
     <SolidColorBrush x:Key="BrushPrimaryBackground" Color="{StaticResource ColorPrimaryBackground}" />
@@ -50,4 +59,12 @@
     <SolidColorBrush x:Key="BrushButtonPrimary" Color="{StaticResource ColorButtonPrimary}" />
     <SolidColorBrush x:Key="BrushButtonSecondary" Color="{StaticResource ColorButtonSecondary}" />
     <SolidColorBrush x:Key="BrushButtonHover" Color="{StaticResource ColorButtonHover}" />
+
+    <SolidColorBrush x:Key="BrushRegexHighlight" Color="{StaticResource ColorRegexHighlight}" />
+    <SolidColorBrush x:Key="BrushRegexHighlightHover" Color="{StaticResource ColorRegexHighlightHover}" />
+    <SolidColorBrush x:Key="BrushRegexHighlightBorder" Color="{StaticResource ColorRegexHighlightBorder}" />
+    <SolidColorBrush x:Key="BrushRegexValidationSuccess" Color="{StaticResource ColorRegexValidationSuccess}" />
+    <SolidColorBrush x:Key="BrushRegexValidationError" Color="{StaticResource ColorRegexValidationError}" />
+    <SolidColorBrush x:Key="BrushRegexValidationSuccessBackground" Color="{StaticResource ColorRegexValidationSuccessBackground}" />
+    <SolidColorBrush x:Key="BrushRegexValidationErrorBackground" Color="{StaticResource ColorRegexValidationErrorBackground}" />
 </ResourceDictionary>

@@ -8,9 +8,42 @@ namespace DevCrew.Desktop.Controls;
 
 public sealed class RegexHighlightOverlay : Control
 {
-    private static readonly IBrush HighlightBrush = new SolidColorBrush(Color.FromArgb(120, 14, 165, 233));
-    private static readonly IBrush HoverBrush = new SolidColorBrush(Color.FromArgb(170, 56, 189, 248));
-    private static readonly IPen HighlightPen = new Pen(new SolidColorBrush(Color.FromArgb(180, 125, 211, 252)), 1);
+    public static readonly StyledProperty<IBrush?> HighlightBrushProperty =
+        AvaloniaProperty.Register<RegexHighlightOverlay, IBrush?>(nameof(HighlightBrush));
+
+    public static readonly StyledProperty<IBrush?> HoverBrushProperty =
+        AvaloniaProperty.Register<RegexHighlightOverlay, IBrush?>(nameof(HoverBrush));
+
+    public static readonly StyledProperty<IBrush?> HighlightBorderBrushProperty =
+        AvaloniaProperty.Register<RegexHighlightOverlay, IBrush?>(nameof(HighlightBorderBrush));
+
+    public static readonly StyledProperty<double> HighlightBorderThicknessProperty =
+        AvaloniaProperty.Register<RegexHighlightOverlay, double>(nameof(HighlightBorderThickness), 1);
+
+    public IBrush? HighlightBrush
+    {
+        get => GetValue(HighlightBrushProperty);
+        set => SetValue(HighlightBrushProperty, value);
+    }
+
+    public IBrush? HoverBrush
+    {
+        get => GetValue(HoverBrushProperty);
+        set => SetValue(HoverBrushProperty, value);
+    }
+
+    public IBrush? HighlightBorderBrush
+    {
+        get => GetValue(HighlightBorderBrushProperty);
+        set => SetValue(HighlightBorderBrushProperty, value);
+    }
+
+    public double HighlightBorderThickness
+    {
+        get => GetValue(HighlightBorderThicknessProperty);
+        set => SetValue(HighlightBorderThicknessProperty, value);
+    }
+
     private readonly List<RenderedRegion> _regions = [];
 
     private TextLayout? _textLayout;
@@ -62,10 +95,19 @@ public sealed class RegexHighlightOverlay : Control
     {
         base.Render(context);
 
+        using var clip = context.PushClip(new Rect(Bounds.Size));
+        var defaultHighlightBrush = (IBrush?)Application.Current?.FindResource("BrushRegexHighlight") ?? Brushes.Transparent;
+        var defaultHoverBrush = (IBrush?)Application.Current?.FindResource("BrushRegexHighlightHover") ?? defaultHighlightBrush;
+        var borderBrush = (IBrush?)Application.Current?.FindResource("BrushRegexHighlightBorder") ?? defaultHighlightBrush;
+
+        var highlightBrush = HighlightBrush ?? defaultHighlightBrush;
+        var hoverBrush = HoverBrush ?? defaultHoverBrush;
+        var pen = new Pen(HighlightBorderBrush ?? borderBrush, HighlightBorderThickness);
+
         foreach (var region in _regions)
         {
-            var brush = ReferenceEquals(region.Match, _hoveredMatch) ? HoverBrush : HighlightBrush;
-            context.DrawRectangle(brush, HighlightPen, region.Bounds, 4, 4);
+            var brush = ReferenceEquals(region.Match, _hoveredMatch) ? hoverBrush : highlightBrush;
+            context.DrawRectangle(brush, pen, region.Bounds, 4, 4);
         }
     }
 
