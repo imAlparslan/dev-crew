@@ -145,7 +145,8 @@ public sealed class RegexHighlightOverlay : Control
 
                 var prefixLength = segmentStart - lineStart;
                 var lineText = SafeSubstring(_text, lineStart, line.Length);
-                var prefixText = prefixLength > 0 ? lineText[..prefixLength] : string.Empty;
+                var safePrefixLength = Math.Clamp(prefixLength, 0, lineText.Length);
+                var prefixText = safePrefixLength > 0 ? lineText[..safePrefixLength] : string.Empty;
                 var segmentText = SafeSubstring(_text, segmentStart, segmentLength);
 
                 var x = _textPadding.Left + MeasureWidth(prefixText) - _scrollOffset.X;
@@ -180,7 +181,19 @@ public sealed class RegexHighlightOverlay : Control
 
     private static string SafeSubstring(string source, int start, int length)
     {
-        if (string.IsNullOrEmpty(source) || start >= source.Length || length <= 0)
+        if (string.IsNullOrEmpty(source) || length <= 0)
+        {
+            return string.Empty;
+        }
+
+        // Line indices can briefly lag behind text updates while editing.
+        if (start < 0)
+        {
+            length += start;
+            start = 0;
+        }
+
+        if (start >= source.Length || length <= 0)
         {
             return string.Empty;
         }

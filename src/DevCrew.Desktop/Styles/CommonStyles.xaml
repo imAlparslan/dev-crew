@@ -77,4 +77,45 @@
         <Setter Property="SelectionBrush" Value="{StaticResource BrushAccent}" />
     </Style>
 
+    <Style Selector="TextBox.RegexInputTextBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorderSecondary}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style Selector="TextBox.RegexInputTextBox:pointerover">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushButtonHover}" />
+    </Style>
+
+    <Style Selector="TextBox.RegexInputTextBox:focus">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource BrushAccent}" />
+    </Style>
+
+
+    <Style Selector="TextBox.RegexInputTextBox /template/ Border#borderElement">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="TextBox.RegexInputTextBox:pointerover /template/ Border#borderElement">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="TextBox.RegexInputTextBox:focus /template/ Border#borderElement">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="TextBox.RegexInputTextBox /template/ ScrollViewer">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="TextBox.RegexInputTextBox:pointerover /template/ ScrollViewer">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="TextBox.RegexInputTextBox:focus /template/ ScrollViewer">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
 </Styles>

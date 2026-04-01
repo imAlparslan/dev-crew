@@ -11,6 +11,7 @@ public partial class RegexViewModel : BaseViewModel
     private readonly IRegexService _regexService;
     private readonly ILocalizationService _localizationService;
     private CancellationTokenSource? _refreshCancellationTokenSource;
+    private bool _suppressRefresh;
 
     [ObservableProperty]
     private string pattern = string.Empty;
@@ -73,14 +74,25 @@ public partial class RegexViewModel : BaseViewModel
     private void Clear()
     {
         _refreshCancellationTokenSource?.Cancel();
-        Pattern = string.Empty;
-        InputText = string.Empty;
-        SourcePath = string.Empty;
-        ValidationMessage = string.Empty;
-        IsValid = false;
-        IsError = false;
-        MatchCount = 0;
-        Matches = [];
+        _refreshCancellationTokenSource?.Dispose();
+        _refreshCancellationTokenSource = null;
+
+        _suppressRefresh = true;
+        try
+        {
+            Pattern = string.Empty;
+            InputText = string.Empty;
+            SourcePath = string.Empty;
+            ValidationMessage = string.Empty;
+            IsValid = false;
+            IsError = false;
+            MatchCount = 0;
+            Matches = [];
+        }
+        finally
+        {
+            _suppressRefresh = false;
+        }
     }
 
     [RelayCommand]
@@ -206,6 +218,11 @@ public partial class RegexViewModel : BaseViewModel
 
     private void ScheduleRefresh()
     {
+        if (_suppressRefresh)
+        {
+            return;
+        }
+
         _refreshCancellationTokenSource?.Cancel();
         _refreshCancellationTokenSource?.Dispose();
         var cancellationTokenSource = new CancellationTokenSource();
@@ -215,14 +232,7 @@ public partial class RegexViewModel : BaseViewModel
 
     private async Task RefreshMatchesAsync(CancellationToken cancellationToken)
     {
-        try
-        {
-            await Task.Delay(120, cancellationToken);
-        }
-        catch (OperationCanceledException)
-        {
-            return;
-        }
+        await Task.Delay(10);
 
         if (cancellationToken.IsCancellationRequested)
         {

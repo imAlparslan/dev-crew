@@ -140,17 +140,25 @@
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      Padding="8"
-                                     Background="Transparent"
-                                     BorderThickness="0"
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Stretch"
                                      VerticalContentAlignment="Top"
-                                     Classes="MonospaceInputTextBox"
+                                     Classes="MonospaceInputTextBox RegexInputTextBox"
                                      FontFamily="{DynamicResource FontMonospace}"
                                      FontSize="{DynamicResource FontSizeSmall}"
                                      Watermark="{Binding [regex.input_watermark], Source={StaticResource Loc}}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <TextBox.Resources>
+                                    <SolidColorBrush x:Key="TextControlBackground" Color="Transparent" />
+                                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent" />
+                                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent" />
+                                    <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="Transparent" />
+                                    <StaticResource x:Key="TextControlBorderBrush" ResourceKey="BrushBorderSecondary" />
+                                    <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="BrushButtonHover" />
+                                    <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="BrushAccent" />
+                                </TextBox.Resources>
+                            </TextBox>
                         </Grid>
                     </Grid>
                 </Border>
