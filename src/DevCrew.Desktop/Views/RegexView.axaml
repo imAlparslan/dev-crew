@@ -1,7 +1,8 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ae="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+             xmlns:b="using:DevCrew.Desktop.Behaviors"
              xmlns:converters="using:DevCrew.Desktop.Converters"
-             xmlns:controls="using:DevCrew.Desktop.Controls"
              xmlns:vm="using:DevCrew.Desktop.ViewModels"
              x:Class="DevCrew.Desktop.Views.RegexView"
              x:DataType="vm:RegexViewModel">
@@ -130,35 +131,16 @@
                         </Grid>
 
                         <Grid Grid.Row="1">
-                            <controls:RegexHighlightOverlay x:Name="HighlightOverlay"
-                                                            HighlightBrush="{StaticResource BrushRegexHighlight}"
-                                                            HoverBrush="{StaticResource BrushRegexHighlightHover}"
-                                                            HighlightBorderBrush="{StaticResource BrushRegexHighlightBorder}"
-                                                            IsHitTestVisible="False" />
-                            <TextBox x:Name="InputTextBox"
-                                     Text="{Binding InputText}"
-                                     AcceptsReturn="True"
-                                     TextWrapping="Wrap"
-                                     Padding="8"
-                                     HorizontalAlignment="Stretch"
-                                     VerticalAlignment="Stretch"
-                                     VerticalContentAlignment="Top"
-                                     Classes="MonospaceInputTextBox RegexInputTextBox"
-                                     FontFamily="{DynamicResource FontMonospace}"
-                                     FontSize="{DynamicResource FontSizeSmall}"
-                                     Watermark="{Binding [regex.input_watermark], Source={StaticResource Loc}}"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                     ScrollViewer.VerticalScrollBarVisibility="Auto">
-                                <TextBox.Resources>
-                                    <SolidColorBrush x:Key="TextControlBackground" Color="Transparent" />
-                                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent" />
-                                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent" />
-                                    <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="Transparent" />
-                                    <StaticResource x:Key="TextControlBorderBrush" ResourceKey="BrushBorderSecondary" />
-                                    <StaticResource x:Key="TextControlBorderBrushPointerOver" ResourceKey="BrushButtonHover" />
-                                    <StaticResource x:Key="TextControlBorderBrushFocused" ResourceKey="BrushAccent" />
-                                </TextBox.Resources>
-                            </TextBox>
+                            <ae:TextEditor Name="InputEditor"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"
+                                           Background="Transparent"
+                                           Foreground="{StaticResource BrushPrimaryText}"
+                                           ShowLineNumbers="False"
+                                           WordWrap="True"
+                                           FontFamily="{DynamicResource FontMonospace}"
+                                           FontSize="{DynamicResource FontSizeSmall}"
+                                           b:HoverHighlightBehavior.IsEnabled="True" />
                         </Grid>
                     </Grid>
                 </Border>

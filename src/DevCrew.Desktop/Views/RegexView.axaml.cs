@@ -1,11 +1,11 @@
 using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.VisualTree;
+using AvaloniaEdit;
+using DevCrew.Desktop.Behaviors;
 using DevCrew.Desktop.Controls;
 using DevCrew.Desktop.ViewModels;
 
@@ -14,11 +14,10 @@ namespace DevCrew.Desktop.Views;
 public partial class RegexView : UserControl
 {
     private Border? _inputBorder;
-    private TextBox? _inputTextBox;
-    private RegexHighlightOverlay? _highlightOverlay;
-    private ScrollViewer? _editorScrollViewer;
-    private TextPresenter? _textPresenter;
+    private TextEditor? _inputEditor;
+    private readonly RegexMatchColorizingTransformer _matchColorizer = new();
     private RegexViewModel? _viewModel;
+    private bool _syncingEditorText;
 
     public RegexView()
     {
@@ -31,7 +30,7 @@ public partial class RegexView : UserControl
     {
         AttachControls();
         AttachDragDropHandlers();
-        RefreshOverlay();
+        RefreshHighlighting();
     }
 
     private void OnDataContextChanged(object? sender, EventArgs e)
@@ -47,34 +46,48 @@ public partial class RegexView : UserControl
             _viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 
-        RefreshOverlay();
+        RefreshHighlighting();
     }
 
     private void AttachControls()
     {
         _inputBorder = this.FindControl<Border>("InputBorder");
-        _inputTextBox = this.FindControl<TextBox>("InputTextBox");
-        _highlightOverlay = this.FindControl<RegexHighlightOverlay>("HighlightOverlay");
+        _inputEditor = this.FindControl<TextEditor>("InputEditor");
 
-        if (_inputTextBox is null)
+        if (_inputEditor is null)
         {
             return;
         }
 
-        _textPresenter = _inputTextBox.GetVisualDescendants().OfType<TextPresenter>().FirstOrDefault();
-        _editorScrollViewer = _inputTextBox.GetVisualDescendants().OfType<ScrollViewer>().FirstOrDefault();
-
-        _inputTextBox.PropertyChanged -= InputTextBox_PropertyChanged;
-        _inputTextBox.PropertyChanged += InputTextBox_PropertyChanged;
-        _inputTextBox.PointerMoved -= InputTextBox_PointerMoved;
-        _inputTextBox.PointerMoved += InputTextBox_PointerMoved;
-        _inputTextBox.PointerExited -= InputTextBox_PointerExited;
-        _inputTextBox.PointerExited += InputTextBox_PointerExited;
-
-        if (_editorScrollViewer is not null)
+        if (!_inputEditor.TextArea.TextView.BackgroundRenderers.Contains(_matchColorizer))
         {
-            _editorScrollViewer.ScrollChanged -= EditorScrollViewer_ScrollChanged;
-            _editorScrollViewer.ScrollChanged += EditorScrollViewer_ScrollChanged;
+            _inputEditor.TextArea.TextView.BackgroundRenderers.Add(_matchColorizer);
+        }
+
+        _inputEditor.TextChanged -= InputEditor_TextChanged;
+        _inputEditor.TextChanged += InputEditor_TextChanged;
+
+        HoverHighlightBehavior.SetHighlightSource(_inputEditor, _matchColorizer);
+    }
+
+    private void InputEditor_TextChanged(object? sender, EventArgs e)
+    {
+        if (_syncingEditorText || _inputEditor is null || _viewModel is null)
+        {
+            return;
+        }
+
+        // During active typing, match refresh is async; clear stale hover/highlight immediately
+        // so small-screen wraps do not keep tooltips at outdated offsets.
+        _matchColorizer.SetMatches([]);
+        _inputEditor.TextArea.TextView.InvalidateLayer(_matchColorizer.Layer);
+        ToolTip.SetTip(_inputEditor, null);
+        ToolTip.SetIsOpen(_inputEditor, false);
+
+        var editorText = _inputEditor.Text ?? string.Empty;
+        if (!string.Equals(_viewModel.InputText, editorText, StringComparison.Ordinal))
+        {
+            _viewModel.InputText = editorText;
         }
     }
 
@@ -148,68 +161,32 @@ public partial class RegexView : UserControl
     {
         if (e.PropertyName is nameof(RegexViewModel.Matches) or nameof(RegexViewModel.InputText))
         {
-            RefreshOverlay();
+            RefreshHighlighting();
         }
     }
 
-    private void InputTextBox_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    private void RefreshHighlighting()
     {
-        if (e.Property == BoundsProperty || e.Property == TextBox.TextProperty)
-        {
-            RefreshOverlay();
-        }
-    }
-
-    private void EditorScrollViewer_ScrollChanged(object? sender, ScrollChangedEventArgs e)
-    {
-        RefreshOverlay();
-    }
-
-    private void InputTextBox_PointerMoved(object? sender, PointerEventArgs e)
-    {
-        if (_highlightOverlay is null || _inputTextBox is null)
+        if (_inputEditor is null || _viewModel is null)
         {
             return;
         }
 
-        var point = e.GetPosition(_inputTextBox);
-        var match = _highlightOverlay.GetMatchAt(point);
-        _highlightOverlay.SetHoveredMatch(match);
-        ToolTip.SetTip(_inputTextBox, match?.TooltipText);
-        ToolTip.SetIsOpen(_inputTextBox, match is not null);
-    }
-
-    private void InputTextBox_PointerExited(object? sender, PointerEventArgs e)
-    {
-        if (_highlightOverlay is null || _inputTextBox is null)
+        var viewModelText = _viewModel.InputText ?? string.Empty;
+        if (!string.Equals(_inputEditor.Text, viewModelText, StringComparison.Ordinal))
         {
-            return;
+            _syncingEditorText = true;
+            try
+            {
+                _inputEditor.Text = viewModelText;
+            }
+            finally
+            {
+                _syncingEditorText = false;
+            }
         }
 
-        _highlightOverlay.SetHoveredMatch(null);
-        ToolTip.SetIsOpen(_inputTextBox, false);
-    }
-
-    private void RefreshOverlay()
-    {
-        if (_inputTextBox is null || _highlightOverlay is null || _viewModel is null)
-        {
-            return;
-        }
-
-        _textPresenter ??= _inputTextBox.GetVisualDescendants().OfType<TextPresenter>().FirstOrDefault();
-        _editorScrollViewer ??= _inputTextBox.GetVisualDescendants().OfType<ScrollViewer>().FirstOrDefault();
-
-        var fontFamily = _inputTextBox.FontFamily ?? FontFamily.Default;
-        var typeface = new Typeface(fontFamily, _inputTextBox.FontStyle, _inputTextBox.FontWeight);
-
-        _highlightOverlay.UpdatePresentation(
-            _textPresenter?.TextLayout,
-            _inputTextBox.Text ?? string.Empty,
-            _viewModel.Matches,
-            _inputTextBox.Padding,
-            _editorScrollViewer?.Offset ?? default,
-            typeface,
-            _inputTextBox.FontSize);
+        _matchColorizer.SetMatches(_viewModel.Matches);
+        _inputEditor.TextArea.TextView.InvalidateLayer(_matchColorizer.Layer);
     }
 }

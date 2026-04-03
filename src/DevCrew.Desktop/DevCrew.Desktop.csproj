@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.2" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.4.1" />
     <PackageReference Include="Avalonia.BuildServices" Version="11.3.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -38,9 +39,7 @@
     <AvaloniaResource Include="**\*.xaml" />
   </ItemGroup>
 
-  <Target Name="CreateMacAppBundle"
-          AfterTargets="Build;Publish"
-          Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+  <Target Name="CreateMacAppBundle" AfterTargets="Build;Publish" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
     <PropertyGroup>
       <MacAppBundleDir>$(OutDir)$(AssemblyName).app</MacAppBundleDir>
       <MacAppContentsDir>$(MacAppBundleDir)/Contents</MacAppContentsDir>
@@ -51,23 +50,15 @@
     <MakeDir Directories="$(MacAppMacOSDir);$(MacAppResourcesDir)" />
 
     <ItemGroup>
-      <MacAppBundleFiles Include="$(OutDir)**/*"
-                         Exclude="$(MacAppBundleDir)/**" />
+      <MacAppBundleFiles Include="$(OutDir)**/*" Exclude="$(MacAppBundleDir)/**" />
     </ItemGroup>
 
-    <Copy SourceFiles="Packaging/Info.plist.template"
-          DestinationFiles="$(MacAppContentsDir)/Info.plist"
-          SkipUnchangedFiles="true" />
+    <Copy SourceFiles="Packaging/Info.plist.template" DestinationFiles="$(MacAppContentsDir)/Info.plist" SkipUnchangedFiles="true" />
 
-    <Copy SourceFiles="Assets/icons/macos/AppIcon.icns"
-          DestinationFiles="$(MacAppResourcesDir)/AppIcon.icns"
-          SkipUnchangedFiles="true" />
+    <Copy SourceFiles="Assets/icons/macos/AppIcon.icns" DestinationFiles="$(MacAppResourcesDir)/AppIcon.icns" SkipUnchangedFiles="true" />
 
-    <Copy SourceFiles="@(MacAppBundleFiles)"
-          DestinationFolder="$(MacAppMacOSDir)/%(RecursiveDir)"
-          SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(MacAppBundleFiles)" DestinationFolder="$(MacAppMacOSDir)/%(RecursiveDir)" SkipUnchangedFiles="true" />
 
-    <Exec Command="chmod +x &quot;$(MacAppMacOSDir)/$(AssemblyName)&quot;"
-          Condition="Exists('$(MacAppMacOSDir)/$(AssemblyName)')" />
+    <Exec Command="chmod +x &quot;$(MacAppMacOSDir)/$(AssemblyName)&quot;" Condition="Exists('$(MacAppMacOSDir)/$(AssemblyName)')" />
   </Target>
 </Project>
