@@ -1,5 +1,10 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/DevCrew.Cli/DevCrew.Cli.csproj" Type="9a19103f-16f7-4668-be54-9a1e7a4f7558">
+      <BuildType Project="?" />
+      <Platform Project="?" />
+      <Build Project="false" />
+    </Project>
     <Project Path="src/DevCrew.Core/DevCrew.Core.csproj" Type="9a19103f-16f7-4668-be54-9a1e7a4f7558">
       <BuildType Project="?" />
       <Platform Project="?" />
