@@ -37,6 +37,16 @@ public static class EntityConfiguration
     public const int TemplateNameMaxLength = 100;
 
     /// <summary>
+    /// Maximum length for saved regex preset names
+    /// </summary>
+    public const int RegexPresetNameMaxLength = 100;
+
+    /// <summary>
+    /// Maximum length for saved regex pattern content
+    /// </summary>
+    public const int RegexPatternMaxLength = 5000;
+
+    /// <summary>
     /// Maximum length for culture name values (for example: en-US)
     /// </summary>
     public const int CultureNameMaxLength = 10;

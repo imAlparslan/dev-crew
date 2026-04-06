@@ -179,6 +179,12 @@
   <data name="regex.subtitle" xml:space="preserve"><value>Regex und Text eingeben, um Treffer beim Bearbeiten live hervorzuheben</value></data>
   <data name="regex.pattern_title" xml:space="preserve"><value>Muster</value></data>
   <data name="regex.pattern_watermark" xml:space="preserve"><value>(?&lt;word&gt;\w+)</value></data>
+  <data name="regex.saved_presets" xml:space="preserve"><value>Gespeicherte Regexe</value></data>
+  <data name="regex.preset_management" xml:space="preserve"><value>Regex-Vorlagen</value></data>
+  <data name="regex.preset_management_subtitle" xml:space="preserve"><value>Wahlen Sie eine gespeicherte Regex, um Musteroptionen zu fullen, oder speichern Sie die aktuelle Konfiguration fur spater.</value></data>
+  <data name="regex.preset_name_watermark" xml:space="preserve"><value>Name der Regex...</value></data>
+  <data name="regex.save_preset" xml:space="preserve"><value>Regex speichern</value></data>
+  <data name="regex.save_preset_tooltip" xml:space="preserve"><value>Aktuelles Muster und Optionen speichern</value></data>
   <data name="regex.ignore_case" xml:space="preserve"><value>Groß/Kleinschreibung ignorieren</value></data>
   <data name="regex.multiline" xml:space="preserve"><value>Mehrzeilig</value></data>
   <data name="regex.clear" xml:space="preserve"><value>Leeren</value></data>
@@ -300,7 +306,22 @@
   <data name="jsondiff.right_invalid" xml:space="preserve"><value>Rechtes JSON ist ungültig: {0}</value></data>
 
   <data name="regex.pattern_required" xml:space="preserve"><value>Ein Regex-Muster ist erforderlich</value></data>
-  <data name="regex.invalid_pattern" xml:space="preserve"><value>Ungültiges Regex-Muster: {0}</value></data>
+  <data name="regex.preset_name_required" xml:space="preserve"><value>Bitte geben Sie einen Namen fur die gespeicherte Regex ein.</value></data>
+  <data name="regex.preset_pattern_required" xml:space="preserve"><value>Geben Sie vor dem Speichern ein Regex-Muster ein.</value></data>
+  <data name="regex.preset_name_exists" xml:space="preserve"><value>Eine gespeicherte Regex mit diesem Namen existiert bereits.</value></data>
+  <data name="regex.preset_saved" xml:space="preserve"><value>Regex gespeichert: {0}</value></data>
+  <data name="regex.preset_applied" xml:space="preserve"><value>Gespeicherte Regex geladen: {0}</value></data>
+  <data name="regex.preset_not_found" xml:space="preserve"><value>Gespeicherte Regex wurde nicht gefunden.</value></data>
+  <data name="regex.preset_save_failed" xml:space="preserve"><value>Gespeicherte Regex konnte nicht gespeichert werden: {0}</value></data>
+  <data name="regex.preset_load_failed" xml:space="preserve"><value>Gespeicherte Regex konnte nicht geladen werden: {0}</value></data>  <data name="regex.preset_edit" xml:space="preserve"><value>Bearbeiten</value></data>
+  <data name="regex.preset_edit_tooltip" xml:space="preserve"><value>Muster und Optionen des ausgewählten gespeicherten Regex aktualisieren</value></data>
+  <data name="regex.preset_delete" xml:space="preserve"><value>Löschen</value></data>
+  <data name="regex.preset_delete_tooltip" xml:space="preserve"><value>Ausgewähltes gespeichertes Regex löschen</value></data>
+  <data name="regex.preset_not_selected" xml:space="preserve"><value>Bitte wählen Sie zuerst ein gespeichertes Regex aus.</value></data>
+  <data name="regex.preset_updated" xml:space="preserve"><value>Gespeichertes Regex aktualisiert: {0}</value></data>
+  <data name="regex.preset_update_failed" xml:space="preserve"><value>Gespeichertes Regex konnte nicht aktualisiert werden: {0}</value></data>
+  <data name="regex.preset_deleted" xml:space="preserve"><value>Gespeichertes Regex erfolgreich gelöscht</value></data>
+  <data name="regex.preset_delete_failed" xml:space="preserve"><value>Gespeichertes Regex konnte nicht gelöscht werden: {0}</value></data>  <data name="regex.invalid_pattern" xml:space="preserve"><value>Ungültiges Regex-Muster: {0}</value></data>
   <data name="regex.match_timeout" xml:space="preserve"><value>Regex-Abgleich hat das Zeitlimit überschritten: {0}</value></data>
 
   <data name="base64.encode_input_required" xml:space="preserve"><value>Es wurden keine Dateidaten zum Kodieren bereitgestellt</value></data>

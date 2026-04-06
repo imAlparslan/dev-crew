@@ -1,7 +1,10 @@
+using System.Collections.ObjectModel;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Application.Services;
+using DevCrew.Core.Domain.Models;
+using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
@@ -9,11 +12,13 @@ namespace DevCrew.Desktop.ViewModels;
 public partial class RegexViewModel : BaseViewModel
 {
     private readonly IRegexService _regexService;
+    private readonly IRegexPresetRepository _regexPresetRepository;
     private readonly ILocalizationService _localizationService;
     private CancellationTokenSource? _refreshCancellationTokenSource;
     private bool _suppressRefresh;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SavePresetCommand))]
     private string pattern = string.Empty;
 
     [ObservableProperty]
@@ -27,6 +32,13 @@ public partial class RegexViewModel : BaseViewModel
 
     [ObservableProperty]
     private bool multiline;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SavePresetCommand))]
+    private string presetName = string.Empty;
+
+    [ObservableProperty]
+    private RegexPresetItemViewModel? selectedPreset;
 
     [ObservableProperty]
     private string validationMessage = string.Empty;
@@ -44,16 +56,26 @@ public partial class RegexViewModel : BaseViewModel
     [ObservableProperty]
     private IReadOnlyList<RegexHighlightDisplayItem> matches = [];
 
+    public ObservableCollection<RegexPresetItemViewModel> SavedPresets { get; } = new();
+
     public string MatchCountSummary => _localizationService.GetString("regex.match_count_summary", MatchCount);
+
+    public bool HasSavedPresets => SavedPresets.Count > 0;
+
+    public bool CanSavePreset => !string.IsNullOrWhiteSpace(PresetName) && !string.IsNullOrWhiteSpace(Pattern);
 
     public RegexViewModel(
         IErrorHandler errorHandler,
         IRegexService regexService,
+        IRegexPresetRepository regexPresetRepository,
         ILocalizationService localizationService)
         : base(errorHandler)
     {
         _regexService = regexService;
+        _regexPresetRepository = regexPresetRepository;
         _localizationService = localizationService;
+
+        _ = LoadSavedPresetsAsync();
     }
 
     public async Task SetSelectedFileAsync(string filePath)
@@ -62,13 +84,27 @@ public partial class RegexViewModel : BaseViewModel
         await LoadFromPathAsync(filePath);
     }
 
-    partial void OnPatternChanged(string value) => ScheduleRefresh();
+    partial void OnPatternChanged(string value)
+    {
+        SavePresetCommand.NotifyCanExecuteChanged();
+        ScheduleRefresh();
+    }
 
     partial void OnInputTextChanged(string value) => ScheduleRefresh();
 
     partial void OnIgnoreCaseChanged(bool value) => ScheduleRefresh();
 
     partial void OnMultilineChanged(bool value) => ScheduleRefresh();
+
+    partial void OnPresetNameChanged(string value) => SavePresetCommand.NotifyCanExecuteChanged();
+
+    partial void OnSelectedPresetChanged(RegexPresetItemViewModel? value)
+    {
+        if (value != null)
+        {
+            _ = ApplySelectedPresetAsync(value);
+        }
+    }
 
     [RelayCommand]
     private void Clear()
@@ -83,6 +119,8 @@ public partial class RegexViewModel : BaseViewModel
             Pattern = string.Empty;
             InputText = string.Empty;
             SourcePath = string.Empty;
+            PresetName = string.Empty;
+            SelectedPreset = null;
             ValidationMessage = string.Empty;
             IsValid = false;
             IsError = false;
@@ -92,6 +130,157 @@ public partial class RegexViewModel : BaseViewModel
         finally
         {
             _suppressRefresh = false;
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanSavePreset))]
+    private async Task SavePresetAsync()
+    {
+        if (string.IsNullOrWhiteSpace(PresetName))
+        {
+            ValidationMessage = _localizationService.GetString("regex.preset_name_required");
+            IsError = true;
+            IsValid = false;
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Pattern))
+        {
+            ValidationMessage = _localizationService.GetString("regex.preset_pattern_required");
+            IsError = true;
+            IsValid = false;
+            return;
+        }
+
+        try
+        {
+            var normalizedName = PresetName.Trim();
+            var exists = await _regexPresetRepository.NameExistsAsync(normalizedName);
+            if (exists)
+            {
+                ValidationMessage = _localizationService.GetString("regex.preset_name_exists");
+                IsError = true;
+                IsValid = false;
+                return;
+            }
+
+            var savedPreset = await _regexPresetRepository.SaveAsync(new RegexPreset
+            {
+                Name = normalizedName,
+                Pattern = Pattern,
+                IgnoreCase = IgnoreCase,
+                Multiline = Multiline
+            });
+
+            AddSavedPreset(MapPreset(savedPreset));
+
+            PresetName = normalizedName;
+            ValidationMessage = _localizationService.GetString("regex.preset_saved", savedPreset.Name);
+            IsError = false;
+            IsValid = true;
+            ErrorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            ValidationMessage = _localizationService.GetString("regex.preset_save_failed", ex.Message);
+            IsError = true;
+            IsValid = false;
+            ErrorHandler.LogException(ex, "SaveRegexPreset");
+        }
+    }
+
+    [RelayCommand]
+    private async Task UpdatePresetAsync()
+    {
+        if (SelectedPreset is null)
+        {
+            ValidationMessage = _localizationService.GetString("regex.preset_not_selected");
+            IsError = true;
+            IsValid = false;
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Pattern))
+        {
+            ValidationMessage = _localizationService.GetString("regex.preset_pattern_required");
+            IsError = true;
+            IsValid = false;
+            return;
+        }
+
+        try
+        {
+            var updated = await _regexPresetRepository.UpdateAsync(
+                SelectedPreset.Id,
+                Pattern,
+                IgnoreCase,
+                Multiline);
+
+            if (updated is null)
+            {
+                ValidationMessage = _localizationService.GetString("regex.preset_not_found");
+                IsError = true;
+                IsValid = false;
+                return;
+            }
+
+            SelectedPreset.Pattern = updated.Pattern;
+            SelectedPreset.IgnoreCase = updated.IgnoreCase;
+            SelectedPreset.Multiline = updated.Multiline;
+
+            ValidationMessage = _localizationService.GetString("regex.preset_updated", SelectedPreset.Name);
+            IsError = false;
+            IsValid = true;
+            ErrorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            ValidationMessage = _localizationService.GetString("regex.preset_update_failed", ex.Message);
+            IsError = true;
+            IsValid = false;
+            ErrorHandler.LogException(ex, "UpdateRegexPreset");
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeletePresetAsync()
+    {
+        if (SelectedPreset is null)
+        {
+            ValidationMessage = _localizationService.GetString("regex.preset_not_selected");
+            IsError = true;
+            IsValid = false;
+            return;
+        }
+
+        try
+        {
+            var deleted = await _regexPresetRepository.DeleteAsync(SelectedPreset.Id);
+            if (!deleted)
+            {
+                ValidationMessage = _localizationService.GetString("regex.preset_not_found");
+                IsError = true;
+                IsValid = false;
+                return;
+            }
+
+            SavedPresets.Remove(SelectedPreset);
+            SelectedPreset = null;
+            PresetName = string.Empty;
+
+            OnPropertyChanged(nameof(HasSavedPresets));
+
+            ValidationMessage = _localizationService.GetString("regex.preset_deleted");
+            IsError = false;
+            IsValid = true;
+            ErrorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            ValidationMessage = _localizationService.GetString("regex.preset_delete_failed", ex.Message);
+            IsError = true;
+            IsValid = false;
+            ErrorHandler.LogException(ex, "DeleteRegexPreset");
         }
     }
 
@@ -214,6 +403,99 @@ public partial class RegexViewModel : BaseViewModel
             IsValid = false;
             ErrorHandler.LogException(ex, "LoadRegexFile");
         }
+    }
+
+    private async Task LoadSavedPresetsAsync()
+    {
+        try
+        {
+            var presets = await _regexPresetRepository.GetAllAsync();
+            SavedPresets.Clear();
+            foreach (var preset in presets)
+            {
+                SavedPresets.Add(MapPreset(preset));
+            }
+
+            OnPropertyChanged(nameof(HasSavedPresets));
+        }
+        catch (Exception ex)
+        {
+            ErrorHandler.LogException(ex, "LoadRegexPresets");
+        }
+    }
+
+    private async Task ApplySelectedPresetAsync(RegexPresetItemViewModel presetItem)
+    {
+        try
+        {
+            var preset = await _regexPresetRepository.GetByIdAsync(presetItem.Id);
+            if (preset == null)
+            {
+                ValidationMessage = _localizationService.GetString("regex.preset_not_found");
+                IsError = true;
+                IsValid = false;
+                return;
+            }
+
+            _refreshCancellationTokenSource?.Cancel();
+            _refreshCancellationTokenSource?.Dispose();
+            _refreshCancellationTokenSource = null;
+
+            _suppressRefresh = true;
+            try
+            {
+                Pattern = preset.Pattern;
+                IgnoreCase = preset.IgnoreCase;
+                Multiline = preset.Multiline;
+                PresetName = preset.Name;
+            }
+            finally
+            {
+                _suppressRefresh = false;
+            }
+
+            await _regexPresetRepository.UpdateLastUsedAsync(preset.Id);
+            presetItem.LastUsedAt = DateTime.UtcNow;
+
+            ValidationMessage = _localizationService.GetString("regex.preset_applied", preset.Name);
+            IsError = false;
+            IsValid = true;
+            ErrorMessage = null;
+
+            ScheduleRefresh();
+        }
+        catch (Exception ex)
+        {
+            ValidationMessage = _localizationService.GetString("regex.preset_load_failed", ex.Message);
+            IsError = true;
+            IsValid = false;
+            ErrorHandler.LogException(ex, "ApplyRegexPreset");
+        }
+    }
+
+    private RegexPresetItemViewModel MapPreset(RegexPreset preset)
+    {
+        return new RegexPresetItemViewModel(
+            preset.Id,
+            preset.Name,
+            preset.Pattern,
+            preset.IgnoreCase,
+            preset.Multiline,
+            preset.CreatedAt,
+            preset.LastUsedAt);
+    }
+
+    private void AddSavedPreset(RegexPresetItemViewModel presetItem)
+    {
+        var insertIndex = 0;
+        while (insertIndex < SavedPresets.Count &&
+               string.Compare(SavedPresets[insertIndex].Name, presetItem.Name, StringComparison.CurrentCultureIgnoreCase) < 0)
+        {
+            insertIndex++;
+        }
+
+        SavedPresets.Insert(insertIndex, presetItem);
+        OnPropertyChanged(nameof(HasSavedPresets));
     }
 
     private void ScheduleRefresh()

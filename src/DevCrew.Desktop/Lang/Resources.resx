@@ -187,6 +187,12 @@
   <data name="regex.subtitle" xml:space="preserve"><value>Type a regex and text to highlight live matches while you edit</value></data>
   <data name="regex.pattern_title" xml:space="preserve"><value>Pattern</value></data>
   <data name="regex.pattern_watermark" xml:space="preserve"><value>(?&lt;word&gt;\w+)</value></data>
+  <data name="regex.saved_presets" xml:space="preserve"><value>Saved regexes</value></data>
+  <data name="regex.preset_management" xml:space="preserve"><value>Regex presets</value></data>
+  <data name="regex.preset_management_subtitle" xml:space="preserve"><value>Pick a saved regex to refill the pattern options, or name the current setup and save it for later.</value></data>
+  <data name="regex.preset_name_watermark" xml:space="preserve"><value>Regex name...</value></data>
+  <data name="regex.save_preset" xml:space="preserve"><value>Save Regex</value></data>
+  <data name="regex.save_preset_tooltip" xml:space="preserve"><value>Save the current pattern and options</value></data>
   <data name="regex.ignore_case" xml:space="preserve"><value>Ignore case</value></data>
   <data name="regex.multiline" xml:space="preserve"><value>Multiline</value></data>
   <data name="regex.clear" xml:space="preserve"><value>Clear</value></data>
@@ -308,6 +314,23 @@
   <data name="jsondiff.right_invalid" xml:space="preserve"><value>Right JSON is invalid: {0}</value></data>
 
   <data name="regex.pattern_required" xml:space="preserve"><value>Regex pattern is required</value></data>
+  <data name="regex.preset_name_required" xml:space="preserve"><value>Please enter a name for the saved regex.</value></data>
+  <data name="regex.preset_pattern_required" xml:space="preserve"><value>Enter a regex pattern before saving.</value></data>
+  <data name="regex.preset_name_exists" xml:space="preserve"><value>A saved regex with this name already exists.</value></data>
+  <data name="regex.preset_saved" xml:space="preserve"><value>Saved regex: {0}</value></data>
+  <data name="regex.preset_applied" xml:space="preserve"><value>Loaded saved regex: {0}</value></data>
+  <data name="regex.preset_not_found" xml:space="preserve"><value>Saved regex not found.</value></data>
+  <data name="regex.preset_save_failed" xml:space="preserve"><value>Saved regex could not be stored: {0}</value></data>
+  <data name="regex.preset_load_failed" xml:space="preserve"><value>Saved regex could not be loaded: {0}</value></data>
+  <data name="regex.preset_edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="regex.preset_edit_tooltip" xml:space="preserve"><value>Update the selected saved regex pattern and options</value></data>
+  <data name="regex.preset_delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="regex.preset_delete_tooltip" xml:space="preserve"><value>Delete the selected saved regex</value></data>
+  <data name="regex.preset_not_selected" xml:space="preserve"><value>Please select a saved regex first.</value></data>
+  <data name="regex.preset_updated" xml:space="preserve"><value>Updated saved regex: {0}</value></data>
+  <data name="regex.preset_update_failed" xml:space="preserve"><value>Saved regex could not be updated: {0}</value></data>
+  <data name="regex.preset_deleted" xml:space="preserve"><value>Saved regex deleted successfully</value></data>
+  <data name="regex.preset_delete_failed" xml:space="preserve"><value>Saved regex could not be deleted: {0}</value></data>
   <data name="regex.invalid_pattern" xml:space="preserve"><value>Invalid regex pattern: {0}</value></data>
   <data name="regex.match_timeout" xml:space="preserve"><value>Regex matching timed out: {0}</value></data>
 

@@ -322,6 +322,12 @@
   <data name="regex.subtitle" xml:space="preserve"><value>Saisissez une regex et du texte pour surligner les correspondances en direct pendant l'édition</value></data>
   <data name="regex.pattern_title" xml:space="preserve"><value>Motif</value></data>
   <data name="regex.pattern_watermark" xml:space="preserve"><value>(?&lt;word&gt;\w+)</value></data>
+  <data name="regex.saved_presets" xml:space="preserve"><value>Regex enregistrees</value></data>
+  <data name="regex.preset_management" xml:space="preserve"><value>Presets regex</value></data>
+  <data name="regex.preset_management_subtitle" xml:space="preserve"><value>Choisissez une regex enregistree pour recharger les options du motif, ou donnez un nom a la configuration actuelle pour la reutiliser plus tard.</value></data>
+  <data name="regex.preset_name_watermark" xml:space="preserve"><value>Nom de la regex...</value></data>
+  <data name="regex.save_preset" xml:space="preserve"><value>Enregistrer la regex</value></data>
+  <data name="regex.save_preset_tooltip" xml:space="preserve"><value>Enregistrer le motif actuel et ses options</value></data>
   <data name="regex.ignore_case" xml:space="preserve"><value>Ignorer la casse</value></data>
   <data name="regex.multiline" xml:space="preserve"><value>Multiligne</value></data>
   <data name="regex.clear" xml:space="preserve"><value>Effacer</value></data>
@@ -730,7 +736,22 @@
     <value>Le JSON de droite est invalide : {0}</value>
   </data>
   <data name="regex.pattern_required" xml:space="preserve"><value>Un motif regex est requis</value></data>
-  <data name="regex.invalid_pattern" xml:space="preserve"><value>Motif regex invalide : {0}</value></data>
+  <data name="regex.preset_name_required" xml:space="preserve"><value>Veuillez saisir un nom pour la regex enregistree.</value></data>
+  <data name="regex.preset_pattern_required" xml:space="preserve"><value>Saisissez un motif regex avant l'enregistrement.</value></data>
+  <data name="regex.preset_name_exists" xml:space="preserve"><value>Une regex enregistree porte deja ce nom.</value></data>
+  <data name="regex.preset_saved" xml:space="preserve"><value>Regex enregistree : {0}</value></data>
+  <data name="regex.preset_applied" xml:space="preserve"><value>Regex enregistree chargee : {0}</value></data>
+  <data name="regex.preset_not_found" xml:space="preserve"><value>Regex enregistree introuvable.</value></data>
+  <data name="regex.preset_save_failed" xml:space="preserve"><value>La regex enregistree n'a pas pu etre stockee : {0}</value></data>
+  <data name="regex.preset_load_failed" xml:space="preserve"><value>La regex enregistree n'a pas pu etre chargee : {0}</value></data>  <data name="regex.preset_edit" xml:space="preserve"><value>Modifier</value></data>
+  <data name="regex.preset_edit_tooltip" xml:space="preserve"><value>Mettre à jour le motif et les options du regex enregistré sélectionné</value></data>
+  <data name="regex.preset_delete" xml:space="preserve"><value>Supprimer</value></data>
+  <data name="regex.preset_delete_tooltip" xml:space="preserve"><value>Supprimer le regex enregistré sélectionné</value></data>
+  <data name="regex.preset_not_selected" xml:space="preserve"><value>Veuillez d'abord sélectionner un regex enregistré.</value></data>
+  <data name="regex.preset_updated" xml:space="preserve"><value>Regex enregistré mis à jour: {0}</value></data>
+  <data name="regex.preset_update_failed" xml:space="preserve"><value>Le regex enregistré n'a pas pu être mis à jour: {0}</value></data>
+  <data name="regex.preset_deleted" xml:space="preserve"><value>Regex enregistré supprimé avec succès</value></data>
+  <data name="regex.preset_delete_failed" xml:space="preserve"><value>Le regex enregistré n'a pas pu être supprimé: {0}</value></data>  <data name="regex.invalid_pattern" xml:space="preserve"><value>Motif regex invalide : {0}</value></data>
   <data name="regex.match_timeout" xml:space="preserve"><value>La recherche regex a dépassé le délai : {0}</value></data>
   <data name="base64.encode_input_required" xml:space="preserve">
     <value>Aucune donnée de fichier n'a été fournie pour l'encodage</value>

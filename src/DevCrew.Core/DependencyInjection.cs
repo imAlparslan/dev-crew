@@ -32,6 +32,7 @@ public static class DependencyInjection
         services.AddScoped<IGuidRepository, GuidRepository>();
         services.AddScoped<IJwtRepository, JwtRepository>();
         services.AddScoped<IJwtBuilderTemplateRepository, JwtBuilderTemplateRepository>();
+        services.AddScoped<IRegexPresetRepository, RegexPresetRepository>();
         services.AddScoped<IAppSettingsRepository, AppSettingsRepository>();
         services.AddSingleton<IErrorHandler, ErrorHandler>();
         services.AddSingleton<IGuidService, GuidService>();

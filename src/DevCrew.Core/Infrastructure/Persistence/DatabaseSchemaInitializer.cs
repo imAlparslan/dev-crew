@@ -12,6 +12,21 @@ CREATE TABLE IF NOT EXISTS AppSettings (
     UpdatedAt TEXT NOT NULL
 );";
 
+    private const string EnsureRegexPresetsTableSql = @"
+CREATE TABLE IF NOT EXISTS RegexPresets (
+    Id INTEGER NOT NULL CONSTRAINT PK_RegexPresets PRIMARY KEY AUTOINCREMENT,
+    Name TEXT NOT NULL,
+    Pattern TEXT NOT NULL,
+    IgnoreCase INTEGER NOT NULL,
+    Multiline INTEGER NOT NULL,
+    CreatedAt TEXT NOT NULL,
+    LastUsedAt TEXT NULL
+);";
+
+    private const string EnsureRegexPresetsNameIndexSql = @"
+CREATE INDEX IF NOT EXISTS IX_RegexPresets_Name
+ON RegexPresets (Name);";
+
     private const string AddHeadingFontFamilyColumnSql = @"
 ALTER TABLE AppSettings
 ADD COLUMN HeadingFontFamily TEXT NOT NULL DEFAULT 'Inter';";
@@ -29,6 +44,8 @@ ADD COLUMN ButtonFontFamily TEXT NOT NULL DEFAULT 'Inter';";
 
         dbContext.Database.EnsureCreated();
         dbContext.Database.ExecuteSqlRaw(EnsureAppSettingsTableSql);
+        dbContext.Database.ExecuteSqlRaw(EnsureRegexPresetsTableSql);
+        dbContext.Database.ExecuteSqlRaw(EnsureRegexPresetsNameIndexSql);
 
         if (!ColumnExists(dbContext, "AppSettings", "HeadingFontFamily"))
         {

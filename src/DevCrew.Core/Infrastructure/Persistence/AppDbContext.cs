@@ -32,6 +32,11 @@ public class AppDbContext : DbContext
     public DbSet<JwtBuilderTemplate> JwtBuilderTemplates { get; set; }
 
     /// <summary>
+    /// Gets or sets saved regex presets
+    /// </summary>
+    public DbSet<RegexPreset> RegexPresets { get; set; }
+
+    /// <summary>
     /// Gets or sets application-wide user settings
     /// </summary>
     public DbSet<AppSettings> AppSettings { get; set; }
@@ -81,6 +86,20 @@ public class AppDbContext : DbContext
             entity.Property(e => e.CreatedAt).IsRequired();
             entity.HasIndex(e => e.CreatedAt).IsDescending();
             entity.HasIndex(e => e.TemplateName);
+        });
+
+        // Configure RegexPreset entity
+        modelBuilder.Entity<RegexPreset>(entity =>
+        {
+            entity.ToTable("RegexPresets");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(EntityConfiguration.RegexPresetNameMaxLength);
+            entity.Property(e => e.Pattern).IsRequired().HasMaxLength(EntityConfiguration.RegexPatternMaxLength);
+            entity.Property(e => e.IgnoreCase).IsRequired();
+            entity.Property(e => e.Multiline).IsRequired();
+            entity.Property(e => e.CreatedAt).IsRequired();
+            entity.HasIndex(e => e.Name);
+            entity.HasIndex(e => e.CreatedAt).IsDescending();
         });
 
         // Configure AppSettings entity

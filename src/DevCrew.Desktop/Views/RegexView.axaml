@@ -41,8 +41,83 @@
                         CornerRadius="6"
                         Padding="12"
                         Margin="0,0,0,12">
-                    <Grid RowDefinitions="Auto,Auto" RowSpacing="0">
-                        <Grid Grid.Row="0" ColumnDefinitions="Auto,8,*,12,Auto,12,Auto,12,Auto" Margin="0,0,0,10">
+                    <StackPanel Spacing="12">
+                        <Border Background="{StaticResource BrushSecondaryBackground}"
+                                BorderBrush="{StaticResource BrushBorderSecondary}"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="12">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="4">
+                                    <TextBlock Text="{Binding [regex.preset_management], Source={StaticResource Loc}}"
+                                               FontSize="{DynamicResource FontSizeMedium}"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource BrushPrimaryText}" />
+                                    <TextBlock Text="{Binding [regex.preset_management_subtitle], Source={StaticResource Loc}}"
+                                               Foreground="{StaticResource BrushSecondaryText}"
+                                               FontSize="{DynamicResource FontSizeSmall}"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <Grid ColumnDefinitions="*,16,*">
+                                    <StackPanel Grid.Column="0" Spacing="6">
+                                        <TextBlock Text="{Binding [regex.saved_presets], Source={StaticResource Loc}}"
+                                                   Foreground="{StaticResource BrushSecondaryText}"
+                                                   FontWeight="Medium" />
+                                        <Grid ColumnDefinitions="*,12,Auto,12,Auto">
+                                            <ComboBox Grid.Column="0"
+                                                      ItemsSource="{Binding SavedPresets}"
+                                                      SelectedItem="{Binding SelectedPreset}"
+                                                      IsEnabled="{Binding HasSavedPresets}"
+                                                      MinHeight="36"
+                                                      HorizontalAlignment="Stretch">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate x:DataType="vm:RegexPresetItemViewModel">
+                                                        <TextBlock Text="{Binding DisplayPattern}" />
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                            <Button Grid.Column="2"
+                                                    Content="{Binding [regex.preset_edit], Source={StaticResource Loc}}"
+                                                    Command="{Binding UpdatePresetCommand}"
+                                                    IsEnabled="{Binding SelectedPreset, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                                    MinHeight="36"
+                                                    Classes="ActionButton SecondaryActionButton"
+                                                    ToolTip.Tip="{Binding [regex.preset_edit_tooltip], Source={StaticResource Loc}}" />
+                                            <Button Grid.Column="4"
+                                                    Content="{Binding [regex.preset_delete], Source={StaticResource Loc}}"
+                                                    Command="{Binding DeletePresetCommand}"
+                                                    IsEnabled="{Binding SelectedPreset, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                                    MinHeight="36"
+                                                    Classes="ActionButton DangerActionButton"
+                                                    ToolTip.Tip="{Binding [regex.preset_delete_tooltip], Source={StaticResource Loc}}" />
+                                        </Grid>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" Spacing="6">
+                                        <TextBlock Text="{Binding [regex.save_preset], Source={StaticResource Loc}}"
+                                                   Foreground="{StaticResource BrushSecondaryText}"
+                                                   FontWeight="Medium" />
+                                        <Grid ColumnDefinitions="*,12,Auto">
+                                            <TextBox Grid.Column="0"
+                                                     Text="{Binding PresetName}"
+                                                     MinHeight="36"
+                                                     VerticalContentAlignment="Center"
+                                                     Watermark="{Binding [regex.preset_name_watermark], Source={StaticResource Loc}}"
+                                                     Classes="CompactInputTextBox" />
+                                            <Button Grid.Column="2"
+                                                    Content="{Binding [regex.save_preset], Source={StaticResource Loc}}"
+                                                    Command="{Binding SavePresetCommand}"
+                                                    MinHeight="36"
+                                                    Classes="ActionButton PrimaryActionButton"
+                                                    ToolTip.Tip="{Binding [regex.save_preset_tooltip], Source={StaticResource Loc}}" />
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Grid ColumnDefinitions="Auto,8,*,12,Auto,12,Auto,12,Auto">
                             <TextBlock Grid.Column="0"
                                        Text="{Binding [regex.pattern_title], Source={StaticResource Loc}}"
                                        Foreground="{StaticResource BrushSecondaryText}"
@@ -66,7 +141,7 @@
                                     ToolTip.Tip="{Binding [regex.clear_tooltip], Source={StaticResource Loc}}" />
                         </Grid>
 
-                        <Grid Grid.Row="1" ColumnDefinitions="*,8,Auto,8,Auto" Margin="0,0,0,0">
+                        <Grid ColumnDefinitions="*,8,Auto,8,Auto">
                             <TextBox Grid.Column="0"
                                      Text="{Binding SourcePath}"
                                      Watermark="{Binding [regex.path_watermark], Source={StaticResource Loc}}"
@@ -82,7 +157,7 @@
                                     Classes="ActionButton PrimaryActionButton"
                                     ToolTip.Tip="{Binding [regex.browse_tooltip], Source={StaticResource Loc}}" />
                         </Grid>
-                    </Grid>
+                    </StackPanel>
                 </Border>
 
                 <Border Grid.Row="2"

@@ -179,6 +179,12 @@
   <data name="regex.subtitle" xml:space="preserve"><value>Düzenlerken eşleşmeleri canlı vurgulamak için regex ve metin girin</value></data>
   <data name="regex.pattern_title" xml:space="preserve"><value>Pattern</value></data>
   <data name="regex.pattern_watermark" xml:space="preserve"><value>(?&lt;word&gt;\w+)</value></data>
+  <data name="regex.saved_presets" xml:space="preserve"><value>Kayıtlı regexler</value></data>
+  <data name="regex.preset_management" xml:space="preserve"><value>Regex presetleri</value></data>
+  <data name="regex.preset_management_subtitle" xml:space="preserve"><value>Kayıtlı bir regex seçerek pattern seçeneklerini doldurun veya mevcut kurulumu isim verip daha sonra kullanmak için kaydedin.</value></data>
+  <data name="regex.preset_name_watermark" xml:space="preserve"><value>Regex adı...</value></data>
+  <data name="regex.save_preset" xml:space="preserve"><value>Regex Kaydet</value></data>
+  <data name="regex.save_preset_tooltip" xml:space="preserve"><value>Geçerli pattern ve seçenekleri kaydet</value></data>
   <data name="regex.ignore_case" xml:space="preserve"><value>Büyük/küçük harfi yok say</value></data>
   <data name="regex.multiline" xml:space="preserve"><value>Çok satırlı</value></data>
   <data name="regex.clear" xml:space="preserve"><value>Temizle</value></data>
@@ -300,6 +306,23 @@
   <data name="jsondiff.right_invalid" xml:space="preserve"><value>Sağ JSON geçersiz: {0}</value></data>
 
   <data name="regex.pattern_required" xml:space="preserve"><value>Regex pattern zorunludur</value></data>
+  <data name="regex.preset_name_required" xml:space="preserve"><value>Lütfen kayıtlı regex için bir isim girin.</value></data>
+  <data name="regex.preset_pattern_required" xml:space="preserve"><value>Kaydetmeden önce bir regex pattern girin.</value></data>
+  <data name="regex.preset_name_exists" xml:space="preserve"><value>Bu isimde kayıtlı bir regex zaten var.</value></data>
+  <data name="regex.preset_saved" xml:space="preserve"><value>Regex kaydedildi: {0}</value></data>
+  <data name="regex.preset_applied" xml:space="preserve"><value>Kayıtlı regex yüklendi: {0}</value></data>
+  <data name="regex.preset_not_found" xml:space="preserve"><value>Kayıtlı regex bulunamadı.</value></data>
+  <data name="regex.preset_save_failed" xml:space="preserve"><value>Kayıtlı regex kaydedilemedi: {0}</value></data>
+  <data name="regex.preset_load_failed" xml:space="preserve"><value>Kayıtlı regex yüklenemedi: {0}</value></data>
+  <data name="regex.preset_edit" xml:space="preserve"><value>Düzenle</value></data>
+  <data name="regex.preset_edit_tooltip" xml:space="preserve"><value>Seçili kayıtlı regex paternini ve seçeneklerini güncelle</value></data>
+  <data name="regex.preset_delete" xml:space="preserve"><value>Sil</value></data>
+  <data name="regex.preset_delete_tooltip" xml:space="preserve"><value>Seçili kayıtlı regexı sil</value></data>
+  <data name="regex.preset_not_selected" xml:space="preserve"><value>Lütfen önce kayıtlı bir regex seçin.</value></data>
+  <data name="regex.preset_updated" xml:space="preserve"><value>Kayıtlı regex güncellendi: {0}</value></data>
+  <data name="regex.preset_update_failed" xml:space="preserve"><value>Kayıtlı regex güncellenemedi: {0}</value></data>
+  <data name="regex.preset_deleted" xml:space="preserve"><value>Kayıtlı regex başarıyla silindi</value></data>
+  <data name="regex.preset_delete_failed" xml:space="preserve"><value>Kayıtlı regex silinemedi: {0}</value></data>
   <data name="regex.invalid_pattern" xml:space="preserve"><value>Geçersiz regex pattern: {0}</value></data>
   <data name="regex.match_timeout" xml:space="preserve"><value>Regex eşleştirme zaman aşımına uğradı: {0}</value></data>
 
