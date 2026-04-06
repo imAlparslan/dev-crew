@@ -12,7 +12,6 @@ public class JwtHistory
 
     public DateTime DecodedAt { get; set; }
 
-    [MaxLength(500)]
     public string? Notes { get; set; }
 
     public string? Header { get; set; }

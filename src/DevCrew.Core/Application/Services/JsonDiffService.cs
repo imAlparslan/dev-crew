@@ -434,13 +434,7 @@ public class JsonDiffService : IJsonDiffService
     private static string SerializeForDisplay(JsonElement root, JsonDiffOptions options, bool writeIndented = true)
     {
         object? normalized = NormalizeElement(root, options);
-
-        var serializerOptions = new JsonSerializerOptions
-        {
-            WriteIndented = writeIndented
-        };
-
-        return JsonSerializer.Serialize(normalized, serializerOptions);
+        return JsonNodeSerializer.Serialize(normalized, writeIndented);
     }
 
     private static object? NormalizeElement(JsonElement element, JsonDiffOptions options)
@@ -475,7 +469,7 @@ public class JsonDiffService : IJsonDiffService
                 var list = element.EnumerateArray().Select(x => NormalizeElement(x, options)).ToList();
                 if (!options.TreatArrayOrderAsSignificant)
                 {
-                    list = [.. list.OrderBy(x => JsonSerializer.Serialize(x), StringComparer.Ordinal)];
+                    list = [.. list.OrderBy(SerializeComparableValue, StringComparer.Ordinal)];
                 }
 
                 return list;
@@ -499,6 +493,11 @@ public class JsonDiffService : IJsonDiffService
             default:
                 return null;
         }
+    }
+
+    private static string SerializeComparableValue(object? value)
+    {
+        return JsonNodeSerializer.Serialize(value, writeIndented: false);
     }
 
     private static IReadOnlyList<string> SplitLines(string value)

@@ -17,7 +17,6 @@ public class GuidHistory
     /// The generated GUID value
     /// </summary>
     [Required]
-    [MaxLength(36)]
     public string GuidValue { get; set; } = string.Empty;
 
     /// <summary>
@@ -28,6 +27,5 @@ public class GuidHistory
     /// <summary>
     /// Optional notes or description
     /// </summary>
-    [MaxLength(500)]
     public string? Notes { get; set; }
 }

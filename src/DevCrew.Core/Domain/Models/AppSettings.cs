@@ -20,27 +20,21 @@ public class AppSettings
     public int Id { get; set; } = SingletonId;
 
     [Required]
-    [MaxLength(10)]
     public string LanguageCultureName { get; set; } = DefaultLanguageCultureName;
 
     [Required]
-    [MaxLength(10)]
     public string FontSizePreference { get; set; } = DefaultFontSizePreference;
 
     [Required]
-    [MaxLength(50)]
     public string UiFontFamily { get; set; } = DefaultUiFontFamily;
 
     [Required]
-    [MaxLength(50)]
     public string HeadingFontFamily { get; set; } = DefaultHeadingFontFamily;
 
     [Required]
-    [MaxLength(50)]
     public string ButtonFontFamily { get; set; } = DefaultButtonFontFamily;
 
     [Required]
-    [MaxLength(50)]
     public string ContentFontFamily { get; set; } = DefaultContentFontFamily;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

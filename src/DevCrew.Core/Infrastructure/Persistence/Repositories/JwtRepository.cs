@@ -72,7 +72,7 @@ public class JwtRepository : IJwtRepository
     /// <inheritdoc/>
     public async Task<List<JwtHistory>> GetJwtsPagedAsync(int skip, int take, string? searchQuery = null, CancellationToken cancellationToken = default)
     {
-        var query = _dbContext.JwtHistories.AsNoTracking().AsQueryable();
+        var query = _dbContext.JwtHistories.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
@@ -94,7 +94,7 @@ public class JwtRepository : IJwtRepository
     /// <inheritdoc/>
     public async Task<int> GetJwtCountAsync(string? searchQuery = null, CancellationToken cancellationToken = default)
     {
-        var query = _dbContext.JwtHistories.AsNoTracking().AsQueryable();
+        var query = _dbContext.JwtHistories.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {

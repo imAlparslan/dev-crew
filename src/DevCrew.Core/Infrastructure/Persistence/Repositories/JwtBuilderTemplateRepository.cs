@@ -106,7 +106,7 @@ public class JwtBuilderTemplateRepository : IJwtBuilderTemplateRepository
         if (string.IsNullOrWhiteSpace(templateName))
             return false;
 
-        var query = _dbContext.JwtBuilderTemplates.AsNoTracking().AsQueryable();
+        var query = _dbContext.JwtBuilderTemplates.AsNoTracking();
 
         query = query.Where(t => t.TemplateName == templateName);
 

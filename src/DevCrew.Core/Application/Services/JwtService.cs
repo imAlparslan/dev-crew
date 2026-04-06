@@ -2,7 +2,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
 using DevCrew.Core.Domain.Models;
 using DevCrew.Core.Shared.Constants;
 using Microsoft.IdentityModel.Tokens;
@@ -58,14 +57,13 @@ public class JwtService : IJwtService
             result.Algorithm = jwtToken.Header.Alg;
 
             // Format header as JSON
-            var headerJson = JsonSerializer.Serialize(jwtToken.Header, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            var headerJson = JsonNodeSerializer.Serialize(
+                jwtToken.Header.ToDictionary(item => item.Key, item => item.Value),
+                writeIndented: true);
             result.Header = headerJson;
 
             // Format payload as JSON - handle duplicate claims
-            var payloadDict = new Dictionary<string, object>();
+            var payloadDict = new Dictionary<string, object?>();
             var claimGroups = jwtToken.Claims.GroupBy(c => c.Type);
 
             foreach (var group in claimGroups)
@@ -82,10 +80,7 @@ public class JwtService : IJwtService
                 }
             }
 
-            var payloadJson = JsonSerializer.Serialize(payloadDict, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            var payloadJson = JsonNodeSerializer.Serialize(payloadDict, writeIndented: true);
             result.Payload = payloadJson;
             // Extract common claims - check both properties and claims
             // Expiration time

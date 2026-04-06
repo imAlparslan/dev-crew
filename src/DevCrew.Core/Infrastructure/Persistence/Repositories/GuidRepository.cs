@@ -59,7 +59,7 @@ public class GuidRepository : IGuidRepository
     /// <inheritdoc/>
     public async Task<List<GuidHistory>> GetGuidsPagedAsync(int skip, int take, string? searchQuery = null, CancellationToken cancellationToken = default)
     {
-        var query = _dbContext.GuidHistories.AsNoTracking().AsQueryable();
+        var query = _dbContext.GuidHistories.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
@@ -79,7 +79,7 @@ public class GuidRepository : IGuidRepository
     /// <inheritdoc/>
     public async Task<int> GetGuidCountAsync(string? searchQuery = null, CancellationToken cancellationToken = default)
     {
-        var query = _dbContext.GuidHistories.AsNoTracking().AsQueryable();
+        var query = _dbContext.GuidHistories.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {

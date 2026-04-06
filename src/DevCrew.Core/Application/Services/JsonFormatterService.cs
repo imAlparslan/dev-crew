@@ -63,13 +63,9 @@ public class JsonFormatterService : IJsonFormatterService
         try
         {
             using var document = JsonDocument.Parse(input);
-            var elementToSerialize = sortKeys ? SortJsonElement(document.RootElement) : (object)document.RootElement;
-            
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true
-            };
-            var formatted = JsonSerializer.Serialize(elementToSerialize, options);
+            var formatted = sortKeys
+                ? JsonNodeSerializer.Serialize(SortJsonElement(document.RootElement), writeIndented: true)
+                : JsonNodeSerializer.SerializeElement(document.RootElement, writeIndented: true);
             
             return new JsonFormatterResult
             {
@@ -107,13 +103,9 @@ public class JsonFormatterService : IJsonFormatterService
         try
         {
             using var document = JsonDocument.Parse(input);
-            var elementToSerialize = sortKeys ? SortJsonElement(document.RootElement) : (object)document.RootElement;
-            
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = false
-            };
-            var minified = JsonSerializer.Serialize(elementToSerialize, options);
+            var minified = sortKeys
+                ? JsonNodeSerializer.Serialize(SortJsonElement(document.RootElement), writeIndented: false)
+                : JsonNodeSerializer.SerializeElement(document.RootElement, writeIndented: false);
             
             return new JsonFormatterResult
             {
@@ -152,12 +144,7 @@ public class JsonFormatterService : IJsonFormatterService
         {
             using var document = JsonDocument.Parse(input);
             var sorted = SortJsonElement(document.RootElement);
-            
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true
-            };
-            var sortedJson = JsonSerializer.Serialize(sorted, options);
+            var sortedJson = JsonNodeSerializer.Serialize(sorted, writeIndented: true);
             
             return new JsonFormatterResult
             {
