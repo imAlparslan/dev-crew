@@ -16,13 +16,6 @@
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
-                    
-                    <TextBlock Text="{Binding [jwtdecoder.subtitle], Source={StaticResource Loc}}"
-                               FontSize="{DynamicResource FontSizeMedium}"
-                               Foreground="{StaticResource BrushSecondaryText}"
-                               HorizontalAlignment="Center"
-                               TextAlignment="Center"
-                               TextWrapping="Wrap" />
                 </StackPanel>
 
                 <!-- Input Section -->

@@ -25,13 +25,6 @@
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
-
-                    <TextBlock Text="{Binding [regex.subtitle], Source={StaticResource Loc}}"
-                               FontSize="{DynamicResource FontSizeMedium}"
-                               Foreground="{StaticResource BrushSecondaryText}"
-                               HorizontalAlignment="Center"
-                               TextAlignment="Center"
-                               TextWrapping="Wrap" />
                 </StackPanel>
 
                 <Border Grid.Row="1"
@@ -53,10 +46,6 @@
                                                FontSize="{DynamicResource FontSizeMedium}"
                                                FontWeight="SemiBold"
                                                Foreground="{StaticResource BrushPrimaryText}" />
-                                    <TextBlock Text="{Binding [regex.preset_management_subtitle], Source={StaticResource Loc}}"
-                                               Foreground="{StaticResource BrushSecondaryText}"
-                                               FontSize="{DynamicResource FontSizeSmall}"
-                                               TextWrapping="Wrap" />
                                 </StackPanel>
 
                                 <Grid ColumnDefinitions="*,16,*">

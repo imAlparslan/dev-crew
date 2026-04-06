@@ -14,13 +14,6 @@
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
-
-                    <TextBlock Text="{Binding [jsondiff.subtitle], Source={StaticResource Loc}}"
-                               FontSize="{DynamicResource FontSizeMedium}"
-                               Foreground="{StaticResource BrushSecondaryText}"
-                               HorizontalAlignment="Center"
-                               TextAlignment="Center"
-                               TextWrapping="Wrap" />
                 </StackPanel>
 
                 <Border Grid.Row="1"

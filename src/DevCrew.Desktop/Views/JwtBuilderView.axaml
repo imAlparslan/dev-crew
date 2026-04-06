@@ -15,13 +15,6 @@
                                FontWeight="Bold"
                                Foreground="{StaticResource BrushPrimaryText}"
                                HorizontalAlignment="Center" />
-                    
-                    <TextBlock Text="{Binding [jwtbuilder.subtitle], Source={StaticResource Loc}}"
-                               FontSize="{DynamicResource FontSizeMedium}"
-                               Foreground="{StaticResource BrushSecondaryText}"
-                               HorizontalAlignment="Center"
-                               TextAlignment="Center"
-                               TextWrapping="Wrap" />
                 </StackPanel>
 
                 <!-- Algorithm and Secret -->
@@ -447,11 +440,6 @@
                                    FontSize="{DynamicResource FontSizeMedium}"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource BrushPrimaryText}" />
-                        
-                        <TextBlock Text="{Binding [jwtbuilder.template_management_subtitle], Source={StaticResource Loc}}"
-                                   FontSize="{DynamicResource FontSizeDefault}"
-                                   Foreground="{StaticResource BrushSecondaryText}"
-                                   TextWrapping="Wrap" />
                         
                         <!-- Load Template Section -->
                         <StackPanel Spacing="8">

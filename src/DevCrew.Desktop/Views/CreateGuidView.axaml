@@ -23,14 +23,6 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,20" />
                     
-                    <TextBlock Grid.Row="1"
-                               Text="{Binding [createguid.subtitle], Source={StaticResource Loc}}"
-                               FontSize="{DynamicResource FontSizeMedium}"
-                               Foreground="{StaticResource BrushSecondaryText}"
-                               HorizontalAlignment="Center"
-                               TextAlignment="Center"
-                               Margin="0,0,0,20" />
-                    
                         <Button Grid.Row="2"
                             Content="{Binding [createguid.generate], Source={StaticResource Loc}}"
                             Command="{Binding GenerateGuidCommand}"

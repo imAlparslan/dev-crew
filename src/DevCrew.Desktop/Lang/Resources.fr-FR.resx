@@ -80,9 +80,6 @@
   <data name="createguid.title" xml:space="preserve">
     <value>Générateur de GUID</value>
   </data>
-  <data name="createguid.subtitle" xml:space="preserve">
-    <value>Cliquez sur le bouton pour générer un nouveau GUID</value>
-  </data>
   <data name="createguid.generate" xml:space="preserve">
     <value>🎲 Générer un nouveau GUID</value>
   </data>
@@ -116,9 +113,7 @@
   <data name="jsonformatter.title" xml:space="preserve">
     <value>Formateur JSON</value>
   </data>
-  <data name="jsonformatter.subtitle" xml:space="preserve">
-    <value>Validez votre JSON et affichez-le joliment ou en version compacte</value>
-  </data>
+
   <data name="jsonformatter.prettify" xml:space="preserve">
     <value>Formatter</value>
   </data>
@@ -204,9 +199,6 @@
   <data name="jsondiff.title" xml:space="preserve">
     <value>Comparaison JSON</value>
   </data>
-  <data name="jsondiff.subtitle" xml:space="preserve">
-    <value>Inspectez les différences entre deux documents JSON par chemin et par ligne</value>
-  </data>
   <data name="jsondiff.ignore_object_order" xml:space="preserve">
     <value>Ignorer l'ordre des clés d'objet</value>
   </data>
@@ -279,9 +271,6 @@
   <data name="base64encoder.title" xml:space="preserve">
     <value>Encodeur Base64</value>
   </data>
-  <data name="base64encoder.subtitle" xml:space="preserve">
-    <value>Chargez votre fichier et produisez une sortie Base64 avec Encoder</value>
-  </data>
   <data name="base64encoder.input_title" xml:space="preserve">
     <value>Fichier d'entrée</value>
   </data>
@@ -319,12 +308,10 @@
     <value>Fichier sélectionné : {0}</value>
   </data>
   <data name="regex.title" xml:space="preserve"><value>Regex</value></data>
-  <data name="regex.subtitle" xml:space="preserve"><value>Saisissez une regex et du texte pour surligner les correspondances en direct pendant l'édition</value></data>
   <data name="regex.pattern_title" xml:space="preserve"><value>Motif</value></data>
   <data name="regex.pattern_watermark" xml:space="preserve"><value>(?&lt;word&gt;\w+)</value></data>
   <data name="regex.saved_presets" xml:space="preserve"><value>Regex enregistrees</value></data>
   <data name="regex.preset_management" xml:space="preserve"><value>Presets regex</value></data>
-  <data name="regex.preset_management_subtitle" xml:space="preserve"><value>Choisissez une regex enregistree pour recharger les options du motif, ou donnez un nom a la configuration actuelle pour la reutiliser plus tard.</value></data>
   <data name="regex.preset_name_watermark" xml:space="preserve"><value>Nom de la regex...</value></data>
   <data name="regex.save_preset" xml:space="preserve"><value>Enregistrer la regex</value></data>
   <data name="regex.save_preset_tooltip" xml:space="preserve"><value>Enregistrer le motif actuel et ses options</value></data>
@@ -402,9 +389,6 @@
   </data>
   <data name="base64decoder.title" xml:space="preserve">
     <value>Décodeur Base64</value>
-  </data>
-  <data name="base64decoder.subtitle" xml:space="preserve">
-    <value>Chargez un fichier Base64, reconvertissez-le en binaire d'origine et enregistrez-le</value>
   </data>
   <data name="base64decoder.input_title" xml:space="preserve">
     <value>Entrée Base64</value>
@@ -499,9 +483,6 @@
   <data name="jwtdecoder.title" xml:space="preserve">
     <value>Décodeur JWT</value>
   </data>
-  <data name="jwtdecoder.subtitle" xml:space="preserve">
-    <value>Collez votre jeton JWT, il sera décodé automatiquement</value>
-  </data>
   <data name="jwtdecoder.token_title" xml:space="preserve">
     <value>Jeton JWT</value>
   </data>
@@ -563,9 +544,6 @@
   </data>
   <data name="jwtbuilder.title" xml:space="preserve">
     <value>Générateur JWT</value>
-  </data>
-  <data name="jwtbuilder.subtitle" xml:space="preserve">
-    <value>Créez des jetons JWT en définissant les claims, l'algorithme et la clé secrète</value>
   </data>
   <data name="jwtbuilder.algorithm_secret_title" xml:space="preserve">
     <value>Algorithme et clé secrète</value>
@@ -662,9 +640,6 @@
   </data>
   <data name="jwtbuilder.template_management" xml:space="preserve">
     <value>Gestion des modèles</value>
-  </data>
-  <data name="jwtbuilder.template_management_subtitle" xml:space="preserve">
-    <value>Enregistrez votre configuration JWT comme modèle et réutilisez-la plus tard</value>
   </data>
   <data name="jwtbuilder.load_template" xml:space="preserve">
     <value>Charger un modèle</value>

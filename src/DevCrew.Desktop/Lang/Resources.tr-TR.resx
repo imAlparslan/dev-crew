@@ -43,7 +43,6 @@
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Paneli</value></data>
 
   <data name="createguid.title" xml:space="preserve"><value>GUID Oluşturucu</value></data>
-  <data name="createguid.subtitle" xml:space="preserve"><value>Yeni bir GUID üretmek için butona tıklayın</value></data>
   <data name="createguid.generate" xml:space="preserve"><value>🎲 Yeni GUID Üret</value></data>
   <data name="createguid.copy" xml:space="preserve"><value>Kopyala</value></data>
   <data name="createguid.clear" xml:space="preserve"><value>Temizle</value></data>
@@ -56,7 +55,6 @@
   <data name="createguid.delete" xml:space="preserve"><value>Sil</value></data>
 
   <data name="jsonformatter.title" xml:space="preserve"><value>JSON Biçimlendirici</value></data>
-  <data name="jsonformatter.subtitle" xml:space="preserve"><value>JSON verilerinizi doğrulayın, biçimlendirin veya sıkıştırın</value></data>
   <data name="jsonformatter.prettify" xml:space="preserve"><value>Biçimlendir</value></data>
   <data name="jsonformatter.prettify_tooltip" xml:space="preserve"><value>JSON'u biçimlendir</value></data>
   <data name="jsonformatter.minify" xml:space="preserve"><value>Sıkıştır</value></data>
@@ -89,7 +87,6 @@
   <data name="jsonformatter.load_failed" xml:space="preserve"><value>Dosya yükleme hatası: {0}</value></data>
 
   <data name="jsondiff.title" xml:space="preserve"><value>JSON Karşılaştırma</value></data>
-  <data name="jsondiff.subtitle" xml:space="preserve"><value>İki JSON arasındaki farkları yol ve satır bazında inceleyin</value></data>
   <data name="jsondiff.ignore_object_order" xml:space="preserve"><value>Nesne key sırası önemsiz</value></data>
   <data name="jsondiff.array_order_significant" xml:space="preserve"><value>Dizi sırası önemli</value></data>
   <data name="jsondiff.ignore_whitespace" xml:space="preserve"><value>Boşluk farklarını yok say</value></data>
@@ -115,7 +112,6 @@
   <data name="jsondiff.all_files" xml:space="preserve"><value>Tüm Dosyalar</value></data>
 
   <data name="base64encoder.title" xml:space="preserve"><value>Base64 Kodlayıcı</value></data>
-  <data name="base64encoder.subtitle" xml:space="preserve"><value>Dosyanızı yükleyin, Kodla ile Base64 çıktısı oluşturun</value></data>
   <data name="base64encoder.input_title" xml:space="preserve"><value>Girdi Dosyası</value></data>
   <data name="base64encoder.browse" xml:space="preserve"><value>Gözat</value></data>
   <data name="base64encoder.browse_tooltip" xml:space="preserve"><value>Bilgisayardan dosya seç</value></data>
@@ -143,7 +139,6 @@
   <data name="base64encoder.completed_status" xml:space="preserve"><value>Dosya Base64 formatına çevrildi ({0:N0} karakter)</value></data>
 
   <data name="base64decoder.title" xml:space="preserve"><value>Base64 Çözücü</value></data>
-  <data name="base64decoder.subtitle" xml:space="preserve"><value>Base64 formatındaki dosyanızı yükleyin, orijinal ikili biçime çevirin ve bilgisayarınıza kaydedin</value></data>
   <data name="base64decoder.input_title" xml:space="preserve"><value>Base64 Girişi</value></data>
   <data name="base64decoder.browse" xml:space="preserve"><value>Gözat</value></data>
   <data name="base64decoder.browse_tooltip" xml:space="preserve"><value>Bilgisayardan Base64 içerikli dosya seç</value></data>
@@ -176,12 +171,10 @@
   <data name="base64decoder.file_picker_failed" xml:space="preserve"><value>Dosya seçimi sırasında hata: {0}</value></data>
 
   <data name="regex.title" xml:space="preserve"><value>Regex</value></data>
-  <data name="regex.subtitle" xml:space="preserve"><value>Düzenlerken eşleşmeleri canlı vurgulamak için regex ve metin girin</value></data>
   <data name="regex.pattern_title" xml:space="preserve"><value>Pattern</value></data>
   <data name="regex.pattern_watermark" xml:space="preserve"><value>(?&lt;word&gt;\w+)</value></data>
   <data name="regex.saved_presets" xml:space="preserve"><value>Kayıtlı regexler</value></data>
   <data name="regex.preset_management" xml:space="preserve"><value>Regex presetleri</value></data>
-  <data name="regex.preset_management_subtitle" xml:space="preserve"><value>Kayıtlı bir regex seçerek pattern seçeneklerini doldurun veya mevcut kurulumu isim verip daha sonra kullanmak için kaydedin.</value></data>
   <data name="regex.preset_name_watermark" xml:space="preserve"><value>Regex adı...</value></data>
   <data name="regex.save_preset" xml:space="preserve"><value>Regex Kaydet</value></data>
   <data name="regex.save_preset_tooltip" xml:space="preserve"><value>Geçerli pattern ve seçenekleri kaydet</value></data>
@@ -219,7 +212,6 @@
   <data name="regex.hover_capture_item" xml:space="preserve"><value>- {0}: {1} (index {2}, uzunluk {3})</value></data>
   <data name="regex.hover_no_captures" xml:space="preserve"><value>Capture grubu yok</value></data>
 
-  <data name="jwtdecoder.subtitle" xml:space="preserve"><value>JWT token'inizi yapıştırın, otomatik olarak decode edilecek</value></data>
   <data name="jwtdecoder.token_watermark" xml:space="preserve"><value>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkF5c2UiLCJpYXQiOjE1MTYyMzkwMjJ9...</value></data>
   <data name="jwtdecoder.title" xml:space="preserve"><value>JWT Çözücü</value></data>
   <data name="jwtdecoder.token_title" xml:space="preserve"><value>JWT Token</value></data>
@@ -244,7 +236,6 @@
   <data name="jwtdecoder.decoded_payload" xml:space="preserve"><value>Çözülen Payload</value></data>
 
   <data name="jwtbuilder.title" xml:space="preserve"><value>JWT Üretici</value></data>
-  <data name="jwtbuilder.subtitle" xml:space="preserve"><value>JWT token oluşturun - claim, algoritma ve gizli anahtar belirleyin</value></data>
   <data name="jwtbuilder.algorithm_secret_title" xml:space="preserve"><value>Algoritma ve Gizli Anahtar</value></data>
   <data name="jwtbuilder.algorithm" xml:space="preserve"><value>Algoritma:</value></data>
   <data name="jwtbuilder.secret_key" xml:space="preserve"><value>Gizli Anahtar:</value></data>
@@ -277,7 +268,6 @@
   <data name="jwtbuilder.clear" xml:space="preserve"><value>✕ Temizle</value></data>
   <data name="jwtbuilder.generated_token" xml:space="preserve"><value>Oluşturulan JWT Token</value></data>
   <data name="jwtbuilder.template_management" xml:space="preserve"><value>Şablon Yönetimi</value></data>
-  <data name="jwtbuilder.template_management_subtitle" xml:space="preserve"><value>JWT yapılandırmanızı şablon olarak kaydedin ve daha sonra kullanın</value></data>
   <data name="jwtbuilder.load_template" xml:space="preserve"><value>Şablon Yükle</value></data>
   <data name="jwtbuilder.template_placeholder" xml:space="preserve"><value>Şablon seçin...</value></data>
   <data name="jwtbuilder.template_load" xml:space="preserve"><value>📂 Yükle</value></data>
