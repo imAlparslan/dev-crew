@@ -8,6 +8,10 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>DevCrew.Core</AssemblyName>
     <RootNamespace>DevCrew.Core</RootNamespace>
+    <IsAotCompatible>true</IsAotCompatible>
+    <IsTrimmable>true</IsTrimmable>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
   </PropertyGroup>
 
   <ItemGroup>
