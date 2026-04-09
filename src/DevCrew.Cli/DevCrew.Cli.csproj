@@ -9,24 +9,30 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>DevCrew.Cli</AssemblyName>
     <RootNamespace>DevCrew.Cli</RootNamespace>
-    <PublishAot>true</PublishAot>
-    <PublishTrimmed>true</PublishTrimmed>
+    <PublishAot>false</PublishAot>
+    <PublishTrimmed>false</PublishTrimmed>
     <TrimMode>partial</TrimMode>
     <InvariantGlobalization>false</InvariantGlobalization>
-    <EnableAotAnalyzer>true</EnableAotAnalyzer>
-    <IsAotCompatible>true</IsAotCompatible>
+    <EnableAotAnalyzer>false</EnableAotAnalyzer>
+    <IsAotCompatible>false</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- <PackageReference Include="Cocona" Version="2.2.0" /> -->
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
-    <PackageReference Include="Spectre.Console" Version="0.55.0" />
+    <PackageReference Include="Spectre.Console.Cli" Version="0.55.0" />
+    <PackageReference Include="TextCopy" Version="6.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DevCrew.Core\DevCrew.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Results/" />
   </ItemGroup>
 
 </Project>

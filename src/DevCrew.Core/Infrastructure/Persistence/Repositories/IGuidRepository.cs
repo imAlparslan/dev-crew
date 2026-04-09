@@ -59,4 +59,14 @@ public interface IGuidRepository
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The GuidHistory record or null if not found</returns>
     Task<GuidHistory?> GetGuidByIdAsync(int id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a list of GUIDs that start with a specific value and contain specific notes. This can be used for batch deletion or retrieval based on a common prefix and notes.
+    /// </summary>
+    /// <param name="value">The starting value to filter GUIDs</param>
+    /// <param name="notes">The notes to filter GUIDs</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>List of GuidHistory records matching the starting value and notes</returns>
+    Task<List<GuidHistory>> GetGuidByValueAndNotes(string? value, string? notes, CancellationToken cancellationToken = default);
+
 }
