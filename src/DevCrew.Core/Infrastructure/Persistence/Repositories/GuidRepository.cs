@@ -97,4 +97,20 @@ public class GuidRepository : IGuidRepository
     {
         return await _dbContext.GuidHistories.FindAsync(new object[] { id }, cancellationToken);
     }
+
+    public Task<List<GuidHistory>> GetGuidByValueAndNotes(string? value, string? notes, CancellationToken cancellationToken = default)
+    {
+        if(string.IsNullOrWhiteSpace(value) && string.IsNullOrWhiteSpace(notes))
+            throw new ArgumentException("At least one of value or notes must be provided.");
+            
+        var query = _dbContext.GuidHistories.AsNoTracking().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(value))
+            query = query.Where(g => g.GuidValue.StartsWith(value));
+
+        if (!string.IsNullOrWhiteSpace(notes))
+            query = query.Where(g => g.Notes != null && g.Notes.StartsWith(notes));
+
+        return query.ToListAsync(cancellationToken);
+    }
 }
