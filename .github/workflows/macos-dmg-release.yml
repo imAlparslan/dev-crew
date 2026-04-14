@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*.*.*"
+      - "v*.*.*-*"
 
 permissions:
   contents: write
@@ -51,6 +52,20 @@ jobs:
             -p:DebugType=none \
             -o ./artifacts/publish/desktop/osx-arm64
 
+      - name: Publish macOS CLI binary
+        run: |
+          dotnet publish src/DevCrew.Cli/DevCrew.Cli.csproj \
+            -c Release \
+            -r osx-arm64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:EnableCompressionInSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
+            -p:Version=${VERSION_NO_V} \
+            -p:DebugSymbols=false \
+            -p:DebugType=none \
+            -o ./artifacts/publish/cli/osx-arm64
+
       - name: Resolve app bundle path
         run: |
           PRIMARY_PATH="./artifacts/publish/desktop/osx-arm64/DevCrew.Desktop.app"
@@ -67,27 +82,55 @@ jobs:
 
           echo "APP_BUNDLE_PATH=${APP_BUNDLE_PATH}" >> "$GITHUB_ENV"
 
+      - name: Resolve CLI binary path
+        run: |
+          PRIMARY_PATH="./artifacts/publish/cli/osx-arm64/DevCrew.Cli"
+          FALLBACK_PATH="./src/DevCrew.Cli/bin/Release/net10.0/osx-arm64/publish/DevCrew.Cli"
+
+          if [[ -f "$PRIMARY_PATH" ]]; then
+            CLI_BINARY_PATH="$PRIMARY_PATH"
+          elif [[ -f "$FALLBACK_PATH" ]]; then
+            CLI_BINARY_PATH="$FALLBACK_PATH"
+          else
+            echo "DevCrew.Cli executable not found in publish output." >&2
+            exit 1
+          fi
+
+          echo "CLI_BINARY_PATH=${CLI_BINARY_PATH}" >> "$GITHUB_ENV"
+
       - name: Set bundle version in Info.plist
         run: |
           PLIST_PATH="${APP_BUNDLE_PATH}/Contents/Info.plist"
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${VERSION_NO_V}" "$PLIST_PATH"
           /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${VERSION_NO_V}" "$PLIST_PATH"
 
-      - name: Ensure DMG script is executable
-        run: chmod +x ./scripts/packaging/macos/create-dmg.sh
+      - name: Ensure packaging scripts are executable
+        run: |
+          chmod +x ./scripts/packaging/macos/create-pkg.sh
+          chmod +x ./scripts/packaging/macos/create-dmg.sh
+
+      - name: Create PKG installer
+        run: |
+          ./scripts/packaging/macos/create-pkg.sh \
+            --app "${APP_BUNDLE_PATH}" \
+            --cli "${CLI_BINARY_PATH}" \
+            --version "${VERSION_NO_V}" \
+            --output-dir "./artifacts/dist"
 
       - name: Create DMG
         run: |
           ./scripts/packaging/macos/create-dmg.sh \
-            --app "${APP_BUNDLE_PATH}" \
+            --pkg "./artifacts/dist/DevCrew-${VERSION_NO_V}.pkg" \
             --version "${VERSION_NO_V}" \
             --output-dir "./artifacts/dist"
 
       - name: Upload DMG artifact
         uses: actions/upload-artifact@v7
         with:
-          name: DevCrew-macos-dmg-${{ env.VERSION_NO_V }}
-          path: ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.dmg
+          name: DevCrew-macos-installer-${{ env.VERSION_NO_V }}
+          path: |
+            ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.pkg
+            ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.dmg
 
       - name: Create draft GitHub release
         uses: softprops/action-gh-release@v3
@@ -96,4 +139,6 @@ jobs:
           name: DevCrew v${{ env.VERSION_NO_V }}
           draft: true
           generate_release_notes: true
-          files: ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.dmg
+          files: |
+            ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.pkg
+            ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.dmg

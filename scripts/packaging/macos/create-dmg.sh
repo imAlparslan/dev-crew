@@ -2,6 +2,7 @@
 set -euo pipefail
 
 APP_PATH=""
+PKG_PATH=""
 VERSION=""
 OUTPUT_DIR="artifacts/dist"
 
@@ -9,6 +10,10 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --app)
       APP_PATH="$2"
+      shift 2
+      ;;
+    --pkg)
+      PKG_PATH="$2"
       shift 2
       ;;
     --version)
@@ -26,8 +31,13 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$APP_PATH" ]]; then
-  echo "Missing required argument: --app <path-to-app-bundle>" >&2
+if [[ -n "$APP_PATH" && -n "$PKG_PATH" ]]; then
+  echo "Use either --app or --pkg, but not both." >&2
+  exit 1
+fi
+
+if [[ -z "$APP_PATH" && -z "$PKG_PATH" ]]; then
+  echo "Missing required argument: --app <path-to-app-bundle> or --pkg <path-to-package>" >&2
   exit 1
 fi
 
@@ -36,8 +46,13 @@ if [[ -z "$VERSION" ]]; then
   exit 1
 fi
 
-if [[ ! -d "$APP_PATH" ]]; then
+if [[ -n "$APP_PATH" && ! -d "$APP_PATH" ]]; then
   echo "App bundle not found: $APP_PATH" >&2
+  exit 1
+fi
+
+if [[ -n "$PKG_PATH" && ! -f "$PKG_PATH" ]]; then
+  echo "PKG not found: $PKG_PATH" >&2
   exit 1
 fi
 
@@ -56,8 +71,12 @@ cleanup() {
 }
 trap cleanup EXIT
 
-cp -R "$APP_PATH" "${STAGING_DIR}/DevCrew.app"
-ln -s /Applications "${STAGING_DIR}/Applications"
+if [[ -n "$APP_PATH" ]]; then
+  cp -R "$APP_PATH" "${STAGING_DIR}/DevCrew.app"
+  ln -s /Applications "${STAGING_DIR}/Applications"
+else
+  cp "$PKG_PATH" "${STAGING_DIR}/$(basename "$PKG_PATH")"
+fi
 
 hdiutil create \
   -volname "DevCrew ${VERSION}" \
@@ -73,13 +92,20 @@ hdiutil convert "$RW_DMG" \
 hdiutil verify "$DMG_PATH"
 
 hdiutil attach "$DMG_PATH" -mountpoint "$MOUNT_POINT" -readonly >/dev/null
-if [[ ! -d "${MOUNT_POINT}/DevCrew.app" ]]; then
-  echo "DevCrew.app not found in DMG" >&2
-  exit 1
-fi
-if [[ ! -x "${MOUNT_POINT}/DevCrew.app/Contents/MacOS/DevCrew.Desktop" ]]; then
-  echo "DevCrew.Desktop executable not found in DMG" >&2
-  exit 1
+if [[ -n "$APP_PATH" ]]; then
+  if [[ ! -d "${MOUNT_POINT}/DevCrew.app" ]]; then
+    echo "DevCrew.app not found in DMG" >&2
+    exit 1
+  fi
+  if [[ ! -x "${MOUNT_POINT}/DevCrew.app/Contents/MacOS/DevCrew.Desktop" ]]; then
+    echo "DevCrew.Desktop executable not found in DMG" >&2
+    exit 1
+  fi
+else
+  if [[ ! -f "${MOUNT_POINT}/$(basename "$PKG_PATH")" ]]; then
+    echo "$(basename "$PKG_PATH") not found in DMG" >&2
+    exit 1
+  fi
 fi
 
 # Explicitly detach before returning to avoid noisy detach failures at trap time.
