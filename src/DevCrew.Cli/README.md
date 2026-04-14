@@ -6,6 +6,17 @@
 
 ## Installation
 
+### macOS release installer
+
+Tagged macOS releases now ship a `DevCrew.pkg` installer, optionally wrapped in a DMG for download convenience.
+
+Running the installer places:
+
+- `DevCrew.app` in `/Applications`
+- `crew` in `/usr/local/bin`
+
+After installation, open a new terminal session and run `crew --version` to verify the CLI is available on your `PATH`.
+
 ### Build from source
 
 ```bash
