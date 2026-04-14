@@ -62,7 +62,7 @@ public class ErrorHandler : IErrorHandler
     }
 
     /// <inheritdoc/>
-    public void LogException(Exception exception, string? message = null)
+    public void LogException(Exception? exception, string? message = null)
     {
         if (exception == null)
             throw new ArgumentNullException(nameof(exception));

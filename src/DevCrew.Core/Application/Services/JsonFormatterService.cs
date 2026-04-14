@@ -12,7 +12,7 @@ public class JsonFormatterService : IJsonFormatterService
     /// <summary>
     /// Validates if the input is valid JSON
     /// </summary>
-    public JsonFormatterResult Validate(string input)
+    public JsonFormatterResult Validate(string? input)
     {
         if (string.IsNullOrWhiteSpace(input))
         {

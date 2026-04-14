@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DevCrew.Core.Domain.Models;
+using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using Shouldly;
 using Xunit;
@@ -12,7 +11,7 @@ namespace DevCrew.Core.Tests.Infrastructure;
 public sealed class GuidRepositoryTests : IDisposable
 {
     private readonly GuidRepository _repository;
-    private readonly IDisposable _context;
+    private readonly AppDbContext _context;
 
     public GuidRepositoryTests()
     {
@@ -144,7 +143,7 @@ public sealed class GuidRepositoryTests : IDisposable
         result.ShouldBeTrue();
         // Retrieve and verify
         var guids = await _repository.GetGuidsPagedAsync(0, 100);
-        var updated = guids.First();
+        var updated = guids[0];
         updated.Notes.ShouldBe(newNotes);
     }
 
@@ -161,7 +160,7 @@ public sealed class GuidRepositoryTests : IDisposable
         // Assert
         result.ShouldBeTrue();
         var guids = await _repository.GetGuidsPagedAsync(0, 100);
-        guids.First().Notes.ShouldBeNull();
+        guids[0].Notes.ShouldBeNull();
     }
 
     [Fact]

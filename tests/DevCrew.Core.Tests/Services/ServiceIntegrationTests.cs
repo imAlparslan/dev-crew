@@ -40,6 +40,7 @@ public class ServiceIntegrationTests
         // Act - Decode back and validate with JsonFormatter
         var decodeResult = _base64EncoderService.Decode(encodeResult.Output);
         decodeResult.IsSuccess.ShouldBeTrue();
+        decodeResult.Output.ShouldNotBeNull();
 
         var decodedJson = Encoding.UTF8.GetString(decodeResult.Output);
         var validateResult = _jsonFormatterService.Validate(decodedJson);
@@ -59,7 +60,7 @@ public class ServiceIntegrationTests
         // Act - Full cycle: JSON -> Base64 -> Decode -> Validate
         var encoded = _base64EncoderService.Encode(jsonBytes);
         var decoded = _base64EncoderService.Decode(encoded.Output);
-        var decodedJson = Encoding.UTF8.GetString(decoded.Output);
+        var decodedJson = Encoding.UTF8.GetString(decoded.Output!);
         var validated = _jsonFormatterService.Validate(decodedJson);
 
         // Assert
@@ -108,7 +109,8 @@ public class ServiceIntegrationTests
         // Act - Decode and verify
         var decodeResult = _base64EncoderService.Decode(encodeResult.Output);
         decodeResult.IsSuccess.ShouldBeTrue();
-
+        decodeResult.Output.ShouldNotBeNull();
+  
         var decodedJson = Encoding.UTF8.GetString(decodeResult.Output);
 
         // Assert

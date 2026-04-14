@@ -1,7 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using DevCrew.Core.Domain.Models;
+using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
+using DevCrew.Core.Tests.Infrastructure.Factories;
 using Shouldly;
 using Xunit;
 
@@ -10,7 +12,7 @@ namespace DevCrew.Core.Tests.Infrastructure;
 public sealed class RegexPresetRepositoryTests : IDisposable
 {
     private readonly RegexPresetRepository _repository;
-    private readonly IDisposable _context;
+    private readonly AppDbContext _context;
 
     public RegexPresetRepositoryTests()
     {
@@ -24,25 +26,13 @@ public sealed class RegexPresetRepositoryTests : IDisposable
         _context?.Dispose();
     }
 
-    private RegexPreset CreateTestPreset(string name = "Test Preset")
-    {
-        return new RegexPreset
-        {
-            Name = name,
-            Pattern = @"\d+",
-            IgnoreCase = false,
-            Multiline = false,
-            CreatedAt = DateTime.UtcNow
-        };
-    }
-
     #region SaveAsync Tests
 
     [Fact]
     public async Task SaveAsync_PersistToDatabase_WhenPresetIsValid()
     {
         // Arrange
-        var preset = CreateTestPreset("EmailPattern");
+        var preset = RegexPresetTestFactory.CreateTestPreset("EmailPattern");
 
         // Act
         var result = await _repository.SaveAsync(preset);
@@ -58,8 +48,8 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     public async Task SaveAsync_ReturnUniqueIds_WhenSavingMultiplePresets()
     {
         // Arrange
-        var preset1 = CreateTestPreset("Preset1");
-        var preset2 = CreateTestPreset("Preset2");
+        var preset1 = RegexPresetTestFactory.CreateTestPreset("Preset1");
+        var preset2 = RegexPresetTestFactory.CreateTestPreset("Preset2");
 
         // Act
         var result1 = await _repository.SaveAsync(preset1);
@@ -73,7 +63,7 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     public async Task SaveAsync_PreserveOptions_WhenSavingWithOptionsEnabled()
     {
         // Arrange
-        var preset = CreateTestPreset("WithOptions");
+        var preset = RegexPresetTestFactory.CreateTestPreset("WithOptions");
         preset.IgnoreCase = true;
         preset.Multiline = true;
 
@@ -93,9 +83,9 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     public async Task GetAllAsync_ReturnAllPresets_WhenQueried()
     {
         // Arrange
-        await _repository.SaveAsync(CreateTestPreset("Preset1"));
-        await _repository.SaveAsync(CreateTestPreset("Preset2"));
-        await _repository.SaveAsync(CreateTestPreset("Preset3"));
+        await _repository.SaveAsync(RegexPresetTestFactory.CreateTestPreset("Preset1"));
+        await _repository.SaveAsync(RegexPresetTestFactory.CreateTestPreset("Preset2"));
+        await _repository.SaveAsync(RegexPresetTestFactory.CreateTestPreset("Preset3"));
 
         // Act
         var result = await _repository.GetAllAsync();
@@ -108,9 +98,9 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     public async Task GetAllAsync_ReturnOrderedByName()
     {
         // Arrange
-        await _repository.SaveAsync(CreateTestPreset("Zebra"));
-        await _repository.SaveAsync(CreateTestPreset("Apple"));
-        await _repository.SaveAsync(CreateTestPreset("Mango"));
+        await _repository.SaveAsync(RegexPresetTestFactory.CreateTestPreset("Zebra"));
+        await _repository.SaveAsync(RegexPresetTestFactory.CreateTestPreset("Apple"));
+        await _repository.SaveAsync(RegexPresetTestFactory.CreateTestPreset("Mango"));
 
         // Act
         var result = await _repository.GetAllAsync();
@@ -139,7 +129,7 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     public async Task GetByIdAsync_ReturnPreset_WhenIdMatches()
     {
         // Arrange
-        var preset = CreateTestPreset("FindMe");
+        var preset = RegexPresetTestFactory.CreateTestPreset("FindMe");
         var saved = await _repository.SaveAsync(preset);
 
         // Act
@@ -169,7 +159,7 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     public async Task UpdateLastUsedAsync_UpdateTimestamp_WhenIdMatches()
     {
         // Arrange
-        var preset = CreateTestPreset();
+        var preset = RegexPresetTestFactory.CreateTestPreset();
         preset.LastUsedAt = null;
         var saved = await _repository.SaveAsync(preset);
 
@@ -179,6 +169,7 @@ public sealed class RegexPresetRepositoryTests : IDisposable
         // Assert
         result.ShouldBeTrue();
         var updated = await _repository.GetByIdAsync(saved.Id);
+        updated.ShouldNotBeNull();
         updated.LastUsedAt.ShouldNotBeNull();
     }
 
@@ -203,7 +194,7 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     public async Task NameExistsAsync_ReturnTrue_WhenNameExists()
     {
         // Arrange
-        await _repository.SaveAsync(CreateTestPreset("Existing"));
+        await _repository.SaveAsync(RegexPresetTestFactory.CreateTestPreset("Existing"));
 
         // Act
         var result = await _repository.NameExistsAsync("Existing");
@@ -226,7 +217,7 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     public async Task NameExistsAsync_PerformCaseSensitiveCheck()
     {
         // Arrange
-        await _repository.SaveAsync(CreateTestPreset("EmailPattern"));
+        await _repository.SaveAsync(RegexPresetTestFactory.CreateTestPreset("EmailPattern"));
 
         // Act
         var result = await _repository.NameExistsAsync("emailpattern");
@@ -244,7 +235,7 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     public async Task DeleteAsync_RemoveFromDatabase_WhenIdMatches()
     {
         // Arrange
-        var preset = CreateTestPreset();
+        var preset = RegexPresetTestFactory.CreateTestPreset();
         var saved = await _repository.SaveAsync(preset);
 
         // Act
@@ -274,7 +265,7 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     public async Task UpdateAsync_ModifyPatternAndOptions_WhenIdMatches()
     {
         // Arrange
-        var preset = CreateTestPreset();
+        var preset = RegexPresetTestFactory.CreateTestPreset();
         var saved = await _repository.SaveAsync(preset);
         var newPattern = @"[a-z]+";
         var newIgnoreCase = true;
@@ -304,13 +295,14 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     public async Task UpdateAsync_PreserveNameWhenUpdatingPattern()
     {
         // Arrange
-        var preset = CreateTestPreset("ImportantName");
+        var preset = RegexPresetTestFactory.CreateTestPreset("ImportantName");
         var saved = await _repository.SaveAsync(preset);
 
         // Act
         var result = await _repository.UpdateAsync(saved.Id, @"[a-z]+", true, false);
 
         // Assert
+        result.ShouldNotBeNull();
         result.Name.ShouldBe("ImportantName");
         result.Pattern.ShouldBe(@"[a-z]+");
     }

@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DevCrew.Core.Domain.Models;
+using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using Shouldly;
 using Xunit;
@@ -12,7 +11,7 @@ namespace DevCrew.Core.Tests.Infrastructure;
 public sealed class JwtBuilderTemplateRepositoryTests : IDisposable
 {
     private readonly JwtBuilderTemplateRepository _repository;
-    private readonly IDisposable _context;
+    private readonly AppDbContext _context;
 
     public JwtBuilderTemplateRepositoryTests()
     {
@@ -26,7 +25,7 @@ public sealed class JwtBuilderTemplateRepositoryTests : IDisposable
         _context?.Dispose();
     }
 
-    private JwtBuilderTemplate CreateTestTemplate(string name = "Test Template")
+    private static JwtBuilderTemplate CreateTestTemplate(string name = "Test Template")
     {
         return new JwtBuilderTemplate
         {
@@ -94,6 +93,7 @@ public sealed class JwtBuilderTemplateRepositoryTests : IDisposable
         // Assert
         result.ShouldBeTrue();
         var updated = await _repository.GetByIdAsync(saved.Id);
+        updated.ShouldNotBeNull();
         updated.Issuer.ShouldBe("new-issuer");
     }
 
@@ -234,6 +234,7 @@ public sealed class JwtBuilderTemplateRepositoryTests : IDisposable
         // Assert
         result.ShouldBeTrue();
         var updated = await _repository.GetByIdAsync(saved.Id);
+        updated.ShouldNotBeNull();
         updated.LastUsedAt.ShouldNotBeNull();
     }
 
@@ -298,7 +299,7 @@ public sealed class JwtBuilderTemplateRepositoryTests : IDisposable
     {
         // Arrange
         var template1 = CreateTestTemplate("Duplicate");
-        var saved1 = await _repository.SaveAsync(template1);
+        _ = await _repository.SaveAsync(template1);
         var template2 = CreateTestTemplate("Duplicate");
         await _repository.SaveAsync(template2);
 

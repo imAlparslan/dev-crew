@@ -12,7 +12,7 @@ public interface IJsonFormatterService
     /// </summary>
     /// <param name="input">JSON string to validate</param>
     /// <returns>Result containing validation status and error message if any</returns>
-    JsonFormatterResult Validate(string input);
+    JsonFormatterResult Validate(string? input);
 
     /// <summary>
     /// Formats JSON with indentation (prettify)

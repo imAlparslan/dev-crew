@@ -9,7 +9,7 @@ using DevCrew.Core.Shared.Constants;
 public class Base64EncoderService : IBase64EncoderService
 {
     /// <inheritdoc/>
-    public Base64EncodeResult Encode(byte[] input)
+    public Base64EncodeResult Encode(byte[]? input)
     {
         if (input == null || input.Length == 0)
         {
@@ -44,7 +44,7 @@ public class Base64EncoderService : IBase64EncoderService
     }
 
     /// <inheritdoc/>
-    public Base64DecodeResult Decode(string input)
+    public Base64DecodeResult Decode(string? input)
     {
         if (string.IsNullOrWhiteSpace(input))
         {

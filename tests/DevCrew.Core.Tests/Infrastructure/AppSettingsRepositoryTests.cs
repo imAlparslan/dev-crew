@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using Shouldly;
 using Xunit;
@@ -9,7 +10,7 @@ namespace DevCrew.Core.Tests.Infrastructure;
 public sealed class AppSettingsRepositoryTests : IDisposable
 {
     private readonly AppSettingsRepository _repository;
-    private readonly IDisposable _context;
+    private readonly AppDbContext _context;
 
     public AppSettingsRepositoryTests()
     {
@@ -171,7 +172,7 @@ public sealed class AppSettingsRepositoryTests : IDisposable
     {
         // Arrange
         var settings = await _repository.GetOrCreateAsync();
-        var originalLanguage = settings.LanguageCultureName;
+        _ = settings.LanguageCultureName;
         var newLanguage = "tr-TR";
         await _repository.UpdateLanguageAsync(newLanguage);
 

@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using DevCrew.Core.Domain.Models;
+using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using Shouldly;
 using Xunit;
@@ -12,7 +10,7 @@ namespace DevCrew.Core.Tests.Infrastructure;
 public sealed class JwtRepositoryTests : IDisposable
 {
     private readonly JwtRepository _repository;
-    private readonly IDisposable _context;
+    private readonly AppDbContext _context;
 
     public JwtRepositoryTests()
     {
@@ -222,7 +220,10 @@ public sealed class JwtRepositoryTests : IDisposable
 
         // Assert
         result.Count.ShouldBe(1);
-        result[0].Issuer.ShouldContain("example");
+        result[0].ShouldNotBeNull();
+        var issuer = result[0].Issuer;
+        issuer.ShouldNotBeNull();
+        issuer.ShouldContain("example");
     }
 
     #endregion

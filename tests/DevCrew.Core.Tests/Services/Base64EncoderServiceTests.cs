@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DevCrew.Core.Application.Services;
@@ -32,7 +31,7 @@ public sealed class Base64EncoderServiceTests
     public void Encode_ReturnFalse_WhenInputBytesAreNull()
     {
         // Arrange
-        byte[] nullBytes = null;
+        byte[]? nullBytes = null;
 
         // Act
         var result = _service.Encode(nullBytes);
@@ -125,7 +124,7 @@ public sealed class Base64EncoderServiceTests
     public void Decode_ReturnFalse_WhenInputIsNull()
     {
         // Arrange
-        string nullInput = null;
+        string? nullInput = null;
 
         // Act
         var result = _service.Decode(nullInput);
@@ -161,7 +160,9 @@ public sealed class Base64EncoderServiceTests
         var result = _service.Decode(base64String);
 
         // Assert
+        result.ShouldNotBeNull();
         result.IsSuccess.ShouldBeTrue();
+        result.Output.ShouldNotBeNull();
         var decodedText = Encoding.UTF8.GetString(result.Output);
         decodedText.ShouldBe(unicodeText);
     }
@@ -176,7 +177,9 @@ public sealed class Base64EncoderServiceTests
         var result = _service.Decode(base64String);
 
         // Assert
+        result.ShouldNotBeNull();
         result.IsSuccess.ShouldBeTrue();
+        result.Output.ShouldNotBeNull();
         var decodedText = Encoding.UTF8.GetString(result.Output);
         decodedText.ShouldBe("Hello World");
     }
@@ -199,6 +202,7 @@ public sealed class Base64EncoderServiceTests
         // Assert
         encodeResult.IsSuccess.ShouldBeTrue();
         decodeResult.IsSuccess.ShouldBeTrue();
+        decodeResult.Output.ShouldNotBeNull();
         decodeResult.Output.ShouldBe(originalBytes);
         var decodedText = Encoding.UTF8.GetString(decodeResult.Output);
         decodedText.ShouldBe(originalText);
@@ -218,6 +222,7 @@ public sealed class Base64EncoderServiceTests
         // Assert
         encodeResult.IsSuccess.ShouldBeTrue();
         decodeResult.IsSuccess.ShouldBeTrue();
+        decodeResult.Output.ShouldNotBeNull();
         var decodedText = Encoding.UTF8.GetString(decodeResult.Output);
         decodedText.ShouldBe(originalText);
     }
@@ -237,6 +242,7 @@ public sealed class Base64EncoderServiceTests
         // Assert
         encodeResult.IsSuccess.ShouldBeTrue();
         decodeResult.IsSuccess.ShouldBeTrue();
+        decodeResult.Output.ShouldNotBeNull();
         decodeResult.Output.ShouldBe(largeBytes);
     }
 

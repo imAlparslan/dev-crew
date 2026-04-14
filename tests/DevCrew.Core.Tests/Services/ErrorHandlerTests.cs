@@ -41,7 +41,7 @@ public sealed class ErrorHandlerTests
     public void LogException_ThrowArgumentNull_WhenExceptionIsNull()
     {
         // Arrange
-        Exception exceptionNull = null;
+        Exception? exceptionNull = null;
 
         // Act & Assert
         Should.Throw<ArgumentNullException>(() => _errorHandler.LogException(exceptionNull));

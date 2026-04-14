@@ -34,13 +34,13 @@ public class EdgeCaseTests
     {
         // Arrange - Create large JSON array (1MB)
         var largeArray = new StringBuilder();
-        largeArray.Append("[");
+        largeArray.Append('[');
         for (int i = 0; i < 10000; i++)
         {
-            if (i > 0) largeArray.Append(",");
+            if (i > 0) largeArray.Append(',');
             largeArray.Append($"{{\"id\":{i},\"name\":\"item{i}\",\"value\":null}}");
         }
-        largeArray.Append("]");
+        largeArray.Append(']');
 
         var largeJson = largeArray.ToString();
 
@@ -221,7 +221,7 @@ public class EdgeCaseTests
         deepJson.Append("\"end\"");
         for (int i = 0; i < 1000; i++)
         {
-            deepJson.Append("}");
+            deepJson.Append('}');
         }
 
         var json = deepJson.ToString();

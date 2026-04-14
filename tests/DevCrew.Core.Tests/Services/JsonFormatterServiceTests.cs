@@ -1,4 +1,3 @@
-using System.Text.Encodings.Web;
 using System.Text.Json;
 using DevCrew.Core.Application.Services;
 using Shouldly;
@@ -48,9 +47,7 @@ public sealed class JsonFormatterServiceTests
         string? nullInput = null;
 
         // Act
-#pragma warning disable CS8625
         var result = _service.Validate(nullInput);
-#pragma warning restore CS8625
 
         // Assert
         result.IsValid.ShouldBeFalse();
@@ -160,7 +157,8 @@ public sealed class JsonFormatterServiceTests
         // JSON serializer may escape unicode, so check that the decoded value contains emoji
         result.Output.ShouldNotBeNullOrWhiteSpace();
         // Decode to verify emoji is preserved in the actual data
-        var decoded = System.Text.Json.JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, string>>(result.Output);
+        var decoded = JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, string>>(result.Output);
+        decoded.ShouldNotBeNull();
         decoded["greeting"].ShouldContain("👋");
     }
 

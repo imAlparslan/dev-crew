@@ -1,9 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using DevCrew.Core;
 using DevCrew.Core.Infrastructure.Persistence;
-using DevCrew.Core.Application.Services;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using DevCrew.Desktop.DependencyInjection;
 using DevCrew.Desktop.ViewModels;
@@ -64,7 +62,7 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    private IConfiguration LoadConfiguration()
+    private static IConfiguration LoadConfiguration()
     {
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
         var basePath = AppContext.BaseDirectory;

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
 using DevCrew.Core.Application.Services;
-using DevCrew.Core.Domain.Models;
 using Shouldly;
 using Xunit;
 
@@ -28,13 +27,14 @@ public sealed class JwtServiceTests
 
         // Assert
         result.IsValid.ShouldBeTrue();
+        result.Payload.ShouldNotBeNull();
         result.Payload.ShouldContain("user123");
         result.Payload.ShouldContain("user@example.com");
         result.Subject.ShouldBe("user123");
     }
 
     [Fact]
-    public void DecodeToken_IdentifyExpiredToken_WhenTokenExpired()
+    public async Task DecodeToken_IdentifyExpiredToken_WhenTokenExpired()
     {
         // Arrange - Create token that will expire soon (1 second)
         var claims = new Dictionary<string, object> { { "sub", "user123" } };
@@ -44,7 +44,7 @@ public sealed class JwtServiceTests
         success.ShouldBeTrue();
 
         // Wait for token to expire
-        System.Threading.Thread.Sleep(1100);
+        await Task.Delay(1100);
 
         // Act
         var result = _service.DecodeToken(token);
@@ -225,7 +225,7 @@ public sealed class JwtServiceTests
         var emptySecret = string.Empty;
 
         // Act
-        var (success, token, errorMessage, errorKey, _) = _service.BuildToken(claims, emptySecret);
+        var (success, token, _, errorKey, _) = _service.BuildToken(claims, emptySecret);
 
         // Assert
         success.ShouldBeFalse();
@@ -242,7 +242,7 @@ public sealed class JwtServiceTests
         var unsupportedAlgorithm = "INVALID";
 
         // Act
-        var (success, token, errorMessage, errorKey, _) = _service.BuildToken(claims, secret, unsupportedAlgorithm);
+        var (success, token, _, errorKey, _) = _service.BuildToken(claims, secret, unsupportedAlgorithm);
 
         // Assert
         success.ShouldBeFalse();
@@ -345,6 +345,7 @@ public sealed class JwtServiceTests
         buildSuccess.ShouldBeTrue();
         decodeResult.IsValid.ShouldBeTrue();
         decodeResult.Subject.ShouldBe("user999");
+        decodeResult.Payload.ShouldNotBeNullOrEmpty();
         decodeResult.Payload.ShouldContain("roundtrip@test.com");
     }
 

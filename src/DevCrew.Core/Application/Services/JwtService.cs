@@ -29,7 +29,7 @@ public class JwtService : IJwtService
     {
         _tokenHandler = new JwtSecurityTokenHandler();
     }
-    public JwtDecodeResult DecodeToken(string token)
+    public JwtDecodeResult DecodeToken(string? token)
     {
         var result = new JwtDecodeResult();
 

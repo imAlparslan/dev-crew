@@ -19,5 +19,5 @@ public interface IBase64EncoderService
     /// </summary>
     /// <param name="input">Base64 encoded string.</param>
     /// <returns>Decoding result with binary output or error.</returns>
-    Base64DecodeResult Decode(string input);
+    Base64DecodeResult Decode(string? input);
 }
