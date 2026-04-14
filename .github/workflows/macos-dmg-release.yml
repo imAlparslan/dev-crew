@@ -1,0 +1,99 @@
+name: macos-dmg-release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+env:
+  DOTNET_NOLOGO: true
+
+jobs:
+  macos-release:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - name: Extract version from tag
+        run: |
+          VERSION_NO_V="${GITHUB_REF_NAME#v}"
+          echo "VERSION_NO_V=${VERSION_NO_V}" >> "$GITHUB_ENV"
+
+      - name: Build desktop project
+        run: |
+          dotnet build src/DevCrew.Desktop/DevCrew.Desktop.csproj \
+            -c Release \
+            /property:GenerateFullPaths=true \
+            /consoleloggerparameters:NoSummary
+
+      - name: Run core tests
+        run: |
+          dotnet test tests/DevCrew.Core.Tests/DevCrew.Core.Tests.csproj -c Release
+
+      - name: Publish macOS app bundle
+        run: |
+          dotnet publish src/DevCrew.Desktop/DevCrew.Desktop.csproj \
+            -c Release \
+            -r osx-arm64 \
+            --self-contained true \
+            -p:Version=${VERSION_NO_V} \
+            -p:DebugSymbols=false \
+            -p:DebugType=none \
+            -o ./artifacts/publish/desktop/osx-arm64
+
+      - name: Resolve app bundle path
+        run: |
+          PRIMARY_PATH="./artifacts/publish/desktop/osx-arm64/DevCrew.Desktop.app"
+          FALLBACK_PATH="./src/DevCrew.Desktop/bin/Release/net10.0/osx-arm64/DevCrew.Desktop.app"
+
+          if [[ -d "$PRIMARY_PATH" ]]; then
+            APP_BUNDLE_PATH="$PRIMARY_PATH"
+          elif [[ -d "$FALLBACK_PATH" ]]; then
+            APP_BUNDLE_PATH="$FALLBACK_PATH"
+          else
+            echo "DevCrew.Desktop.app not found in publish output." >&2
+            exit 1
+          fi
+
+          echo "APP_BUNDLE_PATH=${APP_BUNDLE_PATH}" >> "$GITHUB_ENV"
+
+      - name: Set bundle version in Info.plist
+        run: |
+          PLIST_PATH="${APP_BUNDLE_PATH}/Contents/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${VERSION_NO_V}" "$PLIST_PATH"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${VERSION_NO_V}" "$PLIST_PATH"
+
+      - name: Ensure DMG script is executable
+        run: chmod +x ./scripts/packaging/macos/create-dmg.sh
+
+      - name: Create DMG
+        run: |
+          ./scripts/packaging/macos/create-dmg.sh \
+            --app "${APP_BUNDLE_PATH}" \
+            --version "${VERSION_NO_V}" \
+            --output-dir "./artifacts/dist"
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: DevCrew-macos-dmg-${{ env.VERSION_NO_V }}
+          path: ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.dmg
+
+      - name: Create draft GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: DevCrew v${{ env.VERSION_NO_V }}
+          draft: true
+          generate_release_notes: true
+          files: ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.dmg
