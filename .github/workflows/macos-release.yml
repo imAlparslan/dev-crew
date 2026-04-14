@@ -107,7 +107,6 @@ jobs:
       - name: Ensure packaging scripts are executable
         run: |
           chmod +x ./scripts/packaging/macos/create-pkg.sh
-          chmod +x ./scripts/packaging/macos/create-dmg.sh
 
       - name: Create PKG installer
         run: |
@@ -116,6 +115,11 @@ jobs:
             --cli "${CLI_BINARY_PATH}" \
             --version "${VERSION_NO_V}" \
             --output-dir "./artifacts/dist"
+
+      - name: Verify PKG output
+        run: |
+          ls -lah ./artifacts/dist
+          test -f "./artifacts/dist/DevCrew-${VERSION_NO_V}.pkg"
 
       - name: Upload PKG artifact
         uses: actions/upload-artifact@v7
@@ -130,4 +134,5 @@ jobs:
           name: DevCrew v${{ env.VERSION_NO_V }}
           draft: true
           generate_release_notes: true
+          fail_on_unmatched_files: true
           files: ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.pkg
