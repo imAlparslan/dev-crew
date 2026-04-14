@@ -68,3 +68,5 @@ nunit-*.xml
 *.swo
 *~
 .DS_Store
+
+.sonarqube/

@@ -176,6 +176,45 @@
                     </StackPanel>
                 </Border>
 
+                <!-- Danger Zone Card (macOS uninstall) -->
+                <Border BorderBrush="{StaticResource BrushDangerDark}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="16"
+                        Background="{StaticResource BrushTertiaryBackground}"
+                        HorizontalAlignment="Stretch"
+                        IsVisible="{Binding IsUninstallSupported}">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="{Binding DangerZoneSectionTitle}"
+                                   FontSize="{DynamicResource FontSizeLabel}"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource BrushDanger}" />
+
+                        <!-- Initial state: uninstall prompt button -->
+                        <Button Content="{Binding UninstallButtonLabel}"
+                                Command="{Binding PromptUninstallCommand}"
+                                Classes="ActionButton"
+                                IsVisible="{Binding !IsPromptingUninstall}"
+                                HorizontalAlignment="Left" />
+
+                        <!-- Confirming state: warning + confirm/cancel -->
+                        <StackPanel Spacing="12" IsVisible="{Binding IsPromptingUninstall}">
+                            <TextBlock Text="{Binding UninstallWarningLabel}"
+                                       FontSize="{DynamicResource FontSizeDefault}"
+                                       Foreground="{StaticResource BrushSecondaryText}"
+                                       TextWrapping="Wrap" />
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Button Content="{Binding UninstallConfirmButtonLabel}"
+                                        Command="{Binding ConfirmUninstallCommand}"
+                                        Classes="ActionButton DangerActionButton" />
+                                <Button Content="{Binding UninstallCancelButtonLabel}"
+                                        Command="{Binding CancelUninstallCommand}"
+                                        Classes="ActionButton" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
             </StackPanel>
         </Border>
     </ScrollViewer>

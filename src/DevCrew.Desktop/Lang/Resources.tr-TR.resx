@@ -38,6 +38,12 @@
   <data name="settings.preview_heading_text" xml:space="preserve"><value>Başlık Örneği</value></data>
   <data name="settings.preview_ui_text" xml:space="preserve"><value>Örnek Metin</value></data>
   <data name="settings.preview_button_text" xml:space="preserve"><value>Buton Etiketi</value></data>
+
+  <data name="settings.danger_zone" xml:space="preserve"><value>Tehlikeli Bölge</value></data>
+  <data name="settings.uninstall_button" xml:space="preserve"><value>DevCrew'u Kaldır...</value></data>
+  <data name="settings.uninstall_warning" xml:space="preserve"><value>Bu işlem DevCrew uygulamasını, crew CLI aracını ve tüm kayıtlı verilerinizi kalıcı olarak kaldıracaktır. Bu işlem geri alınamaz.</value></data>
+  <data name="settings.uninstall_confirm_button" xml:space="preserve"><value>Evet, Her Şeyi Kaldır</value></data>
+  <data name="settings.uninstall_cancel_button" xml:space="preserve"><value>İptal</value></data>
   <data name="settings.preview_code_text" xml:space="preserve"><value>const token = &quot;abc123&quot;;</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Paneli</value></data>

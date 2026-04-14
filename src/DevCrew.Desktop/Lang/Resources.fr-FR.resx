@@ -73,6 +73,12 @@
   <data name="settings.preview_heading_text" xml:space="preserve"><value>Exemple de titre</value></data>
   <data name="settings.preview_ui_text" xml:space="preserve"><value>Exemple de texte</value></data>
   <data name="settings.preview_button_text" xml:space="preserve"><value>Libellé du bouton</value></data>
+
+  <data name="settings.danger_zone" xml:space="preserve"><value>Danger Zone</value></data>
+  <data name="settings.uninstall_button" xml:space="preserve"><value>Uninstall DevCrew...</value></data>
+  <data name="settings.uninstall_warning" xml:space="preserve"><value>This will permanently remove the DevCrew app, the crew CLI tool, and all your saved data. This cannot be undone.</value></data>
+  <data name="settings.uninstall_confirm_button" xml:space="preserve"><value>Yes, Uninstall Everything</value></data>
+  <data name="settings.uninstall_cancel_button" xml:space="preserve"><value>Cancel</value></data>
   <data name="settings.preview_code_text" xml:space="preserve"><value>const token = &quot;abc123&quot;;</value></data>
   <data name="dashboard.title" xml:space="preserve">
     <value>🎯 Tableau de bord DevCrew</value>

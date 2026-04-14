@@ -11,19 +11,26 @@ public class SettingsViewModel : BaseViewModel
     private readonly ILocalizationService _localizationService;
     private readonly IAppSettingsRepository _appSettingsRepository;
     private readonly IFontService _fontService;
+    private readonly IUninstallService _uninstallService;
     private bool _isInitializing;
+    private bool _isPromptingUninstall;
 
     public SettingsViewModel(
         IErrorHandler errorHandler,
         ILocalizationService localizationService,
         IAppSettingsRepository appSettingsRepository,
-        IFontService fontService)
+        IFontService fontService,
+        IUninstallService uninstallService)
         : base(errorHandler)
     {
         _localizationService = localizationService;
         _appSettingsRepository = appSettingsRepository;
         _fontService = fontService;
+        _uninstallService = uninstallService;
         ApplyFontSettingsCommand = new AsyncRelayCommand(ApplyFontSettingsAsync, CanApplyFontSettings);
+        PromptUninstallCommand = new RelayCommand(() => IsPromptingUninstall = true);
+        CancelUninstallCommand = new RelayCommand(() => IsPromptingUninstall = false);
+        ConfirmUninstallCommand = new AsyncRelayCommand(ConfirmUninstallAsync);
         _localizationService.LanguageChanged += OnLanguageChanged;
         SupportedLanguages = _localizationService.SupportedLanguages;
 
@@ -53,6 +60,38 @@ public class SettingsViewModel : BaseViewModel
 
         _isInitializing = false;
         RefreshFontPreviewState();
+    }
+
+    // Uninstall
+    public bool IsUninstallSupported => _uninstallService.IsSupported;
+
+    public bool IsPromptingUninstall
+    {
+        get => _isPromptingUninstall;
+        set => SetProperty(ref _isPromptingUninstall, value);
+    }
+
+    public IRelayCommand PromptUninstallCommand { get; }
+    public IRelayCommand CancelUninstallCommand { get; }
+    public IAsyncRelayCommand ConfirmUninstallCommand { get; }
+
+    private async Task ConfirmUninstallAsync()
+    {
+        ClearError();
+        IsLoading = true;
+        try
+        {
+            await _uninstallService.UninstallAsync();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+            IsPromptingUninstall = false;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 
     // Language
@@ -153,6 +192,13 @@ public class SettingsViewModel : BaseViewModel
     public string PreviewHeadingText => _localizationService.GetString("settings.preview_heading_text");
     public string PreviewUiText => _localizationService.GetString("settings.preview_ui_text");
     public string PreviewButtonText => _localizationService.GetString("settings.preview_button_text");
+
+    // Uninstall labels
+    public string DangerZoneSectionTitle => _localizationService.GetString("settings.danger_zone");
+    public string UninstallButtonLabel => _localizationService.GetString("settings.uninstall_button");
+    public string UninstallWarningLabel => _localizationService.GetString("settings.uninstall_warning");
+    public string UninstallConfirmButtonLabel => _localizationService.GetString("settings.uninstall_confirm_button");
+    public string UninstallCancelButtonLabel => _localizationService.GetString("settings.uninstall_cancel_button");
 
     public double PreviewFontSizeScale => GetFontSizeScale(SelectedFontSize ?? _fontService.CurrentFontSizePreference);
     public double PreviewHeadingFontSize => 22 * PreviewFontSizeScale;
@@ -274,6 +320,11 @@ public class SettingsViewModel : BaseViewModel
         OnPropertyChanged(nameof(PreviewHeadingText));
         OnPropertyChanged(nameof(PreviewUiText));
         OnPropertyChanged(nameof(PreviewButtonText));
+        OnPropertyChanged(nameof(DangerZoneSectionTitle));
+        OnPropertyChanged(nameof(UninstallButtonLabel));
+        OnPropertyChanged(nameof(UninstallWarningLabel));
+        OnPropertyChanged(nameof(UninstallConfirmButtonLabel));
+        OnPropertyChanged(nameof(UninstallCancelButtonLabel));
     }
 }
 

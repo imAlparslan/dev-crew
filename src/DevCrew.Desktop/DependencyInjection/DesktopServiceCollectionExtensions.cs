@@ -22,6 +22,7 @@ public static class DesktopServiceCollectionExtensions
         services.AddSingleton<ILocalizationService>(_ =>
             new LocalizationService(LocalizationService.ResolveOrFallbackCulture(System.Globalization.CultureInfo.CurrentUICulture.Name)));
         services.AddSingleton<IFontService, FontService>();
+        services.AddSingleton<IUninstallService, UninstallService>();
         services.AddScoped<IClipboardService, ClipboardService>();
 
         // ViewModels
