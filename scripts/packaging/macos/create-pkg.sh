@@ -67,9 +67,11 @@ PKG_PATH="${OUTPUT_DIR}/${PKG_NAME}"
 
 STAGING_ROOT="$(mktemp -d /tmp/devcrew-pkg-root.XXXXXX)"
 EXPAND_DIR="$(mktemp -u /tmp/devcrew-pkg-expand.XXXXXX)"
+COMPONENT_PLIST="$(mktemp /tmp/devcrew-component.XXXXXX.plist)"
 
 cleanup() {
   rm -rf "$STAGING_ROOT" "$EXPAND_DIR"
+  rm -f "$COMPONENT_PLIST"
 }
 trap cleanup EXIT
 
@@ -78,10 +80,16 @@ mkdir -p "${STAGING_ROOT}/Applications" "${STAGING_ROOT}/usr/local/bin"
 cp -R "$APP_PATH" "${STAGING_ROOT}/Applications/DevCrew.app"
 install -m 755 "$CLI_PATH" "${STAGING_ROOT}/usr/local/bin/crew"
 
+# Keep the app install path fixed at /Applications and avoid skipping when a relocated/dev copy exists.
+pkgbuild --analyze --root "$STAGING_ROOT" "$COMPONENT_PLIST"
+/usr/libexec/PlistBuddy -c "Set :0:BundleIsRelocatable false" "$COMPONENT_PLIST"
+/usr/libexec/PlistBuddy -c "Set :0:BundleIsVersionChecked false" "$COMPONENT_PLIST"
+
 rm -f "$PKG_PATH"
 
 pkgbuild \
   --root "$STAGING_ROOT" \
+  --component-plist "$COMPONENT_PLIST" \
   --identifier "$PACKAGE_ID" \
   --version "$VERSION" \
   --install-location "/" \
