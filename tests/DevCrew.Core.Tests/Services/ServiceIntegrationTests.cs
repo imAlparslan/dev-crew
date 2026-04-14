@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using DevCrew.Core.Application.Services;
+using DevCrew.Core.Infrastructure.Persistence.Repositories;
+using NSubstitute;
 using Shouldly;
 using Xunit;
 
@@ -22,7 +20,8 @@ public class ServiceIntegrationTests
     {
         _jsonFormatterService = new JsonFormatterService();
         _base64EncoderService = new Base64EncoderService();
-        _guidService = new GuidService();
+        var guidRepository = Substitute.For<IGuidRepository>();
+        _guidService = new GuidService(guidRepository);
     }
 
     #region Base64 + JSON Formatter Integration
