@@ -24,20 +24,20 @@ public interface IErrorHandler
     bool TryExecute(Action action, string? operationName = null);
 
     /// <summary>
-    /// Executes an async action and handles any exceptions that occur.
-    /// </summary>
-    /// <param name="action">The async action to execute</param>
-    /// <param name="operationName">Name of the operation for logging</param>
-    /// <returns>True if successful, false if exception occurred</returns>
-    Task<bool> TryExecuteAsync(Func<Task> action, string? operationName = null);
-
-    /// <summary>
     /// Executes a function and handles any exceptions that occur.
     /// </summary>
     /// <param name="func">The function to execute</param>
     /// <param name="operationName">Name of the operation for logging</param>
     /// <returns>A tuple of (success, result). Result is default if exception occurred.</returns>
     (bool Success, T? Result) TryExecute<T>(Func<T> func, string? operationName = null);
+
+    /// <summary>
+    /// Executes an async action and handles any exceptions that occur.
+    /// </summary>
+    /// <param name="action">The async action to execute</param>
+    /// <param name="operationName">Name of the operation for logging</param>
+    /// <returns>True if successful, false if exception occurred</returns>
+    Task<bool> TryExecuteAsync(Func<Task> action, string? operationName = null);
 
     /// <summary>
     /// Executes an async function and handles any exceptions that occur.
@@ -66,12 +66,7 @@ public class ErrorHandler : IErrorHandler
     public void LogException(Exception? exception, string? message = null)
     {
         ArgumentNullException.ThrowIfNull(exception);
-
-        var errorMessage = string.IsNullOrWhiteSpace(message)
-            ? exception.Message
-            : $"{message} - {exception.Message}";
-
-        _logger.LogError(exception, errorMessage);
+        _logger.LogError(exception, "{Context}: {ExceptionMessage}", message ?? "Operation", exception.Message);
     }
 
     /// <inheritdoc/>
@@ -90,21 +85,6 @@ public class ErrorHandler : IErrorHandler
     }
 
     /// <inheritdoc/>
-    public async Task<bool> TryExecuteAsync(Func<Task> action, string? operationName = null)
-    {
-        try
-        {
-            await action();
-            return true;
-        }
-        catch (Exception ex)
-        {
-            LogException(ex, operationName ?? "Async operation");
-            return false;
-        }
-    }
-
-    /// <inheritdoc/>
     public (bool Success, T? Result) TryExecute<T>(Func<T> func, string? operationName = null)
     {
         try
@@ -116,6 +96,21 @@ public class ErrorHandler : IErrorHandler
         {
             LogException(ex, operationName ?? "Operation");
             return (false, default);
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> TryExecuteAsync(Func<Task> action, string? operationName = null)
+    {
+        try
+        {
+            await action();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            LogException(ex, operationName ?? "Async operation");
+            return false;
         }
     }
 
