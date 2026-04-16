@@ -58,14 +58,14 @@ public class ErrorHandler : IErrorHandler
 
     public ErrorHandler(ILogger<ErrorHandler> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        ArgumentNullException.ThrowIfNull(logger);
+        _logger = logger;
     }
 
     /// <inheritdoc/>
     public void LogException(Exception? exception, string? message = null)
     {
-        if (exception == null)
-            throw new ArgumentNullException(nameof(exception));
+        ArgumentNullException.ThrowIfNull(exception);
 
         var errorMessage = string.IsNullOrWhiteSpace(message)
             ? exception.Message

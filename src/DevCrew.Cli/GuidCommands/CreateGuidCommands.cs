@@ -17,7 +17,7 @@ internal class CreateGuidCommandSettings : CommandSettings
     [CommandOption("-s|--save [Name]")]
     [DefaultValue(null)]
     [Description("Name to associate with the saved GUID.")]
-    public FlagValue<string?> Save { get; init; }
+    public FlagValue<string?> Save { get; init; } = default!;
 }
 
 internal class CreateGuidCommands(IAnsiConsole console,
@@ -33,7 +33,7 @@ internal class CreateGuidCommands(IAnsiConsole console,
     {
         var guid = _guidService.Generate();
         if (settings.Copy)
-            await _clipboardService.SetTextAsync(guid);
+            await _clipboardService.SetTextAsync(guid, cancellationToken);
 
         if (settings.Save.IsSet)
             await _guidRepository.SaveGuidAsync(guid, settings.Save.Value, cancellationToken);

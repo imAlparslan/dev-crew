@@ -28,7 +28,7 @@ app.Configure(config =>
 
 
 });
-var cancellationTokenSource = new CancellationTokenSource();
+using var cancellationTokenSource = new CancellationTokenSource();
 
 Console.CancelKeyPress += (_, e) =>
 {

@@ -31,7 +31,7 @@ public class GuidService(IGuidRepository guidRepository) : IGuidService
 
             return stringBuilder.ToString();
         }
-        var guidToDelete = guids.First();
+        var guidToDelete = guids[0];
         await _guidRepository.DeleteGuidAsync(guidToDelete.Id, cancellationToken);
         return $"Deleted GUID: {guidToDelete.GuidValue}";
     }

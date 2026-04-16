@@ -9,6 +9,8 @@ namespace DevCrew.Core.Application.Services;
 /// </summary>
 public class JsonFormatterService : IJsonFormatterService
 {
+    private const string EmptyJsonInputMessage = "JSON girişi boş olamaz";
+
     /// <summary>
     /// Validates if the input is valid JSON
     /// </summary>
@@ -19,7 +21,7 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = "JSON girişi boş olamaz",
+                ErrorMessage = EmptyJsonInputMessage,
                 ErrorKey = ErrorKeys.JsonFormatter.InputRequired
             };
         }
@@ -55,7 +57,7 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = "JSON girişi boş olamaz",
+                ErrorMessage = EmptyJsonInputMessage,
                 ErrorKey = ErrorKeys.JsonFormatter.InputRequired
             };
         }
@@ -95,7 +97,7 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = "JSON girişi boş olamaz",
+                ErrorMessage = EmptyJsonInputMessage,
                 ErrorKey = ErrorKeys.JsonFormatter.InputRequired
             };
         }
@@ -135,7 +137,7 @@ public class JsonFormatterService : IJsonFormatterService
             return new JsonFormatterResult
             {
                 IsValid = false,
-                ErrorMessage = "JSON girişi boş olamaz",
+                ErrorMessage = EmptyJsonInputMessage,
                 ErrorKey = ErrorKeys.JsonFormatter.InputRequired
             };
         }
@@ -167,7 +169,7 @@ public class JsonFormatterService : IJsonFormatterService
     /// <summary>
     /// Recursively sorts JSON object keys
     /// </summary>
-    private object? SortJsonElement(JsonElement element)
+    private static object? SortJsonElement(JsonElement element)
     {
         switch (element.ValueKind)
         {
