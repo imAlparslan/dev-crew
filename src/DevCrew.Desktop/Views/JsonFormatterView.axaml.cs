@@ -32,7 +32,7 @@ public partial class JsonFormatterView : UserControl
             if (e.Data.Contains(DataFormats.Files))
             {
                 var files = e.Data.GetFiles();
-                if (files == null || files.Count() == 0)
+                if (files == null || !files.Any())
                     return;
 
                 var filePath = files.First().Path.LocalPath;

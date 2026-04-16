@@ -31,10 +31,10 @@ public static class TestDbContextFactory
 
         var context = new AppDbContext(options);
         context.Database.EnsureCreated();
-        
+
         // Store the path for cleanup if needed
         context.Database.GetDbConnection().ConnectionString = connectionString;
-        
+
         return context;
     }
 

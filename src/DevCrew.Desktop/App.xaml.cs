@@ -4,12 +4,12 @@ using Avalonia.Markup.Xaml;
 using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using DevCrew.Desktop.DependencyInjection;
+using DevCrew.Desktop.Services;
 using DevCrew.Desktop.ViewModels;
 using DevCrew.Desktop.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop;
 

@@ -1,4 +1,3 @@
-using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,28 +18,24 @@ public class JwtRepository : IJwtRepository
 
     /// <inheritdoc/>
     public async Task<JwtHistory> SaveJwtAsync(
-        string token, 
-        string? header = null, 
-        string? payload = null, 
-        DateTime? expiresAt = null, 
-        string? issuer = null, 
-        string? audience = null, 
-        string? notes = null,
+        SaveJwtRequest request,
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(token))
-            throw new ArgumentException("JWT token cannot be empty", nameof(token));
+        ArgumentNullException.ThrowIfNull(request);
+
+        if (string.IsNullOrWhiteSpace(request.Token))
+            throw new ArgumentException("JWT token cannot be empty", nameof(request));
 
         var jwtHistory = new JwtHistory
         {
-            Token = token,
+            Token = request.Token,
             DecodedAt = DateTime.UtcNow,
-            Header = header,
-            Payload = payload,
-            ExpiresAt = expiresAt,
-            Issuer = issuer,
-            Audience = audience,
-            Notes = notes
+            Header = request.Header,
+            Payload = request.Payload,
+            ExpiresAt = request.ExpiresAt,
+            Issuer = request.Issuer,
+            Audience = request.Audience,
+            Notes = request.Notes
         };
 
         _dbContext.JwtHistories.Add(jwtHistory);

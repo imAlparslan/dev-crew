@@ -24,11 +24,8 @@ public sealed class BooleanToBrushConverter : IValueConverter
                 return FalseString;
         }
 
-        if (targetType == typeof(string) || targetType == typeof(object))
-        {
-            if (TrueString != null || FalseString != null)
-                return flag == true ? TrueString : FalseString;
-        }
+        if ((targetType == typeof(string) || targetType == typeof(object)) && (TrueString != null || FalseString != null))
+            return flag == true ? TrueString : FalseString;
 
         if (targetType == typeof(IBrush) || targetType == typeof(object))
         {

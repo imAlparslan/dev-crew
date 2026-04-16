@@ -104,7 +104,7 @@ public sealed class GuidRepositoryTests : IDisposable
 
         // Assert
         result.ShouldBeTrue();
-        
+
         // Verify deletion by checking count
         var guids = await _repository.GetGuidsPagedAsync(0, 100);
         guids.ShouldBeEmpty();

@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Application.Services;
-using DevCrew.Core.Domain.Results;
 using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
@@ -16,6 +15,8 @@ public partial class Base64EncoderViewModel : BaseViewModel
     private readonly IBase64EncoderService _base64EncoderService;
     private readonly IClipboardService _clipboardService;
     private readonly ILocalizationService _localizationService;
+
+    private static readonly string[] AllFilePatterns = ["*"];
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasSelectedFile))]
@@ -114,7 +115,7 @@ public partial class Base64EncoderViewModel : BaseViewModel
                     SuggestedStartLocation = suggestedLocation,
                     FileTypeFilter = new[]
                     {
-                        new Avalonia.Platform.Storage.FilePickerFileType(_localizationService.GetString("base64encoder.all_files")) { Patterns = new[] { "*" } }
+                        new Avalonia.Platform.Storage.FilePickerFileType(_localizationService.GetString("base64encoder.all_files")) { Patterns = AllFilePatterns }
                     }
                 });
 

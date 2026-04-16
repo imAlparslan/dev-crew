@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace DevCrew.Core.Infrastructure.Persistence;
 
@@ -39,10 +39,7 @@ ADD COLUMN ButtonFontFamily TEXT NOT NULL DEFAULT 'Inter';";
     [UnconditionalSuppressMessage("AOT", "IL3050", Justification = "Schema bootstrap uses EnsureCreated for local SQLite setup and does not rely on migrations at runtime.")]
     public static void EnsureCompatibilitySchema(AppDbContext dbContext)
     {
-        if (dbContext == null)
-        {
-            throw new ArgumentNullException(nameof(dbContext));
-        }
+        ArgumentNullException.ThrowIfNull(dbContext);
 
         dbContext.Database.EnsureCreated();
         dbContext.Database.ExecuteSqlRaw(EnsureAppSettingsTableSql);

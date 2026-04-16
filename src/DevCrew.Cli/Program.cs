@@ -1,4 +1,4 @@
-﻿using DevCrew.Cli;
+using DevCrew.Cli;
 using DevCrew.Cli.GuidCommands;
 using DevCrew.Core;
 using Microsoft.Extensions.Configuration;

@@ -3,8 +3,8 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DevCrew.Core.Domain.Models;
 using DevCrew.Core.Application.Services;
+using DevCrew.Core.Domain.Models;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using DevCrew.Desktop.Services;
 
@@ -29,7 +29,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
         // Update CanBuildToken when algorithm changes
         OnPropertyChanged(nameof(CanBuildToken));
         OnPropertyChanged(nameof(IsRsaAlgorithm));
-        
+
         // Clear public key when switching to non-RSA algorithm
         if (!value.StartsWith("RS"))
         {
@@ -87,7 +87,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
     private JwtBuilderTemplateItemViewModel? selectedTemplate;
 
     public ObservableCollection<CustomClaimItem> CustomClaims { get; } = new();
-    
+
     public ObservableCollection<JwtBuilderTemplateItemViewModel> SavedTemplates { get; } = new();
 
     public List<string> AvailableAlgorithms { get; } = new()
@@ -113,7 +113,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
     /// </summary>
     public JwtBuilderViewModel(
         IErrorHandler errorHandler,
-        IJwtService jwtService, 
+        IJwtService jwtService,
         IClipboardService clipboardService,
         IJwtBuilderTemplateRepository templateRepository,
         ILocalizationService localizationService)
@@ -123,7 +123,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
         _clipboardService = clipboardService;
         _templateRepository = templateRepository;
         _localizationService = localizationService;
-        
+
         // Load templates when the view model is created
         _ = LoadTemplatesAsync();
     }
@@ -141,16 +141,14 @@ public partial class JwtBuilderViewModel : BaseViewModel
             var claimsDict = new Dictionary<string, List<string>>();
 
             // Group claims by key
-            foreach (var customClaim in CustomClaims)
+            foreach (var customClaim in CustomClaims.Where(c => !string.IsNullOrWhiteSpace(c.Key)))
             {
-                if (!string.IsNullOrWhiteSpace(customClaim.Key))
+                if (!claimsDict.TryGetValue(customClaim.Key, out var claimList))
                 {
-                    if (!claimsDict.ContainsKey(customClaim.Key))
-                    {
-                        claimsDict[customClaim.Key] = new List<string>();
-                    }
-                    claimsDict[customClaim.Key].Add(customClaim.Value ?? string.Empty);
+                    claimList = new List<string>();
+                    claimsDict[customClaim.Key] = claimList;
                 }
+                claimList.Add(customClaim.Value ?? string.Empty);
             }
 
             // Convert to final claims dictionary
@@ -318,7 +316,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
         {
             var templates = await _templateRepository.GetAllAsync();
             SavedTemplates.Clear();
-            
+
             foreach (var template in templates)
             {
                 SavedTemplates.Add(new JwtBuilderTemplateItemViewModel(
@@ -428,7 +426,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
             };
 
             var saved = await _templateRepository.SaveAsync(template);
-            
+
             // Add to list
             SavedTemplates.Add(new JwtBuilderTemplateItemViewModel(
                 saved.Id,
@@ -530,7 +528,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
         try
         {
             await _templateRepository.DeleteAsync(SelectedTemplate.Id);
-            
+
             // Remove from list
             SavedTemplates.Remove(SelectedTemplate);
 
@@ -575,7 +573,7 @@ public partial class JwtBuilderViewModel : BaseViewModel
     /// <summary>
     /// Deserializes custom claims from JSON string
     /// </summary>
-    private List<CustomClaimItem> DeserializeCustomClaims(string json)
+    private static List<CustomClaimItem> DeserializeCustomClaims(string json)
     {
         var result = new List<CustomClaimItem>();
 

@@ -18,10 +18,7 @@ public class RegexPresetRepository : IRegexPresetRepository
     /// <inheritdoc/>
     public async Task<RegexPreset> SaveAsync(RegexPreset preset, CancellationToken cancellationToken = default)
     {
-        if (preset == null)
-        {
-            throw new ArgumentNullException(nameof(preset));
-        }
+        ArgumentNullException.ThrowIfNull(preset);
 
         if (string.IsNullOrWhiteSpace(preset.Name))
         {
@@ -113,10 +110,10 @@ public class RegexPresetRepository : IRegexPresetRepository
             return Task.FromResult(false);
         }
 
-        var normalizedName = name.Trim().ToLower();
+        var normalizedName = name.Trim().ToUpperInvariant();
 
         return _dbContext.RegexPresets
             .AsNoTracking()
-            .AnyAsync(preset => preset.Name.ToLower() == normalizedName, cancellationToken);
+            .AnyAsync(preset => preset.Name.ToUpper() == normalizedName, cancellationToken);
     }
 }

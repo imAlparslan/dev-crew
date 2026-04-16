@@ -1,6 +1,4 @@
 using Avalonia.Controls;
-using AvaloniaEdit;
-using DevCrew.Desktop.ViewModels;
 
 namespace DevCrew.Desktop.Views;
 

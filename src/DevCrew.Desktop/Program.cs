@@ -2,7 +2,7 @@ using Avalonia;
 
 namespace DevCrew.Desktop;
 
-internal class Program
+internal static class Program
 {
     // Handle command line arguments (required for Avalonia)
     [STAThread]

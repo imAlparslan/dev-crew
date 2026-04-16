@@ -16,6 +16,8 @@ public partial class JsonFormatterViewModel : BaseViewModel
     private readonly ILocalizationService _localizationService;
     private string _lastFormatMode = "prettify"; // Track whether user used prettify or minify
 
+    private static readonly string[] AllFilePatterns = ["*"];
+
     [ObservableProperty]
     private string inputJson = string.Empty;
 
@@ -81,7 +83,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
 
         var result = _jsonFormatterService.Validate(value);
         UpdateValidationState(result);
-        
+
         // Auto-format using the last used mode
         if (result.IsValid)
         {
@@ -132,7 +134,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
         _lastFormatMode = "prettify";
         var result = _jsonFormatterService.Prettify(InputJson, IsSortKeysEnabled);
         UpdateValidationState(result);
-        
+
         if (result.IsValid)
         {
             OutputJson = result.Output;
@@ -149,7 +151,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
         _lastFormatMode = "minify";
         var result = _jsonFormatterService.Minify(InputJson, IsSortKeysEnabled);
         UpdateValidationState(result);
-        
+
         if (result.IsValid)
         {
             OutputJson = result.Output;
@@ -215,7 +217,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
 
             // Determine the default file extension
             var defaultExtension = SourceFileExtension ?? ".json";
-            if (!defaultExtension.StartsWith("."))
+            if (!defaultExtension.StartsWith('.'))
             {
                 defaultExtension = "." + defaultExtension;
             }
@@ -296,7 +298,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
                     SuggestedStartLocation = suggestedLocation,
                     FileTypeFilter = new[]
                     {
-                        new Avalonia.Platform.Storage.FilePickerFileType(_localizationService.GetString("jsonformatter.all_files")) { Patterns = new[] { "*" } }
+                        new Avalonia.Platform.Storage.FilePickerFileType(_localizationService.GetString("jsonformatter.all_files")) { Patterns = AllFilePatterns }
                     }
                 });
 
@@ -329,7 +331,7 @@ public partial class JsonFormatterViewModel : BaseViewModel
     {
         IsValid = result.IsValid;
         IsError = !result.IsValid;
-        
+
         if (result.IsValid)
         {
             ValidationMessage = string.Empty;

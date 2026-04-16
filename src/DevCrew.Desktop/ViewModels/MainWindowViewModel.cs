@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Application.Services;
 using DevCrew.Desktop.Services;
+using DevCrew.Desktop.ViewModels.MenuItemViewModels;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -24,16 +25,16 @@ public partial class MainWindowViewModel : BaseViewModel
     private readonly Func<SettingsViewModel> _settingsViewModelFactory;
     private readonly ILocalizationService _localizationService;
 
-    private MenuItemViewModel? _dashboardItem;
-    private MenuItemViewModel? _createGuidItem;
-    private MenuItemViewModel? _jwtDecoderItem;
-    private MenuItemViewModel? _jwtBuilderItem;
-    private MenuItemViewModel? _jsonFormatterItem;
-    private MenuItemViewModel? _jsonDiffItem;
-    private MenuItemViewModel? _base64EncoderItem;
-    private MenuItemViewModel? _base64DecoderItem;
-    private MenuItemViewModel? _regexItem;
-    private MenuItemViewModel? _settingsItem;
+    private DashboardMenuItemViewModel? _dashboardItem;
+    private CreateGuidMenuItemViewModel? _createGuidItem;
+    private JwtDecoderMenuItemViewModel? _jwtDecoderItem;
+    private JwtBuilderMenuItemViewModel? _jwtBuilderItem;
+    private JsonFormatterMenuItemViewModel? _jsonFormatterItem;
+    private JsonDiffMenuItemViewModel? _jsonDiffItem;
+    private Base64EncoderMenuItemViewModel? _base64EncoderItem;
+    private Base64DecoderMenuItemViewModel? _base64DecoderItem;
+    private RegexMenuItemViewModel? _regexItem;
+    private SettingsMenuItemViewModel? _settingsItem;
 
     [ObservableProperty]
     private string title = string.Empty;
@@ -120,39 +121,30 @@ public partial class MainWindowViewModel : BaseViewModel
 
     private void InitializeMenuItems()
     {
-        _dashboardItem = new MenuItemViewModel("dashboard", GetMenuHeader("dashboard"), OpenDashboardCommand, "Primary", "🎯");
-        _createGuidItem = new MenuItemViewModel("create-guid", GetMenuHeader("create-guid"), OpenCreateGuidTabCommand, "Primary", "🎲");
-        _jwtDecoderItem = new MenuItemViewModel("jwt-decoder", GetMenuHeader("jwt-decoder"), OpenJwtDecoderTabCommand, "Primary", "🔐");
-        _jwtBuilderItem = new MenuItemViewModel("jwt-builder", GetMenuHeader("jwt-builder"), OpenJwtBuilderTabCommand, "Primary", "🔧");
-        _jsonFormatterItem = new MenuItemViewModel("json-formatter", GetMenuHeader("json-formatter"), OpenJsonFormatterTabCommand, "Primary", "📋");
-        _jsonDiffItem = new MenuItemViewModel("json-diff", GetMenuHeader("json-diff"), OpenJsonDiffTabCommand, "Primary", "🧩");
-        _base64EncoderItem = new MenuItemViewModel("base64-encoder", GetMenuHeader("base64-encoder"), OpenBase64EncoderTabCommand, "Primary", "🧬");
-        _base64DecoderItem = new MenuItemViewModel("base64-decoder", GetMenuHeader("base64-decoder"), OpenBase64DecoderTabCommand, "Primary", "🔓");
-        _regexItem = new MenuItemViewModel("regex", GetMenuHeader("regex"), OpenRegexTabCommand, "Primary", "🔎");
-        _settingsItem = new MenuItemViewModel("settings", GetMenuHeader("settings"), OpenSettingsTabCommand, "Secondary", "⚙️");
+        _dashboardItem = DashboardMenuItemViewModel.Create(GetMenuHeader(DashboardMenuItemViewModel.MenuId), OpenDashboardCommand);
+        _createGuidItem = CreateGuidMenuItemViewModel.Create(GetMenuHeader(CreateGuidMenuItemViewModel.MenuId), OpenCreateGuidTabCommand);
+        _jwtDecoderItem = JwtDecoderMenuItemViewModel.Create(GetMenuHeader(JwtDecoderMenuItemViewModel.MenuId), OpenJwtDecoderTabCommand);
+        _jwtBuilderItem = JwtBuilderMenuItemViewModel.Create(GetMenuHeader(JwtBuilderMenuItemViewModel.MenuId), OpenJwtBuilderTabCommand);
+        _jsonFormatterItem = JsonFormatterMenuItemViewModel.Create(GetMenuHeader(JsonFormatterMenuItemViewModel.MenuId), OpenJsonFormatterTabCommand);
+        _jsonDiffItem = JsonDiffMenuItemViewModel.Create(GetMenuHeader(JsonDiffMenuItemViewModel.MenuId), OpenJsonDiffTabCommand);
+        _base64EncoderItem = Base64EncoderMenuItemViewModel.Create(GetMenuHeader(Base64EncoderMenuItemViewModel.MenuId), OpenBase64EncoderTabCommand);
+        _base64DecoderItem = Base64DecoderMenuItemViewModel.Create(GetMenuHeader(Base64DecoderMenuItemViewModel.MenuId), OpenBase64DecoderTabCommand);
+        _regexItem = RegexMenuItemViewModel.Create(GetMenuHeader(RegexMenuItemViewModel.MenuId), OpenRegexTabCommand);
+        _settingsItem = SettingsMenuItemViewModel.Create(GetMenuHeader(SettingsMenuItemViewModel.MenuId), OpenSettingsTabCommand);
 
-        MenuItems.Add(_dashboardItem);
-        MenuItems.Add(_createGuidItem);
-        MenuItems.Add(_jwtDecoderItem);
-        MenuItems.Add(_jwtBuilderItem);
-        MenuItems.Add(_jsonFormatterItem);
-        MenuItems.Add(_jsonDiffItem);
-        MenuItems.Add(_base64EncoderItem);
-        MenuItems.Add(_base64DecoderItem);
-        MenuItems.Add(_regexItem);
+        MenuItemViewModel[] primaryItems =
+        [
+            _dashboardItem, _createGuidItem, _jwtDecoderItem, _jwtBuilderItem,
+            _jsonFormatterItem, _jsonDiffItem, _base64EncoderItem, _base64DecoderItem, _regexItem
+        ];
+
+        foreach (var item in primaryItems)
+        {
+            MenuItems.Add(item);
+            _dashboardViewModel.MenuItems.Add(item);
+        }
 
         BottomMenuItems.Add(_settingsItem);
-
-        // Populate Dashboard MenuItems
-        _dashboardViewModel.MenuItems.Add(_dashboardItem);
-        _dashboardViewModel.MenuItems.Add(_createGuidItem);
-        _dashboardViewModel.MenuItems.Add(_jwtDecoderItem);
-        _dashboardViewModel.MenuItems.Add(_jwtBuilderItem);
-        _dashboardViewModel.MenuItems.Add(_jsonFormatterItem);
-        _dashboardViewModel.MenuItems.Add(_jsonDiffItem);
-        _dashboardViewModel.MenuItems.Add(_base64EncoderItem);
-        _dashboardViewModel.MenuItems.Add(_base64DecoderItem);
-        _dashboardViewModel.MenuItems.Add(_regexItem);
     }
 
     [RelayCommand]
@@ -389,16 +381,8 @@ public partial class MainWindowViewModel : BaseViewModel
         MenuTitle = _localizationService.GetString("main.menu");
         CloseTabTooltip = _localizationService.GetString("main.close_tab");
 
-        if (_dashboardItem != null) _dashboardItem.Header = GetMenuHeader("dashboard");
-        if (_createGuidItem != null) _createGuidItem.Header = GetMenuHeader("create-guid");
-        if (_jwtDecoderItem != null) _jwtDecoderItem.Header = GetMenuHeader("jwt-decoder");
-        if (_jwtBuilderItem != null) _jwtBuilderItem.Header = GetMenuHeader("jwt-builder");
-        if (_jsonFormatterItem != null) _jsonFormatterItem.Header = GetMenuHeader("json-formatter");
-        if (_jsonDiffItem != null) _jsonDiffItem.Header = GetMenuHeader("json-diff");
-        if (_base64EncoderItem != null) _base64EncoderItem.Header = GetMenuHeader("base64-encoder");
-        if (_base64DecoderItem != null) _base64DecoderItem.Header = GetMenuHeader("base64-decoder");
-        if (_regexItem != null) _regexItem.Header = GetMenuHeader("regex");
-        if (_settingsItem != null) _settingsItem.Header = GetMenuHeader("settings");
+        foreach (var item in MenuItems.Concat(BottomMenuItems))
+            item.RefreshHeader(_localizationService);
 
         foreach (var tab in Tabs)
         {

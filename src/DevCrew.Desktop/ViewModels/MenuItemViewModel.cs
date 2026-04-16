@@ -1,14 +1,26 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DevCrew.Desktop.Services;
 
 namespace DevCrew.Desktop.ViewModels;
 
 /// <summary>
 /// ViewModel for sidebar menu items.
 /// </summary>
-public partial class MenuItemViewModel : ObservableObject
+public abstract partial class MenuItemViewModel : ObservableObject
 {
-    public MenuItemViewModel(string id, string header, IRelayCommand command, string kind = "Primary", string? icon = null)
+    /// <summary>
+    /// The localization key used to fetch this item's display header.
+    /// </summary>
+    public abstract string LocalizationKey { get; }
+
+    /// <summary>
+    /// Updates the Header property using the given localization service.
+    /// </summary>
+    public void RefreshHeader(ILocalizationService localizationService)
+        => Header = localizationService.GetString(LocalizationKey);
+
+    protected MenuItemViewModel(string id, string header, IRelayCommand command, string kind = "Primary", string? icon = null)
     {
         Id = id;
         Header = header;

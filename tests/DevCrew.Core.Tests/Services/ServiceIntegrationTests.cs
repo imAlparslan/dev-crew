@@ -110,7 +110,7 @@ public class ServiceIntegrationTests
         var decodeResult = _base64EncoderService.Decode(encodeResult.Output);
         decodeResult.IsSuccess.ShouldBeTrue();
         decodeResult.Output.ShouldNotBeNull();
-  
+
         var decodedJson = Encoding.UTF8.GetString(decodeResult.Output);
 
         // Assert
@@ -146,14 +146,14 @@ public class ServiceIntegrationTests
         var unsortedJson = "{\"z\": 1, \"a\": 2, \"m\": 3}";
 
         // Act
-        var sortResult = _jsonFormatterService.SortKeys(unsortedJson);
+        var sortResult = JsonFormatterService.SortKeys(unsortedJson);
         sortResult.IsValid.ShouldBeTrue();
 
         var prettifyResult = _jsonFormatterService.Prettify(sortResult.Output);
         prettifyResult.IsValid.ShouldBeTrue();
 
         // Second execution should produce identical output (deterministic)
-        var sortResult2 = _jsonFormatterService.SortKeys(unsortedJson);
+        var sortResult2 = JsonFormatterService.SortKeys(unsortedJson);
         var prettifyResult2 = _jsonFormatterService.Prettify(sortResult2.Output);
 
         // Assert

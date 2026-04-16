@@ -187,7 +187,7 @@ public sealed class JsonFormatterServiceTests
         var unsortedJson = "{\"z\":\"last\",\"a\":\"first\",\"m\":\"middle\"}";
 
         // Act
-        var result = _service.SortKeys(unsortedJson);
+        var result = JsonFormatterService.SortKeys(unsortedJson);
 
         // Assert
         result.IsValid.ShouldBeTrue();
@@ -206,7 +206,7 @@ public sealed class JsonFormatterServiceTests
         var invalidJson = "{bad json}";
 
         // Act
-        var result = _service.SortKeys(invalidJson);
+        var result = JsonFormatterService.SortKeys(invalidJson);
 
         // Assert
         result.IsValid.ShouldBeFalse();

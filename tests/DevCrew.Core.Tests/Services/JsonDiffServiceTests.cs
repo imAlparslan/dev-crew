@@ -1,7 +1,7 @@
 using System;
-using DevCrew.Core.Shared.Enums;
-using DevCrew.Core.Domain.Results;
 using DevCrew.Core.Application.Services;
+using DevCrew.Core.Domain.Results;
+using DevCrew.Core.Shared.Enums;
 using Shouldly;
 using Xunit;
 

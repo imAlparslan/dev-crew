@@ -1,5 +1,5 @@
-using System.Globalization;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace DevCrew.Desktop.Services;
 

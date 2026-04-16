@@ -18,9 +18,11 @@ public class JwtService : IJwtService
     /// In production, generate unique keys and store them securely.
     /// NEVER use these keys in production environments.
     /// </summary>
+    private const string AlgorithmHs256 = "HS256";
+
     private static readonly Dictionary<string, string> DefaultSecretKeys = new()
     {
-        { "HS256", "a-string-secret-at-least-256-bits-long" },
+        { AlgorithmHs256, "a-string-secret-at-least-256-bits-long" },
         { "HS384", "a-valid-string-secret-that-is-at-least-384-bits-long" },
         { "HS512", "a-valid-string-secret-that-is-at-least-512-bits-long-which-is-very-long" }
     };
@@ -217,7 +219,7 @@ public class JwtService : IJwtService
     /// </summary>
     /// <param name="token">The token with possible "Bearer " prefix</param>
     /// <returns>Token without the prefix</returns>
-    private string RemoveBearerPrefix(string token)
+    private static string RemoveBearerPrefix(string token)
     {
         const string bearerPrefix = "Bearer ";
 
@@ -232,7 +234,7 @@ public class JwtService : IJwtService
     public (bool Success, string? Token, string? ErrorMessage, string? ErrorKey, object[]? ErrorArgs) BuildToken(
         Dictionary<string, object> claims,
         string secret,
-        string algorithm = "HS256",
+        string algorithm = AlgorithmHs256,
         DateTime? expiresAt = null,
         string? issuer = null,
         string? audience = null,
@@ -255,7 +257,7 @@ public class JwtService : IJwtService
             algorithm = algorithm.ToUpperInvariant();
 
             // Validate algorithm
-            var supportedAlgorithms = new[] { "HS256", "HS384", "HS512", "RS256", "RS384", "RS512" };
+            var supportedAlgorithms = new[] { AlgorithmHs256, "HS384", "HS512", "RS256", "RS384", "RS512" };
             if (!supportedAlgorithms.Contains(algorithm))
             {
                 var supported = string.Join(", ", supportedAlgorithms);
@@ -274,7 +276,7 @@ public class JwtService : IJwtService
 
                 var algorithmName = algorithm switch
                 {
-                    "HS256" => SecurityAlgorithms.HmacSha256,
+                    AlgorithmHs256 => SecurityAlgorithms.HmacSha256,
                     "HS384" => SecurityAlgorithms.HmacSha384,
                     "HS512" => SecurityAlgorithms.HmacSha512,
                     _ => SecurityAlgorithms.HmacSha256

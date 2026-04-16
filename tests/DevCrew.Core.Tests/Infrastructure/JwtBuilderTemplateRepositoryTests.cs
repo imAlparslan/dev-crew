@@ -243,7 +243,7 @@ public sealed class JwtBuilderTemplateRepositoryTests : IDisposable
     {
         // Note: ExecuteUpdateAsync returns the number of rows affected (0)
         // The implementation likely treats this as success (true)
-        
+
         // Act
         var result = await _repository.UpdateLastUsedAsync(99999);
 

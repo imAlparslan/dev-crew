@@ -1,4 +1,3 @@
-using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 

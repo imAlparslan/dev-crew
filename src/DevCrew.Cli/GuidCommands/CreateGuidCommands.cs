@@ -37,7 +37,7 @@ internal class CreateGuidCommands(IAnsiConsole console,
 
         if (settings.Save.IsSet)
             await _guidRepository.SaveGuidAsync(guid, settings.Save.Value, cancellationToken);
-        
+
         _console.MarkupLine($"[green]Generated Guid:[/] {guid}");
         return Result.Success;
     }

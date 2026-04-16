@@ -1,4 +1,3 @@
-using System.Text;
 using System.Text.Json;
 using DevCrew.Core.Domain.Results;
 using DevCrew.Core.Shared.Constants;
@@ -442,38 +441,38 @@ public class JsonDiffService : IJsonDiffService
         switch (element.ValueKind)
         {
             case JsonValueKind.Object:
-            {
-                var properties = element.EnumerateObject();
-                if (options.IgnoreObjectPropertyOrder)
                 {
-                    var sorted = new SortedDictionary<string, object?>(StringComparer.Ordinal);
-                    foreach (var property in properties)
+                    var properties = element.EnumerateObject();
+                    if (options.IgnoreObjectPropertyOrder)
                     {
-                        sorted[property.Name] = NormalizeElement(property.Value, options);
+                        var sorted = new SortedDictionary<string, object?>(StringComparer.Ordinal);
+                        foreach (var property in properties)
+                        {
+                            sorted[property.Name] = NormalizeElement(property.Value, options);
+                        }
+
+                        return sorted;
                     }
 
-                    return sorted;
-                }
+                    var map = new Dictionary<string, object?>(StringComparer.Ordinal);
+                    foreach (var property in properties)
+                    {
+                        map[property.Name] = NormalizeElement(property.Value, options);
+                    }
 
-                var map = new Dictionary<string, object?>(StringComparer.Ordinal);
-                foreach (var property in properties)
-                {
-                    map[property.Name] = NormalizeElement(property.Value, options);
+                    return map;
                 }
-
-                return map;
-            }
 
             case JsonValueKind.Array:
-            {
-                var list = element.EnumerateArray().Select(x => NormalizeElement(x, options)).ToList();
-                if (!options.TreatArrayOrderAsSignificant)
                 {
-                    list = [.. list.OrderBy(SerializeComparableValue, StringComparer.Ordinal)];
-                }
+                    var list = element.EnumerateArray().Select(x => NormalizeElement(x, options)).ToList();
+                    if (!options.TreatArrayOrderAsSignificant)
+                    {
+                        list = [.. list.OrderBy(SerializeComparableValue, StringComparer.Ordinal)];
+                    }
 
-                return list;
-            }
+                    return list;
+                }
 
             case JsonValueKind.String:
                 return element.GetString();
@@ -500,7 +499,7 @@ public class JsonDiffService : IJsonDiffService
         return JsonNodeSerializer.Serialize(value, writeIndented: false);
     }
 
-    private static IReadOnlyList<string> SplitLines(string value)
+    private static string[] SplitLines(string value)
     {
         return NormalizeLineEndings(value).Split('\n');
     }
@@ -510,17 +509,17 @@ public class JsonDiffService : IJsonDiffService
         return value.Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n');
     }
 
-    private static IReadOnlyList<JsonLineDiffEntry> BuildLineDiffs(IReadOnlyList<string> leftLines, IReadOnlyList<string> rightLines)
+    private static List<JsonLineDiffEntry> BuildLineDiffs(string[] leftLines, string[] rightLines)
     {
-        if ((long)leftLines.Count * rightLines.Count > MaxLcsCells)
+        if ((long)leftLines.Length * rightLines.Length > MaxLcsCells)
         {
             return BuildSimpleLineDiffs(leftLines, rightLines);
         }
 
-        var lcs = new int[leftLines.Count + 1, rightLines.Count + 1];
-        for (var i = leftLines.Count - 1; i >= 0; i--)
+        var lcs = new int[leftLines.Length + 1, rightLines.Length + 1];
+        for (var i = leftLines.Length - 1; i >= 0; i--)
         {
-            for (var j = rightLines.Count - 1; j >= 0; j--)
+            for (var j = rightLines.Length - 1; j >= 0; j--)
             {
                 if (leftLines[i] == rightLines[j])
                 {
@@ -537,7 +536,7 @@ public class JsonDiffService : IJsonDiffService
         var leftIndex = 0;
         var rightIndex = 0;
 
-        while (leftIndex < leftLines.Count && rightIndex < rightLines.Count)
+        while (leftIndex < leftLines.Length && rightIndex < rightLines.Length)
         {
             if (leftLines[leftIndex] == rightLines[rightIndex])
             {
@@ -577,7 +576,7 @@ public class JsonDiffService : IJsonDiffService
             }
         }
 
-        while (leftIndex < leftLines.Count)
+        while (leftIndex < leftLines.Length)
         {
             entries.Add(new JsonLineDiffEntry
             {
@@ -588,7 +587,7 @@ public class JsonDiffService : IJsonDiffService
             leftIndex++;
         }
 
-        while (rightIndex < rightLines.Count)
+        while (rightIndex < rightLines.Length)
         {
             entries.Add(new JsonLineDiffEntry
             {
@@ -602,15 +601,15 @@ public class JsonDiffService : IJsonDiffService
         return MergeAdjacentChanges(entries);
     }
 
-    private static IReadOnlyList<JsonLineDiffEntry> BuildSimpleLineDiffs(IReadOnlyList<string> leftLines, IReadOnlyList<string> rightLines)
+    private static List<JsonLineDiffEntry> BuildSimpleLineDiffs(string[] leftLines, string[] rightLines)
     {
         var entries = new List<JsonLineDiffEntry>();
-        var max = Math.Max(leftLines.Count, rightLines.Count);
+        var max = Math.Max(leftLines.Length, rightLines.Length);
 
         for (var i = 0; i < max; i++)
         {
-            var hasLeft = i < leftLines.Count;
-            var hasRight = i < rightLines.Count;
+            var hasLeft = i < leftLines.Length;
+            var hasRight = i < rightLines.Length;
 
             if (hasLeft && hasRight)
             {
@@ -647,7 +646,7 @@ public class JsonDiffService : IJsonDiffService
         return entries;
     }
 
-    private static IReadOnlyList<JsonLineDiffEntry> MergeAdjacentChanges(IReadOnlyList<JsonLineDiffEntry> entries)
+    private static List<JsonLineDiffEntry> MergeAdjacentChanges(List<JsonLineDiffEntry> entries)
     {
         if (entries.Count == 0)
         {

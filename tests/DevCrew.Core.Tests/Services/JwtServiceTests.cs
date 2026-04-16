@@ -159,7 +159,7 @@ public sealed class JwtServiceTests
         token.ShouldNotBeNullOrWhiteSpace();
         errorMessage.ShouldBeNull();
         errorKey.ShouldBeNull();
-        
+
         // Verify token can be decoded
         var decoded = _service.DecodeToken(token);
         decoded.IsValid.ShouldBeTrue();

@@ -68,7 +68,7 @@ public class JsonFormatterService : IJsonFormatterService
             var formatted = sortKeys
                 ? JsonNodeSerializer.Serialize(SortJsonElement(document.RootElement), writeIndented: true)
                 : JsonNodeSerializer.SerializeElement(document.RootElement, writeIndented: true);
-            
+
             return new JsonFormatterResult
             {
                 IsValid = true,
@@ -108,7 +108,7 @@ public class JsonFormatterService : IJsonFormatterService
             var minified = sortKeys
                 ? JsonNodeSerializer.Serialize(SortJsonElement(document.RootElement), writeIndented: false)
                 : JsonNodeSerializer.SerializeElement(document.RootElement, writeIndented: false);
-            
+
             return new JsonFormatterResult
             {
                 IsValid = true,
@@ -130,7 +130,7 @@ public class JsonFormatterService : IJsonFormatterService
     /// <summary>
     /// Sorts JSON object keys alphabetically
     /// </summary>
-    public JsonFormatterResult SortKeys(string input)
+    public static JsonFormatterResult SortKeys(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
         {
@@ -147,7 +147,7 @@ public class JsonFormatterService : IJsonFormatterService
             using var document = JsonDocument.Parse(input);
             var sorted = SortJsonElement(document.RootElement);
             var sortedJson = JsonNodeSerializer.Serialize(sorted, writeIndented: true);
-            
+
             return new JsonFormatterResult
             {
                 IsValid = true,

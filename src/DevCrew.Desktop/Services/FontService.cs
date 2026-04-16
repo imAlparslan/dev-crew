@@ -9,20 +9,20 @@ public class FontService : IFontService
     // Base sizes at Medium (1.0x scale)
     private static readonly Dictionary<string, double> BaseSizes = new()
     {
-        ["FontSizeSmall"]   = 11,
+        ["FontSizeSmall"] = 11,
         ["FontSizeDefault"] = 12,
-        ["FontSizeLabel"]   = 13,
-        ["FontSizeMedium"]  = 14,
-        ["FontSizeLarge"]   = 16,
+        ["FontSizeLabel"] = 13,
+        ["FontSizeMedium"] = 14,
+        ["FontSizeLarge"] = 16,
         ["FontSizeHeading"] = 20,
-        ["FontSizeXLarge"]  = 32,
+        ["FontSizeXLarge"] = 32,
     };
 
     private static readonly Dictionary<string, double> Scales = new()
     {
-        ["Small"]  = 0.85,
+        ["Small"] = 0.85,
         ["Medium"] = 1.0,
-        ["Large"]  = 1.2,
+        ["Large"] = 1.2,
     };
 
     public string CurrentFontSizePreference { get; private set; } = AppSettings.DefaultFontSizePreference;

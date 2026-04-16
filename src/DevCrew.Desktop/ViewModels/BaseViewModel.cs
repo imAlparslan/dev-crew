@@ -9,7 +9,7 @@ namespace DevCrew.Desktop.ViewModels;
 public abstract class BaseViewModel : ObservableObject
 {
     protected readonly IErrorHandler ErrorHandler;
-    
+
     private bool _isLoading;
     private string? _errorMessage;
 
@@ -56,8 +56,7 @@ public abstract class BaseViewModel : ObservableObject
     /// <returns>True if operation succeeded, false otherwise</returns>
     protected async Task<bool> RunAsyncOperationAsync(Func<Task> operation, string? errorContext = null)
     {
-        if (operation == null)
-            throw new ArgumentNullException(nameof(operation));
+        ArgumentNullException.ThrowIfNull(operation);
 
         try
         {
@@ -88,8 +87,7 @@ public abstract class BaseViewModel : ObservableObject
     /// <returns>A tuple of (success, result). Result is default if operation failed.</returns>
     protected async Task<(bool Success, T? Result)> RunAsyncOperationAsync<T>(Func<Task<T>> operation, string? errorContext = null)
     {
-        if (operation == null)
-            throw new ArgumentNullException(nameof(operation));
+        ArgumentNullException.ThrowIfNull(operation);
 
         try
         {

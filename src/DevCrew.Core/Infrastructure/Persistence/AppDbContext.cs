@@ -1,5 +1,5 @@
-using DevCrew.Core.Domain.Models;
 using System.Diagnostics.CodeAnalysis;
+using DevCrew.Core.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DevCrew.Core.Infrastructure.Persistence;
@@ -13,8 +13,8 @@ public class AppDbContext : DbContext
     /// Initializes a new instance of the <see cref="AppDbContext"/> class.
     /// </summary>
     /// <param name="options">Database context options.</param>
-    [UnconditionalSuppressMessage("AOT", "IL2026", Justification = "EF Core DbContext constructor is required by EF runtime and explicitly accepted for Core persistence." )]
-    [UnconditionalSuppressMessage("AOT", "IL3050", Justification = "EF Core DbContext constructor is required by EF runtime and explicitly accepted for Core persistence." )]
+    [UnconditionalSuppressMessage("AOT", "IL2026", Justification = "EF Core DbContext constructor is required by EF runtime and explicitly accepted for Core persistence.")]
+    [UnconditionalSuppressMessage("AOT", "IL3050", Justification = "EF Core DbContext constructor is required by EF runtime and explicitly accepted for Core persistence.")]
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }

@@ -1,4 +1,3 @@
-using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,8 +19,7 @@ public class JwtBuilderTemplateRepository : IJwtBuilderTemplateRepository
     /// <inheritdoc/>
     public async Task<JwtBuilderTemplate> SaveAsync(JwtBuilderTemplate template, CancellationToken cancellationToken = default)
     {
-        if (template == null)
-            throw new ArgumentNullException(nameof(template));
+        ArgumentNullException.ThrowIfNull(template);
 
         if (string.IsNullOrWhiteSpace(template.TemplateName))
             throw new ArgumentException("Template name cannot be empty", nameof(template));
@@ -37,8 +35,7 @@ public class JwtBuilderTemplateRepository : IJwtBuilderTemplateRepository
     /// <inheritdoc/>
     public async Task<bool> UpdateAsync(JwtBuilderTemplate template, CancellationToken cancellationToken = default)
     {
-        if (template == null)
-            throw new ArgumentNullException(nameof(template));
+        ArgumentNullException.ThrowIfNull(template);
 
         var existing = await _dbContext.JwtBuilderTemplates.FindAsync(new object[] { template.Id }, cancellationToken);
         if (existing == null)

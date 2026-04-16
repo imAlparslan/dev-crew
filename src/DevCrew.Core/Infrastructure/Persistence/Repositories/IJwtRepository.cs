@@ -11,23 +11,11 @@ public interface IJwtRepository
     /// <summary>
     /// Saves a decoded JWT to the database.
     /// </summary>
-    /// <param name="token">The JWT token string</param>
-    /// <param name="header">Decoded header JSON</param>
-    /// <param name="payload">Decoded payload JSON</param>
-    /// <param name="expiresAt">Token expiration time</param>
-    /// <param name="issuer">Token issuer</param>
-    /// <param name="audience">Token audience</param>
-    /// <param name="notes">Optional notes</param>
+    /// <param name="request">Save request containing JWT fields</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The created JwtHistory entity with assigned ID</returns>
     Task<JwtHistory> SaveJwtAsync(
-        string token, 
-        string? header = null, 
-        string? payload = null, 
-        DateTime? expiresAt = null, 
-        string? issuer = null, 
-        string? audience = null, 
-        string? notes = null,
+        SaveJwtRequest request,
         CancellationToken cancellationToken = default);
 
     /// <summary>

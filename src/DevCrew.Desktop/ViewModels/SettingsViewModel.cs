@@ -1,8 +1,8 @@
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Application.Services;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using DevCrew.Desktop.Services;
-using Avalonia.Media;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -12,7 +12,7 @@ public class SettingsViewModel : BaseViewModel
     private readonly IAppSettingsRepository _appSettingsRepository;
     private readonly IFontService _fontService;
     private readonly IUninstallService _uninstallService;
-    private bool _isInitializing;
+    private readonly bool _isInitializing;
     private bool _isPromptingUninstall;
 
     public SettingsViewModel(
@@ -37,26 +37,26 @@ public class SettingsViewModel : BaseViewModel
         _isInitializing = true;
 
         SelectedLanguage = SupportedLanguages.FirstOrDefault(x => x.CultureName == _localizationService.CurrentCulture.Name)
-            ?? SupportedLanguages.FirstOrDefault();
+            ?? (SupportedLanguages.Count > 0 ? SupportedLanguages[0] : null);
 
         SelectedFontSize = _fontService.CurrentFontSizePreference;
 
         SelectedUiFont = _fontService.AvailableUiFonts
             .FirstOrDefault(x => x.Key == _fontService.CurrentUiFontFamily)
             ?? _fontService.AvailableUiFonts.FirstOrDefault(x => x.Key == "SystemDefault")
-            ?? _fontService.AvailableUiFonts.FirstOrDefault();
+            ?? (_fontService.AvailableUiFonts.Count > 0 ? _fontService.AvailableUiFonts[0] : null);
 
         SelectedHeadingFont = _fontService.AvailableUiFonts
             .FirstOrDefault(x => x.Key == _fontService.CurrentHeadingFontFamily)
             ?? SelectedUiFont
             ?? _fontService.AvailableUiFonts.FirstOrDefault(x => x.Key == "SystemDefault")
-            ?? _fontService.AvailableUiFonts.FirstOrDefault();
+            ?? (_fontService.AvailableUiFonts.Count > 0 ? _fontService.AvailableUiFonts[0] : null);
 
         SelectedButtonFont = _fontService.AvailableUiFonts
             .FirstOrDefault(x => x.Key == _fontService.CurrentButtonFontFamily)
             ?? SelectedUiFont
             ?? _fontService.AvailableUiFonts.FirstOrDefault(x => x.Key == "SystemDefault")
-            ?? _fontService.AvailableUiFonts.FirstOrDefault();
+            ?? (_fontService.AvailableUiFonts.Count > 0 ? _fontService.AvailableUiFonts[0] : null);
 
         _isInitializing = false;
         RefreshFontPreviewState();
@@ -103,12 +103,9 @@ public class SettingsViewModel : BaseViewModel
         get => _selectedLanguage;
         set
         {
-            if (SetProperty(ref _selectedLanguage, value) && value is not null)
+            if (SetProperty(ref _selectedLanguage, value) && value is not null && _localizationService.SetLanguage(value.CultureName) && !_isInitializing)
             {
-                if (_localizationService.SetLanguage(value.CultureName) && !_isInitializing)
-                {
-                    _ = PersistLanguagePreferenceAsync(value.CultureName);
-                }
+                _ = PersistLanguagePreferenceAsync(value.CultureName);
             }
         }
     }
@@ -276,7 +273,7 @@ public class SettingsViewModel : BaseViewModel
         }
     }
 
-    private double GetFontSizeScale(string fontSizePreference) => fontSizePreference switch
+    private static double GetFontSizeScale(string fontSizePreference) => fontSizePreference switch
     {
         "Small" => 0.85,
         "Large" => 1.2,

@@ -78,7 +78,7 @@ public class EdgeCaseTests
 
         // Act
         var sw = Stopwatch.StartNew();
-        var sortResult = _jsonFormatterService.SortKeys(largeJson);
+        var sortResult = JsonFormatterService.SortKeys(largeJson);
         sw.Stop();
 
         // Assert

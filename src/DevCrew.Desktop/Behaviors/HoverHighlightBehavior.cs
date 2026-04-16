@@ -2,10 +2,10 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using DevCrew.Desktop.Controls;
-using DevCrew.Desktop.Models;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
+using DevCrew.Desktop.Controls;
+using DevCrew.Desktop.Models;
 
 namespace DevCrew.Desktop.Behaviors;
 

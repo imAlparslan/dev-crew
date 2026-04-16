@@ -51,7 +51,7 @@ internal class DeleteGuidCommand(IAnsiConsole console, IGuidRepository guidRepos
             _console.MarkupLine(stringBuilder.ToString());
             return Result.Error;
         }
-    var guidToDelete = guids[0];
+        var guidToDelete = guids[0];
         await _guidRepository.DeleteGuidAsync(guidToDelete.Id, cancellationToken);
         _console.MarkupLine($"[green]Deleted GUID:[/] {guidToDelete.GuidValue}");
         return Result.Success;

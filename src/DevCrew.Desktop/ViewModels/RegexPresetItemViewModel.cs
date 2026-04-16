@@ -35,13 +35,13 @@ public partial class RegexPresetItemViewModel : ObservableObject
     {
         get
         {
-            var preview = Pattern.Length > 40 ? Pattern.Substring(0, 37) + "..." : Pattern;
+            var preview = Pattern.Length > 40 ? string.Concat(Pattern.AsSpan(0, 37), "...") : Pattern;
             var flags = new List<string>();
             if (IgnoreCase)
                 flags.Add("i");
             if (Multiline)
                 flags.Add("m");
-            
+
             var flagStr = flags.Count > 0 ? $" [{string.Join("", flags)}]" : string.Empty;
             return $"{Name} · {preview}{flagStr}";
         }

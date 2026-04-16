@@ -1,5 +1,5 @@
-using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Application.Services;
+using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

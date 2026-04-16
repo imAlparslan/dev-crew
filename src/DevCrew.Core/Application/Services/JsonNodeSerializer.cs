@@ -37,37 +37,21 @@ internal static class JsonNodeSerializer
                 return node;
 
             case IDictionary<string, object?> map:
-            {
-                var obj = new JsonObject();
-                foreach (var item in map)
-                {
-                    obj[item.Key] = FromObject(item.Value);
-                }
-
-                return obj;
-            }
+                return BuildJsonObject(map);
 
             case IEnumerable<KeyValuePair<string, object>> map:
-            {
-                var obj = new JsonObject();
-                foreach (var item in map)
-                {
-                    obj[item.Key] = FromObject(item.Value);
-                }
-
-                return obj;
-            }
+                return BuildJsonObject(map.Select(x => KeyValuePair.Create(x.Key, (object?)x.Value)));
 
             case IEnumerable<object?> sequence:
-            {
-                var array = new JsonArray();
-                foreach (var item in sequence)
                 {
-                    array.Add(FromObject(item));
-                }
+                    var array = new JsonArray();
+                    foreach (var item in sequence)
+                    {
+                        array.Add(FromObject(item));
+                    }
 
-                return array;
-            }
+                    return array;
+                }
 
             case string stringValue:
                 return JsonValue.Create(stringValue);
@@ -93,5 +77,16 @@ internal static class JsonNodeSerializer
             default:
                 return JsonValue.Create(value.ToString());
         }
+    }
+
+    private static JsonObject BuildJsonObject(IEnumerable<KeyValuePair<string, object?>> map)
+    {
+        var obj = new JsonObject();
+        foreach (var item in map)
+        {
+            obj[item.Key] = FromObject(item.Value);
+        }
+
+        return obj;
     }
 }

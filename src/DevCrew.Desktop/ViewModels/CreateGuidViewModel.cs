@@ -20,6 +20,7 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
     private readonly ILocalizationService _localizationService;
     private readonly HashSet<GuidItemViewModel> _trackedGuidItems = new();
     private CancellationTokenSource? _loadCancellationTokenSource;
+    private bool _disposed;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasGuid))]
@@ -79,8 +80,8 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
     /// <param name="localizationService">Localization service for user-facing text.</param>
     public CreateGuidViewModel(
         IErrorHandler errorHandler,
-        IGuidService guidService, 
-        IClipboardService clipboardService, 
+        IGuidService guidService,
+        IClipboardService clipboardService,
         IGuidRepository guidRepository,
         ILocalizationService localizationService)
         : base(errorHandler)
@@ -272,10 +273,13 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
             return;
 
         // Cancel any existing load operation
-        _loadCancellationTokenSource?.Cancel();
-        _loadCancellationTokenSource?.Dispose();
+        if (_loadCancellationTokenSource is not null)
+        {
+            await _loadCancellationTokenSource.CancelAsync();
+            _loadCancellationTokenSource.Dispose();
+        }
         _loadCancellationTokenSource = new CancellationTokenSource();
-        
+
         var cancellationToken = _loadCancellationTokenSource.Token;
 
         try
@@ -286,7 +290,7 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
             {
                 _savedSkip = 0;
                 HasMoreSavedGuids = true;
-                
+
                 // Detach items before clearing when resetting saved GUIDs view
                 foreach (var item in FilteredGuidsByPage.ToList())
                 {
@@ -443,10 +447,31 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
     /// </summary>
     public void Dispose()
     {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Releases managed resources when disposing is true.
+    /// </summary>
+    /// <param name="disposing">Whether managed resources should be released.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        if (!disposing)
+        {
+            return;
+        }
+
         // Cancel and dispose any ongoing load operations
         _loadCancellationTokenSource?.Cancel();
         _loadCancellationTokenSource?.Dispose();
-        
+        _loadCancellationTokenSource = null;
+
         // Detach all event handlers
         foreach (var item in _trackedGuidItems.ToList())
         {
@@ -454,6 +479,6 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
         }
         _trackedGuidItems.Clear();
 
-        GC.SuppressFinalize(this);
+        _disposed = true;
     }
 }

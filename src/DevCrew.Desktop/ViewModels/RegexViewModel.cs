@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Application.Services;
@@ -437,9 +436,13 @@ public partial class RegexViewModel : BaseViewModel
                 return;
             }
 
-            _refreshCancellationTokenSource?.Cancel();
-            _refreshCancellationTokenSource?.Dispose();
-            _refreshCancellationTokenSource = null;
+            var refreshCancellationTokenSource = _refreshCancellationTokenSource;
+            if (refreshCancellationTokenSource is not null)
+            {
+                await refreshCancellationTokenSource.CancelAsync();
+                refreshCancellationTokenSource.Dispose();
+                _refreshCancellationTokenSource = null;
+            }
 
             _suppressRefresh = true;
             try
@@ -473,7 +476,7 @@ public partial class RegexViewModel : BaseViewModel
         }
     }
 
-    private RegexPresetItemViewModel MapPreset(RegexPreset preset)
+    private static RegexPresetItemViewModel MapPreset(RegexPreset preset)
     {
         return new RegexPresetItemViewModel(
             preset.Id,
@@ -514,7 +517,14 @@ public partial class RegexViewModel : BaseViewModel
 
     private async Task RefreshMatchesAsync(CancellationToken cancellationToken)
     {
-        await Task.Delay(10);
+        try
+        {
+            await Task.Delay(10, cancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
 
         if (cancellationToken.IsCancellationRequested)
         {

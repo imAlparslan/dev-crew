@@ -72,7 +72,7 @@ public partial class JwtDecoderViewModel : BaseViewModel
     /// </summary>
     public JwtDecoderViewModel(
         IErrorHandler errorHandler,
-        IJwtService jwtService, 
+        IJwtService jwtService,
         IClipboardService clipboardService,
         ILocalizationService localizationService)
         : base(errorHandler)
@@ -205,7 +205,7 @@ public partial class JwtDecoderViewModel : BaseViewModel
     /// Helper method to reset copy indicator after a delay.
     /// </summary>
     /// <param name="resetAction">Action to execute for resetting the indicator</param>
-    private async Task ResetCopyIndicatorAsync(Action resetAction)
+    private static async Task ResetCopyIndicatorAsync(Action resetAction)
     {
         await Task.Delay(2000);
         resetAction();

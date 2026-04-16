@@ -36,7 +36,7 @@ public sealed class JwtRepositoryTests : IDisposable
         var issuer = "https://example.com";
 
         // Act
-        var result = await _repository.SaveJwtAsync(token, header, payload, issuer: issuer);
+        var result = await _repository.SaveJwtAsync(new SaveJwtRequest(token, header, payload, null, issuer));
 
         // Assert
         result.ShouldNotBeNull();
@@ -56,8 +56,8 @@ public sealed class JwtRepositoryTests : IDisposable
         var token2 = "token2";
 
         // Act
-        var result1 = await _repository.SaveJwtAsync(token1);
-        var result2 = await _repository.SaveJwtAsync(token2);
+        var result1 = await _repository.SaveJwtAsync(new SaveJwtRequest(token1));
+        var result2 = await _repository.SaveJwtAsync(new SaveJwtRequest(token2));
 
         // Assert
         result1.Id.ShouldNotBe(result2.Id);
@@ -76,7 +76,7 @@ public sealed class JwtRepositoryTests : IDisposable
         var notes = "test jwt";
 
         // Act
-        var result = await _repository.SaveJwtAsync(token, header, payload, expiresAt, issuer, audience, notes);
+        var result = await _repository.SaveJwtAsync(new SaveJwtRequest(token, header, payload, expiresAt, issuer, audience, notes));
 
         // Assert
         result.Token.ShouldBe(token);
@@ -96,14 +96,14 @@ public sealed class JwtRepositoryTests : IDisposable
     public async Task DeleteJwtAsync_RemoveFromDatabase_WhenIdMatches()
     {
         // Arrange
-        var saved = await _repository.SaveJwtAsync("token123");
+        var saved = await _repository.SaveJwtAsync(new SaveJwtRequest("token123"));
 
         // Act
         var result = await _repository.DeleteJwtAsync(saved.Id);
 
         // Assert
         result.ShouldBeTrue();
-        
+
         // Verify deletion
         var jwts = await _repository.GetJwtsPagedAsync(0, 100);
         jwts.ShouldBeEmpty();
@@ -127,7 +127,7 @@ public sealed class JwtRepositoryTests : IDisposable
     public async Task UpdateJwtNotesAsync_ModifyNotes_WhenIdMatches()
     {
         // Arrange
-        var saved = await _repository.SaveJwtAsync("token", notes: "original");
+        var saved = await _repository.SaveJwtAsync(new SaveJwtRequest("token", null, null, null, null, null, "original"));
         var newNotes = "updated";
 
         // Act
@@ -144,7 +144,7 @@ public sealed class JwtRepositoryTests : IDisposable
     public async Task UpdateJwtNotesAsync_ClearNotes_WhenNotesSetToNull()
     {
         // Arrange
-        var saved = await _repository.SaveJwtAsync("token", notes: "original");
+        var saved = await _repository.SaveJwtAsync(new SaveJwtRequest("token", null, null, null, null, null, "original"));
 
         // Act
         var result = await _repository.UpdateJwtNotesAsync(saved.Id, null);
@@ -163,9 +163,9 @@ public sealed class JwtRepositoryTests : IDisposable
     public async Task GetJwtsPagedAsync_ReturnAllRecords_WhenQueried()
     {
         // Arrange
-        await _repository.SaveJwtAsync("token1");
-        await _repository.SaveJwtAsync("token2");
-        await _repository.SaveJwtAsync("token3");
+        await _repository.SaveJwtAsync(new SaveJwtRequest("token1"));
+        await _repository.SaveJwtAsync(new SaveJwtRequest("token2"));
+        await _repository.SaveJwtAsync(new SaveJwtRequest("token3"));
 
         // Act
         var result = await _repository.GetJwtsPagedAsync(0, 100);
@@ -178,9 +178,9 @@ public sealed class JwtRepositoryTests : IDisposable
     public async Task GetJwtsPagedAsync_ReturnOrderedByDecodedAtDescending()
     {
         // Arrange
-        var jwt1 = await _repository.SaveJwtAsync("token1");
+        var jwt1 = await _repository.SaveJwtAsync(new SaveJwtRequest("token1"));
         await System.Threading.Tasks.Task.Delay(10);
-        var jwt2 = await _repository.SaveJwtAsync("token2");
+        var jwt2 = await _repository.SaveJwtAsync(new SaveJwtRequest("token2"));
 
         // Act
         var result = await _repository.GetJwtsPagedAsync(0, 100);
@@ -196,7 +196,7 @@ public sealed class JwtRepositoryTests : IDisposable
         // Arrange
         for (int i = 0; i < 5; i++)
         {
-            await _repository.SaveJwtAsync($"token{i}");
+            await _repository.SaveJwtAsync(new SaveJwtRequest($"token{i}"));
         }
 
         // Act
@@ -212,8 +212,8 @@ public sealed class JwtRepositoryTests : IDisposable
     public async Task GetJwtsPagedAsync_FilterBySearchQuery_WhenSearchTermMatches()
     {
         // Arrange
-        await _repository.SaveJwtAsync("token1", issuer: "example.com");
-        await _repository.SaveJwtAsync("token2", issuer: "other.com");
+        await _repository.SaveJwtAsync(new SaveJwtRequest("token1", null, null, null, "example.com"));
+        await _repository.SaveJwtAsync(new SaveJwtRequest("token2", null, null, null, "other.com"));
 
         // Act
         var result = await _repository.GetJwtsPagedAsync(0, 100, "example");
@@ -234,9 +234,9 @@ public sealed class JwtRepositoryTests : IDisposable
     public async Task GetJwtCountAsync_ReturnTotalCount_WhenQueried()
     {
         // Arrange
-        await _repository.SaveJwtAsync("token1");
-        await _repository.SaveJwtAsync("token2");
-        await _repository.SaveJwtAsync("token3");
+        await _repository.SaveJwtAsync(new SaveJwtRequest("token1"));
+        await _repository.SaveJwtAsync(new SaveJwtRequest("token2"));
+        await _repository.SaveJwtAsync(new SaveJwtRequest("token3"));
 
         // Act
         var count = await _repository.GetJwtCountAsync();
@@ -249,9 +249,9 @@ public sealed class JwtRepositoryTests : IDisposable
     public async Task GetJwtCountAsync_ReturnCountWithSearchFilter()
     {
         // Arrange
-        await _repository.SaveJwtAsync("token1", issuer: "matching");
-        await _repository.SaveJwtAsync("token2", issuer: "matching");
-        await _repository.SaveJwtAsync("token3", issuer: "other");
+        await _repository.SaveJwtAsync(new SaveJwtRequest("token1", null, null, null, "matching"));
+        await _repository.SaveJwtAsync(new SaveJwtRequest("token2", null, null, null, "matching"));
+        await _repository.SaveJwtAsync(new SaveJwtRequest("token3", null, null, null, "other"));
 
         // Act
         var count = await _repository.GetJwtCountAsync("matching");
@@ -278,7 +278,7 @@ public sealed class JwtRepositoryTests : IDisposable
     public async Task GetJwtByIdAsync_ReturnRecord_WhenIdMatches()
     {
         // Arrange
-        var saved = await _repository.SaveJwtAsync("token123");
+        var saved = await _repository.SaveJwtAsync(new SaveJwtRequest("token123"));
 
         // Act
         var result = await _repository.GetJwtByIdAsync(saved.Id);

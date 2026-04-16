@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using DevCrew.Core.Domain.Models;
 using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using DevCrew.Core.Tests.Infrastructure.Factories;
@@ -178,7 +177,7 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     {
         // Note: ExecuteUpdateAsync returns the number of rows affected (0)
         // The implementation likely treats this as success (true)
-        
+
         // Act
         var result = await _repository.UpdateLastUsedAsync(99999);
 
@@ -214,7 +213,7 @@ public sealed class RegexPresetRepositoryTests : IDisposable
     }
 
     [Fact]
-    public async Task NameExistsAsync_PerformCaseSensitiveCheck()
+    public async Task NameExistsAsync_PerformCaseInsensitiveCheck()
     {
         // Arrange
         await _repository.SaveAsync(RegexPresetTestFactory.CreateTestPreset("EmailPattern"));
@@ -223,8 +222,7 @@ public sealed class RegexPresetRepositoryTests : IDisposable
         var result = await _repository.NameExistsAsync("emailpattern");
 
         // Assert
-        // Database is case-sensitive by default
-        result.ShouldBeOfType<bool>();
+        result.ShouldBeTrue();
     }
 
     #endregion
