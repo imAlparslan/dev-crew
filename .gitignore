@@ -70,3 +70,4 @@ nunit-*.xml
 .DS_Store
 
 .sonarqube/
+.local/
