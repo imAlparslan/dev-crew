@@ -1,7 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <SonarQubeTestProject Condition="$(MSBuildProjectDirectory.Contains('src'))">false</SonarQubeTestProject>
-    
-    <SonarQubeTestProject Condition="$(MSBuildProjectDirectory.Contains('tests'))">true</SonarQubeTestProject>
-  </PropertyGroup>
-</Project>
