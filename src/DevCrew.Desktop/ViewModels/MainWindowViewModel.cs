@@ -156,15 +156,17 @@ public partial class MainWindowViewModel : BaseViewModel
     [RelayCommand]
     private void OpenDashboard()
     {
-        SetSelectedMenuItem("dashboard");
-        OpenOrSelectTab("dashboard", GetTabHeader("dashboard"), _dashboardViewModel, false, "🎯");
+        var menuId = DashboardMenuItemViewModel.MenuId;
+        SetSelectedMenuItem(menuId);
+        OpenOrSelectTab(menuId, GetTabHeader(menuId), _dashboardViewModel, false, "🎯");
     }
 
     [RelayCommand]
     private void OpenCreateGuidTab()
     {
-        SetSelectedMenuItem("create-guid");
-        var existingTab = Tabs.FirstOrDefault(t => t.Id == "create-guid");
+        var menuId = CreateGuidMenuItemViewModel.MenuId;
+        SetSelectedMenuItem(menuId);
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == menuId);
         if (existingTab != null)
         {
             SelectedTab = existingTab;
@@ -172,14 +174,15 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var createGuidViewModel = _createGuidViewModelFactory();
-        OpenOrSelectTab("create-guid", GetTabHeader("create-guid"), createGuidViewModel, true, "🎲");
+        OpenOrSelectTab(menuId, GetTabHeader(menuId), createGuidViewModel, true, "🎲");
     }
 
     [RelayCommand]
     private void OpenJwtDecoderTab()
     {
-        SetSelectedMenuItem("jwt-decoder");
-        var existingTab = Tabs.FirstOrDefault(t => t.Id == "jwt-decoder");
+        var menuId = JwtDecoderMenuItemViewModel.MenuId;
+        SetSelectedMenuItem(menuId);
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == menuId);
         if (existingTab != null)
         {
             SelectedTab = existingTab;
@@ -187,14 +190,15 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var jwtDecoderViewModel = _jwtDecoderViewModelFactory();
-        OpenOrSelectTab("jwt-decoder", GetTabHeader("jwt-decoder"), jwtDecoderViewModel, true, "🔐");
+        OpenOrSelectTab(menuId, GetTabHeader(menuId), jwtDecoderViewModel, true, "🔐");
     }
 
     [RelayCommand]
     private void OpenJwtBuilderTab()
     {
-        SetSelectedMenuItem("jwt-builder");
-        var existingTab = Tabs.FirstOrDefault(t => t.Id == "jwt-builder");
+        var menuId = JwtBuilderMenuItemViewModel.MenuId;
+        SetSelectedMenuItem(menuId);
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == menuId);
         if (existingTab != null)
         {
             SelectedTab = existingTab;
@@ -202,14 +206,15 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var jwtBuilderViewModel = _jwtBuilderViewModelFactory();
-        OpenOrSelectTab("jwt-builder", GetTabHeader("jwt-builder"), jwtBuilderViewModel, true, "🔧");
+        OpenOrSelectTab(menuId, GetTabHeader(menuId), jwtBuilderViewModel, true, "🔧");
     }
 
     [RelayCommand]
     private void OpenJsonFormatterTab()
     {
-        SetSelectedMenuItem("json-formatter");
-        var existingTab = Tabs.FirstOrDefault(t => t.Id == "json-formatter");
+        var menuId = JsonFormatterMenuItemViewModel.MenuId;
+        SetSelectedMenuItem(menuId);
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == menuId);
         if (existingTab != null)
         {
             SelectedTab = existingTab;
@@ -217,14 +222,15 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var jsonFormatterViewModel = _jsonFormatterViewModelFactory();
-        OpenOrSelectTab("json-formatter", GetTabHeader("json-formatter"), jsonFormatterViewModel, true, "📋");
+        OpenOrSelectTab(menuId, GetTabHeader(menuId), jsonFormatterViewModel, true, "📋");
     }
 
     [RelayCommand]
     private void OpenJsonDiffTab()
     {
-        SetSelectedMenuItem("json-diff");
-        var existingTab = Tabs.FirstOrDefault(t => t.Id == "json-diff");
+        var menuId = JsonDiffMenuItemViewModel.MenuId;
+        SetSelectedMenuItem(menuId);
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == menuId);
         if (existingTab != null)
         {
             SelectedTab = existingTab;
@@ -232,14 +238,15 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var jsonDiffViewModel = _jsonDiffViewModelFactory();
-        OpenOrSelectTab("json-diff", GetTabHeader("json-diff"), jsonDiffViewModel, true, "🧩");
+        OpenOrSelectTab(menuId, GetTabHeader(menuId), jsonDiffViewModel, true, "🧩");
     }
 
     [RelayCommand]
     private void OpenBase64EncoderTab()
     {
-        SetSelectedMenuItem("base64-encoder");
-        var existingTab = Tabs.FirstOrDefault(t => t.Id == "base64-encoder");
+        var menuId = Base64EncoderMenuItemViewModel.MenuId;
+        SetSelectedMenuItem(menuId);
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == menuId);
         if (existingTab != null)
         {
             SelectedTab = existingTab;
@@ -247,14 +254,15 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var base64EncoderViewModel = _base64EncoderViewModelFactory();
-        OpenOrSelectTab("base64-encoder", GetTabHeader("base64-encoder"), base64EncoderViewModel, true, "🧬");
+        OpenOrSelectTab(menuId, GetTabHeader(menuId), base64EncoderViewModel, true, "🧬");
     }
 
     [RelayCommand]
     private void OpenBase64DecoderTab()
     {
-        SetSelectedMenuItem("base64-decoder");
-        var existingTab = Tabs.FirstOrDefault(t => t.Id == "base64-decoder");
+        var menuId = Base64DecoderMenuItemViewModel.MenuId;
+        SetSelectedMenuItem(menuId);
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == menuId);
         if (existingTab != null)
         {
             SelectedTab = existingTab;
@@ -262,14 +270,15 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var base64DecoderViewModel = _base64DecoderViewModelFactory();
-        OpenOrSelectTab("base64-decoder", GetTabHeader("base64-decoder"), base64DecoderViewModel, true, "🔓");
+        OpenOrSelectTab(menuId, GetTabHeader(menuId), base64DecoderViewModel, true, "🔓");
     }
 
     [RelayCommand]
     private void OpenRegexTab()
     {
-        SetSelectedMenuItem("regex");
-        var existingTab = Tabs.FirstOrDefault(t => t.Id == "regex");
+        var menuId = RegexMenuItemViewModel.MenuId;
+        SetSelectedMenuItem(menuId);
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == menuId);
         if (existingTab != null)
         {
             SelectedTab = existingTab;
@@ -277,14 +286,15 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var regexViewModel = _regexViewModelFactory();
-        OpenOrSelectTab("regex", GetTabHeader("regex"), regexViewModel, true, "🔎");
+        OpenOrSelectTab(menuId, GetTabHeader(menuId), regexViewModel, true, "🔎");
     }
 
     [RelayCommand]
     private void OpenSettingsTab()
     {
-        SetSelectedMenuItem("settings");
-        var existingTab = Tabs.FirstOrDefault(t => t.Id == "settings");
+        var menuId = SettingsMenuItemViewModel.MenuId;
+        SetSelectedMenuItem(menuId);
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == menuId);
         if (existingTab != null)
         {
             SelectedTab = existingTab;
@@ -292,7 +302,7 @@ public partial class MainWindowViewModel : BaseViewModel
         }
 
         var settingsViewModel = _settingsViewModelFactory();
-        OpenOrSelectTab("settings", GetTabHeader("settings"), settingsViewModel, true, "⚙️");
+        OpenOrSelectTab(menuId, GetTabHeader(menuId), settingsViewModel, true, "⚙️");
     }
 
     private void SetSelectedMenuItem(string id)
@@ -316,7 +326,16 @@ public partial class MainWindowViewModel : BaseViewModel
             return;
         }
 
-        if (value.Id == "dashboard" || value.Id == "create-guid" || value.Id == "jwt-decoder" || value.Id == "jwt-builder" || value.Id == "json-formatter" || value.Id == "json-diff" || value.Id == "base64-encoder" || value.Id == "base64-decoder" || value.Id == "regex" || value.Id == "settings")
+        if (value.Id is DashboardMenuItemViewModel.MenuId
+            or CreateGuidMenuItemViewModel.MenuId
+            or JwtDecoderMenuItemViewModel.MenuId
+            or JwtBuilderMenuItemViewModel.MenuId
+            or JsonFormatterMenuItemViewModel.MenuId
+            or JsonDiffMenuItemViewModel.MenuId
+            or Base64EncoderMenuItemViewModel.MenuId
+            or Base64DecoderMenuItemViewModel.MenuId
+            or RegexMenuItemViewModel.MenuId
+            or SettingsMenuItemViewModel.MenuId)
         {
             SetSelectedMenuItem(value.Id);
             return;
@@ -395,16 +414,16 @@ public partial class MainWindowViewModel : BaseViewModel
     {
         return id switch
         {
-            "dashboard" => _localizationService.GetString("menu.dashboard"),
-            "create-guid" => _localizationService.GetString("menu.create_guid"),
-            "jwt-decoder" => _localizationService.GetString("menu.jwt_decoder"),
-            "jwt-builder" => _localizationService.GetString("menu.jwt_builder"),
-            "json-formatter" => _localizationService.GetString("menu.json_formatter"),
-            "json-diff" => _localizationService.GetString("menu.json_diff"),
-            "base64-encoder" => _localizationService.GetString("menu.base64_encoder"),
-            "base64-decoder" => _localizationService.GetString("menu.base64_decoder"),
-            "regex" => _localizationService.GetString("menu.regex"),
-            "settings" => _localizationService.GetString("menu.settings"),
+            DashboardMenuItemViewModel.MenuId => _localizationService.GetString("menu.dashboard"),
+            CreateGuidMenuItemViewModel.MenuId => _localizationService.GetString("menu.create_guid"),
+            JwtDecoderMenuItemViewModel.MenuId => _localizationService.GetString("menu.jwt_decoder"),
+            JwtBuilderMenuItemViewModel.MenuId => _localizationService.GetString("menu.jwt_builder"),
+            JsonFormatterMenuItemViewModel.MenuId => _localizationService.GetString("menu.json_formatter"),
+            JsonDiffMenuItemViewModel.MenuId => _localizationService.GetString("menu.json_diff"),
+            Base64EncoderMenuItemViewModel.MenuId => _localizationService.GetString("menu.base64_encoder"),
+            Base64DecoderMenuItemViewModel.MenuId => _localizationService.GetString("menu.base64_decoder"),
+            RegexMenuItemViewModel.MenuId => _localizationService.GetString("menu.regex"),
+            SettingsMenuItemViewModel.MenuId => _localizationService.GetString("menu.settings"),
             _ => id
         };
     }

@@ -310,9 +310,12 @@ public partial class JsonFormatterViewModel : BaseViewModel
 
                 InputJson = fileContent;
                 SourceFileExtension = fileExtension;
-                ValidationMessage = _localizationService.GetString("jsonformatter.file_loaded", selectedFile.Name);
-                IsValid = true;
-                IsError = false;
+
+                if (IsValid)
+                {
+                    ValidationMessage = _localizationService.GetString("jsonformatter.file_loaded", selectedFile.Name);
+                    IsError = false;
+                }
             }
         }
         catch (Exception ex)

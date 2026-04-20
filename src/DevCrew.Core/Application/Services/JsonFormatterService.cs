@@ -28,7 +28,8 @@ public class JsonFormatterService : IJsonFormatterService
 
         try
         {
-            using var document = JsonDocument.Parse(input);
+            using var _ = JsonDocument.Parse(input);
+
             return new JsonFormatterResult
             {
                 IsValid = true,
