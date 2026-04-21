@@ -3,7 +3,10 @@ using NetSparkleUpdater.Enums;
 using NetSparkleUpdater.UI.Avalonia;
 using NetSparkleUpdater.SignatureVerifiers;
 using Microsoft.Extensions.Configuration;
+using System.IO;
 using System.Reflection;
+using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace DevCrew.Desktop.Services;
 
@@ -14,6 +17,10 @@ public class SparkleUpdateService : IUpdateService
     private AppCastItem? _latestUpdateItem;
     private const string DefaultChannel = "stable";
     private const string DefaultAppCastBaseUrl = "https://raw.githubusercontent.com/imAlparslan/dev-crew/main/Appcasts";
+
+    // DIAGNOSTIC: remove after debugging
+    private readonly string _diagnosticAppCastUrl;
+    private readonly string _diagnosticChannel;
 
     public SparkleUpdateService(IConfiguration configuration)
     {
@@ -30,6 +37,14 @@ public class SparkleUpdateService : IUpdateService
             : configuredBaseUrl.TrimEnd('/');
         var appCastUrl = $"{appCastBaseUrl}/{fileName}";
 
+        // DIAGNOSTIC: remove after debugging
+        _diagnosticAppCastUrl = appCastUrl;
+        _diagnosticChannel = channel;
+        Debug.WriteLine($"[SparkleUpdateService] Channel: {channel}");
+        Debug.WriteLine($"[SparkleUpdateService] AppCast URL: {appCastUrl}");
+        Debug.WriteLine($"[SparkleUpdateService] Assembly version: {ResolveCurrentVersion()}");
+        Debug.WriteLine($"[SparkleUpdateService] Info.plist version: {TryResolveMacBundleVersion() ?? "(not found)"}");
+
         _updater = new SparkleUpdater(appCastUrl, new Ed25519Checker(SecurityMode.Unsafe))
         {
             UIFactory = new UIFactory(),
@@ -40,7 +55,22 @@ public class SparkleUpdateService : IUpdateService
     public async Task<UpdateCheckResult> CheckForUpdatesAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var res = await _updater.CheckForUpdatesAtUserRequest();
+
+        // DIAGNOSTIC: remove after debugging
+        Debug.WriteLine($"[SparkleUpdateService] CheckForUpdates — channel={_diagnosticChannel}, url={_diagnosticAppCastUrl}");
+
+        UpdateInfo? res = null;
+        try
+        {
+            res = await _updater.CheckForUpdatesAtUserRequest();
+            Debug.WriteLine($"[SparkleUpdateService] CheckForUpdates result — Status={res?.Status}, UpdateCount={res?.Updates?.Count ?? 0}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[SparkleUpdateService] CheckForUpdates EXCEPTION — {ex.GetType().Name}: {ex.Message}");
+            throw;
+        }
+
         cancellationToken.ThrowIfCancellationRequested();
 
         var updates = res?.Updates?.ToList() ?? new List<AppCastItem>();
@@ -48,6 +78,16 @@ public class SparkleUpdateService : IUpdateService
 
         var latestItem = updates.FirstOrDefault();
         _latestUpdateItem = latestItem;
+
+        // DIAGNOSTIC: remove after debugging
+        if (latestItem is not null)
+        {
+            Debug.WriteLine($"[SparkleUpdateService] Latest item — Version={latestItem.Version}, ShortVersionString={ResolveAppCastItemVersion(latestItem)}");
+        }
+        else
+        {
+            Debug.WriteLine($"[SparkleUpdateService] No update items returned from feed.");
+        }
 
         var latestVersion = ResolveAppCastItemVersion(latestItem) ?? ResolveCurrentVersion();
 
@@ -96,6 +136,12 @@ public class SparkleUpdateService : IUpdateService
             }
         }
 
+        var bundleVersion = TryResolveMacBundleVersion();
+        if (!string.IsNullOrWhiteSpace(bundleVersion))
+        {
+            return bundleVersion;
+        }
+
         var version = entryAssembly.GetName().Version;
 
         if (version is null)
@@ -125,6 +171,64 @@ public class SparkleUpdateService : IUpdateService
         }
 
         return item.Version?.ToString();
+    }
+
+    private static string? TryResolveMacBundleVersion()
+    {
+        try
+        {
+            var baseDir = AppContext.BaseDirectory;
+            var macOsDir = new DirectoryInfo(baseDir);
+            var contentsDir = macOsDir.Parent;
+
+            if (contentsDir is null || !string.Equals(contentsDir.Name, "Contents", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            var infoPlistPath = Path.Combine(contentsDir.FullName, "Info.plist");
+            if (!File.Exists(infoPlistPath))
+            {
+                return null;
+            }
+
+            var document = XDocument.Load(infoPlistPath);
+            var dictElement = document.Root?.Element("dict");
+            if (dictElement is null)
+            {
+                return null;
+            }
+
+            var children = dictElement.Elements().ToList();
+            for (var i = 0; i < children.Count - 1; i++)
+            {
+                var keyElement = children[i];
+                if (!string.Equals(keyElement.Name.LocalName, "key", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (!string.Equals(keyElement.Value, "CFBundleShortVersionString", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var valueElement = children[i + 1];
+                if (!string.Equals(valueElement.Name.LocalName, "string", StringComparison.OrdinalIgnoreCase))
+                {
+                    return null;
+                }
+
+                var value = valueElement.Value?.Trim();
+                return string.IsNullOrWhiteSpace(value) ? null : value;
+            }
+        }
+        catch
+        {
+            // Ignore plist parsing errors and continue with assembly fallback.
+        }
+
+        return null;
     }
 
     private static string ResolveChannel(string? configuredChannel)

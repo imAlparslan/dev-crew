@@ -3,7 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Application.Services;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using DevCrew.Desktop.Services;
+using System.IO;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace DevCrew.Desktop.ViewModels;
 
@@ -472,8 +474,27 @@ public class SettingsViewModel : BaseViewModel
 
     private static string ResolveCurrentVersion()
     {
-        var version = Assembly.GetEntryAssembly()?.GetName().Version
-            ?? typeof(SettingsViewModel).Assembly.GetName().Version;
+        var entryAssembly = Assembly.GetEntryAssembly() ?? typeof(SettingsViewModel).Assembly;
+        var informationalVersion = entryAssembly
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion;
+
+        if (!string.IsNullOrWhiteSpace(informationalVersion))
+        {
+            var normalized = informationalVersion.Split('+')[0].Trim();
+            if (!string.IsNullOrWhiteSpace(normalized))
+            {
+                return normalized;
+            }
+        }
+
+        var bundleVersion = TryResolveMacBundleVersion();
+        if (!string.IsNullOrWhiteSpace(bundleVersion))
+        {
+            return bundleVersion;
+        }
+
+        var version = entryAssembly.GetName().Version;
 
         if (version is null)
         {
@@ -482,6 +503,64 @@ public class SettingsViewModel : BaseViewModel
 
         var build = version.Build < 0 ? 0 : version.Build;
         return $"{version.Major}.{version.Minor}.{build}";
+    }
+
+    private static string? TryResolveMacBundleVersion()
+    {
+        try
+        {
+            var baseDir = AppContext.BaseDirectory;
+            var macOsDir = new DirectoryInfo(baseDir);
+            var contentsDir = macOsDir.Parent;
+
+            if (contentsDir is null || !string.Equals(contentsDir.Name, "Contents", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            var infoPlistPath = Path.Combine(contentsDir.FullName, "Info.plist");
+            if (!File.Exists(infoPlistPath))
+            {
+                return null;
+            }
+
+            var document = XDocument.Load(infoPlistPath);
+            var dictElement = document.Root?.Element("dict");
+            if (dictElement is null)
+            {
+                return null;
+            }
+
+            var children = dictElement.Elements().ToList();
+            for (var i = 0; i < children.Count - 1; i++)
+            {
+                var keyElement = children[i];
+                if (!string.Equals(keyElement.Name.LocalName, "key", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (!string.Equals(keyElement.Value, "CFBundleShortVersionString", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var valueElement = children[i + 1];
+                if (!string.Equals(valueElement.Name.LocalName, "string", StringComparison.OrdinalIgnoreCase))
+                {
+                    return null;
+                }
+
+                var value = valueElement.Value?.Trim();
+                return string.IsNullOrWhiteSpace(value) ? null : value;
+            }
+        }
+        catch
+        {
+            // Ignore plist parsing errors and continue with assembly fallback.
+        }
+
+        return null;
     }
 
     private string ResolveUiFontFamilyValue(string key)
