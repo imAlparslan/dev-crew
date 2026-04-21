@@ -187,7 +187,7 @@ jobs:
           name: DevCrew-macos-installer-${{ env.VERSION_NO_V }}
           path: ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.pkg
 
-      - name: Create draft GitHub release
+      - name: Create GitHub release
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.ref_name }}
