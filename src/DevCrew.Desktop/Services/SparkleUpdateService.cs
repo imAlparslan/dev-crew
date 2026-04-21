@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Reflection;
 using System.Xml.Linq;
-using System.Diagnostics;
 
 namespace DevCrew.Desktop.Services;
 
@@ -40,10 +39,10 @@ public class SparkleUpdateService : IUpdateService
         // DIAGNOSTIC: remove after debugging
         _diagnosticAppCastUrl = appCastUrl;
         _diagnosticChannel = channel;
-        Debug.WriteLine($"[SparkleUpdateService] Channel: {channel}");
-        Debug.WriteLine($"[SparkleUpdateService] AppCast URL: {appCastUrl}");
-        Debug.WriteLine($"[SparkleUpdateService] Assembly version: {ResolveCurrentVersion()}");
-        Debug.WriteLine($"[SparkleUpdateService] Info.plist version: {TryResolveMacBundleVersion() ?? "(not found)"}");
+        DiagLog($"Channel: {channel}");
+        DiagLog($"AppCast URL: {appCastUrl}");
+        DiagLog($"Assembly version: {ResolveCurrentVersion()}");
+        DiagLog($"Info.plist version: {TryResolveMacBundleVersion() ?? "(not found)"}");
 
         _updater = new SparkleUpdater(appCastUrl, new Ed25519Checker(SecurityMode.Unsafe))
         {
@@ -57,17 +56,17 @@ public class SparkleUpdateService : IUpdateService
         cancellationToken.ThrowIfCancellationRequested();
 
         // DIAGNOSTIC: remove after debugging
-        Debug.WriteLine($"[SparkleUpdateService] CheckForUpdates — channel={_diagnosticChannel}, url={_diagnosticAppCastUrl}");
+        DiagLog($"CheckForUpdates — channel={_diagnosticChannel}, url={_diagnosticAppCastUrl}");
 
         UpdateInfo? res = null;
         try
         {
             res = await _updater.CheckForUpdatesAtUserRequest();
-            Debug.WriteLine($"[SparkleUpdateService] CheckForUpdates result — Status={res?.Status}, UpdateCount={res?.Updates?.Count ?? 0}");
+            DiagLog($"CheckForUpdates result — Status={res?.Status}, UpdateCount={res?.Updates?.Count ?? 0}");
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[SparkleUpdateService] CheckForUpdates EXCEPTION — {ex.GetType().Name}: {ex.Message}");
+            DiagLog($"CheckForUpdates EXCEPTION — {ex.GetType().Name}: {ex.Message}");
             throw;
         }
 
@@ -82,11 +81,11 @@ public class SparkleUpdateService : IUpdateService
         // DIAGNOSTIC: remove after debugging
         if (latestItem is not null)
         {
-            Debug.WriteLine($"[SparkleUpdateService] Latest item — Version={latestItem.Version}, ShortVersionString={ResolveAppCastItemVersion(latestItem)}");
+            DiagLog($"Latest item — Version={latestItem.Version}, ShortVersionString={ResolveAppCastItemVersion(latestItem)}");
         }
         else
         {
-            Debug.WriteLine($"[SparkleUpdateService] No update items returned from feed.");
+            DiagLog("No update items returned from feed.");
         }
 
         var latestVersion = ResolveAppCastItemVersion(latestItem) ?? ResolveCurrentVersion();
@@ -266,5 +265,24 @@ public class SparkleUpdateService : IUpdateService
         }
 
         return DefaultChannel;
+    }
+
+    // DIAGNOSTIC: remove after debugging
+    private static readonly string DiagLogPath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+        "Library", "Logs", "DevCrew", "sparkle-diagnostic.log");
+
+    private static void DiagLog(string message)
+    {
+        try
+        {
+            var logDir = Path.GetDirectoryName(DiagLogPath)!;
+            Directory.CreateDirectory(logDir);
+            File.AppendAllText(DiagLogPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [SparkleUpdateService] {message}{Environment.NewLine}");
+        }
+        catch
+        {
+            // ignore logging errors
+        }
     }
 }
