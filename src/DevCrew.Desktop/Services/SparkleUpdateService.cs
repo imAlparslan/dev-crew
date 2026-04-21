@@ -17,7 +17,7 @@ public class SparkleUpdateService : IUpdateService
 
     public SparkleUpdateService(IConfiguration configuration)
     {
-        var channel = NormalizeChannel(configuration["Sparkle:Channel"]);
+        var channel = ResolveChannel(configuration["Sparkle:Channel"]);
         var fileName = channel switch
         {
             "alpha" => "appcast-alpha.xml",
@@ -49,7 +49,7 @@ public class SparkleUpdateService : IUpdateService
         var latestItem = updates.FirstOrDefault();
         _latestUpdateItem = latestItem;
 
-        var latestVersion = latestItem?.Version?.ToString() ?? ResolveCurrentVersion();
+        var latestVersion = ResolveAppCastItemVersion(latestItem) ?? ResolveCurrentVersion();
 
         return new UpdateCheckResult(
             IsUpdateAvailable: res?.Status == UpdateStatus.UpdateAvailable && latestItem is not null,
@@ -62,7 +62,8 @@ public class SparkleUpdateService : IUpdateService
         ArgumentException.ThrowIfNullOrWhiteSpace(latestVersion);
 
         var selectedItem = _cachedUpdates.FirstOrDefault(item =>
-            string.Equals(item.Version?.ToString(), latestVersion, StringComparison.OrdinalIgnoreCase));
+            string.Equals(ResolveAppCastItemVersion(item), latestVersion, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(item.Version?.ToString(), latestVersion, StringComparison.OrdinalIgnoreCase));
 
         _latestUpdateItem = selectedItem ?? _latestUpdateItem;
 
@@ -81,8 +82,21 @@ public class SparkleUpdateService : IUpdateService
 
     private static string ResolveCurrentVersion()
     {
-        var version = Assembly.GetEntryAssembly()?.GetName().Version
-            ?? typeof(SparkleUpdateService).Assembly.GetName().Version;
+        var entryAssembly = Assembly.GetEntryAssembly() ?? typeof(SparkleUpdateService).Assembly;
+        var informationalVersion = entryAssembly
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion;
+
+        if (!string.IsNullOrWhiteSpace(informationalVersion))
+        {
+            var normalized = informationalVersion.Split('+')[0].Trim();
+            if (!string.IsNullOrWhiteSpace(normalized))
+            {
+                return normalized;
+            }
+        }
+
+        var version = entryAssembly.GetName().Version;
 
         if (version is null)
         {
@@ -91,6 +105,37 @@ public class SparkleUpdateService : IUpdateService
 
         var build = version.Build < 0 ? 0 : version.Build;
         return $"{version.Major}.{version.Minor}.{build}";
+    }
+
+    private static string? ResolveAppCastItemVersion(AppCastItem? item)
+    {
+        if (item is null)
+        {
+            return null;
+        }
+
+        var shortVersionString = item.GetType()
+            .GetProperty("ShortVersionString", BindingFlags.Public | BindingFlags.Instance)
+            ?.GetValue(item)
+            ?.ToString();
+
+        if (!string.IsNullOrWhiteSpace(shortVersionString))
+        {
+            return shortVersionString;
+        }
+
+        return item.Version?.ToString();
+    }
+
+    private static string ResolveChannel(string? configuredChannel)
+    {
+        var normalizedConfiguredChannel = NormalizeChannel(configuredChannel);
+        var inferredFromVersion = InferChannelFromVersion(ResolveCurrentVersion());
+
+        // Keep explicit config values; only infer for prerelease builds when config is stable/default.
+        return normalizedConfiguredChannel == DefaultChannel && inferredFromVersion != DefaultChannel
+            ? inferredFromVersion
+            : normalizedConfiguredChannel;
     }
 
     private static string NormalizeChannel(string? channel)
@@ -102,5 +147,20 @@ public class SparkleUpdateService : IUpdateService
 
         var normalized = channel.Trim().ToLowerInvariant();
         return normalized is "alpha" or "beta" ? normalized : DefaultChannel;
+    }
+
+    private static string InferChannelFromVersion(string version)
+    {
+        if (version.Contains("-alpha", StringComparison.OrdinalIgnoreCase))
+        {
+            return "alpha";
+        }
+
+        if (version.Contains("-beta", StringComparison.OrdinalIgnoreCase))
+        {
+            return "beta";
+        }
+
+        return DefaultChannel;
     }
 }
