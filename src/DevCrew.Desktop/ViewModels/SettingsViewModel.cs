@@ -1,3 +1,5 @@
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Application.Services;
@@ -313,6 +315,14 @@ public class SettingsViewModel : BaseViewModel
         try
         {
             await _uninstallService.UninstallAsync();
+
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+            {
+                desktopLifetime.Shutdown();
+                return;
+            }
+
+            Environment.Exit(0);
         }
         catch (Exception ex)
         {

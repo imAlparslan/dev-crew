@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace DevCrew.Desktop.Services;
 
@@ -15,7 +16,7 @@ public sealed class UninstallService : IUninstallService
 
     public bool IsSupported => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-    public async Task UninstallAsync()
+    public Task UninstallAsync()
     {
         if (!IsSupported)
             throw new PlatformNotSupportedException("Uninstall is only supported on macOS.");
@@ -24,34 +25,50 @@ public sealed class UninstallService : IUninstallService
         if (Directory.Exists(UserDataDirectory))
             Directory.Delete(UserDataDirectory, recursive: true);
 
-        // Remove app bundle, CLI binary, and PKG receipt in a single elevated shell script
-        var script = $"do shell script " +
-                     $"\"rm -rf '{AppBundlePath}' && " +
-                     $"rm -f '{CliBinaryPath}' && " +
-                     $"pkgutil --forget {PackageId}\" " +
-                     $"with administrator privileges";
+        ScheduleDetachedUninstall();
+        return Task.CompletedTask;
+    }
 
-        var psi = new ProcessStartInfo("osascript")
+    private static void ScheduleDetachedUninstall()
+    {
+        var currentProcessId = Environment.ProcessId;
+        var scriptPath = Path.Combine(Path.GetTempPath(), $"devcrew-uninstall-{Guid.NewGuid():N}.sh");
+
+        // Forgetting package receipts can fail on some systems after files are already removed.
+        // Keep uninstall successful by treating receipt cleanup as best effort.
+        var uninstallCommand = $"rm -rf '{AppBundlePath}'; rm -f '{CliBinaryPath}'; pkgutil --forget {PackageId} || true";
+
+        var scriptContent = new StringBuilder()
+            .AppendLine("#!/bin/bash")
+            .AppendLine("set -euo pipefail")
+            .AppendLine($"while kill -0 {currentProcessId} >/dev/null 2>&1; do sleep 0.2; done")
+            .AppendLine("osascript <<'APPLESCRIPT'")
+            .AppendLine($"do shell script \"{uninstallCommand.Replace("\"", "\\\"")}\" with administrator privileges")
+            .AppendLine("APPLESCRIPT")
+            .AppendLine("rm -f \"$0\"")
+            .ToString();
+
+        File.WriteAllText(scriptPath, scriptContent, Encoding.UTF8);
+
+        var chmod = Process.Start(new ProcessStartInfo("chmod")
         {
-            ArgumentList = { "-e", script },
-            RedirectStandardError = true,
+            ArgumentList = { "+x", scriptPath },
             UseShellExecute = false,
             CreateNoWindow = true
-        };
+        }) ?? throw new InvalidOperationException("Failed to mark uninstall helper script as executable.");
 
-        using var proc = Process.Start(psi)
-            ?? throw new InvalidOperationException("Failed to start osascript process.");
+        chmod.WaitForExit();
+        if (chmod.ExitCode != 0)
+            throw new InvalidOperationException("Unable to prepare uninstall helper script.");
 
-        await proc.WaitForExitAsync();
-
-        if (proc.ExitCode != 0)
+        var launcher = Process.Start(new ProcessStartInfo("/bin/bash")
         {
-            var err = await proc.StandardError.ReadToEndAsync();
-            throw new InvalidOperationException(
-                $"Uninstall failed (exit {proc.ExitCode}). " +
-                (string.IsNullOrWhiteSpace(err) ? "The operation was cancelled or denied." : err.Trim()));
-        }
+            ArgumentList = { "-c", $"nohup '{scriptPath}' >/tmp/devcrew-uninstall.log 2>&1 &" },
+            UseShellExecute = false,
+            CreateNoWindow = true
+        });
 
-        Environment.Exit(0);
+        if (launcher is null)
+            throw new InvalidOperationException("Failed to launch uninstall helper process.");
     }
 }
