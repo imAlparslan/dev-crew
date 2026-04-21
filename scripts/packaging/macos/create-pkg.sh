@@ -51,10 +51,22 @@ pkgbuild --analyze --root "$STAGING_ROOT" "$COMPONENT_PLIST"
 # 2. Edit Component Settings (using PlistBuddy)
 # Index 0 is usually /Applications/DevCrew.app. 
 # These settings ensure it overwrites during updates and guarantees a fixed location.
-/usr/libexec/PlistBuddy -c "Set :0:BundleIsRelocatable false" "$COMPONENT_PLIST"
-/usr/libexec/PlistBuddy -c "Set :0:BundleIsVersionChecked false" "$COMPONENT_PLIST"
-/usr/libexec/PlistBuddy -c "Set :0:BundleHasBundleIdentifier true" "$COMPONENT_PLIST"
-/usr/libexec/PlistBuddy -c "Set :0:BundleIdentifier $PACKAGE_ID" "$COMPONENT_PLIST"
+set_or_add_plist_entry() {
+  local key_path="$1"
+  local value_type="$2"
+  local value="$3"
+
+  if /usr/libexec/PlistBuddy -c "Print ${key_path}" "$COMPONENT_PLIST" >/dev/null 2>&1; then
+    /usr/libexec/PlistBuddy -c "Set ${key_path} ${value}" "$COMPONENT_PLIST"
+  else
+    /usr/libexec/PlistBuddy -c "Add ${key_path} ${value_type} ${value}" "$COMPONENT_PLIST"
+  fi
+}
+
+set_or_add_plist_entry ":0:BundleIsRelocatable" "bool" "false"
+set_or_add_plist_entry ":0:BundleIsVersionChecked" "bool" "false"
+set_or_add_plist_entry ":0:BundleHasBundleIdentifier" "bool" "true"
+set_or_add_plist_entry ":0:BundleIdentifier" "string" "$PACKAGE_ID"
 
 # 3. Create the package
 pkgbuild \
