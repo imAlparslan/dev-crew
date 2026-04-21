@@ -4,6 +4,7 @@ using NetSparkleUpdater.UI.Avalonia;
 using NetSparkleUpdater.SignatureVerifiers;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Net.Http;
 using System.Reflection;
 using System.Xml.Linq;
 
@@ -57,6 +58,7 @@ public class SparkleUpdateService : IUpdateService
 
         // DIAGNOSTIC: remove after debugging
         DiagLog($"CheckForUpdates — channel={_diagnosticChannel}, url={_diagnosticAppCastUrl}");
+        await ProbeAppCastAsync(_diagnosticAppCastUrl, cancellationToken);
 
         UpdateInfo? res = null;
         try
@@ -265,6 +267,41 @@ public class SparkleUpdateService : IUpdateService
         }
 
         return DefaultChannel;
+    }
+
+    // DIAGNOSTIC: remove after debugging
+    private static async Task ProbeAppCastAsync(string appCastUrl, CancellationToken cancellationToken)
+    {
+        try
+        {
+            using var client = new HttpClient();
+            using var response = await client.GetAsync(appCastUrl, cancellationToken);
+            DiagLog($"Probe appcast HTTP — Status={(int)response.StatusCode} {response.StatusCode}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return;
+            }
+
+            var xml = await response.Content.ReadAsStringAsync(cancellationToken);
+            var document = XDocument.Parse(xml);
+            var sparkleNs = XNamespace.Get("http://www.andymatuschak.org/xml-namespaces/sparkle");
+            var channelElement = document.Root?.Element("channel");
+            var title = channelElement?.Element("title")?.Value?.Trim();
+            var firstItem = channelElement?.Elements("item").FirstOrDefault();
+            var enclosure = firstItem?.Element("enclosure");
+            var shortVersion = enclosure?.Attribute(sparkleNs + "shortVersionString")?.Value;
+            var buildVersion = enclosure?.Attribute(sparkleNs + "version")?.Value;
+            var packageUrl = enclosure?.Attribute("url")?.Value;
+            var itemCount = channelElement?.Elements("item").Count() ?? 0;
+
+            DiagLog(
+                $"Probe appcast parsed — Title={title ?? "(null)"}, ItemCount={itemCount}, FirstShortVersion={shortVersion ?? "(null)"}, FirstVersion={buildVersion ?? "(null)"}, FirstUrl={packageUrl ?? "(null)"}");
+        }
+        catch (Exception ex)
+        {
+            DiagLog($"Probe appcast EXCEPTION — {ex.GetType().Name}: {ex.Message}");
+        }
     }
 
     // DIAGNOSTIC: remove after debugging
