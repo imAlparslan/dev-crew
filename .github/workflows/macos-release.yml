@@ -139,9 +139,10 @@ jobs:
           fi
 
           echo "APPCAST_FILENAME=${FILENAME}" >> "$GITHUB_ENV"
-          mkdir -p ./Appcasts
+            APPCAST_TEMP_PATH="${RUNNER_TEMP}/${FILENAME}"
+            echo "APPCAST_TEMP_PATH=${APPCAST_TEMP_PATH}" >> "$GITHUB_ENV"
 
-          cat <<EOF > ./Appcasts/${FILENAME}
+            cat <<EOF > "${APPCAST_TEMP_PATH}"
           <?xml version="1.0" encoding="utf-8"?>
           <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
               <channel>
@@ -162,6 +163,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin main
+          git checkout -B appcast-update origin/main
+
+          mkdir -p ./Appcasts
+          cp "${APPCAST_TEMP_PATH}" "./Appcasts/${APPCAST_FILENAME}"
+
           git add "./Appcasts/${APPCAST_FILENAME}"
 
           if git diff --cached --quiet; then
