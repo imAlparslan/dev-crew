@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
     <channel>
-        <title>Version 0.0.1-beta.12</title>
+        <title>Version 0.0.1-beta.13</title>
         <item>
-            <sparkle:releaseNotesLink>https://github.com/imAlparslan/dev-crew/releases/tag/v0.0.1-beta.12</sparkle:releaseNotesLink>
-            <pubDate>Tue, 21 Apr 2026 13:01:54 GMT</pubDate>
-            <enclosure url="https://github.com/imAlparslan/dev-crew/releases/download/v0.0.1-beta.12/DevCrew-0.0.1-beta.12.pkg"
-                       sparkle:version="27"
-                   sparkle:short_version="0.0.1-beta.12"
-                       sparkle:shortVersionString="0.0.1-beta.12"
+            <sparkle:releaseNotesLink>https://github.com/imAlparslan/dev-crew/releases/tag/v0.0.1-beta.13</sparkle:releaseNotesLink>
+            <pubDate>Tue, 21 Apr 2026 13:09:20 GMT</pubDate>
+            <enclosure url="https://github.com/imAlparslan/dev-crew/releases/download/v0.0.1-beta.13/DevCrew-0.0.1-beta.13.pkg"
+                       sparkle:version="28"
+                   sparkle:short_version="0.0.1-beta.13"
+                       sparkle:shortVersionString="0.0.1-beta.13"
                    sparkle:os="macos"
                        type="application/octet-stream" />
         </item>
