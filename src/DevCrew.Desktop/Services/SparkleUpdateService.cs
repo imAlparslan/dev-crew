@@ -24,6 +24,12 @@ public class SparkleUpdateService : IUpdateService
 
     public SparkleUpdateService(IConfiguration configuration)
     {
+        // DIAGNOSTIC: remove after debugging
+        DiagLog($"BaseDirectory: {AppContext.BaseDirectory}");
+        DiagLog($"DOTNET_ENVIRONMENT: {Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "(null)"}");
+        DiagLog($"ASPNETCORE_ENVIRONMENT: {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "(null)"}");
+        DiagLog($"Configured Sparkle:Channel: {configuration["Sparkle:Channel"] ?? "(null)"}");
+
         var channel = ResolveChannel(configuration["Sparkle:Channel"]);
         var fileName = channel switch
         {
@@ -63,7 +69,9 @@ public class SparkleUpdateService : IUpdateService
         UpdateInfo? res = null;
         try
         {
-            res = await _updater.CheckForUpdatesAtUserRequest();
+            // Use quiet mode to avoid NetSparkle's built-in generic error popup.
+            // We keep user messaging in our own UI via UpdateCheckResult.
+            res = await _updater.CheckForUpdatesQuietly();
             DiagLog($"CheckForUpdates result — Status={res?.Status}, UpdateCount={res?.Updates?.Count ?? 0}");
         }
         catch (Exception ex)
