@@ -46,6 +46,19 @@
   <data name="settings.uninstall_cancel_button" xml:space="preserve"><value>Cancel</value></data>
   <data name="settings.preview_code_text" xml:space="preserve"><value>const token = &quot;abc123&quot;;</value></data>
 
+  <data name="settings.update.section_title" xml:space="preserve"><value>App-Updates</value></data>
+  <data name="settings.update.current_version" xml:space="preserve"><value>Aktuelle Version</value></data>
+  <data name="settings.update.latest_version" xml:space="preserve"><value>Neueste Version</value></data>
+  <data name="settings.update.latest_version_unknown" xml:space="preserve"><value>Noch nicht gepruft</value></data>
+  <data name="settings.update.check_button" xml:space="preserve"><value>Nach Updates suchen</value></data>
+  <data name="settings.update.update_button" xml:space="preserve"><value>Jetzt aktualisieren</value></data>
+  <data name="settings.update.status_idle" xml:space="preserve"><value>Klicken Sie auf "Nach Updates suchen", um eine neuere Version zu finden.</value></data>
+  <data name="settings.update.status_checking" xml:space="preserve"><value>Suche nach Updates...</value></data>
+  <data name="settings.update.status_up_to_date" xml:space="preserve"><value>Die App ist auf dem neuesten Stand.</value></data>
+  <data name="settings.update.status_available" xml:space="preserve"><value>Eine neue Version ist verfugbar: {0}</value></data>
+  <data name="settings.update.status_started" xml:space="preserve"><value>Mock-Update fur Version {0} wurde gestartet. Der echte Installer-Flow kann jetzt angebunden werden.</value></data>
+  <data name="settings.update.status_failed" xml:space="preserve"><value>Update-Prufung fehlgeschlagen. Bitte erneut versuchen.</value></data>
+
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Übersicht</value></data>
 
   <data name="createguid.title" xml:space="preserve"><value>GUID-Generator</value></data>

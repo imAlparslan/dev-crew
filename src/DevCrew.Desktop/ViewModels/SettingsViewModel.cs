@@ -3,34 +3,60 @@ using CommunityToolkit.Mvvm.Input;
 using DevCrew.Core.Application.Services;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using DevCrew.Desktop.Services;
+using System.Reflection;
 
 namespace DevCrew.Desktop.ViewModels;
 
 public class SettingsViewModel : BaseViewModel
 {
+    private enum UpdateStatusState
+    {
+        Idle,
+        Checking,
+        UpToDate,
+        UpdateAvailable,
+        UpdateStarted,
+        Failed
+    }
+
     private readonly ILocalizationService _localizationService;
     private readonly IAppSettingsRepository _appSettingsRepository;
     private readonly IFontService _fontService;
     private readonly IUninstallService _uninstallService;
+    private readonly IUpdateService _updateService;
     private readonly bool _isInitializing;
+
     private bool _isPromptingUninstall;
+    private bool _isCheckingForUpdates;
+    private bool _isUpdating;
+    private bool _isUpdateAvailable;
+    private string _currentVersion = string.Empty;
+    private string? _latestVersion;
+    private string _updateStatusMessage = string.Empty;
+    private UpdateStatusState _updateStatus = UpdateStatusState.Idle;
 
     public SettingsViewModel(
         IErrorHandler errorHandler,
         ILocalizationService localizationService,
         IAppSettingsRepository appSettingsRepository,
         IFontService fontService,
-        IUninstallService uninstallService)
+        IUninstallService uninstallService,
+        IUpdateService updateService)
         : base(errorHandler)
     {
         _localizationService = localizationService;
         _appSettingsRepository = appSettingsRepository;
         _fontService = fontService;
         _uninstallService = uninstallService;
+        _updateService = updateService;
+
         ApplyFontSettingsCommand = new AsyncRelayCommand(ApplyFontSettingsAsync, CanApplyFontSettings);
         PromptUninstallCommand = new RelayCommand(() => IsPromptingUninstall = true);
         CancelUninstallCommand = new RelayCommand(() => IsPromptingUninstall = false);
         ConfirmUninstallCommand = new AsyncRelayCommand(ConfirmUninstallAsync);
+        CheckForUpdatesCommand = new AsyncRelayCommand(CheckForUpdatesAsync, CanCheckForUpdates);
+        StartUpdateCommand = new AsyncRelayCommand(StartUpdateAsync, CanStartUpdate);
+
         _localizationService.LanguageChanged += OnLanguageChanged;
         SupportedLanguages = _localizationService.SupportedLanguages;
 
@@ -58,8 +84,12 @@ public class SettingsViewModel : BaseViewModel
             ?? _fontService.AvailableUiFonts.FirstOrDefault(x => x.Key == "SystemDefault")
             ?? (_fontService.AvailableUiFonts.Count > 0 ? _fontService.AvailableUiFonts[0] : null);
 
+        CurrentVersion = ResolveCurrentVersion();
+        RefreshUpdateStatus(UpdateStatusState.Idle);
+
         _isInitializing = false;
         RefreshFontPreviewState();
+        RefreshUpdateCommandsState();
     }
 
     // Uninstall
@@ -75,23 +105,68 @@ public class SettingsViewModel : BaseViewModel
     public IRelayCommand CancelUninstallCommand { get; }
     public IAsyncRelayCommand ConfirmUninstallCommand { get; }
 
-    private async Task ConfirmUninstallAsync()
+    // Update
+    public IAsyncRelayCommand CheckForUpdatesCommand { get; }
+    public IAsyncRelayCommand StartUpdateCommand { get; }
+
+    public bool IsCheckingForUpdates
     {
-        ClearError();
-        IsLoading = true;
-        try
+        get => _isCheckingForUpdates;
+        private set
         {
-            await _uninstallService.UninstallAsync();
+            if (SetProperty(ref _isCheckingForUpdates, value))
+            {
+                OnPropertyChanged(nameof(IsUpdateOperationInProgress));
+            }
         }
-        catch (Exception ex)
+    }
+
+    public bool IsUpdating
+    {
+        get => _isUpdating;
+        private set
         {
-            ErrorMessage = ex.Message;
-            IsPromptingUninstall = false;
+            if (SetProperty(ref _isUpdating, value))
+            {
+                OnPropertyChanged(nameof(IsUpdateOperationInProgress));
+            }
         }
-        finally
+    }
+
+    public bool IsUpdateOperationInProgress => IsCheckingForUpdates || IsUpdating;
+
+    public bool IsUpdateAvailable
+    {
+        get => _isUpdateAvailable;
+        private set => SetProperty(ref _isUpdateAvailable, value);
+    }
+
+    public string CurrentVersion
+    {
+        get => _currentVersion;
+        private set => SetProperty(ref _currentVersion, value);
+    }
+
+    public string? LatestVersion
+    {
+        get => _latestVersion;
+        private set
         {
-            IsLoading = false;
+            if (SetProperty(ref _latestVersion, value))
+            {
+                OnPropertyChanged(nameof(LatestVersionDisplay));
+            }
         }
+    }
+
+    public string LatestVersionDisplay => string.IsNullOrWhiteSpace(LatestVersion)
+        ? _localizationService.GetString("settings.update.latest_version_unknown")
+        : LatestVersion;
+
+    public string UpdateStatusMessage
+    {
+        get => _updateStatusMessage;
+        private set => SetProperty(ref _updateStatusMessage, value);
     }
 
     // Language
@@ -184,6 +259,13 @@ public class SettingsViewModel : BaseViewModel
     public string FontSizeMediumLabel => _localizationService.GetString("settings.font_size_medium");
     public string FontSizeLargeLabel => _localizationService.GetString("settings.font_size_large");
 
+    // Update labels
+    public string UpdateSectionTitle => _localizationService.GetString("settings.update.section_title");
+    public string CurrentVersionLabel => _localizationService.GetString("settings.update.current_version");
+    public string LatestVersionLabel => _localizationService.GetString("settings.update.latest_version");
+    public string CheckForUpdatesLabel => _localizationService.GetString("settings.update.check_button");
+    public string UpdateNowLabel => _localizationService.GetString("settings.update.update_button");
+
     // Preview section
     public string PreviewLabel => _localizationService.GetString("settings.preview_label");
     public string PreviewHeadingText => _localizationService.GetString("settings.preview_heading_text");
@@ -218,6 +300,29 @@ public class SettingsViewModel : BaseViewModel
 
     private bool CanApplyFontSettings() => HasPendingFontSettings && !IsLoading;
 
+    private bool CanCheckForUpdates() => !IsUpdateOperationInProgress;
+
+    private bool CanStartUpdate() => IsUpdateAvailable && !IsUpdateOperationInProgress;
+
+    private async Task ConfirmUninstallAsync()
+    {
+        ClearError();
+        IsLoading = true;
+        try
+        {
+            await _uninstallService.UninstallAsync();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+            IsPromptingUninstall = false;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
     private void RefreshFontPreviewState()
     {
         OnPropertyChanged(nameof(PreviewFontSizeScale));
@@ -228,6 +333,31 @@ public class SettingsViewModel : BaseViewModel
         OnPropertyChanged(nameof(PreviewButtonFont));
         OnPropertyChanged(nameof(HasPendingFontSettings));
         ApplyFontSettingsCommand.NotifyCanExecuteChanged();
+    }
+
+    private void RefreshUpdateCommandsState()
+    {
+        CheckForUpdatesCommand.NotifyCanExecuteChanged();
+        StartUpdateCommand.NotifyCanExecuteChanged();
+    }
+
+    private void RefreshUpdateStatus(UpdateStatusState state)
+    {
+        _updateStatus = state;
+
+        UpdateStatusMessage = state switch
+        {
+            UpdateStatusState.Checking => _localizationService.GetString("settings.update.status_checking"),
+            UpdateStatusState.UpToDate => _localizationService.GetString("settings.update.status_up_to_date"),
+            UpdateStatusState.UpdateAvailable => string.Format(
+                _localizationService.GetString("settings.update.status_available"),
+                LatestVersionDisplay),
+            UpdateStatusState.UpdateStarted => string.Format(
+                _localizationService.GetString("settings.update.status_started"),
+                LatestVersionDisplay),
+            UpdateStatusState.Failed => _localizationService.GetString("settings.update.status_failed"),
+            _ => _localizationService.GetString("settings.update.status_idle")
+        };
     }
 
     private async Task ApplyFontSettingsAsync()
@@ -273,12 +403,86 @@ public class SettingsViewModel : BaseViewModel
         }
     }
 
+    private async Task CheckForUpdatesAsync()
+    {
+        ClearError();
+        IsCheckingForUpdates = true;
+        RefreshUpdateStatus(UpdateStatusState.Checking);
+        RefreshUpdateCommandsState();
+
+        try
+        {
+            var result = await _updateService.CheckForUpdatesAsync();
+
+            CurrentVersion = result.CurrentVersion;
+            LatestVersion = result.LatestVersion;
+            IsUpdateAvailable = result.IsUpdateAvailable;
+
+            RefreshUpdateStatus(IsUpdateAvailable
+                ? UpdateStatusState.UpdateAvailable
+                : UpdateStatusState.UpToDate);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+            IsUpdateAvailable = false;
+            RefreshUpdateStatus(UpdateStatusState.Failed);
+        }
+        finally
+        {
+            IsCheckingForUpdates = false;
+            RefreshUpdateCommandsState();
+        }
+    }
+
+    private async Task StartUpdateAsync()
+    {
+        if (!IsUpdateAvailable || string.IsNullOrWhiteSpace(LatestVersion))
+        {
+            return;
+        }
+
+        ClearError();
+        IsUpdating = true;
+        RefreshUpdateCommandsState();
+
+        try
+        {
+            await _updateService.StartUpdateAsync(LatestVersion);
+            RefreshUpdateStatus(UpdateStatusState.UpdateStarted);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+            RefreshUpdateStatus(UpdateStatusState.Failed);
+        }
+        finally
+        {
+            IsUpdating = false;
+            RefreshUpdateCommandsState();
+        }
+    }
+
     private static double GetFontSizeScale(string fontSizePreference) => fontSizePreference switch
     {
         "Small" => 0.85,
         "Large" => 1.2,
         _ => 1.0
     };
+
+    private static string ResolveCurrentVersion()
+    {
+        var version = Assembly.GetEntryAssembly()?.GetName().Version
+            ?? typeof(SettingsViewModel).Assembly.GetName().Version;
+
+        if (version is null)
+        {
+            return "0.0.0";
+        }
+
+        var build = version.Build < 0 ? 0 : version.Build;
+        return $"{version.Major}.{version.Minor}.{build}";
+    }
 
     private string ResolveUiFontFamilyValue(string key)
     {
@@ -313,6 +517,15 @@ public class SettingsViewModel : BaseViewModel
         OnPropertyChanged(nameof(FontSizeSmallLabel));
         OnPropertyChanged(nameof(FontSizeMediumLabel));
         OnPropertyChanged(nameof(FontSizeLargeLabel));
+
+        OnPropertyChanged(nameof(UpdateSectionTitle));
+        OnPropertyChanged(nameof(CurrentVersionLabel));
+        OnPropertyChanged(nameof(LatestVersionLabel));
+        OnPropertyChanged(nameof(CheckForUpdatesLabel));
+        OnPropertyChanged(nameof(UpdateNowLabel));
+        OnPropertyChanged(nameof(LatestVersionDisplay));
+        RefreshUpdateStatus(_updateStatus);
+
         OnPropertyChanged(nameof(PreviewLabel));
         OnPropertyChanged(nameof(PreviewHeadingText));
         OnPropertyChanged(nameof(PreviewUiText));
@@ -324,4 +537,3 @@ public class SettingsViewModel : BaseViewModel
         OnPropertyChanged(nameof(UninstallCancelButtonLabel));
     }
 }
-
