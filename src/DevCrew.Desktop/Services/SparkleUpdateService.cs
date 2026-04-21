@@ -62,7 +62,9 @@ public class SparkleUpdateService : IUpdateService
             Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
             "Downloads",
             "DevCrewUpdates");
+        _updater.TmpDownloadFileNameWithExtension = "DevCrew-update.pkg";
         _updater.CheckServerFileName = true;
+        DiagLog($"Installer temp target: {_updater.TmpDownloadFilePath}/{_updater.TmpDownloadFileNameWithExtension}");
 
     }
     public async Task<UpdateCheckResult> CheckForUpdatesAsync(CancellationToken cancellationToken = default)
