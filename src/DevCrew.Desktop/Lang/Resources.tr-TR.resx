@@ -56,7 +56,7 @@
   <data name="settings.update.status_checking" xml:space="preserve"><value>Guncellemeler kontrol ediliyor...</value></data>
   <data name="settings.update.status_up_to_date" xml:space="preserve"><value>Uygulamaniz guncel.</value></data>
   <data name="settings.update.status_available" xml:space="preserve"><value>Yeni bir surum mevcut: {0}</value></data>
-  <data name="settings.update.status_started" xml:space="preserve"><value>{0} surumu icin mock update tetiklendi. Gercek kurulum akisina baglayabilirsiniz.</value></data>
+  <data name="settings.update.status_started" xml:space="preserve"><value>{0} surumu icin kurulum baslatildi. Kurulumu tamamlayip uygulamayi yeniden acin.</value></data>
   <data name="settings.update.status_failed" xml:space="preserve"><value>Guncelleme kontrolu basarisiz oldu. Lutfen tekrar deneyin.</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Paneli</value></data>

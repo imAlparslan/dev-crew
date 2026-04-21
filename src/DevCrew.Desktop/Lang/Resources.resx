@@ -64,7 +64,7 @@
   <data name="settings.update.status_checking" xml:space="preserve"><value>Checking for updates...</value></data>
   <data name="settings.update.status_up_to_date" xml:space="preserve"><value>Your app is up to date.</value></data>
   <data name="settings.update.status_available" xml:space="preserve"><value>A new version is available: {0}</value></data>
-  <data name="settings.update.status_started" xml:space="preserve"><value>Mock update triggered for version {0}. You can wire the real installer flow next.</value></data>
+  <data name="settings.update.status_started" xml:space="preserve"><value>Installer launched for version {0}. Complete the installation and reopen the app.</value></data>
   <data name="settings.update.status_failed" xml:space="preserve"><value>Update check failed. Please try again.</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Dashboard</value></data>

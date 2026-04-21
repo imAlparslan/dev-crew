@@ -56,7 +56,7 @@
   <data name="settings.update.status_checking" xml:space="preserve"><value>Suche nach Updates...</value></data>
   <data name="settings.update.status_up_to_date" xml:space="preserve"><value>Die App ist auf dem neuesten Stand.</value></data>
   <data name="settings.update.status_available" xml:space="preserve"><value>Eine neue Version ist verfugbar: {0}</value></data>
-  <data name="settings.update.status_started" xml:space="preserve"><value>Mock-Update fur Version {0} wurde gestartet. Der echte Installer-Flow kann jetzt angebunden werden.</value></data>
+  <data name="settings.update.status_started" xml:space="preserve"><value>Installer fur Version {0} wurde gestartet. Schliessen Sie die Installation ab und starten Sie die App neu.</value></data>
   <data name="settings.update.status_failed" xml:space="preserve"><value>Update-Prufung fehlgeschlagen. Bitte erneut versuchen.</value></data>
 
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Übersicht</value></data>

@@ -183,6 +183,7 @@ jobs:
                       <pubDate>$(date -u +"%a, %d %b %Y %H:%M:%S GMT")</pubDate>
                       <enclosure url="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/DevCrew-${VERSION_NO_V}.pkg"
                                  sparkle:version="${APPCAST_BUILD_VERSION}"
+                             sparkle:short_version="${VERSION_NO_V}"
                                  sparkle:shortVersionString="${VERSION_NO_V}"
                              sparkle:os="macos"
                                  type="application/octet-stream" />

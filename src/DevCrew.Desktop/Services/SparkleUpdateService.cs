@@ -57,6 +57,13 @@ public class SparkleUpdateService : IUpdateService
             RelaunchAfterUpdate = true,
         };
 
+        // Keep downloaded installers in a stable user-writable path on macOS to avoid temp-path issues.
+        _updater.TmpDownloadFilePath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            "Downloads",
+            "DevCrewUpdates");
+        _updater.CheckServerFileName = true;
+
     }
     public async Task<UpdateCheckResult> CheckForUpdatesAsync(CancellationToken cancellationToken = default)
     {
@@ -110,9 +117,18 @@ public class SparkleUpdateService : IUpdateService
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(latestVersion);
 
+        // DIAGNOSTIC: remove after debugging
+        DiagLog($"StartUpdate requested — latestVersion={latestVersion}");
+
         var selectedItem = _cachedUpdates.FirstOrDefault(item =>
             string.Equals(ResolveAppCastItemVersion(item), latestVersion, StringComparison.OrdinalIgnoreCase)
             || string.Equals(item.Version?.ToString(), latestVersion, StringComparison.OrdinalIgnoreCase));
+
+        if (selectedItem is not null)
+        {
+            // DIAGNOSTIC: remove after debugging
+            DiagLog($"StartUpdate selected item — Version={selectedItem.Version}, ResolvedVersion={ResolveAppCastItemVersion(selectedItem)}, DownloadLink={selectedItem.DownloadLink}");
+        }
 
         _latestUpdateItem = selectedItem ?? _latestUpdateItem;
 
@@ -167,6 +183,17 @@ public class SparkleUpdateService : IUpdateService
         if (item is null)
         {
             return null;
+        }
+
+        // NetSparkle appcast parser may map sparkle:short_version directly.
+        var shortVersion = item.GetType()
+            .GetProperty("ShortVersion", BindingFlags.Public | BindingFlags.Instance)
+            ?.GetValue(item)
+            ?.ToString();
+
+        if (!string.IsNullOrWhiteSpace(shortVersion))
+        {
+            return shortVersion;
         }
 
         var shortVersionString = item.GetType()
