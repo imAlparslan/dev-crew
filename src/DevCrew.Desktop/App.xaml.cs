@@ -64,7 +64,9 @@ public partial class App : Application
 
     private static IConfiguration LoadConfiguration()
     {
-        var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+        var env = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
+            ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+            ?? "Production";
         var basePath = AppContext.BaseDirectory;
         var configBuilder = new ConfigurationBuilder()
             .SetBasePath(basePath)

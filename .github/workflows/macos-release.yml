@@ -32,7 +32,29 @@ jobs:
       - name: Extract version from tag
         run: |
           VERSION_NO_V="${GITHUB_REF_NAME#v}"
+          RELEASE_CHANNEL="stable"
+          RELEASE_DOTNET_ENVIRONMENT="Production"
+          RELEASE_SETTINGS_FILE="src/DevCrew.Desktop/appsettings.json"
+
+          if [[ "${VERSION_NO_V}" == *"alpha"* ]]; then
+            RELEASE_CHANNEL="alpha"
+            RELEASE_DOTNET_ENVIRONMENT="Alpha"
+            RELEASE_SETTINGS_FILE="src/DevCrew.Desktop/appsettings.Alpha.json"
+          elif [[ "${VERSION_NO_V}" == *"beta"* ]]; then
+            RELEASE_CHANNEL="beta"
+            RELEASE_DOTNET_ENVIRONMENT="Beta"
+            RELEASE_SETTINGS_FILE="src/DevCrew.Desktop/appsettings.Beta.json"
+          fi
+
           echo "VERSION_NO_V=${VERSION_NO_V}" >> "$GITHUB_ENV"
+          echo "RELEASE_CHANNEL=${RELEASE_CHANNEL}" >> "$GITHUB_ENV"
+          echo "RELEASE_DOTNET_ENVIRONMENT=${RELEASE_DOTNET_ENVIRONMENT}" >> "$GITHUB_ENV"
+          echo "RELEASE_SETTINGS_FILE=${RELEASE_SETTINGS_FILE}" >> "$GITHUB_ENV"
+
+      - name: Set .NET runtime environment variables
+        run: |
+          echo "DOTNET_ENVIRONMENT=${RELEASE_DOTNET_ENVIRONMENT}" >> "$GITHUB_ENV"
+          echo "ASPNETCORE_ENVIRONMENT=${RELEASE_DOTNET_ENVIRONMENT}" >> "$GITHUB_ENV"
 
       - name: Build desktop project
         run: |
@@ -85,6 +107,14 @@ jobs:
           fi
 
           echo "APP_BUNDLE_PATH=${APP_BUNDLE_PATH}" >> "$GITHUB_ENV"
+
+      - name: Apply release appsettings to app bundle
+        run: |
+          APP_SETTINGS_TARGET_DIR="${APP_BUNDLE_PATH}/Contents/MacOS"
+          mkdir -p "${APP_SETTINGS_TARGET_DIR}"
+
+          cp "src/DevCrew.Desktop/appsettings.json" "${APP_SETTINGS_TARGET_DIR}/appsettings.json"
+          cp "${RELEASE_SETTINGS_FILE}" "${APP_SETTINGS_TARGET_DIR}/appsettings.Production.json"
 
       - name: Resolve CLI binary path
         run: |
@@ -140,10 +170,10 @@ jobs:
           fi
 
           echo "APPCAST_FILENAME=${FILENAME}" >> "$GITHUB_ENV"
-            APPCAST_TEMP_PATH="${RUNNER_TEMP}/${FILENAME}"
-            echo "APPCAST_TEMP_PATH=${APPCAST_TEMP_PATH}" >> "$GITHUB_ENV"
+          APPCAST_TEMP_PATH="${RUNNER_TEMP}/${FILENAME}"
+          echo "APPCAST_TEMP_PATH=${APPCAST_TEMP_PATH}" >> "$GITHUB_ENV"
 
-            cat <<EOF > "${APPCAST_TEMP_PATH}"
+          cat <<EOF > "${APPCAST_TEMP_PATH}"
           <?xml version="1.0" encoding="utf-8"?>
           <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
               <channel>
