@@ -107,11 +107,19 @@ public class SparkleUpdateService : IUpdateService
             DiagLog("No update items returned from feed.");
         }
 
-        var latestVersion = ResolveAppCastItemVersion(latestItem) ?? ResolveCurrentVersion();
+        var currentVersion = ResolveCurrentVersion();
+        var latestVersion = ResolveAppCastItemVersion(latestItem) ?? currentVersion;
+        var isResolvedVersionNewer = !string.Equals(latestVersion, currentVersion, StringComparison.OrdinalIgnoreCase);
+
+        if (!isResolvedVersionNewer && res?.Status == UpdateStatus.UpdateAvailable)
+        {
+            // DIAGNOSTIC: remove after debugging
+            DiagLog($"Suppressing false update result because currentVersion matches latestVersion ({currentVersion}).");
+        }
 
         return new UpdateCheckResult(
-            IsUpdateAvailable: res?.Status == UpdateStatus.UpdateAvailable && latestItem is not null,
-            CurrentVersion: ResolveCurrentVersion(),
+            IsUpdateAvailable: res?.Status == UpdateStatus.UpdateAvailable && latestItem is not null && isResolvedVersionNewer,
+            CurrentVersion: currentVersion,
             LatestVersion: latestVersion);
     }
 
