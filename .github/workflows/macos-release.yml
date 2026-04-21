@@ -11,10 +11,14 @@ permissions:
 
 env:
   DOTNET_NOLOGO: true
+  MACOS_BUNDLE_ID: "com.devcrew.desktop"
 
 jobs:
   macos-release:
     runs-on: macos-latest
+    concurrency:
+      group: macos-appcast-main
+      cancel-in-progress: false
 
     steps:
       - name: Checkout
@@ -98,11 +102,13 @@ jobs:
 
           echo "CLI_BINARY_PATH=${CLI_BINARY_PATH}" >> "$GITHUB_ENV"
 
-      - name: Set bundle version in Info.plist
+      - name: Set bundle metadata in Info.plist
         run: |
           PLIST_PATH="${APP_BUNDLE_PATH}/Contents/Info.plist"
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${VERSION_NO_V}" "$PLIST_PATH"
           /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${VERSION_NO_V}" "$PLIST_PATH"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier ${{ env.MACOS_BUNDLE_ID }}" "$PLIST_PATH" || \
+          /usr/libexec/PlistBuddy -c "Add :CFBundleIdentifier string ${{ env.MACOS_BUNDLE_ID }}" "$PLIST_PATH"
 
       - name: Ensure packaging scripts are executable
         run: |
@@ -114,12 +120,57 @@ jobs:
             --app "${APP_BUNDLE_PATH}" \
             --cli "${CLI_BINARY_PATH}" \
             --version "${VERSION_NO_V}" \
+            --package-id "${{ env.MACOS_BUNDLE_ID }}" \
             --output-dir "./artifacts/dist"
 
       - name: Verify PKG output
         run: |
           ls -lah ./artifacts/dist
           test -f "./artifacts/dist/DevCrew-${VERSION_NO_V}.pkg"
+
+      - name: Generate Sparkle AppCast
+        run: |
+          FILENAME="appcast.xml"
+
+          if [[ "${{ github.ref_name }}" == *"alpha"* ]]; then
+            FILENAME="appcast-alpha.xml"
+          elif [[ "${{ github.ref_name }}" == *"beta"* ]]; then
+            FILENAME="appcast-beta.xml"
+          fi
+
+          echo "APPCAST_FILENAME=${FILENAME}" >> "$GITHUB_ENV"
+          mkdir -p ./Appcasts
+
+          cat <<EOF > ./Appcasts/${FILENAME}
+          <?xml version="1.0" encoding="utf-8"?>
+          <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+              <channel>
+                  <title>Version ${VERSION_NO_V}</title>
+                  <item>
+                      <sparkle:releaseNotesLink>https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}</sparkle:releaseNotesLink>
+                      <pubDate>$(date -u +"%a, %d %b %Y %H:%M:%S GMT")</pubDate>
+                      <enclosure url="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/DevCrew-${VERSION_NO_V}.pkg"
+                                 sparkle:version="${VERSION_NO_V}"
+                                 sparkle:shortVersionString="${VERSION_NO_V}"
+                                 type="application/octet-stream" />
+                  </item>
+              </channel>
+          </rss>
+          EOF
+
+      - name: Commit AppCast to main branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "./Appcasts/${APPCAST_FILENAME}"
+
+          if git diff --cached --quiet; then
+            echo "No AppCast changes detected."
+            exit 0
+          fi
+
+          git commit -m "chore(appcast): update ${APPCAST_FILENAME} for ${GITHUB_REF_NAME}"
+          git push origin HEAD:main
 
       - name: Upload PKG artifact
         uses: actions/upload-artifact@v7
@@ -135,4 +186,5 @@ jobs:
           draft: true
           generate_release_notes: true
           fail_on_unmatched_files: true
-          files: ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.pkg
+          files: |
+            ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.pkg

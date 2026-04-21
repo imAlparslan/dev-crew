@@ -80,6 +80,20 @@
   <data name="settings.uninstall_confirm_button" xml:space="preserve"><value>Yes, Uninstall Everything</value></data>
   <data name="settings.uninstall_cancel_button" xml:space="preserve"><value>Cancel</value></data>
   <data name="settings.preview_code_text" xml:space="preserve"><value>const token = &quot;abc123&quot;;</value></data>
+
+  <data name="settings.update.section_title" xml:space="preserve"><value>Mises a jour de l'application</value></data>
+  <data name="settings.update.current_version" xml:space="preserve"><value>Version actuelle</value></data>
+  <data name="settings.update.latest_version" xml:space="preserve"><value>Derniere version</value></data>
+  <data name="settings.update.latest_version_unknown" xml:space="preserve"><value>Pas encore verifiee</value></data>
+  <data name="settings.update.check_button" xml:space="preserve"><value>Verifier les mises a jour</value></data>
+  <data name="settings.update.update_button" xml:space="preserve"><value>Mettre a jour</value></data>
+  <data name="settings.update.status_idle" xml:space="preserve"><value>Appuyez sur "Verifier les mises a jour" pour rechercher une version plus recente.</value></data>
+  <data name="settings.update.status_checking" xml:space="preserve"><value>Verification des mises a jour...</value></data>
+  <data name="settings.update.status_up_to_date" xml:space="preserve"><value>Votre application est a jour.</value></data>
+  <data name="settings.update.status_available" xml:space="preserve"><value>Une nouvelle version est disponible : {0}</value></data>
+  <data name="settings.update.status_started" xml:space="preserve"><value>Mise a jour mock declenchee pour la version {0}. Vous pouvez maintenant brancher le vrai flux d'installation.</value></data>
+  <data name="settings.update.status_failed" xml:space="preserve"><value>La verification des mises a jour a echoue. Veuillez reessayer.</value></data>
+
   <data name="dashboard.title" xml:space="preserve">
     <value>🎯 Tableau de bord DevCrew</value>
   </data>

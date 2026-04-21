@@ -46,6 +46,19 @@
   <data name="settings.uninstall_cancel_button" xml:space="preserve"><value>İptal</value></data>
   <data name="settings.preview_code_text" xml:space="preserve"><value>const token = &quot;abc123&quot;;</value></data>
 
+  <data name="settings.update.section_title" xml:space="preserve"><value>Uygulama Guncellemeleri</value></data>
+  <data name="settings.update.current_version" xml:space="preserve"><value>Mevcut surum</value></data>
+  <data name="settings.update.latest_version" xml:space="preserve"><value>Son surum</value></data>
+  <data name="settings.update.latest_version_unknown" xml:space="preserve"><value>Henuz kontrol edilmedi</value></data>
+  <data name="settings.update.check_button" xml:space="preserve"><value>Guncellemeleri kontrol et</value></data>
+  <data name="settings.update.update_button" xml:space="preserve"><value>Simdi guncelle</value></data>
+  <data name="settings.update.status_idle" xml:space="preserve"><value>Daha yeni surum aramak icin "Guncellemeleri kontrol et" butonuna basin.</value></data>
+  <data name="settings.update.status_checking" xml:space="preserve"><value>Guncellemeler kontrol ediliyor...</value></data>
+  <data name="settings.update.status_up_to_date" xml:space="preserve"><value>Uygulamaniz guncel.</value></data>
+  <data name="settings.update.status_available" xml:space="preserve"><value>Yeni bir surum mevcut: {0}</value></data>
+  <data name="settings.update.status_started" xml:space="preserve"><value>{0} surumu icin mock update tetiklendi. Gercek kurulum akisina baglayabilirsiniz.</value></data>
+  <data name="settings.update.status_failed" xml:space="preserve"><value>Guncelleme kontrolu basarisiz oldu. Lutfen tekrar deneyin.</value></data>
+
   <data name="dashboard.title" xml:space="preserve"><value>🎯 DevCrew Paneli</value></data>
 
   <data name="createguid.title" xml:space="preserve"><value>GUID Oluşturucu</value></data>
