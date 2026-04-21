@@ -8,6 +8,7 @@
             <enclosure url="https://github.com/imAlparslan/dev-crew/releases/download/v0.0.1-beta.8/DevCrew-0.0.1-beta.8.pkg"
                        sparkle:version="23"
                        sparkle:shortVersionString="0.0.1-beta.8"
+                       sparkle:os="macos"
                        type="application/octet-stream" />
         </item>
     </channel>
