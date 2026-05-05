@@ -102,10 +102,8 @@
                                     BorderThickness="0"
                                     ToolTip.Tip="{Binding [base64encoder.copy_tooltip], Source={StaticResource Loc}}"
                                     Cursor="Hand">
-                                <TextBlock Text="📋"
-                                           FontSize="{DynamicResource FontSizeLarge}"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
+                                <PathIcon Data="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
+                                          Width="16" Height="16" />
                             </Button>
                         </Grid>
 
