@@ -147,6 +147,24 @@ public partial class JwtDecoderViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task CopySecret()
+    {
+        if (!string.IsNullOrWhiteSpace(Secret))
+        {
+            await _clipboardService.TrySetTextAsync(Secret);
+        }
+    }
+
+    [RelayCommand]
+    private async Task CopyPublicKey()
+    {
+        if (!string.IsNullOrWhiteSpace(PublicKey))
+        {
+            await _clipboardService.TrySetTextAsync(PublicKey);
+        }
+    }
+
+    [RelayCommand]
     private void Clear()
     {
         RawToken = string.Empty;

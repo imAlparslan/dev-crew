@@ -689,7 +689,7 @@
     <value>Enregistrer comme nouveau modèle</value>
   </data>
   <data name="jwtbuilder.template_update" xml:space="preserve">
-    <value>✏️ Mettre à jour</value>
+    <value>Mettre à jour</value>
   </data>
   <data name="jwtbuilder.template_update_tooltip" xml:space="preserve">
     <value>Mettre à jour le modèle actuel</value>

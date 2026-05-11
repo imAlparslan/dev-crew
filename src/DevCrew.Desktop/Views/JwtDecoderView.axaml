@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:DevCrew.Desktop.ViewModels"
              xmlns:conv="using:DevCrew.Desktop.Converters"
+             xmlns:controls="using:DevCrew.Desktop.Controls"
              x:Class="DevCrew.Desktop.Views.JwtDecoderView"
              x:DataType="vm:JwtDecoderViewModel">
     
@@ -108,18 +109,21 @@
                             </Grid>
                             
                             <!-- HMAC Secret Key -->
-                            <Grid Grid.Row="1" ColumnDefinitions="Auto,*" IsVisible="{Binding !IsRsaAlgorithm}">
-                                <Button Grid.Column="0"
-                                        Content="👁️"
-                                        Width="36"
-                                        Height="36"
-                                        Padding="0"
+                            <Grid Grid.Row="1" ColumnDefinitions="Auto,Auto,*" IsVisible="{Binding !IsRsaAlgorithm}">
+                                <controls:EyeToggleButton Grid.Column="0"
                                         Margin="0,0,4,0"
-                                    Classes="NeutralActionButton"
-                                        ToolTip.Tip="{Binding [jwtdecoder.toggle_secret], Source={StaticResource Loc}}"
+                                        IsToggled="{Binding IsSecretVisible}"
+                                        ToolTipText="{Binding [jwtdecoder.toggle_secret], Source={StaticResource Loc}}"
                                         Command="{Binding ToggleSecretVisibilityCommand}" />
+
+                                <controls:CopyActionButton Grid.Column="1"
+                                                           Width="36"
+                                                           Height="36"
+                                                           Margin="0,0,4,0"
+                                                           ToolTipText="{Binding [jwtbuilder.copy_secret_tooltip], Source={StaticResource Loc}}"
+                                                           Command="{Binding CopySecretCommand}" />
                                 
-                                <TextBox Grid.Column="1"
+                                <TextBox Grid.Column="2"
                                          Text="{Binding Secret}"
                                          PasswordChar="●"
                                          RevealPassword="{Binding IsSecretVisible}"
@@ -137,20 +141,28 @@
                             </Grid>
                             
                             <!-- RSA Public Key -->
-                            <TextBox Grid.Row="2"
-                                     Text="{Binding PublicKey}"
-                                     AcceptsReturn="True"
-                                     TextWrapping="Wrap"
-                                     Padding="8"
-                                     MinHeight="60"
-                                     MaxHeight="100"
-                                     HorizontalAlignment="Stretch"
-                                     Classes="MonospaceInputTextBox"
-                                     FontSize="{DynamicResource FontSizeSmall}"
-                                     Watermark="{Binding [jwtdecoder.public_key_watermark], Source={StaticResource Loc}}"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                     IsVisible="{Binding IsRsaAlgorithm}" />
+                            <Grid Grid.Row="2" ColumnDefinitions="Auto,*" IsVisible="{Binding IsRsaAlgorithm}">
+                                <controls:CopyActionButton Grid.Column="0"
+                                                           Width="36"
+                                                           Height="36"
+                                                           Margin="0,0,4,0"
+                                                           ToolTipText="{Binding [jwtbuilder.copy_public_key_tooltip], Source={StaticResource Loc}}"
+                                                           Command="{Binding CopyPublicKeyCommand}" />
+
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding PublicKey}"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         Padding="8"
+                                         MinHeight="60"
+                                         MaxHeight="100"
+                                         HorizontalAlignment="Stretch"
+                                         Classes="MonospaceInputTextBox"
+                                         FontSize="{DynamicResource FontSizeSmall}"
+                                         Watermark="{Binding [jwtdecoder.public_key_watermark], Source={StaticResource Loc}}"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                            </Grid>
                             
                             <Grid Grid.Row="3" Margin="0,8,0,0" ColumnDefinitions="*,Auto">
                                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4"
@@ -264,16 +276,11 @@
                                            Foreground="{StaticResource BrushPrimaryText}"
                                            VerticalAlignment="Center" />
                                 
-                                <Button Grid.Column="1"
-                                        Command="{Binding CopyHeaderCommand}"
-                                    Classes="ActionButtonCompact AccentActionButton">
-                                    <TextBlock>
-                                        <TextBlock.Text>
-                                            <Binding Path="IsHeaderCopied"
-                                                     Converter="{StaticResource CopyStatusConverter}" />
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </Button>
+                                <controls:CopyActionButton Grid.Column="1"
+                                                           Command="{Binding CopyHeaderCommand}"
+                                                           Width="32"
+                                                           Height="32"
+                                                           ToolTipText="{Binding [createguid.copy], Source={StaticResource Loc}}" />
                             </Grid>
                             
                             <Border Grid.Row="1"
@@ -311,16 +318,11 @@
                                            Foreground="{StaticResource BrushPrimaryText}"
                                            VerticalAlignment="Center" />
                                 
-                                <Button Grid.Column="1"
-                                        Command="{Binding CopyPayloadCommand}"
-                                    Classes="ActionButtonCompact AccentActionButton">
-                                    <TextBlock>
-                                        <TextBlock.Text>
-                                            <Binding Path="IsPayloadCopied"
-                                                     Converter="{StaticResource CopyStatusConverter}" />
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </Button>
+                                <controls:CopyActionButton Grid.Column="1"
+                                                           Command="{Binding CopyPayloadCommand}"
+                                                           Width="32"
+                                                           Height="32"
+                                                           ToolTipText="{Binding [createguid.copy], Source={StaticResource Loc}}" />
                             </Grid>
                             
                             <Border Grid.Row="1"

@@ -36,5 +36,8 @@
     <conv:BooleanToBrushConverter x:Key="CopyStatusConverter"
                                   TrueString="✓ Kopyalandı"
                                   FalseString="📋 Kopyala" />
+    <conv:BooleanToBrushConverter x:Key="CopyStatusTextConverter"
+                                  TrueString="Kopyalandı"
+                                  FalseString="Kopyala" />
     
 </ResourceDictionary>

@@ -61,9 +61,6 @@ public partial class JwtBuilderViewModel : BaseViewModel
     private string? generatedToken;
 
     [ObservableProperty]
-    private bool isTokenCopied;
-
-    [ObservableProperty]
     private bool isSecretVisible;
 
     [ObservableProperty]
@@ -133,7 +130,6 @@ public partial class JwtBuilderViewModel : BaseViewModel
     {
         ErrorMessage = null;
         GeneratedToken = null;
-        IsTokenCopied = false;
 
         try
         {
@@ -236,11 +232,6 @@ public partial class JwtBuilderViewModel : BaseViewModel
             return;
 
         await _clipboardService.TrySetTextAsync(GeneratedToken);
-        IsTokenCopied = true;
-
-        // Reset the copied indicator after 2 seconds
-        await Task.Delay(2000);
-        IsTokenCopied = false;
     }
 
     [RelayCommand]
@@ -259,7 +250,6 @@ public partial class JwtBuilderViewModel : BaseViewModel
         CustomClaimValue = string.Empty;
         GeneratedToken = null;
         ErrorMessage = null;
-        IsTokenCopied = false;
         IsSecretVisible = false;
     }
 

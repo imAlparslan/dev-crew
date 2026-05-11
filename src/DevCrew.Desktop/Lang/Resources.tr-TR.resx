@@ -296,7 +296,7 @@
   <data name="jwtbuilder.template_name_watermark" xml:space="preserve"><value>Şablon adı...</value></data>
   <data name="jwtbuilder.template_save_new" xml:space="preserve"><value>💾 Yeni Kaydet</value></data>
   <data name="jwtbuilder.template_save_new_tooltip" xml:space="preserve"><value>Yeni şablon olarak kaydet</value></data>
-  <data name="jwtbuilder.template_update" xml:space="preserve"><value>✏️ Güncelle</value></data>
+  <data name="jwtbuilder.template_update" xml:space="preserve"><value>Güncelle</value></data>
   <data name="jwtbuilder.template_update_tooltip" xml:space="preserve"><value>Mevcut şablonu güncelle</value></data>
   <data name="jwtbuilder.template_not_found" xml:space="preserve"><value>Şablon bulunamadı.</value></data>
   <data name="jwtbuilder.template_name_required" xml:space="preserve"><value>Lütfen şablon adı girin.</value></data>

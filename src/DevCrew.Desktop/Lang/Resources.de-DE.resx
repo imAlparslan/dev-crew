@@ -296,7 +296,7 @@
   <data name="jwtbuilder.template_name_watermark" xml:space="preserve"><value>Name der Vorlage...</value></data>
   <data name="jwtbuilder.template_save_new" xml:space="preserve"><value>💾 Neu speichern</value></data>
   <data name="jwtbuilder.template_save_new_tooltip" xml:space="preserve"><value>Als neue Vorlage speichern</value></data>
-  <data name="jwtbuilder.template_update" xml:space="preserve"><value>✏️ Aktualisieren</value></data>
+  <data name="jwtbuilder.template_update" xml:space="preserve"><value>Aktualisieren</value></data>
   <data name="jwtbuilder.template_update_tooltip" xml:space="preserve"><value>Aktuelle Vorlage aktualisieren</value></data>
   <data name="jwtbuilder.template_not_found" xml:space="preserve"><value>Vorlage wurde nicht gefunden.</value></data>
   <data name="jwtbuilder.template_name_required" xml:space="preserve"><value>Bitte geben Sie einen Vorlagennamen ein.</value></data>

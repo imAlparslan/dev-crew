@@ -304,7 +304,7 @@
   <data name="jwtbuilder.template_name_watermark" xml:space="preserve"><value>Template name...</value></data>
   <data name="jwtbuilder.template_save_new" xml:space="preserve"><value>💾 Save New</value></data>
   <data name="jwtbuilder.template_save_new_tooltip" xml:space="preserve"><value>Save as a new template</value></data>
-  <data name="jwtbuilder.template_update" xml:space="preserve"><value>✏️ Update</value></data>
+  <data name="jwtbuilder.template_update" xml:space="preserve"><value>Update</value></data>
   <data name="jwtbuilder.template_update_tooltip" xml:space="preserve"><value>Update current template</value></data>
   <data name="jwtbuilder.template_not_found" xml:space="preserve"><value>Template not found.</value></data>
   <data name="jwtbuilder.template_name_required" xml:space="preserve"><value>Please enter a template name.</value></data>

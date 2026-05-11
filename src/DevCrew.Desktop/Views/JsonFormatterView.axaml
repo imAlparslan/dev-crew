@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:DevCrew.Desktop.ViewModels"
+             xmlns:controls="using:DevCrew.Desktop.Controls"
              x:Class="DevCrew.Desktop.Views.JsonFormatterView"
              x:DataType="vm:JsonFormatterViewModel">
     
@@ -114,20 +115,14 @@
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
                                 
-                                <Button Grid.Column="1"
-                                        Command="{Binding CopyOutputCommand}"
-                                        IsEnabled="{Binding HasOutput}"
-                                        Width="32"
-                                        Height="32"
-                                        Padding="0"
-                                        Margin="0,0,8,0"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        ToolTip.Tip="{Binding [jsonformatter.copy_output_tooltip], Source={StaticResource Loc}}"
-                                        Cursor="Hand">
-                                    <PathIcon Data="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
-                                               Width="16" Height="16" />
-                                </Button>
+                                <controls:CopyActionButton Grid.Column="1"
+                                                           Command="{Binding CopyOutputCommand}"
+                                                           IsEnabled="{Binding HasOutput}"
+                                                           Width="32"
+                                                           Height="32"
+                                                           Margin="0,0,8,0"
+                                                           ToolTipText="{Binding [jsonformatter.copy_output_tooltip], Source={StaticResource Loc}}"
+                                                           Cursor="Hand" />
 
                                 <Button Grid.Column="2"
                                         Command="{Binding SaveOutputCommand}"

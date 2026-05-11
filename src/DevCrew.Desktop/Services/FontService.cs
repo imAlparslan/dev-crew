@@ -16,6 +16,8 @@ public class FontService : IFontService
         ["FontSizeLarge"] = 16,
         ["FontSizeHeading"] = 20,
         ["FontSizeXLarge"] = 32,
+        ["IconButtonSize"] = 32,
+        ["IconSize"] = 16,
     };
 
     private static readonly Dictionary<string, double> Scales = new()
