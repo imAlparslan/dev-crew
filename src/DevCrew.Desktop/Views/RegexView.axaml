@@ -3,6 +3,7 @@
              xmlns:ae="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
              xmlns:b="using:DevCrew.Desktop.Behaviors"
              xmlns:converters="using:DevCrew.Desktop.Converters"
+             xmlns:controls="using:DevCrew.Desktop.Controls"
              xmlns:vm="using:DevCrew.Desktop.ViewModels"
              x:Class="DevCrew.Desktop.Views.RegexView"
              x:DataType="vm:RegexViewModel">
@@ -66,20 +67,18 @@
                                                     </DataTemplate>
                                                 </ComboBox.ItemTemplate>
                                             </ComboBox>
-                                            <Button Grid.Column="2"
-                                                    Content="{Binding [regex.preset_edit], Source={StaticResource Loc}}"
+                                            <controls:UpdateActionButton Grid.Column="2"
                                                     Command="{Binding UpdatePresetCommand}"
                                                     IsEnabled="{Binding SelectedPreset, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                                    MinHeight="36"
-                                                    Classes="ActionButton SecondaryActionButton"
-                                                    ToolTip.Tip="{Binding [regex.preset_edit_tooltip], Source={StaticResource Loc}}" />
-                                            <Button Grid.Column="4"
-                                                    Content="{Binding [regex.preset_delete], Source={StaticResource Loc}}"
+                                                    Width="32" Height="32"
+                                                    ToolTipText="{Binding [regex.preset_edit_tooltip], Source={StaticResource Loc}}"
+                                                    Cursor="Hand" />
+                                            <controls:DeleteActionButton Grid.Column="4"
                                                     Command="{Binding DeletePresetCommand}"
                                                     IsEnabled="{Binding SelectedPreset, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                                    MinHeight="36"
-                                                    Classes="ActionButton DangerActionButton"
-                                                    ToolTip.Tip="{Binding [regex.preset_delete_tooltip], Source={StaticResource Loc}}" />
+                                                    Width="32" Height="32"
+                                                    ToolTipText="{Binding [regex.preset_delete_tooltip], Source={StaticResource Loc}}"
+                                                    Cursor="Hand" />
                                         </Grid>
                                     </StackPanel>
 
@@ -94,12 +93,11 @@
                                                      VerticalContentAlignment="Center"
                                                      Watermark="{Binding [regex.preset_name_watermark], Source={StaticResource Loc}}"
                                                      Classes="CompactInputTextBox" />
-                                            <Button Grid.Column="2"
-                                                    Content="{Binding [regex.save_preset], Source={StaticResource Loc}}"
+                                            <controls:SaveActionButton Grid.Column="2"
                                                     Command="{Binding SavePresetCommand}"
-                                                    MinHeight="36"
-                                                    Classes="ActionButton PrimaryActionButton"
-                                                    ToolTip.Tip="{Binding [regex.save_preset_tooltip], Source={StaticResource Loc}}" />
+                                                    Width="32" Height="32"
+                                                    ToolTipText="{Binding [regex.save_preset_tooltip], Source={StaticResource Loc}}"
+                                                    Cursor="Hand" />
                                         </Grid>
                                     </StackPanel>
                                 </Grid>
@@ -140,11 +138,10 @@
                                     Command="{Binding LoadFromPathCommand}"
                                     Classes="ActionButton PrimaryActionButton"
                                     ToolTip.Tip="{Binding [regex.load_from_path_tooltip], Source={StaticResource Loc}}" />
-                            <Button Grid.Column="4"
-                                    Content="{Binding [regex.browse], Source={StaticResource Loc}}"
-                                    Command="{Binding BrowseFileCommand}"
-                                    Classes="ActionButton PrimaryActionButton"
-                                    ToolTip.Tip="{Binding [regex.browse_tooltip], Source={StaticResource Loc}}" />
+                                <controls:BrowseActionButton Grid.Column="4"
+                                             Command="{Binding BrowseFileCommand}"
+                                             ToolTipText="{Binding [regex.browse_tooltip], Source={StaticResource Loc}}"
+                                             Cursor="Hand" />
                         </Grid>
                     </StackPanel>
                 </Border>

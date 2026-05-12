@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:DevCrew.Desktop.ViewModels"
+             xmlns:controls="using:DevCrew.Desktop.Controls"
              x:Class="DevCrew.Desktop.Views.Base64DecoderView"
              x:DataType="vm:Base64DecoderViewModel">
 
@@ -34,14 +35,11 @@
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    VerticalAlignment="Center" />
 
-                        <Button Grid.Row="0"
-                            Grid.Column="1"
-                            Content="{Binding [base64decoder.browse], Source={StaticResource Loc}}"
-                                Command="{Binding BrowseFileCommand}"
-                                Padding="10,6"
-                                FontWeight="SemiBold"
-                                Classes="ActionButton PrimaryActionButton"
-                                ToolTip.Tip="{Binding [base64decoder.browse_tooltip], Source={StaticResource Loc}}" />
+                        <controls:BrowseActionButton Grid.Row="0"
+                                                     Grid.Column="1"
+                                                     Command="{Binding BrowseFileCommand}"
+                                                     ToolTipText="{Binding [base64decoder.browse_tooltip], Source={StaticResource Loc}}"
+                                                     Cursor="Hand" />
 
                         <TextBlock Grid.Row="1"
                                    Grid.ColumnSpan="2"
@@ -75,6 +73,12 @@
                             Classes="ActionButton PrimaryActionButton"
                             FontWeight="SemiBold"
                             ToolTip.Tip="{Binding [base64decoder.decode_tooltip], Source={StaticResource Loc}}" />
+                    <Button Content="{Binding [base64decoder.clear], Source={StaticResource Loc}}"
+                            Command="{Binding ClearCommand}"
+                            Classes="ActionButton DangerActionButton"
+                            Padding="12,10"
+                            FontWeight="SemiBold"
+                            ToolTip.Tip="{Binding [base64decoder.clear_tooltip], Source={StaticResource Loc}}" />
                 </StackPanel>
 
                 <Border Grid.Row="3"
@@ -84,7 +88,7 @@
                         CornerRadius="6"
                         Padding="12">
                     <Grid RowDefinitions="Auto,Auto,*">
-                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
                             <TextBlock Grid.Column="0"
                                        Text="{Binding [base64decoder.output_title], Source={StaticResource Loc}}"
                                        FontSize="{DynamicResource FontSizeLabel}"
@@ -92,23 +96,13 @@
                                        Foreground="{StaticResource BrushSecondaryText}"
                                        VerticalAlignment="Center" />
 
-                                <Button Grid.Column="1"
-                                    Content="{Binding [base64decoder.clear], Source={StaticResource Loc}}"
-                                    Command="{Binding ClearCommand}"
-                                    Margin="0,0,8,0"
-                                    Padding="10,6"
-                                    FontWeight="SemiBold"
-                                    Classes="ActionButton DangerActionButton"
-                                    ToolTip.Tip="{Binding [base64decoder.clear_tooltip], Source={StaticResource Loc}}" />
-
-                                <Button Grid.Column="2"
-                                    Content="{Binding [base64decoder.save], Source={StaticResource Loc}}"
-                                    Command="{Binding SaveBinaryCommand}"
-                                    IsEnabled="{Binding HasDecodedOutput}"
-                                    Padding="10,6"
-                                    FontWeight="SemiBold"
-                                    Classes="ActionButton NeutralActionButton"
-                                    ToolTip.Tip="{Binding [base64decoder.save_tooltip], Source={StaticResource Loc}}" />
+                            <controls:SaveActionButton Grid.Column="1"
+                                Command="{Binding SaveBinaryCommand}"
+                                IsEnabled="{Binding HasDecodedOutput}"
+                                Width="32"
+                                Height="32"
+                                ToolTipText="{Binding [base64decoder.save_tooltip], Source={StaticResource Loc}}"
+                                Cursor="Hand" />
                         </Grid>
 
                         <Border Grid.Row="1"

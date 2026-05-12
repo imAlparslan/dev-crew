@@ -9,6 +9,8 @@
             Width="{DynamicResource IconButtonSize}"
             Height="{DynamicResource IconButtonSize}"
             Padding="0"
+            CornerRadius="8"
+            BorderThickness="1"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             ToolTip.Tip="{Binding ToolTipText, ElementName=Root}">

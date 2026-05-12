@@ -113,11 +113,10 @@
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
-                                <Button Grid.Column="1"
-                                    Content="{Binding [jsonformatter.browse], Source={StaticResource Loc}}"
-                                        Command="{Binding BrowseLeftFileCommand}"
-                                        Classes="ActionButton PrimaryActionButton"
-                                        Padding="10,6" />
+                                <controls:BrowseActionButton Grid.Column="1"
+                                                             Command="{Binding BrowseLeftFileCommand}"
+                                                             ToolTipText="{Binding [jsonformatter.browse_tooltip], Source={StaticResource Loc}}"
+                                                             Cursor="Hand" />
                             </Grid>
 
                             <TextBox Grid.Row="1"
@@ -151,11 +150,10 @@
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource BrushSecondaryText}"
                                            VerticalAlignment="Center" />
-                                <Button Grid.Column="1"
-                                    Content="{Binding [jsonformatter.browse], Source={StaticResource Loc}}"
-                                        Command="{Binding BrowseRightFileCommand}"
-                                        Classes="ActionButton PrimaryActionButton"
-                                        Padding="10,6" />
+                                <controls:BrowseActionButton Grid.Column="1"
+                                                             Command="{Binding BrowseRightFileCommand}"
+                                                             ToolTipText="{Binding [jsonformatter.browse_tooltip], Source={StaticResource Loc}}"
+                                                             Cursor="Hand" />
                             </Grid>
 
                             <TextBox Grid.Row="1"

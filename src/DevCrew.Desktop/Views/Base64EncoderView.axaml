@@ -34,14 +34,11 @@
                                    Foreground="{StaticResource BrushSecondaryText}"
                                    VerticalAlignment="Center" />
 
-                        <Button Grid.Row="0"
-                            Grid.Column="1"
-                            Content="{Binding [base64encoder.browse], Source={StaticResource Loc}}"
-                                Command="{Binding BrowseFileCommand}"
-                                Padding="10,6"
-                                FontWeight="SemiBold"
-                                Classes="ActionButton PrimaryActionButton"
-                                ToolTip.Tip="{Binding [base64encoder.browse_tooltip], Source={StaticResource Loc}}" />
+                        <controls:BrowseActionButton Grid.Row="0"
+                                                     Grid.Column="1"
+                                                     Command="{Binding BrowseFileCommand}"
+                                                     ToolTipText="{Binding [base64encoder.browse_tooltip], Source={StaticResource Loc}}"
+                                                     Cursor="Hand" />
 
                         <TextBox Grid.Row="1"
                                  Grid.ColumnSpan="2"
