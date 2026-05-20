@@ -4,6 +4,7 @@ using DevCrew.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
+using System.Reflection;
 using TextCopy;
 
 var services = new ServiceCollection();
@@ -23,6 +24,7 @@ var app = new CommandApp(register);
 app.Configure(config =>
 {
     config.SetApplicationName("crew");
+    config.SetApplicationVersion(ResolveCurrentVersion());
 
     config.AddGuidCommands();
 
@@ -36,4 +38,32 @@ Console.CancelKeyPress += (_, e) =>
     cancellationTokenSource.Cancel();
     Console.WriteLine("Cancellation requested...");
 };
+
 return await app.RunAsync(args, cancellationTokenSource.Token);
+
+static string ResolveCurrentVersion()
+{
+    var entryAssembly = Assembly.GetEntryAssembly();
+    if (entryAssembly is null)
+    {
+        return "0.0.0";
+    }
+
+    var informationalVersion = entryAssembly
+        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+        ?.InformationalVersion;
+
+    if (!string.IsNullOrWhiteSpace(informationalVersion))
+    {
+        return informationalVersion.Split('+')[0].Trim();
+    }
+
+    var version = entryAssembly.GetName().Version;
+    if (version is null)
+    {
+        return "0.0.0";
+    }
+
+    var build = version.Build < 0 ? 0 : version.Build;
+    return $"{version.Major}.{version.Minor}.{build}";
+}
