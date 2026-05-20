@@ -8,7 +8,8 @@
                          x:DataType="vm:CreateGuidViewModel"
                          behaviors:FocusClearBehavior.IsEnabled="True"
                          behaviors:LoadedCommandBehavior.Command="{Binding LoadSavedGuidsCommand}">
-    <ScrollViewer>
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
         <Border Padding="{DynamicResource ResponsivePaddingMedium}" Background="{StaticResource BrushSecondaryBackground}">
             <Grid RowDefinitions="Auto,*" MaxWidth="900" HorizontalAlignment="Center">
                 <!-- Top Section - Fixed -->
@@ -34,22 +35,20 @@
                     <Border Grid.Row="3"
                         x:Name="GuidBorder"
                         Padding="6,4"
-                        Width="580"
                         Height="44"
-                        HorizontalAlignment="Left"
+                        HorizontalAlignment="Stretch"
                         ClipToBounds="True"
                         Background="{Binding IsGuidCopied, Converter={StaticResource GuidBackgroundConverter}}"
                         BorderBrush="{Binding IsGuidCopied, Converter={StaticResource GuidBorderConverter}}"
                         BorderThickness="1"
                         CornerRadius="6">
-                        <Grid ColumnDefinitions="46,488,46" Height="32" VerticalAlignment="Center" HorizontalAlignment="Stretch" ClipToBounds="True">
+                        <Grid ColumnDefinitions="46,*,46" Height="32" VerticalAlignment="Center" HorizontalAlignment="Stretch" ClipToBounds="True">
                         <TextBox Grid.Column="1"
                              Text="{Binding CurrentGuid}"
                              AcceptsReturn="False"
                              IsReadOnly="True"
                              Padding="6,4"
                              Height="32"
-                             Width="488"
                                 Classes="GuidDisplayTextBox"
                              HorizontalAlignment="Stretch"
                              FontFamily="{DynamicResource FontMonospace}"
@@ -80,8 +79,8 @@
                     IsVisible="{Binding HasRecentGuids}">
                 <Grid RowDefinitions="Auto,*">
                     <!-- Title with Filter Checkbox -->
-                    <Grid Grid.Row="0"
-                          ColumnDefinitions="*,Auto,Auto"
+                      <Grid Grid.Row="0"
+                          ColumnDefinitions="*,*,Auto"
                           Height="40"
                           Margin="0,0,0,8">
                         <TextBlock Grid.Column="0"
@@ -102,7 +101,9 @@
                                  Classes="CompactInputTextBox"
                                  Margin="0,0,8,0"
                                  CornerRadius="4"
-                                 Width="200"
+                                 MinWidth="120"
+                                 MaxWidth="260"
+                                 HorizontalAlignment="Stretch"
                                  />
                         
                         <CheckBox Grid.Column="2"
@@ -115,9 +116,13 @@
                     <!-- Scrollable Content -->
                     <ScrollViewer Grid.Row="1"
                                   IsVisible="{Binding HasFilteredGuids}"
+                                  HorizontalAlignment="Stretch"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto"
                                   behaviors:ScrollLoadBehavior.LoadMoreCommand="{Binding LoadMoreSavedGuidsCommand}"
                                   behaviors:ScrollLoadBehavior.Threshold="80">
-                        <ItemsControl ItemsSource="{Binding FilteredGuidsByPage}">
+                        <ItemsControl ItemsSource="{Binding FilteredGuidsByPage}"
+                                      HorizontalAlignment="Stretch">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />
@@ -130,8 +135,9 @@
                                         BorderThickness="1"
                                         CornerRadius="4"
                                         Padding="8,6"
-                                        Margin="0,2">
-                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        Margin="0,2"
+                                        HorizontalAlignment="Stretch">
+                                    <Grid ColumnDefinitions="2.2*,1.2*,Auto">
                                         <!-- Column 1: GUID Value -->
                                         <TextBlock Grid.Column="0"
                                                    Text="{Binding GuidValue}"
@@ -139,8 +145,6 @@
                                                    FontSize="{DynamicResource FontSizeDefault}"
                                                    Foreground="{StaticResource BrushSecondaryText}"
                                                    VerticalAlignment="Center"
-                                                   MinWidth="250"
-                                                   MaxWidth="350"
                                                    TextTrimming="CharacterEllipsis"
                                                    Margin="0,0,8,0" />
                                         
@@ -155,6 +159,7 @@
                                                  MaxHeight="28"
                                                  Classes="CompactInputTextBox"
                                                  HorizontalAlignment="Stretch"
+                                                 MinWidth="120"
                                                  CornerRadius="3"
                                                  Margin="0,0,8,0"
                                                  />
