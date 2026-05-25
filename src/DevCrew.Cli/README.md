@@ -47,11 +47,13 @@ OPTIONS:
     -v, --version    Prints version information
 
 COMMANDS:
+    base64  Encode/decode Base64 payloads
     guid    Generate, list, or delete GUIDs
     json    Format and process JSON payloads
     jwt     Decode JWT tokens and validate signatures
 ```
 
+Run `crew base64 --help` to see Base64-specific options.
 Run `crew guid --help` to see subcommand-specific options.
 Run `crew json --help` to see JSON-specific options.
 Run `crew jwt --help` to see JWT-specific options.
@@ -102,6 +104,70 @@ crew guid --save "my-api-key" --copy
 ```
 
 > **Note:** `--save` accepts an optional value. Omitting the value saves the GUID without an associated label.
+
+---
+
+### `crew base64 encode` — Encode To Base64
+
+Encode inline text or file bytes to Base64 output.
+
+```
+USAGE:
+    crew base64 encode (--input <TEXT> | --input-path <PATH>) [OPTIONS]
+
+OPTIONS:
+    -i, --input <TEXT>          Inline text input
+    --input-path <PATH>         Read input bytes from file path
+    -c, --copy                  Copy encoded output to clipboard
+    --save <PATH>               Save encoded output to file
+    -h, --help                  Prints help information
+```
+
+#### Examples
+
+Encode inline text:
+
+```bash
+crew base64 encode -i "hello world"
+```
+
+Encode file contents and save result:
+
+```bash
+crew base64 encode --input-path ./payload.bin --save ./payload.b64
+```
+
+---
+
+### `crew base64 decode` — Decode Base64
+
+Decode Base64 input to text output or binary file output.
+
+```
+USAGE:
+    crew base64 decode (--input <BASE64> | --input-path <PATH>) [OPTIONS]
+
+OPTIONS:
+    -i, --input <BASE64>        Inline Base64 input
+    --input-path <PATH>         Read Base64 input from file path
+    --output-path <PATH>        Save decoded bytes to file
+    -c, --copy                  Copy decoded text output to clipboard (without --output-path)
+    -h, --help                  Prints help information
+```
+
+#### Examples
+
+Decode inline Base64 to text:
+
+```bash
+crew base64 decode -i "aGVsbG8gd29ybGQ="
+```
+
+Decode Base64 file to binary output:
+
+```bash
+crew base64 decode --input-path ./payload.b64 --output-path ./payload.bin
+```
 
 ---
 

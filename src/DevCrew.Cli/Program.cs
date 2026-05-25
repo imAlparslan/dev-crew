@@ -1,4 +1,5 @@
 using DevCrew.Cli;
+using DevCrew.Cli.Base64Commands;
 using DevCrew.Cli.GuidCommands;
 using DevCrew.Cli.JsonCommands;
 using DevCrew.Cli.JwtCommands;
@@ -28,6 +29,7 @@ app.Configure(config =>
     config.SetApplicationName("crew");
     config.SetApplicationVersion(ResolveCurrentVersion());
 
+    config.AddBase64Commands();
     config.AddGuidCommands();
     config.AddJsonCommands();
     config.AddJwtCommands();
