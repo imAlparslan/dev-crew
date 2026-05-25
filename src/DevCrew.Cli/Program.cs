@@ -1,5 +1,6 @@
 using DevCrew.Cli;
 using DevCrew.Cli.GuidCommands;
+using DevCrew.Cli.JsonCommands;
 using DevCrew.Cli.JwtCommands;
 using DevCrew.Core;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,7 @@ app.Configure(config =>
     config.SetApplicationVersion(ResolveCurrentVersion());
 
     config.AddGuidCommands();
+    config.AddJsonCommands();
     config.AddJwtCommands();
 
 

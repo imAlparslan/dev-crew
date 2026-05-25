@@ -48,10 +48,12 @@ OPTIONS:
 
 COMMANDS:
     guid    Generate, list, or delete GUIDs
+    json    Format and process JSON payloads
     jwt     Decode JWT tokens and validate signatures
 ```
 
 Run `crew guid --help` to see subcommand-specific options.
+Run `crew json --help` to see JSON-specific options.
 Run `crew jwt --help` to see JWT-specific options.
 
 ---
@@ -100,6 +102,59 @@ crew guid --save "my-api-key" --copy
 ```
 
 > **Note:** `--save` accepts an optional value. Omitting the value saves the GUID without an associated label.
+
+---
+
+### `crew json format` — Format JSON
+
+Format JSON input as prettified or minified output, optionally sort keys, copy output, or save to file.
+
+```
+USAGE:
+    crew json format (--input <JSON> | --input-path <PATH>) [OPTIONS]
+
+OPTIONS:
+    -i, --input <JSON>          Input JSON string to format
+    --input-path <PATH>         Read input JSON from file path
+    -p, --prettify, --pretify   Prettify JSON output
+    -m, --minify                Minify JSON output
+    -s, --sort                  Sort JSON object keys alphabetically
+    -c, --copy                  Copy formatted output to clipboard
+    --save <PATH>               Save formatted output to file
+    -h, --help                  Prints help information
+```
+
+#### Examples
+
+Prettify JSON:
+
+```bash
+crew json format --input "{\"name\":\"devcrew\",\"enabled\":true}" --prettify
+```
+
+Minify and sort keys:
+
+```bash
+crew json format -i "{\"z\":1,\"a\":2}" -m -s
+```
+
+Prettify and copy output:
+
+```bash
+crew json format -i "{\"name\":\"devcrew\"}" -p -c
+```
+
+Prettify and save output to file:
+
+```bash
+crew json format -i "{\"name\":\"devcrew\"}" -p --save ./formatted.json
+```
+
+Read input from file path:
+
+```bash
+crew json format --input-path ./payload.json --prettify --sort
+```
 
 ---
 
