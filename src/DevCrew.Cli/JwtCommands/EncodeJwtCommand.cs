@@ -7,6 +7,7 @@ using DevCrew.Core.Domain.Models;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using TextCopy;
 
 namespace DevCrew.Cli.JwtCommands;
 
@@ -52,6 +53,10 @@ internal sealed class JwtEncodeCommandSettings : CommandSettings
     [Description("Save effective encode options as a reusable template.")]
     public string? Save { get; init; }
 
+    [CommandOption("--copy")]
+    [Description("Copy the generated token to the clipboard.")]
+    public bool Copy { get; init; }
+
     public override ValidationResult Validate()
     {
         if (ExpirationMinutes is <= 0)
@@ -66,13 +71,15 @@ internal sealed class JwtEncodeCommandSettings : CommandSettings
 internal sealed class JwtEncodeCommand(
     IAnsiConsole console,
     IJwtService jwtService,
-    IJwtBuilderTemplateRepository templateRepository) : AsyncCommand<JwtEncodeCommandSettings>
+    IJwtBuilderTemplateRepository templateRepository,
+    IClipboard clipboardService) : AsyncCommand<JwtEncodeCommandSettings>
 {
     private static readonly string[] SupportedAlgorithms = ["HS256", "HS384", "HS512", "RS256", "RS384", "RS512"];
 
     private readonly IAnsiConsole _console = console;
     private readonly IJwtService _jwtService = jwtService;
     private readonly IJwtBuilderTemplateRepository _templateRepository = templateRepository;
+    private readonly IClipboard _clipboardService = clipboardService;
 
     protected override async Task<int> ExecuteAsync(CommandContext context, JwtEncodeCommandSettings settings, CancellationToken cancellationToken)
     {
@@ -131,6 +138,19 @@ internal sealed class JwtEncodeCommand(
 
         _console.MarkupLine("[green]Token:[/]");
         _console.MarkupLine(Markup.Escape(buildResult.Token));
+
+        if (settings.Copy)
+        {
+            try
+            {
+                await _clipboardService.SetTextAsync(buildResult.Token, cancellationToken);
+                _console.MarkupLine("[green]Token copied to clipboard.[/]");
+            }
+            catch (Exception ex)
+            {
+                _console.MarkupLine($"[yellow]Warning:[/] Unable to copy token to clipboard: {Markup.Escape(ex.Message)}");
+            }
+        }
 
         if (!saveResult.Success)
         {

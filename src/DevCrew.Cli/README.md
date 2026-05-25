@@ -152,6 +152,7 @@ OPTIONS:
     --expiration <MINUTES>       Expiration in minutes (default: 60)
     -c, --claim <CLAIM>          Custom claim (repeatable: key=value, key:value, or key-value)
     --save <NAME>                Save effective options as a template
+    --copy                       Copy generated token to clipboard
     -h, --help                   Prints help information
 ```
 
@@ -179,6 +180,12 @@ Build and save as a reusable template:
 
 ```bash
 crew jwt encode --algorithm RS256 --issuer "devcrew" --save "cli-rs-template"
+```
+
+Build and copy token to clipboard:
+
+```bash
+crew jwt encode --copy
 ```
 
 ---
