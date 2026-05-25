@@ -8,7 +8,8 @@ internal static class JwtCommandsInjections
     {
         config.AddBranch("jwt", jwt =>
         {
-            jwt.SetDefaultCommand<DecodeJwtCommand>();
+            jwt.AddCommand<JwtDecodeCommand>("decode");
+            jwt.AddCommand<JwtEncodeCommand>("encode");
         });
 
         return config;

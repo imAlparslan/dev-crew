@@ -103,16 +103,15 @@ crew guid --save "my-api-key" --copy
 
 ---
 
-### `crew jwt` — Decode a JWT
+### `crew jwt decode` — Decode a JWT
 
-`jwt` is the default branch command for JWT work. Run `crew jwt --decode <TOKEN>` to decode a token.
+Decode a JWT token and optionally validate its signature.
 
 ```
 USAGE:
-    crew jwt [OPTIONS]
+    crew jwt decode <TOKEN> [OPTIONS]
 
 OPTIONS:
-    -d, --decode <TOKEN>   JWT token to decode
     -s, --secret <SECRET>  Secret or public key used to validate the token signature
     -h, --help             Prints help information
 ```
@@ -122,15 +121,65 @@ OPTIONS:
 Decode a token:
 
 ```bash
-crew jwt --decode "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMifQ."
+crew jwt decode "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMifQ."
 ```
 
 Decode and validate the signature with a secret:
 ```bash
-crew jwt --decode "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMifQ." --secret "your-secret-key"
+crew jwt decode "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMifQ." --secret "your-secret-key"
 ```
 
 When `--secret` is provided, the command prints both the decoded token contents and the signature validation result.
+
+---
+
+### `crew jwt encode` — Build a JWT
+
+Build a JWT with algorithm, keys, standard claims, and custom claims.
+
+```
+USAGE:
+    crew jwt encode [OPTIONS]
+
+OPTIONS:
+    -t, --template <NAME>        Use a saved template by name
+    -a, --algorithm <ALGORITHM>  JWT algorithm (HS256, HS384, HS512, RS256, RS384, RS512)
+    -s, --secret <SECRET>        Secret key (HMAC) or private key (RSA)
+    -p, --public-key <KEY>       Public key (RSA)
+    --issuer <ISSUER>            Issuer claim
+    --audience <AUDIENCE>        Audience claim
+    --subject <SUBJECT>          Subject claim
+    --expiration <MINUTES>       Expiration in minutes (default: 60)
+    -c, --claim <CLAIM>          Custom claim (repeatable: key=value, key:value, or key-value)
+    --save <NAME>                Save effective options as a template
+    -h, --help                   Prints help information
+```
+
+#### Examples
+
+Build with defaults:
+
+```bash
+crew jwt encode
+```
+
+Build with algorithm and claims:
+
+```bash
+crew jwt encode --algorithm HS256 --claim role=admin --claim env:dev
+```
+
+Build from a saved template and override expiration:
+
+```bash
+crew jwt encode --template "my-template" --expiration 15
+```
+
+Build and save as a reusable template:
+
+```bash
+crew jwt encode --algorithm RS256 --issuer "devcrew" --save "cli-rs-template"
+```
 
 ---
 

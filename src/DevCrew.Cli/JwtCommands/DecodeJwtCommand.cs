@@ -6,9 +6,9 @@ using Spectre.Console.Cli;
 
 namespace DevCrew.Cli.JwtCommands;
 
-internal class JwtDecodeCommandSettings : CommandSettings
+internal sealed class JwtDecodeCommandSettings : CommandSettings
 {
-    [CommandOption("-d|--decode <TOKEN>")]
+    [CommandArgument(0, "<TOKEN>")]
     [Description("JWT token to decode.")]
     public required string Token { get; init; }
 
@@ -17,7 +17,7 @@ internal class JwtDecodeCommandSettings : CommandSettings
     public string? Secret { get; init; }
 }
 
-internal sealed class DecodeJwtCommand(IAnsiConsole console, IJwtService jwtService) : AsyncCommand<JwtDecodeCommandSettings>
+internal sealed class JwtDecodeCommand(IAnsiConsole console, IJwtService jwtService) : AsyncCommand<JwtDecodeCommandSettings>
 {
     private readonly IAnsiConsole _console = console;
     private readonly IJwtService _jwtService = jwtService;
