@@ -51,12 +51,14 @@ COMMANDS:
     guid    Generate, list, or delete GUIDs
     json    Format and process JSON payloads
     jwt     Decode JWT tokens and validate signatures
+    regex   Run regex matching utilities
 ```
 
 Run `crew base64 --help` to see Base64-specific options.
 Run `crew guid --help` to see subcommand-specific options.
 Run `crew json --help` to see JSON-specific options.
 Run `crew jwt --help` to see JWT-specific options.
+Run `crew regex --help` to see Regex-specific options.
 
 ---
 
@@ -167,6 +169,61 @@ Decode Base64 file to binary output:
 
 ```bash
 crew base64 decode --input-path ./payload.b64 --output-path ./payload.bin
+```
+
+---
+
+### `crew regex match` — Match Regex Pattern
+
+Run regex matching against inline text or file input and display matches/captures.
+
+```
+USAGE:
+    crew regex match (--pattern <PATTERN> | --template <NAME>) (--input <TEXT> | --input-path <PATH>) [OPTIONS]
+
+OPTIONS:
+    -t, --template <NAME>       Use a saved regex pattern template by name
+    -p, --pattern <PATTERN>    Regex pattern
+    -i, --input <TEXT>         Inline input text
+    --input-path <PATH>        Read input text from file path
+    --ignore-case              Enable case-insensitive mode
+    -m, --multiline            Enable multiline mode
+    --save-template <NAME>     Save effective regex pattern as template
+    -c, --copy                 Copy full report to clipboard
+    --save <PATH>              Save full report to file
+    -h, --help                 Prints help information
+```
+
+#### Examples
+
+Inline match:
+
+```bash
+crew regex match -p "cat" -i "cat scatter cat"
+```
+
+Named captures:
+
+```bash
+crew regex match -p "(?<word>\\w+)-(?<digits>\\d+)" -i "item-42"
+```
+
+File input with flags:
+
+```bash
+crew regex match --pattern "^foo" --input-path ./sample.txt --multiline --ignore-case
+```
+
+Save a reusable pattern template:
+
+```bash
+crew regex match --pattern "(?<word>\\w+)-(?<digits>\\d+)" --input "item-42" --save-template word-digit
+```
+
+Use a saved pattern template:
+
+```bash
+crew regex match --template word-digit --input "order-9000"
 ```
 
 ---

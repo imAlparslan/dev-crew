@@ -3,6 +3,7 @@ using DevCrew.Cli.Base64Commands;
 using DevCrew.Cli.GuidCommands;
 using DevCrew.Cli.JsonCommands;
 using DevCrew.Cli.JwtCommands;
+using DevCrew.Cli.RegexCommands;
 using DevCrew.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +34,7 @@ app.Configure(config =>
     config.AddGuidCommands();
     config.AddJsonCommands();
     config.AddJwtCommands();
+    config.AddRegexCommands();
 
 
 });
