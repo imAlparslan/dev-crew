@@ -158,6 +158,44 @@ crew json format --input-path ./payload.json --prettify --sort
 
 ---
 
+### `crew json diff` — Compare JSON
+
+Compare two JSON inputs and print a summary with path-level differences.
+
+```
+USAGE:
+    crew json diff [OPTIONS]
+
+OPTIONS:
+    -l, --left-input <JSON>         Left JSON input string
+    --left-input-path <PATH>        Read left JSON input from file path
+    -r, --right-input <JSON>        Right JSON input string
+    --right-input-path <PATH>       Read right JSON input from file path
+    -h, --help                      Prints help information
+```
+
+#### Examples
+
+Compare inline JSON values:
+
+```bash
+crew json diff -l "{\"a\":1}" -r "{\"a\":2}"
+```
+
+Compare file-based JSON inputs:
+
+```bash
+crew json diff --left-input-path ./left.json --right-input-path ./right.json
+```
+
+Compare mixed inputs:
+
+```bash
+crew json diff --left-input-path ./left.json -r "{\"a\":1,\"b\":2}"
+```
+
+---
+
 ### `crew jwt decode` — Decode a JWT
 
 Decode a JWT token and optionally validate its signature.

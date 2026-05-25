@@ -9,6 +9,7 @@ internal static class JsonCommandsInjections
         config.AddBranch("json", json =>
         {
             json.AddCommand<FormatJsonCommand>("format");
+            json.AddCommand<DiffJsonCommand>("diff");
         });
 
         return config;
