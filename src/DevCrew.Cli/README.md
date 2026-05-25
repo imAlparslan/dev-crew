@@ -1,6 +1,6 @@
 # DevCrew CLI
 
-`crew` is a command-line companion tool for the DevCrew desktop application. It provides quick access to productivity utilities — such as GUID generation and management — directly from your terminal.
+`crew` is a command-line companion tool for the DevCrew desktop application. It provides quick access to productivity utilities — such as GUID generation, JWT decoding, and token validation — directly from your terminal.
 
 ---
 
@@ -48,9 +48,11 @@ OPTIONS:
 
 COMMANDS:
     guid    Generate, list, or delete GUIDs
+    jwt     Decode JWT tokens and validate signatures
 ```
 
 Run `crew guid --help` to see subcommand-specific options.
+Run `crew jwt --help` to see JWT-specific options.
 
 ---
 
@@ -98,6 +100,37 @@ crew guid --save "my-api-key" --copy
 ```
 
 > **Note:** `--save` accepts an optional value. Omitting the value saves the GUID without an associated label.
+
+---
+
+### `crew jwt` — Decode a JWT
+
+`jwt` is the default branch command for JWT work. Run `crew jwt --decode <TOKEN>` to decode a token.
+
+```
+USAGE:
+    crew jwt [OPTIONS]
+
+OPTIONS:
+    -d, --decode <TOKEN>   JWT token to decode
+    -s, --secret <SECRET>  Secret or public key used to validate the token signature
+    -h, --help             Prints help information
+```
+
+#### Examples
+
+Decode a token:
+
+```bash
+crew jwt --decode "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMifQ."
+```
+
+Decode and validate the signature with a secret:
+```bash
+crew jwt --decode "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMifQ." --secret "your-secret-key"
+```
+
+When `--secret` is provided, the command prints both the decoded token contents and the signature validation result.
 
 ---
 
