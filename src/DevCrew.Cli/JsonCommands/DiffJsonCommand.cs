@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using DevCrew.Cli.Results;
 using DevCrew.Core.Application.Services;
+using DevCrew.Core.Domain.Results;
 using DevCrew.Core.Shared.Enums;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -24,6 +25,34 @@ internal sealed class DiffJsonCommandSettings : CommandSettings
     [CommandOption("--right-input-path <PATH>")]
     [Description("Read right JSON input from file path.")]
     public string? RightInputPath { get; init; }
+
+    [CommandOption("--ignore-object-property-order")]
+    [Description("Ignore object property ordering differences.")]
+    public bool IgnoreObjectPropertyOrder { get; init; } = true;
+
+    [CommandOption("--respect-object-property-order")]
+    [Description("Treat object property ordering differences as meaningful.")]
+    public bool RespectObjectPropertyOrder { get; init; }
+
+    [CommandOption("--treat-array-order-as-significant")]
+    [Description("Treat array item ordering differences as meaningful.")]
+    public bool TreatArrayOrderAsSignificant { get; init; } = true;
+
+    [CommandOption("--ignore-array-order")]
+    [Description("Ignore array item ordering differences.")]
+    public bool IgnoreArrayOrder { get; init; }
+
+    [CommandOption("--ignore-whitespace-differences")]
+    [Description("Ignore formatting and whitespace-only JSON differences.")]
+    public bool IgnoreWhitespaceDifferences { get; init; } = true;
+
+    [CommandOption("--respect-whitespace-differences")]
+    [Description("Treat formatting and whitespace-only JSON differences as meaningful.")]
+    public bool RespectWhitespaceDifferences { get; init; }
+
+    [CommandOption("--treat-null-and-empty-string-as-equal")]
+    [Description("Treat null and empty string values as equivalent.")]
+    public bool TreatNullAndEmptyStringAsEqual { get; init; }
 
     public override ValidationResult Validate()
     {
@@ -52,6 +81,21 @@ internal sealed class DiffJsonCommandSettings : CommandSettings
             return ValidationResult.Error("Use only one right input source: --right-input <JSON> or --right-input-path <PATH>.");
         }
 
+        if (IgnoreObjectPropertyOrder && RespectObjectPropertyOrder)
+        {
+            return ValidationResult.Error("Use only one object property order mode: --ignore-object-property-order or --respect-object-property-order.");
+        }
+
+        if (TreatArrayOrderAsSignificant && IgnoreArrayOrder)
+        {
+            return ValidationResult.Error("Use only one array order mode: --treat-array-order-as-significant or --ignore-array-order.");
+        }
+
+        if (IgnoreWhitespaceDifferences && RespectWhitespaceDifferences)
+        {
+            return ValidationResult.Error("Use only one whitespace mode: --ignore-whitespace-differences or --respect-whitespace-differences.");
+        }
+
         return ValidationResult.Success();
     }
 }
@@ -77,7 +121,24 @@ internal sealed class DiffJsonCommand(IAnsiConsole console, IJsonDiffService jso
             return Result.Error;
         }
 
-        var diffResult = _jsonDiffService.Compare(leftResult.Input ?? string.Empty, rightResult.Input ?? string.Empty);
+        var options = new JsonDiffOptions
+        {
+            IgnoreObjectPropertyOrder = settings.RespectObjectPropertyOrder
+                ? false
+                : settings.IgnoreObjectPropertyOrder,
+            TreatArrayOrderAsSignificant = settings.IgnoreArrayOrder
+                ? false
+                : settings.TreatArrayOrderAsSignificant,
+            IgnoreWhitespaceDifferences = settings.RespectWhitespaceDifferences
+                ? false
+                : settings.IgnoreWhitespaceDifferences,
+            TreatNullAndEmptyStringAsEqual = settings.TreatNullAndEmptyStringAsEqual
+        };
+
+        var diffResult = _jsonDiffService.Compare(
+            leftResult.Input ?? string.Empty,
+            rightResult.Input ?? string.Empty,
+            options);
         if (!diffResult.IsValid)
         {
             _console.MarkupLine($"[red]Error:[/] {Markup.Escape(diffResult.ErrorMessage ?? "Unable to compare JSON inputs.")}");

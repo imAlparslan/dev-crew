@@ -10,6 +10,7 @@ internal static class GuidCommandsInjections
         {
             guid.SetDefaultCommand<CreateGuidCommands>();
             guid.AddCommand<ListGuidCommands>("list");
+            guid.AddCommand<UpdateGuidNotesCommand>("update-notes");
             guid.AddCommand<DeleteGuidCommand>("delete");
 
         });

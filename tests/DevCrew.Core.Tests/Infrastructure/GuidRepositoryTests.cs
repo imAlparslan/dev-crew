@@ -315,4 +315,148 @@ public sealed class GuidRepositoryTests : IDisposable
     }
 
     #endregion
+
+    #region GetGuidByIdAsync Tests
+
+    [Fact]
+    public async Task GetGuidByIdAsync_ReturnGuid_WhenIdMatches()
+    {
+        // Arrange
+        var guidValue = Guid.NewGuid().ToString();
+        var notes = "Test notes";
+        var saved = await _repository.SaveGuidAsync(guidValue, notes);
+
+        // Act
+        var result = await _repository.GetGuidByIdAsync(saved.Id);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.Id.ShouldBe(saved.Id);
+        result.GuidValue.ShouldBe(guidValue);
+        result.Notes.ShouldBe(notes);
+    }
+
+    [Fact]
+    public async Task GetGuidByIdAsync_ReturnNull_WhenIdNotFound()
+    {
+        // Act
+        var result = await _repository.GetGuidByIdAsync(99999);
+
+        // Assert
+        result.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task GetGuidByIdAsync_ReturnCorrectRecord_WhenMultipleGuidsExist()
+    {
+        // Arrange
+        var guid1 = await _repository.SaveGuidAsync(Guid.NewGuid().ToString(), "First");
+        var guid2 = await _repository.SaveGuidAsync(Guid.NewGuid().ToString(), "Second");
+        var guid3 = await _repository.SaveGuidAsync(Guid.NewGuid().ToString(), "Third");
+
+        // Act
+        var result = await _repository.GetGuidByIdAsync(guid2.Id);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.Notes.ShouldBe("Second");
+    }
+
+    #endregion
+
+    #region GetGuidByValueAndNotes Tests
+
+    [Fact]
+    public async Task GetGuidByValueAndNotes_ReturnGuid_WhenValueMatches()
+    {
+        // Arrange
+        var guidValue = "550e8400-e29b-41d4-a716-446655440000";
+        var notes = "Production API Key";
+        await _repository.SaveGuidAsync(guidValue, notes);
+
+        // Act
+        var result = await _repository.GetGuidByValueAndNotes(guidValue, notes);
+
+        // Assert
+        result.ShouldNotBeEmpty();
+        result[0].GuidValue.ShouldBe(guidValue);
+        result[0].Notes.ShouldBe(notes);
+    }
+
+    [Fact]
+    public async Task GetGuidByValueAndNotes_ReturnEmpty_WhenValueNotFound()
+    {
+        // Arrange
+        await _repository.SaveGuidAsync(Guid.NewGuid().ToString(), "existing");
+
+        // Act
+        var result = await _repository.GetGuidByValueAndNotes("nonexistent-guid", "existing");
+
+        // Assert
+        result.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public async Task GetGuidByValueAndNotes_ReturnEmpty_WhenNotesNotFound()
+    {
+        // Arrange
+        var guidValue = Guid.NewGuid().ToString();
+        await _repository.SaveGuidAsync(guidValue, "correct-notes");
+
+        // Act
+        var result = await _repository.GetGuidByValueAndNotes(guidValue, "wrong-notes");
+
+        // Assert
+        result.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public async Task GetGuidByValueAndNotes_ReturnMultiple_WhenMultipleMatchesExist()
+    {
+        // Arrange
+        var guidValue = "550e8400-e29b-41d4-a716-446655440000";
+        var notes = "Shared Notes";
+        await _repository.SaveGuidAsync(guidValue, notes);
+        await _repository.SaveGuidAsync(guidValue, notes);
+        await _repository.SaveGuidAsync(Guid.NewGuid().ToString(), notes);
+
+        // Act
+        var result = await _repository.GetGuidByValueAndNotes(guidValue, notes);
+
+        // Assert
+        result.Count.ShouldBe(2);
+        result.All(g => g.GuidValue == guidValue).ShouldBeTrue();
+        result.All(g => g.Notes == notes).ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task GetGuidByValueAndNotes_ThrowException_WhenBothValueAndNotesNull()
+    {
+        // Arrange
+        await _repository.SaveGuidAsync(Guid.NewGuid().ToString(), "some notes");
+
+        // Act & Assert
+        await Should.ThrowAsync<ArgumentException>(
+            () => _repository.GetGuidByValueAndNotes(null, null)
+        );
+    }
+
+    [Fact]
+    public async Task GetGuidByValueAndNotes_FilterByValueOnly_WhenNotesIsNull()
+    {
+        // Arrange
+        var guidValue = Guid.NewGuid().ToString();
+        await _repository.SaveGuidAsync(guidValue, "notes1");
+        await _repository.SaveGuidAsync(guidValue, "notes2");
+        await _repository.SaveGuidAsync(Guid.NewGuid().ToString(), "notes1");
+
+        // Act
+        var result = await _repository.GetGuidByValueAndNotes(guidValue, null);
+
+        // Assert
+        result.Count.ShouldBeGreaterThanOrEqualTo(2);
+        result.All(g => g.GuidValue == guidValue).ShouldBeTrue();
+    }
+
+    #endregion
 }

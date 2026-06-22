@@ -30,7 +30,7 @@ internal class ListGuidCommands(IAnsiConsole console, IGuidRepository guidReposi
         {
             var guidText = Regex.Replace(guid.GuidValue, settings.Search ?? string.Empty, match => $"[yellow]{match.Value}[/]");
             var noteText = Regex.Replace(guid.Notes ?? string.Empty, settings.Search ?? string.Empty, match => $"[yellow]{match.Value}[/]");
-            _console.MarkupLine($"[green]Guid:[/] {guidText} [green]Notes:[/] {noteText}");
+            _console.MarkupLine($"[green]Id:[/] {guid.Id} [green]Guid:[/] {guidText} [green]Notes:[/] {noteText}");
         }
         return Result.Success;
     }

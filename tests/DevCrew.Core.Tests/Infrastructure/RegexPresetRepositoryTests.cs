@@ -305,5 +305,103 @@ public sealed class RegexPresetRepositoryTests : IDisposable
         result.Pattern.ShouldBe(@"[a-z]+");
     }
 
+    [Fact]
+    public async Task UpdateAsync_PreserveCreatedAt_WhenUpdatingPreset()
+    {
+        // Arrange
+        var preset = RegexPresetTestFactory.CreateTestPreset("PreserveTimestamp");
+        var saved = await _repository.SaveAsync(preset);
+        var originalCreatedAt = saved.CreatedAt;
+        System.Threading.Thread.Sleep(10);
+
+        // Act
+        var result = await _repository.UpdateAsync(saved.Id, @"[0-9]+", true, false);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.CreatedAt.ShouldBe(originalCreatedAt);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_UpdateFlagsCombinations_WhenMultipleFlagsChange()
+    {
+        // Arrange
+        var preset = RegexPresetTestFactory.CreateTestPreset();
+        preset.IgnoreCase = false;
+        preset.Multiline = false;
+        var saved = await _repository.SaveAsync(preset);
+
+        // Act - Set only IgnoreCase to true
+        var result1 = await _repository.UpdateAsync(saved.Id, @"\d+", ignoreCase: true, multiline: false);
+
+        // Assert
+        result1.ShouldNotBeNull();
+        result1.IgnoreCase.ShouldBeTrue();
+        result1.Multiline.ShouldBeFalse();
+
+        // Act - Now disable IgnoreCase, enable Multiline
+        var result2 = await _repository.UpdateAsync(result1.Id, @"\w+", ignoreCase: false, multiline: true);
+
+        // Assert
+        result2.ShouldNotBeNull();
+        result2.IgnoreCase.ShouldBeFalse();
+        result2.Multiline.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_UpdatePatternOnly_WhenFlagsUnchanged()
+    {
+        // Arrange
+        var preset = RegexPresetTestFactory.CreateTestPreset();
+        preset.IgnoreCase = true;
+        preset.Multiline = true;
+        var saved = await _repository.SaveAsync(preset);
+        var originalIgnoreCase = saved.IgnoreCase;
+        var originalMultiline = saved.Multiline;
+
+        // Act
+        var result = await _repository.UpdateAsync(saved.Id, @"[A-Z]+", originalIgnoreCase, originalMultiline);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.Pattern.ShouldBe(@"[A-Z]+");
+        result.IgnoreCase.ShouldBe(originalIgnoreCase);
+        result.Multiline.ShouldBe(originalMultiline);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_SwitchAllFlagsOff_WhenPresetHasAllFlagsOn()
+    {
+        // Arrange
+        var preset = RegexPresetTestFactory.CreateTestPreset("AllFlagsOn");
+        preset.IgnoreCase = true;
+        preset.Multiline = true;
+        var saved = await _repository.SaveAsync(preset);
+
+        // Act
+        var result = await _repository.UpdateAsync(saved.Id, saved.Pattern, false, false);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.IgnoreCase.ShouldBeFalse();
+        result.Multiline.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ComplexPatternUpdate_WithSpecialCharacters()
+    {
+        // Arrange
+        var preset = RegexPresetTestFactory.CreateTestPreset();
+        var saved = await _repository.SaveAsync(preset);
+        var complexPattern = @"(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})";
+
+        // Act
+        var result = await _repository.UpdateAsync(saved.Id, complexPattern, true, false);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.Pattern.ShouldBe(complexPattern);
+    }
+
     #endregion
 }

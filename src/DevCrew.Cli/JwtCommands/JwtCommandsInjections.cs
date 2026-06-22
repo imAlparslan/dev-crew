@@ -10,6 +10,9 @@ internal static class JwtCommandsInjections
         {
             jwt.AddCommand<JwtDecodeCommand>("decode");
             jwt.AddCommand<JwtEncodeCommand>("encode");
+            jwt.AddCommand<JwtListTemplatesCommand>("list-templates");
+            jwt.AddCommand<JwtUpdateTemplateCommand>("update-template");
+            jwt.AddCommand<JwtDeleteTemplateCommand>("delete-template");
         });
 
         return config;

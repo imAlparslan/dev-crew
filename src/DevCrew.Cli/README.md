@@ -48,10 +48,10 @@ OPTIONS:
 
 COMMANDS:
     base64  Encode/decode Base64 payloads
-    guid    Generate, list, or delete GUIDs
+    guid    Generate, list, update, or delete GUIDs
     json    Format and process JSON payloads
-    jwt     Decode JWT tokens and validate signatures
-    regex   Run regex matching utilities
+    jwt     Decode, build, and manage JWT templates
+    regex   Run regex matching and preset utilities
 ```
 
 Run `crew base64 --help` to see Base64-specific options.
@@ -228,6 +228,96 @@ crew regex match --template word-digit --input "order-9000"
 
 ---
 
+### `crew regex list` — List Saved Regex Presets
+
+List saved regex presets and optionally filter them by name.
+
+```
+USAGE:
+    crew regex list [OPTIONS]
+
+OPTIONS:
+    -n, --name <TEXT>  Filter presets by name
+    -h, --help         Prints help information
+```
+
+#### Examples
+
+List all presets:
+
+```bash
+crew regex list
+```
+
+Filter presets by name:
+
+```bash
+crew regex list --name word
+```
+
+---
+
+### `crew regex update` — Update A Saved Regex Preset
+
+Update a saved regex preset by name. You can replace the pattern, switch case sensitivity, and toggle multiline mode.
+
+```
+USAGE:
+    crew regex update <NAME> [OPTIONS]
+
+OPTIONS:
+    -p, --pattern <PATTERN>  Replace the preset pattern
+    --ignore-case            Enable case-insensitive matching
+    --case-sensitive         Disable case-insensitive matching
+    -m, --multiline          Enable multiline mode
+    --singleline-input       Disable multiline mode
+    -h, --help               Prints help information
+```
+
+#### Examples
+
+Replace the saved pattern:
+
+```bash
+crew regex update word-digit --pattern "(?<word>\\w+)-(?<digits>\\d+)"
+```
+
+Enable case-insensitive and multiline matching:
+
+```bash
+crew regex update word-digit --ignore-case --multiline
+```
+
+Disable case-insensitive matching:
+
+```bash
+crew regex update word-digit --case-sensitive
+```
+
+---
+
+### `crew regex delete` — Delete A Saved Regex Preset
+
+Delete a saved regex preset by name.
+
+```
+USAGE:
+    crew regex delete <NAME>
+
+OPTIONS:
+    -h, --help  Prints help information
+```
+
+#### Examples
+
+Delete a preset:
+
+```bash
+crew regex delete word-digit
+```
+
+---
+
 ### `crew json format` — Format JSON
 
 Format JSON input as prettified or minified output, optionally sort keys, copy output, or save to file.
@@ -294,6 +384,16 @@ OPTIONS:
     --left-input-path <PATH>        Read left JSON input from file path
     -r, --right-input <JSON>        Right JSON input string
     --right-input-path <PATH>       Read right JSON input from file path
+    --ignore-object-property-order  Ignore object property ordering differences (default)
+    --respect-object-property-order Treat object property ordering differences as meaningful
+    --treat-array-order-as-significant
+                                    Treat array item ordering differences as meaningful (default)
+    --ignore-array-order            Ignore array item ordering differences
+    --ignore-whitespace-differences Ignore formatting and whitespace-only differences (default)
+    --respect-whitespace-differences
+                                    Treat formatting and whitespace-only differences as meaningful
+    --treat-null-and-empty-string-as-equal
+                                    Treat null and empty string values as equivalent
     -h, --help                      Prints help information
 ```
 
@@ -315,6 +415,18 @@ Compare mixed inputs:
 
 ```bash
 crew json diff --left-input-path ./left.json -r "{\"a\":1,\"b\":2}"
+```
+
+Ignore array ordering:
+
+```bash
+crew json diff -l "{\"items\":[1,2,3]}" -r "{\"items\":[3,2,1]}" --ignore-array-order
+```
+
+Treat `null` and empty string as equal:
+
+```bash
+crew json diff -l "{\"value\":null}" -r "{\"value\":\"\"}" --treat-null-and-empty-string-as-equal
 ```
 
 ---
@@ -406,6 +518,102 @@ crew jwt encode --copy
 
 ---
 
+### `crew jwt list-templates` — List Saved JWT Templates
+
+List saved JWT templates and optionally filter them by name.
+
+```
+USAGE:
+    crew jwt list-templates [OPTIONS]
+
+OPTIONS:
+    -n, --name <TEXT>  Filter templates by name
+    -h, --help         Prints help information
+```
+
+#### Examples
+
+List all saved templates:
+
+```bash
+crew jwt list-templates
+```
+
+Filter templates by name:
+
+```bash
+crew jwt list-templates --name cli
+```
+
+---
+
+### `crew jwt update-template` — Update A Saved JWT Template
+
+Update a saved JWT template by name. You can rename the template, change token settings, and replace custom claims.
+
+```
+USAGE:
+    crew jwt update-template <NAME> [OPTIONS]
+
+OPTIONS:
+    --template-name <NAME>  Rename the template
+    -a, --algorithm <ALGORITHM>
+                            JWT algorithm (HS256, HS384, HS512, RS256, RS384, RS512)
+    -s, --secret <SECRET>   Secret key (HMAC) or private key (RSA)
+    -p, --public-key <KEY>  Public key (RSA)
+    --issuer <ISSUER>       Issuer claim
+    --audience <AUDIENCE>   Audience claim
+    --subject <SUBJECT>     Subject claim
+    --expiration <MINUTES>  Expiration in minutes
+    -c, --claim <CLAIM>     Replace claims with the provided set (repeatable)
+    --clear-claims          Remove all custom claims
+    -h, --help              Prints help information
+```
+
+#### Examples
+
+Update expiration and subject:
+
+```bash
+crew jwt update-template my-template --expiration 15 --subject "service-token"
+```
+
+Replace claims:
+
+```bash
+crew jwt update-template my-template --claim role=admin --claim env=prod
+```
+
+Rename a template:
+
+```bash
+crew jwt update-template my-template --template-name my-template-v2
+```
+
+---
+
+### `crew jwt delete-template` — Delete A Saved JWT Template
+
+Delete a saved JWT template by name.
+
+```
+USAGE:
+    crew jwt delete-template <NAME>
+
+OPTIONS:
+    -h, --help  Prints help information
+```
+
+#### Examples
+
+Delete a template:
+
+```bash
+crew jwt delete-template my-template
+```
+
+---
+
 ### `crew guid list` — List saved GUIDs
 
 ```
@@ -424,6 +632,7 @@ List the 5 most recent GUIDs:
 
 ```bash
 crew guid list
+# Id: 21 Guid: 1c516271-9404-47d4-8e64-de4233a3fb02 Notes: my-api-key
 ```
 
 List the 10 most recent GUIDs:
@@ -442,6 +651,36 @@ Combine count and search:
 
 ```bash
 crew guid list --count 20 --search "prod"
+```
+
+---
+
+### `crew guid update-notes` — Update Saved GUID Notes
+
+Update or clear notes for a saved GUID by its record ID.
+
+```
+USAGE:
+    crew guid update-notes <ID> [OPTIONS]
+
+OPTIONS:
+    -n, --notes <TEXT>  New notes value
+    --clear-notes       Remove notes from the saved GUID
+    -h, --help          Prints help information
+```
+
+#### Examples
+
+Update notes by ID:
+
+```bash
+crew guid update-notes 21 --notes "rotated-prod-key"
+```
+
+Clear notes by ID:
+
+```bash
+crew guid update-notes 21 --clear-notes
 ```
 
 ---

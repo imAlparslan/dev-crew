@@ -311,4 +311,168 @@ public sealed class JwtBuilderTemplateRepositoryTests : IDisposable
     }
 
     #endregion
+
+    #region SaveAsync Full Field Coverage Tests
+
+    [Fact]
+    public async Task SaveAsync_PersistAllFields_WhenTemplateIsComplete()
+    {
+        // Arrange
+        var template = new JwtBuilderTemplate
+        {
+            TemplateName = "CompleteTemplate",
+            Algorithm = "HS512",
+            Secret = "super-secret-key",
+            Issuer = "my-issuer",
+            Audience = "my-audience",
+            Subject = "my-subject",
+            ExpirationMinutes = 120,
+            IncludeExpiration = true,
+            CustomClaimsJson = "{\"role\":\"admin\",\"department\":\"IT\"}",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        // Act
+        var result = await _repository.SaveAsync(template);
+
+        // Assert
+        result.Secret.ShouldBe("super-secret-key");
+        result.Issuer.ShouldBe("my-issuer");
+        result.Audience.ShouldBe("my-audience");
+        result.Subject.ShouldBe("my-subject");
+        result.ExpirationMinutes.ShouldBe(120);
+        result.IncludeExpiration.ShouldBeTrue();
+        result.CustomClaimsJson.ShouldBe("{\"role\":\"admin\",\"department\":\"IT\"}");
+    }
+
+    #endregion
+
+    #region UpdateAsync Partial Field Update Tests
+
+    [Fact]
+    public async Task UpdateAsync_UpdateSingleField_WhenOnlyOneFieldChanges()
+    {
+        // Arrange
+        var template = CreateTestTemplate("Original");
+        var saved = await _repository.SaveAsync(template);
+        var originalIssuer = saved.Issuer;
+        saved.Audience = "new-audience";
+
+        // Act
+        var result = await _repository.UpdateAsync(saved);
+
+        // Assert
+        result.ShouldBeTrue();
+        var updated = await _repository.GetByIdAsync(saved.Id);
+        updated.ShouldNotBeNull();
+        updated.Audience.ShouldBe("new-audience");
+        updated.Issuer.ShouldBe(originalIssuer); // Other fields should remain unchanged
+    }
+
+    [Fact]
+    public async Task UpdateAsync_UpdateCustomClaimsJson_WhenClaimsChange()
+    {
+        // Arrange
+        var template = CreateTestTemplate("WithClaims");
+        template.CustomClaimsJson = "{\"oldClaim\":\"oldValue\"}";
+        var saved = await _repository.SaveAsync(template);
+        saved.CustomClaimsJson = "{\"newClaim\":\"newValue\",\"role\":\"admin\"}";
+
+        // Act
+        var result = await _repository.UpdateAsync(saved);
+
+        // Assert
+        result.ShouldBeTrue();
+        var updated = await _repository.GetByIdAsync(saved.Id);
+        updated.ShouldNotBeNull();
+        updated.CustomClaimsJson.ShouldBe("{\"newClaim\":\"newValue\",\"role\":\"admin\"}");
+    }
+
+    [Fact]
+    public async Task UpdateAsync_PreserveCreatedAt_WhenUpdatingTemplate()
+    {
+        // Arrange
+        var template = CreateTestTemplate("PreserveTimestamp");
+        var saved = await _repository.SaveAsync(template);
+        var originalCreatedAt = saved.CreatedAt;
+        saved.Issuer = "updated-issuer";
+        System.Threading.Thread.Sleep(10);
+
+        // Act
+        var result = await _repository.UpdateAsync(saved);
+
+        // Assert
+        result.ShouldBeTrue();
+        var updated = await _repository.GetByIdAsync(saved.Id);
+        updated.ShouldNotBeNull();
+        updated.CreatedAt.ShouldBe(originalCreatedAt); // CreatedAt should not change
+    }
+
+    [Fact]
+    public async Task UpdateAsync_PreserveId_WhenUpdatingTemplate()
+    {
+        // Arrange
+        var template = CreateTestTemplate("PreserveId");
+        var saved = await _repository.SaveAsync(template);
+        var originalId = saved.Id;
+        saved.Algorithm = "RS256";
+        saved.Issuer = "new-issuer";
+
+        // Act
+        var result = await _repository.UpdateAsync(saved);
+
+        // Assert
+        result.ShouldBeTrue();
+        var updated = await _repository.GetByIdAsync(originalId);
+        updated.ShouldNotBeNull();
+        updated.Id.ShouldBe(originalId);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_UpdateMultipleFields_WhenBatchEditOccurs()
+    {
+        // Arrange
+        var template = CreateTestTemplate("Batch");
+        var saved = await _repository.SaveAsync(template);
+        saved.Algorithm = "RS512";
+        saved.Issuer = "batch-issuer";
+        saved.Audience = "batch-audience";
+        saved.ExpirationMinutes = 240;
+
+        // Act
+        var result = await _repository.UpdateAsync(saved);
+
+        // Assert
+        result.ShouldBeTrue();
+        var updated = await _repository.GetByIdAsync(saved.Id);
+        updated.ShouldNotBeNull();
+        updated.Algorithm.ShouldBe("RS512");
+        updated.Issuer.ShouldBe("batch-issuer");
+        updated.Audience.ShouldBe("batch-audience");
+        updated.ExpirationMinutes.ShouldBe(240);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_UpdateExpirationSettings_WhenIncludeExpirationToggled()
+    {
+        // Arrange
+        var template = CreateTestTemplate("Expiration");
+        template.IncludeExpiration = true;
+        template.ExpirationMinutes = 60;
+        var saved = await _repository.SaveAsync(template);
+        saved.IncludeExpiration = false;
+        saved.ExpirationMinutes = 0;
+
+        // Act
+        var result = await _repository.UpdateAsync(saved);
+
+        // Assert
+        result.ShouldBeTrue();
+        var updated = await _repository.GetByIdAsync(saved.Id);
+        updated.ShouldNotBeNull();
+        updated.IncludeExpiration.ShouldBeFalse();
+        updated.ExpirationMinutes.ShouldBe(0);
+    }
+
+    #endregion
 }
