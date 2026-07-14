@@ -41,16 +41,26 @@ public interface IGuidRepository
     /// <param name="take">Number of records to take</param>
     /// <param name="searchQuery">Optional search term to filter by GUID value or notes</param>
     /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="prefixSearch">When true, applies prefix matching instead of contains matching.</param>
     /// <returns>List of GuidHistory records matching the criteria</returns>
-    Task<List<GuidHistory>> GetGuidsPagedAsync(int skip, int take, string? searchQuery = null, CancellationToken cancellationToken = default);
+    Task<List<GuidHistory>> GetGuidsPagedAsync(
+        int skip,
+        int take,
+        string? searchQuery = null,
+        CancellationToken cancellationToken = default,
+        bool prefixSearch = false);
 
     /// <summary>
     /// Gets total count of saved GUIDs, optionally filtered by search query.
     /// </summary>
     /// <param name="searchQuery">Optional search term to filter by GUID value or notes</param>
     /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="prefixSearch">When true, applies prefix matching instead of contains matching.</param>
     /// <returns>Total count of GUIDs matching the criteria</returns>
-    Task<int> GetGuidCountAsync(string? searchQuery = null, CancellationToken cancellationToken = default);
+    Task<int> GetGuidCountAsync(
+        string? searchQuery = null,
+        CancellationToken cancellationToken = default,
+        bool prefixSearch = false);
 
     /// <summary>
     /// Gets a specific GUID by its ID.
@@ -66,7 +76,12 @@ public interface IGuidRepository
     /// <param name="value">The starting value to filter GUIDs</param>
     /// <param name="notes">The notes to filter GUIDs</param>
     /// <param name="cancellationToken">Cancellation token</param>
+    /// <param name="maxResults">Optional maximum number of rows to return. Null means no explicit limit.</param>
     /// <returns>List of GuidHistory records matching the starting value and notes</returns>
-    Task<List<GuidHistory>> GetGuidByValueAndNotes(string? value, string? notes, CancellationToken cancellationToken = default);
+    Task<List<GuidHistory>> GetGuidByValueAndNotes(
+        string? value,
+        string? notes,
+        CancellationToken cancellationToken = default,
+        int? maxResults = null);
 
 }

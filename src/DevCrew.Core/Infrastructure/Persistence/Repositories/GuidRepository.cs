@@ -38,34 +38,49 @@ public class GuidRepository : IGuidRepository
     /// <inheritdoc/>
     public async Task<bool> DeleteGuidAsync(int id, CancellationToken cancellationToken = default)
     {
-        _ = await _dbContext.GuidHistories
+        var affectedRows = await _dbContext.GuidHistories
                     .Where(g => g.Id == id)
                     .ExecuteDeleteAsync(cancellationToken);
 
-        return true;
+        return affectedRows > 0;
     }
 
     /// <inheritdoc/>
     public async Task<bool> UpdateGuidNotesAsync(int id, string? notes, CancellationToken cancellationToken = default)
     {
-        _ = await _dbContext.GuidHistories
+        var affectedRows = await _dbContext.GuidHistories
                     .Where(g => g.Id == id)
                     .ExecuteUpdateAsync(setter => setter.SetProperty(g => g.Notes, notes), cancellationToken);
 
-        return true;
+        return affectedRows > 0;
     }
 
     /// <inheritdoc/>
-    public async Task<List<GuidHistory>> GetGuidsPagedAsync(int skip, int take, string? searchQuery = null, CancellationToken cancellationToken = default)
+    public async Task<List<GuidHistory>> GetGuidsPagedAsync(
+        int skip,
+        int take,
+        string? searchQuery = null,
+        CancellationToken cancellationToken = default,
+        bool prefixSearch = false)
     {
         var query = _dbContext.GuidHistories.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
-            // Search in both GUID value and notes
-            query = query.Where(g =>
-                g.GuidValue.Contains(searchQuery) ||
-                (g.Notes != null && g.Notes.Contains(searchQuery)));
+            var normalizedQuery = searchQuery.Trim();
+
+            if (prefixSearch)
+            {
+                query = query.Where(g =>
+                    g.GuidValue.StartsWith(normalizedQuery) ||
+                    (g.Notes != null && g.Notes.StartsWith(normalizedQuery)));
+            }
+            else
+            {
+                query = query.Where(g =>
+                    g.GuidValue.Contains(normalizedQuery) ||
+                    (g.Notes != null && g.Notes.Contains(normalizedQuery)));
+            }
         }
 
         return await query
@@ -76,16 +91,29 @@ public class GuidRepository : IGuidRepository
     }
 
     /// <inheritdoc/>
-    public async Task<int> GetGuidCountAsync(string? searchQuery = null, CancellationToken cancellationToken = default)
+    public async Task<int> GetGuidCountAsync(
+        string? searchQuery = null,
+        CancellationToken cancellationToken = default,
+        bool prefixSearch = false)
     {
         var query = _dbContext.GuidHistories.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
-            // Search in both GUID value and notes
-            query = query.Where(g =>
-                g.GuidValue.Contains(searchQuery) ||
-                (g.Notes != null && g.Notes.Contains(searchQuery)));
+            var normalizedQuery = searchQuery.Trim();
+
+            if (prefixSearch)
+            {
+                query = query.Where(g =>
+                    g.GuidValue.StartsWith(normalizedQuery) ||
+                    (g.Notes != null && g.Notes.StartsWith(normalizedQuery)));
+            }
+            else
+            {
+                query = query.Where(g =>
+                    g.GuidValue.Contains(normalizedQuery) ||
+                    (g.Notes != null && g.Notes.Contains(normalizedQuery)));
+            }
         }
 
         return await query.CountAsync(cancellationToken);
@@ -97,7 +125,11 @@ public class GuidRepository : IGuidRepository
         return await _dbContext.GuidHistories.FindAsync(new object[] { id }, cancellationToken);
     }
 
-    public Task<List<GuidHistory>> GetGuidByValueAndNotes(string? value, string? notes, CancellationToken cancellationToken = default)
+    public Task<List<GuidHistory>> GetGuidByValueAndNotes(
+        string? value,
+        string? notes,
+        CancellationToken cancellationToken = default,
+        int? maxResults = null)
     {
         if (string.IsNullOrWhiteSpace(value) && string.IsNullOrWhiteSpace(notes))
             throw new ArgumentException("At least one of value or notes must be provided.");
@@ -109,6 +141,9 @@ public class GuidRepository : IGuidRepository
 
         if (!string.IsNullOrWhiteSpace(notes))
             query = query.Where(g => g.Notes != null && g.Notes.StartsWith(notes));
+
+        if (maxResults.HasValue && maxResults.Value > 0)
+            query = query.Take(maxResults.Value);
 
         return query.ToListAsync(cancellationToken);
     }

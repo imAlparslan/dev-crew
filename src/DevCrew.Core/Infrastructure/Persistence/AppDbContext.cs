@@ -57,6 +57,8 @@ public class AppDbContext : DbContext
             entity.Property(e => e.CreatedAt).IsRequired();
             entity.Property(e => e.Notes).HasMaxLength(EntityConfiguration.NotesMaxLength);
             entity.HasIndex(e => e.CreatedAt).IsDescending();
+            entity.HasIndex(e => e.GuidValue);
+            entity.HasIndex(e => e.Notes);
         });
 
         // Configure JwtHistory entity
