@@ -4,7 +4,8 @@ on:
   push:
     tags:
       - "v*.*.*"
-      - "v*.*.*-*"
+    tags-ignore:
+      - "*-*"
 
 permissions:
   contents: write
@@ -31,25 +32,15 @@ jobs:
 
       - name: Extract version from tag
         run: |
-          VERSION_NO_V="${GITHUB_REF_NAME#v}"
-          RELEASE_CHANNEL="stable"
-          RELEASE_DOTNET_ENVIRONMENT="Production"
-          RELEASE_SETTINGS_FILE="src/DevCrew.Desktop/appsettings.json"
-
-          if [[ "${VERSION_NO_V}" == *"alpha"* ]]; then
-            RELEASE_CHANNEL="alpha"
-            RELEASE_DOTNET_ENVIRONMENT="Alpha"
-            RELEASE_SETTINGS_FILE="src/DevCrew.Desktop/appsettings.Alpha.json"
-          elif [[ "${VERSION_NO_V}" == *"beta"* ]]; then
-            RELEASE_CHANNEL="beta"
-            RELEASE_DOTNET_ENVIRONMENT="Beta"
-            RELEASE_SETTINGS_FILE="src/DevCrew.Desktop/appsettings.Beta.json"
+          if [[ ! "${GITHUB_REF_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Only stable tags in format vX.Y.Z are allowed (example: v1.0.0)." >&2
+            exit 1
           fi
 
+          VERSION_NO_V="${GITHUB_REF_NAME#v}"
+
           echo "VERSION_NO_V=${VERSION_NO_V}" >> "$GITHUB_ENV"
-          echo "RELEASE_CHANNEL=${RELEASE_CHANNEL}" >> "$GITHUB_ENV"
-          echo "RELEASE_DOTNET_ENVIRONMENT=${RELEASE_DOTNET_ENVIRONMENT}" >> "$GITHUB_ENV"
-          echo "RELEASE_SETTINGS_FILE=${RELEASE_SETTINGS_FILE}" >> "$GITHUB_ENV"
+          echo "RELEASE_DOTNET_ENVIRONMENT=Production" >> "$GITHUB_ENV"
 
       - name: Set .NET runtime environment variables
         run: |
@@ -114,7 +105,7 @@ jobs:
           mkdir -p "${APP_SETTINGS_TARGET_DIR}"
 
           cp "src/DevCrew.Desktop/appsettings.json" "${APP_SETTINGS_TARGET_DIR}/appsettings.json"
-          cp "${RELEASE_SETTINGS_FILE}" "${APP_SETTINGS_TARGET_DIR}/appsettings.Production.json"
+          cp "src/DevCrew.Desktop/appsettings.json" "${APP_SETTINGS_TARGET_DIR}/appsettings.Production.json"
 
       - name: Resolve CLI binary path
         run: |
@@ -162,12 +153,6 @@ jobs:
         run: |
           FILENAME="appcast.xml"
           APPCAST_BUILD_VERSION="${{ github.run_number }}"
-
-          if [[ "${{ github.ref_name }}" == *"alpha"* ]]; then
-            FILENAME="appcast-alpha.xml"
-          elif [[ "${{ github.ref_name }}" == *"beta"* ]]; then
-            FILENAME="appcast-beta.xml"
-          fi
 
           echo "APPCAST_FILENAME=${FILENAME}" >> "$GITHUB_ENV"
           APPCAST_TEMP_PATH="${RUNNER_TEMP}/${FILENAME}"
