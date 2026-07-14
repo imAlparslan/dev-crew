@@ -31,7 +31,11 @@ internal class DeleteGuidCommand(IAnsiConsole console, IGuidRepository guidRepos
             _console.MarkupLine("[red]Error:[/] At least one of the options --value or --notes must be provided to delete a GUID.");
             return Result.Error;
         }
-        var guids = await _guidRepository.GetGuidByValueAndNotes(settings.Value.Value, settings.Notes.Value, cancellationToken);
+        var guids = await _guidRepository.GetGuidByValueAndNotes(
+            settings.Value.Value,
+            settings.Notes.Value,
+            cancellationToken,
+            maxResults: 4);
         if (guids.Count == 0)
         {
             _console.MarkupLine("[red]Error:[/] No GUIDs found matching the specified criteria.");
@@ -41,7 +45,7 @@ internal class DeleteGuidCommand(IAnsiConsole console, IGuidRepository guidRepos
         if (guids.Count > 1)
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"{guids.Count} GUIDs found;");
+            stringBuilder.AppendLine("Multiple GUIDs found;");
             guids.Take(3).ToList().ForEach(g => stringBuilder.AppendLine($"Value: {g.GuidValue}, Notes: {g.Notes}"));
             if (guids.Count > 3)
                 stringBuilder.AppendLine("...and more.");
