@@ -111,7 +111,7 @@ public sealed class GuidRepositoryTests : IDisposable
     }
 
     [Fact]
-    public async Task DeleteGuidAsync_ReturnTrue_WhenDeletingNonExistentId()
+    public async Task DeleteGuidAsync_ReturnFalse_WhenDeletingNonExistentId()
     {
         // Arrange
         var nonExistentId = 99999;
@@ -120,7 +120,7 @@ public sealed class GuidRepositoryTests : IDisposable
         var result = await _repository.DeleteGuidAsync(nonExistentId);
 
         // Assert
-        result.ShouldBeTrue();
+        result.ShouldBeFalse();
     }
 
     #endregion
@@ -164,7 +164,7 @@ public sealed class GuidRepositoryTests : IDisposable
     }
 
     [Fact]
-    public async Task UpdateGuidNotesAsync_ReturnTrue_WhenUpdatingNonExistentId()
+    public async Task UpdateGuidNotesAsync_ReturnFalse_WhenUpdatingNonExistentId()
     {
         // Arrange
         var nonExistentId = 99999;
@@ -173,7 +173,7 @@ public sealed class GuidRepositoryTests : IDisposable
         var result = await _repository.UpdateGuidNotesAsync(nonExistentId, "New notes");
 
         // Assert
-        result.ShouldBeTrue();
+        result.ShouldBeFalse();
     }
 
     #endregion

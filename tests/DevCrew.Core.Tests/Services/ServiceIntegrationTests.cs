@@ -1,6 +1,7 @@
 using System.Text;
 using DevCrew.Core.Application.Services;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
 using Xunit;
@@ -21,7 +22,13 @@ public class ServiceIntegrationTests
         _jsonFormatterService = new JsonFormatterService();
         _base64EncoderService = new Base64EncoderService();
         var guidRepository = Substitute.For<IGuidRepository>();
-        _guidService = new GuidService(guidRepository);
+
+        var services = new ServiceCollection();
+        services.AddScoped(_ => guidRepository);
+        var serviceProvider = services.BuildServiceProvider();
+
+        var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
+        _guidService = new GuidService(scopeFactory);
     }
 
     #region Base64 + JSON Formatter Integration

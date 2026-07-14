@@ -3,6 +3,7 @@ set -euo pipefail
 
 APP_PATH=""
 CLI_PATH=""
+MCP_PATH=""
 VERSION=""
 OUTPUT_DIR="artifacts/dist"
 PACKAGE_ID="com.devcrew.macos"
@@ -12,6 +13,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --app) APP_PATH="$2"; shift 2 ;;
     --cli) CLI_PATH="$2"; shift 2 ;;
+    --mcp) MCP_PATH="$2"; shift 2 ;;
     --version) VERSION="$2"; shift 2 ;;
     --output-dir) OUTPUT_DIR="$2"; shift 2 ;;
     --package-id) PACKAGE_ID="$2"; shift 2 ;;
@@ -20,8 +22,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Folder check
-if [[ -z "$APP_PATH" || -z "$CLI_PATH" || -z "$VERSION" ]]; then
-  echo "ERROR: --app, --cli and --version parameters are required!" >&2
+if [[ -z "$APP_PATH" || -z "$CLI_PATH" || -z "$MCP_PATH" || -z "$VERSION" ]]; then
+  echo "ERROR: --app, --cli, --mcp and --version parameters are required!" >&2
   exit 1
 fi
 
@@ -44,6 +46,7 @@ mkdir -p "${STAGING_ROOT}/Applications" "${STAGING_ROOT}/usr/local/bin"
 
 cp -R "$APP_PATH" "${STAGING_ROOT}/Applications/DevCrew.app"
 install -m 755 "$CLI_PATH" "${STAGING_ROOT}/usr/local/bin/crew"
+install -m 755 "$MCP_PATH" "${STAGING_ROOT}/usr/local/bin/devcrew-mcp"
 
 # 1. Component Analysis
 pkgbuild --analyze --root "$STAGING_ROOT" "$COMPONENT_PLIST"

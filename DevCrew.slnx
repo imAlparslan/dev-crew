@@ -12,6 +12,7 @@
       <BuildType Project="?" />
       <Platform Project="?" />
     </Project>
+    <Project Path="src/DevCrew.Mcp/DevCrew.Mcp.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/DevCrew.Core.Tests/DevCrew.Core.Tests.csproj" Type="9a19103f-16f7-4668-be54-9a1e7a4f7558" />

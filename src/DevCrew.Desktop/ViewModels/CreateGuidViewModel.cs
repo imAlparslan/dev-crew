@@ -186,7 +186,12 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
             // Remove from database if saved
             if (guidItem.IsSaved && guidItem.DatabaseId.HasValue)
             {
-                await _guidRepository.DeleteGuidAsync(guidItem.DatabaseId.Value);
+                var deleted = await _guidRepository.DeleteGuidAsync(guidItem.DatabaseId.Value);
+                if (!deleted)
+                {
+                    ErrorMessage = _localizationService.GetString("createguid.delete");
+                    return;
+                }
             }
 
             // Remove from recent list
@@ -395,7 +400,11 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
     {
         try
         {
-            await _guidRepository.UpdateGuidNotesAsync(databaseId, notes);
+            var updated = await _guidRepository.UpdateGuidNotesAsync(databaseId, notes);
+            if (!updated)
+            {
+                ErrorMessage = _localizationService.GetString("createguid.notes_watermark");
+            }
         }
         catch (Exception ex)
         {
