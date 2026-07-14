@@ -15,7 +15,6 @@ builder.Services.AddDevCrewCore(builder.Configuration);
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()
-    .WithTools<RandomNumberTools>()
     .WithTools<GuidTools>();
 
 await builder.Build().RunAsync();
