@@ -11,9 +11,9 @@ Bu klasor platform bazli paketleme dosya iskeletini tutar.
 ## Publish Plani
 
 - Runtime hedefleri: `win-x64`, `osx-x64`, `osx-arm64`, `linux-x64`
-- Ilk publish adimi framework-dependent olarak tutulur.
-- Self-contained paketleme, platform bazli publish akisi netlestiginde ikinci asamada acilir.
-- Bu klasordeki dosyalar simdilik otomatik publish'e bagli degildir; platform packaging kararlari netlesince entegre edilir.
+- macOS release akisi paketleme icin ayrintili bir workflow ile baglidir.
+- Windows release akisi MSIX installer uretir.
+- Bu klasordeki dosyalar platform bazli packaging kararlarini destekleyen iskeletler olarak tutulur.
 
 ## VS Code Debug Notu
 
@@ -23,4 +23,4 @@ Bu klasor platform bazli paketleme dosya iskeletini tutar.
 
 ## Not
 
-Bu dosyalar minimal iskelet olarak eklendi. Release asamasinda platform gereksinimlerine gore guncellenmelidir.
+Bu dosyalar minimal iskelet olarak eklendi. Release asamasinda platform gereksinimlerine gore guncellenebilir.
