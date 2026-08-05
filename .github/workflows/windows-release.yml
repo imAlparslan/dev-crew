@@ -124,15 +124,63 @@ jobs:
           </Package>
           "@ | Set-Content -Path $manifestPath -Encoding utf8
 
-          if (-not (Get-Command makeappx -ErrorAction SilentlyContinue)) {
-            throw "makeappx was not found on the runner."
+          $makeAppxCommand = Get-Command makeappx.exe -ErrorAction SilentlyContinue
+          $signToolCommand = Get-Command signtool.exe -ErrorAction SilentlyContinue
+
+          $makeAppxPath = $makeAppxCommand?.Source
+          $signToolPath = $signToolCommand?.Source
+
+          $sdkBinRoots = @(
+            (Join-Path ${env:ProgramFiles(x86)} "Windows Kits\10\bin"),
+            (Join-Path $env:ProgramFiles "Windows Kits\10\bin")
+          ) | Where-Object { $_ -and (Test-Path $_) }
+
+          foreach ($sdkBinRoot in $sdkBinRoots) {
+            if ($makeAppxPath -and $signToolPath) {
+              break
+            }
+
+            $versionDirs = Get-ChildItem -Path $sdkBinRoot -Directory -ErrorAction SilentlyContinue |
+              Sort-Object -Property Name -Descending
+
+            foreach ($versionDir in $versionDirs) {
+              $x64Dir = Join-Path $versionDir.FullName "x64"
+              if (-not (Test-Path $x64Dir)) {
+                continue
+              }
+
+              if (-not $makeAppxPath) {
+                $candidateMakeAppx = Join-Path $x64Dir "makeappx.exe"
+                if (Test-Path $candidateMakeAppx) {
+                  $makeAppxPath = $candidateMakeAppx
+                }
+              }
+
+              if (-not $signToolPath) {
+                $candidateSignTool = Join-Path $x64Dir "signtool.exe"
+                if (Test-Path $candidateSignTool) {
+                  $signToolPath = $candidateSignTool
+                }
+              }
+
+              if ($makeAppxPath -and $signToolPath) {
+                break
+              }
+            }
           }
 
-          if (-not (Get-Command signtool -ErrorAction SilentlyContinue)) {
-            throw "signtool was not found on the runner."
+          if (-not $makeAppxPath) {
+            throw "makeappx.exe was not found. Checked PATH and Windows SDK bin folders under Program Files."
           }
 
-          & makeappx pack /d $packageRoot /p $msixPath /o | Out-Host
+          if (-not $signToolPath) {
+            throw "signtool.exe was not found. Checked PATH and Windows SDK bin folders under Program Files."
+          }
+
+          Write-Host "Using makeappx: $makeAppxPath"
+          Write-Host "Using signtool: $signToolPath"
+
+          & $makeAppxPath pack /d $packageRoot /p $msixPath /o | Out-Host
 
           $pfxPath = Join-Path $env:RUNNER_TEMP "devcrew-msix.pfx"
           $pfxPassword = [Guid]::NewGuid().ToString("N")
@@ -141,7 +189,7 @@ jobs:
           Export-PfxCertificate -Cert $cert -FilePath $pfxPath -Password $securePassword | Out-Null
           Export-Certificate -Cert $cert -FilePath $cerPath | Out-Null
 
-          & signtool sign /fd SHA256 /f $pfxPath /p $pfxPassword $msixPath | Out-Host
+          & $signToolPath sign /fd SHA256 /f $pfxPath /p $pfxPassword $msixPath | Out-Host
 
           Get-ChildItem $distDir
           if (-not (Test-Path $msixPath)) {
