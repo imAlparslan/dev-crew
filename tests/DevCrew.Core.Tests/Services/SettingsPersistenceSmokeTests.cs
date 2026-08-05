@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DevCrew.Core.Domain.Models;
 using DevCrew.Core.Infrastructure.Persistence;
 using DevCrew.Core.Infrastructure.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -37,7 +38,7 @@ public class SettingsPersistenceSmokeTests
         }
         finally
         {
-            DeleteTempDbIfExists(dbPath);
+            await DeleteTempDbIfExistsAsync(dbPath);
         }
     }
 
@@ -75,7 +76,7 @@ public class SettingsPersistenceSmokeTests
         }
         finally
         {
-            DeleteTempDbIfExists(dbPath);
+            await DeleteTempDbIfExistsAsync(dbPath);
         }
     }
 
@@ -90,6 +91,11 @@ public class SettingsPersistenceSmokeTests
 
         var services = new ServiceCollection();
         services.AddDevCrewCore(configuration);
+
+        // Disable SQLite pooling in this smoke test to ensure temp DB files are released deterministically.
+        var smokeTestConnectionString = $"Data Source={dbPath};Pooling=false;Foreign Keys=true;";
+        services.AddDbContext<AppDbContext>(options => options.UseSqlite(smokeTestConnectionString));
+
         return services.BuildServiceProvider();
     }
 
@@ -100,11 +106,32 @@ public class SettingsPersistenceSmokeTests
         return Path.Combine(directory, $"settings-smoke-{Guid.NewGuid():N}.db");
     }
 
-    private static void DeleteTempDbIfExists(string dbPath)
+    private static async Task DeleteTempDbIfExistsAsync(string dbPath)
     {
-        if (File.Exists(dbPath))
+        const int maxAttempts = 10;
+        for (var attempt = 0; attempt < maxAttempts; attempt++)
         {
-            File.Delete(dbPath);
+            if (!File.Exists(dbPath))
+            {
+                return;
+            }
+
+            try
+            {
+                File.Delete(dbPath);
+                return;
+            }
+            catch (IOException) when (attempt < maxAttempts - 1)
+            {
+            }
+            catch (UnauthorizedAccessException) when (attempt < maxAttempts - 1)
+            {
+            }
+
+            await Task.Delay(TimeSpan.FromMilliseconds(50));
         }
+
+        // Final attempt should throw and fail loudly if lock never clears.
+        File.Delete(dbPath);
     }
 }
