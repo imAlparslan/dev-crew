@@ -4,9 +4,9 @@
         <title>Version 1.0.1</title>
         <item>
             <sparkle:releaseNotesLink>https://github.com/imAlparslan/dev-crew/releases/tag/v1.0.1</sparkle:releaseNotesLink>
-            <pubDate>Wed, 05 Aug 2026 18:29:54 GMT</pubDate>
+            <pubDate>Wed, 05 Aug 2026 18:34:55 GMT</pubDate>
             <enclosure url="https://github.com/imAlparslan/dev-crew/releases/download/v1.0.1/DevCrew-1.0.1.pkg"
-                       sparkle:version="42"
+                       sparkle:version="43"
                    sparkle:short_version="1.0.1"
                        sparkle:shortVersionString="1.0.1"
                    sparkle:os="macos"
