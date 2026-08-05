@@ -69,6 +69,9 @@ jobs:
 
       - name: Create MSIX package
         shell: pwsh
+        env:
+          WINDOWS_SIGNING_CERT_BASE64: ${{ secrets.WINDOWS_SIGNING_CERT_BASE64 }}
+          WINDOWS_SIGNING_CERT_PASSWORD: ${{ secrets.WINDOWS_SIGNING_CERT_PASSWORD }}
         run: |
           $ErrorActionPreference = 'Stop'
 
@@ -182,14 +185,25 @@ jobs:
 
           & $makeAppxPath pack /d $packageRoot /p $msixPath /o | Out-Host
 
-          $pfxPath = Join-Path $env:RUNNER_TEMP "devcrew-msix.pfx"
-          $pfxPassword = [Guid]::NewGuid().ToString("N")
-          $securePassword = ConvertTo-SecureString -String $pfxPassword -AsPlainText -Force
-          $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject $env:WINDOWS_PUBLISHER -CertStoreLocation "Cert:\CurrentUser\My"
-          Export-PfxCertificate -Cert $cert -FilePath $pfxPath -Password $securePassword | Out-Null
+          if ([string]::IsNullOrWhiteSpace($env:WINDOWS_SIGNING_CERT_BASE64)) {
+            throw "Missing required secret WINDOWS_SIGNING_CERT_BASE64. Add your base64-encoded PFX to repository secrets."
+          }
+
+          if ([string]::IsNullOrWhiteSpace($env:WINDOWS_SIGNING_CERT_PASSWORD)) {
+            throw "Missing required secret WINDOWS_SIGNING_CERT_PASSWORD. Add your PFX password to repository secrets."
+          }
+
+          $pfxPath = Join-Path $env:RUNNER_TEMP "devcrew-signing.pfx"
+          [IO.File]::WriteAllBytes(
+            $pfxPath,
+            [Convert]::FromBase64String($env:WINDOWS_SIGNING_CERT_BASE64)
+          )
+
+          $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
+          $cert.Import($pfxPath, $env:WINDOWS_SIGNING_CERT_PASSWORD, 'Exportable,PersistKeySet')
           Export-Certificate -Cert $cert -FilePath $cerPath | Out-Null
 
-          & $signToolPath sign /fd SHA256 /f $pfxPath /p $pfxPassword $msixPath | Out-Host
+          & $signToolPath sign /fd SHA256 /f $pfxPath /p $env:WINDOWS_SIGNING_CERT_PASSWORD /tr http://timestamp.digicert.com /td SHA256 $msixPath | Out-Host
 
           Get-ChildItem $distDir
           if (-not (Test-Path $msixPath)) {
