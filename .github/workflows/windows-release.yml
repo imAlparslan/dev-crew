@@ -1,0 +1,172 @@
+name: windows-release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+      - "!v*-*"
+
+permissions:
+  contents: write
+
+env:
+  DOTNET_NOLOGO: true
+  WINDOWS_PACKAGE_ID: "com.devcrew.desktop"
+  WINDOWS_PUBLISHER: "CN=DevCrew"
+
+jobs:
+  windows-release:
+    runs-on: windows-latest
+    concurrency:
+      group: windows-release-main
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - name: Extract version from tag
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF_NAME -notmatch '^v[0-9]+\.[0-9]+\.[0-9]+$') {
+            throw "Only stable tags in format vX.Y.Z are allowed (example: v1.0.0)."
+          }
+
+          $versionNoV = $env:GITHUB_REF_NAME.Substring(1)
+          Add-Content -Path $env:GITHUB_ENV -Value "VERSION_NO_V=$versionNoV"
+          Add-Content -Path $env:GITHUB_ENV -Value "RELEASE_DOTNET_ENVIRONMENT=Production"
+
+      - name: Set .NET runtime environment variables
+        shell: pwsh
+        run: |
+          Add-Content -Path $env:GITHUB_ENV -Value "DOTNET_ENVIRONMENT=$env:RELEASE_DOTNET_ENVIRONMENT"
+          Add-Content -Path $env:GITHUB_ENV -Value "ASPNETCORE_ENVIRONMENT=$env:RELEASE_DOTNET_ENVIRONMENT"
+
+      - name: Build desktop project
+        run: |
+          dotnet build src/DevCrew.Desktop/DevCrew.Desktop.csproj -c Release /property:GenerateFullPaths=true /consoleloggerparameters:NoSummary
+
+      - name: Run core tests
+        run: |
+          dotnet test tests/DevCrew.Core.Tests/DevCrew.Core.Tests.csproj -c Release
+
+      - name: Publish Windows desktop app
+        run: |
+          dotnet publish src/DevCrew.Desktop/DevCrew.Desktop.csproj -c Release -r win-x64 --self-contained true -p:Version=$env:VERSION_NO_V -p:DebugSymbols=false -p:DebugType=none -o ./artifacts/publish/desktop/win-x64
+
+      - name: Publish Windows CLI binary
+        run: |
+          dotnet publish src/DevCrew.Cli/DevCrew.Cli.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:Version=$env:VERSION_NO_V -p:DebugSymbols=false -p:DebugType=none -o ./artifacts/publish/cli/win-x64
+
+      - name: Publish Windows MCP binary
+        run: |
+          dotnet publish src/DevCrew.Mcp/DevCrew.Mcp.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:Version=$env:VERSION_NO_V -p:DebugSymbols=false -p:DebugType=none -o ./artifacts/publish/mcp/win-x64
+
+      - name: Create MSIX package
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $versionNoV = $env:VERSION_NO_V
+          $packageVersion = "$versionNoV.0"
+          $publishDir = (Resolve-Path "./artifacts/publish/desktop/win-x64").Path
+          $packageRoot = Join-Path $PWD "artifacts/package/windows-msix"
+          $assetDir = Join-Path $packageRoot "Assets"
+          $distDir = Join-Path $PWD "artifacts/dist"
+          $msixPath = Join-Path $distDir "DevCrew-$versionNoV.msix"
+          $cerPath = Join-Path $distDir "DevCrew-msix.cer"
+          $manifestPath = Join-Path $packageRoot "AppxManifest.xml"
+
+          Remove-Item $packageRoot, $distDir -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Force -Path $assetDir, $distDir | Out-Null
+
+          Copy-Item -Path (Join-Path $publishDir '*') -Destination $packageRoot -Recurse -Force
+          Copy-Item -Path "src\DevCrew.Desktop\Assets\icons\app-window.png" -Destination (Join-Path $assetDir "StoreLogo.png") -Force
+          Copy-Item -Path "src\DevCrew.Desktop\Assets\icons\app-window.png" -Destination (Join-Path $assetDir "Square150x150Logo.png") -Force
+          Copy-Item -Path "src\DevCrew.Desktop\Assets\icons\app-window.png" -Destination (Join-Path $assetDir "Square44x44Logo.png") -Force
+
+          @"
+          <?xml version="1.0" encoding="utf-8"?>
+          <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+                   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+                   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+                   IgnorableNamespaces="uap rescap">
+            <Identity Name="$($env:WINDOWS_PACKAGE_ID)" Publisher="$($env:WINDOWS_PUBLISHER)" Version="$packageVersion" />
+            <Properties>
+              <DisplayName>DevCrew</DisplayName>
+              <PublisherDisplayName>DevCrew</PublisherDisplayName>
+              <Description>DevCrew Desktop</Description>
+              <Logo>Assets\StoreLogo.png</Logo>
+            </Properties>
+            <Resources>
+              <Resource Language="en-us" />
+            </Resources>
+            <Dependencies>
+              <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
+            </Dependencies>
+            <Capabilities>
+              <rescap:Capability Name="runFullTrust" />
+            </Capabilities>
+            <Applications>
+              <Application Id="DevCrewDesktop" Executable="DevCrew.Desktop.exe" EntryPoint="Windows.FullTrustApplication">
+                <uap:VisualElements DisplayName="DevCrew"
+                                    Description="DevCrew Desktop"
+                                    BackgroundColor="transparent"
+                                    Square150x150Logo="Assets\Square150x150Logo.png"
+                                    Square44x44Logo="Assets\Square44x44Logo.png" />
+              </Application>
+            </Applications>
+          </Package>
+          "@ | Set-Content -Path $manifestPath -Encoding utf8
+
+          if (-not (Get-Command makeappx -ErrorAction SilentlyContinue)) {
+            throw "makeappx was not found on the runner."
+          }
+
+          if (-not (Get-Command signtool -ErrorAction SilentlyContinue)) {
+            throw "signtool was not found on the runner."
+          }
+
+          & makeappx pack /d $packageRoot /p $msixPath /o | Out-Host
+
+          $pfxPath = Join-Path $env:RUNNER_TEMP "devcrew-msix.pfx"
+          $pfxPassword = [Guid]::NewGuid().ToString("N")
+          $securePassword = ConvertTo-SecureString -String $pfxPassword -AsPlainText -Force
+          $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject $env:WINDOWS_PUBLISHER -CertStoreLocation "Cert:\CurrentUser\My"
+          Export-PfxCertificate -Cert $cert -FilePath $pfxPath -Password $securePassword | Out-Null
+          Export-Certificate -Cert $cert -FilePath $cerPath | Out-Null
+
+          & signtool sign /fd SHA256 /f $pfxPath /p $pfxPassword $msixPath | Out-Host
+
+          Get-ChildItem $distDir
+          if (-not (Test-Path $msixPath)) {
+            throw "MSIX package was not created."
+          }
+          if (-not (Test-Path $cerPath)) {
+            throw "MSIX certificate was not created."
+          }
+
+      - name: Upload MSIX artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: DevCrew-windows-installer-${{ env.VERSION_NO_V }}
+          path: |
+            ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.msix
+            ./artifacts/dist/DevCrew-msix.cer
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: DevCrew v${{ env.VERSION_NO_V }}
+          draft: true
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
+            ./artifacts/dist/DevCrew-${{ env.VERSION_NO_V }}.msix
+            ./artifacts/dist/DevCrew-msix.cer
