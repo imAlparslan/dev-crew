@@ -151,6 +151,69 @@ jobs:
             throw "MSIX certificate was not created."
           }
 
+      - name: Generate Sparkle AppCast for Windows
+        shell: pwsh
+        run: |
+          $appCastFileName = "appcast-windows.xml"
+          $appCastBuildVersion = "${{ github.run_number }}"
+          $appCastTempPath = Join-Path $env:RUNNER_TEMP $appCastFileName
+
+          Add-Content -Path $env:GITHUB_ENV -Value "APPCAST_WINDOWS_FILENAME=$appCastFileName"
+          Add-Content -Path $env:GITHUB_ENV -Value "APPCAST_WINDOWS_TEMP_PATH=$appCastTempPath"
+
+          @"
+          <?xml version="1.0" encoding="utf-8"?>
+          <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+              <channel>
+                  <title>Version $($env:VERSION_NO_V)</title>
+                  <item>
+                      <sparkle:releaseNotesLink>https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}</sparkle:releaseNotesLink>
+                      <pubDate>$((Get-Date).ToUniversalTime().ToString("ddd, dd MMM yyyy HH:mm:ss 'GMT'", [System.Globalization.CultureInfo]::InvariantCulture))</pubDate>
+                      <enclosure url="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/DevCrew-$($env:VERSION_NO_V).msix"
+                                 sparkle:version="$appCastBuildVersion"
+                                 sparkle:short_version="$($env:VERSION_NO_V)"
+                                 sparkle:shortVersionString="$($env:VERSION_NO_V)"
+                                 sparkle:os="windows"
+                                 type="application/octet-stream" />
+                  </item>
+              </channel>
+          </rss>
+          "@ | Set-Content -Path $appCastTempPath -Encoding utf8
+
+      - name: Commit Windows AppCast to main branch
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin main
+          git checkout -B appcast-update origin/main
+
+          New-Item -ItemType Directory -Force -Path "./Appcasts" | Out-Null
+          Copy-Item -Path $env:APPCAST_WINDOWS_TEMP_PATH -Destination "./Appcasts/$($env:APPCAST_WINDOWS_FILENAME)" -Force
+
+          git add "./Appcasts/$($env:APPCAST_WINDOWS_FILENAME)"
+
+          if (git diff --cached --quiet) {
+            Write-Host "No Windows AppCast changes detected."
+            exit 0
+          }
+
+          git commit -m "chore(appcast): update windows appcast for $env:GITHUB_REF_NAME"
+
+          for ($attempt = 1; $attempt -le 3; $attempt++) {
+            git push origin HEAD:main
+            if ($LASTEXITCODE -eq 0) {
+              exit 0
+            }
+
+            Write-Host "Push failed on attempt $attempt; rebasing onto origin/main and retrying..."
+            git fetch origin main
+            git rebase origin/main
+          }
+
+          throw "Failed to push windows appcast update after retries."
+
       - name: Upload MSIX artifact
         uses: actions/upload-artifact@v7
         with:

@@ -4,6 +4,7 @@ using NetSparkleUpdater.UI.Avalonia;
 using NetSparkleUpdater.SignatureVerifiers;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Xml.Linq;
 
 namespace DevCrew.Desktop.Services;
@@ -13,25 +14,20 @@ public class SparkleUpdateService : IUpdateService
     private readonly SparkleUpdater _updater;
     private IReadOnlyList<AppCastItem> _cachedUpdates = Array.Empty<AppCastItem>();
     private AppCastItem? _latestUpdateItem;
-    private const string DefaultChannel = "stable";
+    private const string DefaultAppCastFileName = "appcast.xml";
+    private const string MacOsAppCastFileName = "appcast-macos.xml";
+    private const string WindowsAppCastFileName = "appcast-windows.xml";
     private const string DefaultAppCastBaseUrl = "https://raw.githubusercontent.com/imAlparslan/dev-crew/main/Appcasts";
 
 
     public SparkleUpdateService(IConfiguration configuration)
     {
-
-        var channel = ResolveChannel(configuration["Sparkle:Channel"]);
-        var fileName = channel switch
-        {
-            "alpha" => "appcast-alpha.xml",
-            "beta" => "appcast-beta.xml",
-            _ => "appcast.xml"
-        };
         var configuredBaseUrl = configuration["Sparkle:AppCastBaseUrl"];
         var appCastBaseUrl = string.IsNullOrWhiteSpace(configuredBaseUrl)
             ? DefaultAppCastBaseUrl
             : configuredBaseUrl.TrimEnd('/');
-        var appCastUrl = $"{appCastBaseUrl}/{fileName}";
+        var appCastFileName = ResolveAppCastFileName();
+        var appCastUrl = $"{appCastBaseUrl}/{appCastFileName}";
 
 
         _updater = new SparkleUpdater(appCastUrl, new Ed25519Checker(SecurityMode.Unsafe))
@@ -230,41 +226,18 @@ public class SparkleUpdateService : IUpdateService
         return null;
     }
 
-    private static string ResolveChannel(string? configuredChannel)
+    private static string ResolveAppCastFileName()
     {
-        var normalizedConfiguredChannel = NormalizeChannel(configuredChannel);
-        var inferredFromVersion = InferChannelFromVersion(ResolveCurrentVersion());
-
-        // Keep explicit config values; only infer for prerelease builds when config is stable/default.
-        return normalizedConfiguredChannel == DefaultChannel && inferredFromVersion != DefaultChannel
-            ? inferredFromVersion
-            : normalizedConfiguredChannel;
-    }
-
-    private static string NormalizeChannel(string? channel)
-    {
-        if (string.IsNullOrWhiteSpace(channel))
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            return DefaultChannel;
+            return MacOsAppCastFileName;
         }
 
-        var normalized = channel.Trim().ToLowerInvariant();
-        return normalized is "alpha" or "beta" ? normalized : DefaultChannel;
-    }
-
-    private static string InferChannelFromVersion(string version)
-    {
-        if (version.Contains("-alpha", StringComparison.OrdinalIgnoreCase))
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            return "alpha";
+            return WindowsAppCastFileName;
         }
 
-        if (version.Contains("-beta", StringComparison.OrdinalIgnoreCase))
-        {
-            return "beta";
-        }
-
-        return DefaultChannel;
+        return DefaultAppCastFileName;
     }
-
 }

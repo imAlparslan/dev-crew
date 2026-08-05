@@ -198,11 +198,13 @@ jobs:
 
       - name: Generate Sparkle AppCast
         run: |
-          FILENAME="appcast.xml"
+          PRIMARY_FILENAME="appcast-macos.xml"
+          COMPAT_FILENAME="appcast.xml"
           APPCAST_BUILD_VERSION="${{ github.run_number }}"
 
-          echo "APPCAST_FILENAME=${FILENAME}" >> "$GITHUB_ENV"
-          APPCAST_TEMP_PATH="${RUNNER_TEMP}/${FILENAME}"
+          echo "APPCAST_PRIMARY_FILENAME=${PRIMARY_FILENAME}" >> "$GITHUB_ENV"
+          echo "APPCAST_COMPAT_FILENAME=${COMPAT_FILENAME}" >> "$GITHUB_ENV"
+          APPCAST_TEMP_PATH="${RUNNER_TEMP}/${PRIMARY_FILENAME}"
           echo "APPCAST_TEMP_PATH=${APPCAST_TEMP_PATH}" >> "$GITHUB_ENV"
 
           cat <<EOF > "${APPCAST_TEMP_PATH}"
@@ -233,17 +235,30 @@ jobs:
           git checkout -B appcast-update origin/main
 
           mkdir -p ./Appcasts
-          cp "${APPCAST_TEMP_PATH}" "./Appcasts/${APPCAST_FILENAME}"
+          cp "${APPCAST_TEMP_PATH}" "./Appcasts/${APPCAST_PRIMARY_FILENAME}"
+          cp "${APPCAST_TEMP_PATH}" "./Appcasts/${APPCAST_COMPAT_FILENAME}"
 
-          git add "./Appcasts/${APPCAST_FILENAME}"
+          git add "./Appcasts/${APPCAST_PRIMARY_FILENAME}" "./Appcasts/${APPCAST_COMPAT_FILENAME}"
 
           if git diff --cached --quiet; then
             echo "No AppCast changes detected."
             exit 0
           fi
 
-          git commit -m "chore(appcast): update ${APPCAST_FILENAME} for ${GITHUB_REF_NAME}"
-          git push origin HEAD:main
+          git commit -m "chore(appcast): update macOS appcast for ${GITHUB_REF_NAME}"
+
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+
+            echo "Push failed on attempt ${attempt}; rebasing onto origin/main and retrying..."
+            git fetch origin main
+            git rebase origin/main
+          done
+
+          echo "Failed to push appcast update after retries."
+          exit 1
 
       - name: Upload PKG artifact
         uses: actions/upload-artifact@v7
