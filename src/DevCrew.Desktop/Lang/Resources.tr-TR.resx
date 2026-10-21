@@ -18,7 +18,27 @@
   <data name="menu.base64_encoder" xml:space="preserve"><value>Base64 Kodlayıcı</value></data>
   <data name="menu.base64_decoder" xml:space="preserve"><value>Base64 Çözücü</value></data>
   <data name="menu.regex" xml:space="preserve"><value>Regex</value></data>
+  <data name="menu.mcp" xml:space="preserve"><value>MCP</value></data>
   <data name="menu.settings" xml:space="preserve"><value>Ayarlar</value></data>
+
+  <data name="mcp.title" xml:space="preserve"><value>DevCrew'u MCP sunucusu olarak ayarlayın</value></data>
+  <data name="mcp.description" xml:space="preserve"><value>DevCrew, MCP sunucusu çalıştırılabilir dosyasını otomatik bulur ve istemciniz için yapılandırma örneği oluşturur. Bu ekran istemci dosyalarını değiştirmez.</value></data>
+  <data name="mcp.executable_status" xml:space="preserve"><value>Bulunan MCP sunucusu dosyası</value></data>
+  <data name="mcp.detected" xml:space="preserve"><value>Bulundu: {0}</value></data>
+  <data name="mcp.not_found" xml:space="preserve"><value>Bulunamadı</value></data>
+  <data name="mcp.detected_status" xml:space="preserve"><value>MCP sunucusu çalıştırılabilir dosyası bulundu.</value></data>
+  <data name="mcp.not_found_status" xml:space="preserve"><value>MCP sunucusu çalıştırılabilir dosyası bulunamadı. DevCrew'u yeniden yükleyin veya MCP projesini derleyin.</value></data>
+  <data name="mcp.client" xml:space="preserve"><value>İstemci yapılandırması</value></data>
+  <data name="mcp.transport" xml:space="preserve"><value>Taşıma</value></data>
+  <data name="mcp.stdio" xml:space="preserve"><value>STDIO</value></data>
+  <data name="mcp.configuration" xml:space="preserve"><value>Yapılandırma örneği</value></data>
+  <data name="mcp.copy_configuration" xml:space="preserve"><value>Yapılandırmayı kopyala</value></data>
+  <data name="mcp.configuration_copied" xml:space="preserve"><value>Yapılandırma panoya kopyalandı.</value></data>
+  <data name="mcp.copy_failed" xml:space="preserve"><value>Yapılandırma panoya kopyalanamadı.</value></data>
+  <data name="mcp.client.vscode_copilot" xml:space="preserve"><value>VS Code GitHub Copilot (mcp.json)</value></data>
+  <data name="mcp.client.claude_desktop" xml:space="preserve"><value>Claude Desktop</value></data>
+  <data name="mcp.client.cursor" xml:space="preserve"><value>Cursor</value></data>
+  <data name="mcp.client.generic_stdio" xml:space="preserve"><value>Genel STDIO yapılandırması</value></data>
 
   <data name="settings.title" xml:space="preserve"><value>Ayarlar</value></data>
   <data name="settings.language" xml:space="preserve"><value>Uygulama dili</value></data>
@@ -349,5 +369,3 @@
   <data name="jwt.build_invalid_rsa_private_key" xml:space="preserve"><value>Geçersiz RSA özel anahtar formatı: {0}</value></data>
   <data name="jwt.build_failed" xml:space="preserve"><value>Token üretilirken hata: {0}</value></data>
 </root>
-
-

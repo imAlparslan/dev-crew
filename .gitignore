@@ -71,3 +71,4 @@ nunit-*.xml
 
 .sonarqube/
 .local/
+.mcp.json

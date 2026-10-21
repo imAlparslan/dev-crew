@@ -48,9 +48,30 @@
   <data name="menu.regex" xml:space="preserve">
     <value>Regex</value>
   </data>
+  <data name="menu.mcp" xml:space="preserve">
+    <value>MCP</value>
+  </data>
   <data name="menu.settings" xml:space="preserve">
     <value>Paramètres</value>
   </data>
+  <data name="mcp.title" xml:space="preserve"><value>Configurer DevCrew comme serveur MCP</value></data>
+  <data name="mcp.description" xml:space="preserve"><value>DevCrew recherche automatiquement son exécutable serveur MCP et génère un exemple de configuration pour votre client. Cette page ne modifie pas les fichiers du client.</value></data>
+  <data name="mcp.executable_status" xml:space="preserve"><value>Exécutable du serveur MCP détecté</value></data>
+  <data name="mcp.detected" xml:space="preserve"><value>Trouvé : {0}</value></data>
+  <data name="mcp.not_found" xml:space="preserve"><value>Introuvable</value></data>
+  <data name="mcp.detected_status" xml:space="preserve"><value>Exécutable du serveur MCP détecté.</value></data>
+  <data name="mcp.not_found_status" xml:space="preserve"><value>L’exécutable du serveur MCP est introuvable. Réinstallez DevCrew ou générez le projet MCP.</value></data>
+  <data name="mcp.client" xml:space="preserve"><value>Configuration du client</value></data>
+  <data name="mcp.transport" xml:space="preserve"><value>Transport</value></data>
+  <data name="mcp.stdio" xml:space="preserve"><value>STDIO</value></data>
+  <data name="mcp.configuration" xml:space="preserve"><value>Extrait de configuration</value></data>
+  <data name="mcp.copy_configuration" xml:space="preserve"><value>Copier la configuration</value></data>
+  <data name="mcp.configuration_copied" xml:space="preserve"><value>Configuration copiée dans le presse-papiers.</value></data>
+  <data name="mcp.copy_failed" xml:space="preserve"><value>Impossible de copier la configuration dans le presse-papiers.</value></data>
+  <data name="mcp.client.vscode_copilot" xml:space="preserve"><value>VS Code GitHub Copilot (mcp.json)</value></data>
+  <data name="mcp.client.claude_desktop" xml:space="preserve"><value>Claude Desktop</value></data>
+  <data name="mcp.client.cursor" xml:space="preserve"><value>Cursor</value></data>
+  <data name="mcp.client.generic_stdio" xml:space="preserve"><value>Configuration STDIO générique</value></data>
   <data name="settings.title" xml:space="preserve">
     <value>Paramètres</value>
   </data>

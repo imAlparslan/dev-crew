@@ -89,6 +89,7 @@ jobs:
           New-Item -ItemType Directory -Force -Path $assetDir, $distDir | Out-Null
 
           Copy-Item -Path (Join-Path $publishDir '*') -Destination $packageRoot -Recurse -Force
+          Copy-Item -Path "./artifacts/publish/mcp/win-x64/DevCrew.Mcp.exe" -Destination $packageRoot -Force
           Copy-Item -Path "src\DevCrew.Desktop\Assets\icons\app-window.png" -Destination (Join-Path $assetDir "StoreLogo.png") -Force
           Copy-Item -Path "src\DevCrew.Desktop\Assets\icons\app-window.png" -Destination (Join-Path $assetDir "Square150x150Logo.png") -Force
           Copy-Item -Path "src\DevCrew.Desktop\Assets\icons\app-window.png" -Destination (Join-Path $assetDir "Square44x44Logo.png") -Force

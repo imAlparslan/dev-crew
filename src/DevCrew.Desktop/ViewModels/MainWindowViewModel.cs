@@ -22,6 +22,7 @@ public partial class MainWindowViewModel : BaseViewModel
     private readonly Func<Base64EncoderViewModel> _base64EncoderViewModelFactory;
     private readonly Func<Base64DecoderViewModel> _base64DecoderViewModelFactory;
     private readonly Func<RegexViewModel> _regexViewModelFactory;
+    private readonly Func<McpViewModel> _mcpViewModelFactory;
     private readonly Func<SettingsViewModel> _settingsViewModelFactory;
     private readonly ILocalizationService _localizationService;
 
@@ -34,6 +35,7 @@ public partial class MainWindowViewModel : BaseViewModel
     private Base64EncoderMenuItemViewModel? _base64EncoderItem;
     private Base64DecoderMenuItemViewModel? _base64DecoderItem;
     private RegexMenuItemViewModel? _regexItem;
+    private McpMenuItemViewModel? _mcpItem;
     private SettingsMenuItemViewModel? _settingsItem;
 
     [ObservableProperty]
@@ -80,6 +82,7 @@ public partial class MainWindowViewModel : BaseViewModel
     /// <param name="base64EncoderViewModelFactory">Factory for new Base64 Encoder view models.</param>
     /// <param name="base64DecoderViewModelFactory">Factory for new Base64 Decoder view models.</param>
     /// <param name="regexViewModelFactory">Factory for new Regex view models.</param>
+    /// <param name="mcpViewModelFactory">Factory for new MCP setup view models.</param>
     /// <param name="settingsViewModelFactory">Factory for new Settings view models.</param>
     /// <param name="localizationService">Localization service for runtime language switching.</param>
     public MainWindowViewModel(
@@ -94,6 +97,7 @@ public partial class MainWindowViewModel : BaseViewModel
         Func<Base64EncoderViewModel> base64EncoderViewModelFactory,
         Func<Base64DecoderViewModel> base64DecoderViewModelFactory,
         Func<RegexViewModel> regexViewModelFactory,
+        Func<McpViewModel> mcpViewModelFactory,
         Func<SettingsViewModel> settingsViewModelFactory,
         ILocalizationService localizationService)
         : base(errorHandler)
@@ -108,6 +112,7 @@ public partial class MainWindowViewModel : BaseViewModel
         _base64EncoderViewModelFactory = base64EncoderViewModelFactory;
         _base64DecoderViewModelFactory = base64DecoderViewModelFactory;
         _regexViewModelFactory = regexViewModelFactory;
+        _mcpViewModelFactory = mcpViewModelFactory;
         _settingsViewModelFactory = settingsViewModelFactory;
         _localizationService = localizationService;
         _localizationService.LanguageChanged += OnLanguageChanged;
@@ -130,6 +135,7 @@ public partial class MainWindowViewModel : BaseViewModel
         _base64EncoderItem = Base64EncoderMenuItemViewModel.Create(GetMenuHeader(Base64EncoderMenuItemViewModel.MenuId), OpenBase64EncoderTabCommand);
         _base64DecoderItem = Base64DecoderMenuItemViewModel.Create(GetMenuHeader(Base64DecoderMenuItemViewModel.MenuId), OpenBase64DecoderTabCommand);
         _regexItem = RegexMenuItemViewModel.Create(GetMenuHeader(RegexMenuItemViewModel.MenuId), OpenRegexTabCommand);
+        _mcpItem = McpMenuItemViewModel.Create(GetMenuHeader(McpMenuItemViewModel.MenuId), OpenMcpTabCommand);
         _settingsItem = SettingsMenuItemViewModel.Create(GetMenuHeader(SettingsMenuItemViewModel.MenuId), OpenSettingsTabCommand);
 
         MenuItemViewModel[] primaryItems =
@@ -144,6 +150,7 @@ public partial class MainWindowViewModel : BaseViewModel
             _dashboardViewModel.MenuItems.Add(item);
         }
 
+        BottomMenuItems.Add(_mcpItem);
         BottomMenuItems.Add(_settingsItem);
     }
 
@@ -305,6 +312,22 @@ public partial class MainWindowViewModel : BaseViewModel
         OpenOrSelectTab(menuId, GetTabHeader(menuId), settingsViewModel, true, "⚙️");
     }
 
+    [RelayCommand]
+    private void OpenMcpTab()
+    {
+        var menuId = McpMenuItemViewModel.MenuId;
+        SetSelectedMenuItem(menuId);
+        var existingTab = Tabs.FirstOrDefault(t => t.Id == menuId);
+        if (existingTab != null)
+        {
+            SelectedTab = existingTab;
+            return;
+        }
+
+        var mcpViewModel = _mcpViewModelFactory();
+        OpenOrSelectTab(menuId, GetTabHeader(menuId), mcpViewModel, true, "🔌");
+    }
+
     private void SetSelectedMenuItem(string id)
     {
         foreach (var item in MenuItems)
@@ -335,6 +358,7 @@ public partial class MainWindowViewModel : BaseViewModel
             or Base64EncoderMenuItemViewModel.MenuId
             or Base64DecoderMenuItemViewModel.MenuId
             or RegexMenuItemViewModel.MenuId
+            or McpMenuItemViewModel.MenuId
             or SettingsMenuItemViewModel.MenuId)
         {
             SetSelectedMenuItem(value.Id);
@@ -423,6 +447,7 @@ public partial class MainWindowViewModel : BaseViewModel
             Base64EncoderMenuItemViewModel.MenuId => _localizationService.GetString("menu.base64_encoder"),
             Base64DecoderMenuItemViewModel.MenuId => _localizationService.GetString("menu.base64_decoder"),
             RegexMenuItemViewModel.MenuId => _localizationService.GetString("menu.regex"),
+            McpMenuItemViewModel.MenuId => _localizationService.GetString("menu.mcp"),
             SettingsMenuItemViewModel.MenuId => _localizationService.GetString("menu.settings"),
             _ => id
         };

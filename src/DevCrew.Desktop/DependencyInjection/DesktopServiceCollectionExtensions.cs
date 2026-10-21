@@ -55,6 +55,9 @@ public static class DesktopServiceCollectionExtensions
         services.AddTransient<RegexViewModel>();
         services.AddTransient<Func<RegexViewModel>>(sp => () => sp.GetRequiredService<RegexViewModel>());
 
+        services.AddTransient<McpViewModel>();
+        services.AddTransient<Func<McpViewModel>>(sp => () => sp.GetRequiredService<McpViewModel>());
+
         services.AddTransient<SettingsViewModel>();
         services.AddTransient<Func<SettingsViewModel>>(sp => () => sp.GetRequiredService<SettingsViewModel>());
 
