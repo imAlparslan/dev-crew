@@ -43,6 +43,9 @@
   <data name="mcp.copy_configuration" xml:space="preserve"><value>Copy configuration</value></data>
   <data name="mcp.configuration_copied" xml:space="preserve"><value>Configuration copied to the clipboard.</value></data>
   <data name="mcp.copy_failed" xml:space="preserve"><value>Could not copy the configuration to the clipboard.</value></data>
+  <data name="mcp.add_to_vscode" xml:space="preserve"><value>Add to VS Code</value></data>
+  <data name="mcp.vscode_opened" xml:space="preserve"><value>VS Code was asked to install the DevCrew MCP server. Confirm in VS Code.</value></data>
+  <data name="mcp.vscode_open_failed" xml:space="preserve"><value>Could not open VS Code: {0}</value></data>
   <data name="mcp.client.vscode_copilot" xml:space="preserve"><value>VS Code GitHub Copilot (mcp.json)</value></data>
   <data name="mcp.client.claude_desktop" xml:space="preserve"><value>Claude Desktop</value></data>
   <data name="mcp.client.cursor" xml:space="preserve"><value>Cursor</value></data>

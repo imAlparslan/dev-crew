@@ -97,10 +97,14 @@
                                  VerticalContentAlignment="Top"
                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto" />
-                        <Button Content="{Binding CopyConfigurationButtonLabel}"
-                                Command="{Binding CopyConfigurationCommand}"
-                                HorizontalAlignment="Left"
-                                Classes="PrimaryActionButton" />
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Button Content="{Binding CopyConfigurationButtonLabel}"
+                                    Command="{Binding CopyConfigurationCommand}"
+                                    Classes="PrimaryActionButton" />
+                            <Button Content="{Binding AddToVsCodeButtonLabel}"
+                                    Command="{Binding AddToVsCodeCommand}"
+                                    Classes="PrimaryActionButton" />
+                        </StackPanel>
                         <TextBlock Text="{Binding StatusMessage}"
                                    IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                    Foreground="{StaticResource BrushSecondaryText}"

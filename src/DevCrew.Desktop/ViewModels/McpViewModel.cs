@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -56,6 +57,7 @@ public partial class McpViewModel : BaseViewModel
     public string TransportValue => _localizationService.GetString("mcp.stdio");
     public string ConfigurationLabel => _localizationService.GetString("mcp.configuration");
     public string CopyConfigurationButtonLabel => _localizationService.GetString("mcp.copy_configuration");
+    public string AddToVsCodeButtonLabel => _localizationService.GetString("mcp.add_to_vscode");
     public string ExecutableStatus => string.IsNullOrWhiteSpace(ExecutablePath)
         ? _localizationService.GetString("mcp.not_found")
         : _localizationService.GetString("mcp.detected", ExecutablePath);
@@ -67,6 +69,7 @@ public partial class McpViewModel : BaseViewModel
         OnPropertyChanged(nameof(IsConfigurationAvailable));
         RefreshConfiguration();
         CopyConfigurationCommand.NotifyCanExecuteChanged();
+        AddToVsCodeCommand.NotifyCanExecuteChanged();
     }
 
     partial void OnSelectedClientChanged(McpClientOption? value)
@@ -78,9 +81,38 @@ public partial class McpViewModel : BaseViewModel
     [RelayCommand]
     private Task InitializeAsync()
     {
-        ExecutablePath = McpExecutableLocator.Locate() ?? string.Empty;
+        var located = McpExecutableLocator.Locate();
+        ExecutablePath = located is null ? string.Empty : McpExecutableInstaller.EnsureAccessible(located);
         SetStatus(ExecutablePath.Length == 0 ? "mcp.not_found_status" : "mcp.detected_status");
         return Task.CompletedTask;
+    }
+
+    [RelayCommand(CanExecute = nameof(IsConfigurationAvailable))]
+    private void AddToVsCode()
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo(BuildVsCodeInstallUri(ExecutablePath)) { UseShellExecute = true });
+            SetStatus("mcp.vscode_opened");
+        }
+        catch (Exception ex)
+        {
+            ErrorHandler.LogException(ex, "Add MCP server to VS Code");
+            SetStatus("mcp.vscode_open_failed", ex.Message, isError: true);
+        }
+    }
+
+    internal static string BuildVsCodeInstallUri(string executablePath)
+    {
+        var payload = JsonSerializer.Serialize(new Dictionary<string, object>
+        {
+            ["name"] = "devcrew",
+            ["type"] = "stdio",
+            ["command"] = executablePath,
+            ["args"] = Array.Empty<string>()
+        });
+
+        return "vscode:mcp/install?" + Uri.EscapeDataString(payload);
     }
 
     [RelayCommand(CanExecute = nameof(CanCopyConfiguration))]
@@ -178,6 +210,7 @@ public partial class McpViewModel : BaseViewModel
         OnPropertyChanged(nameof(TransportValue));
         OnPropertyChanged(nameof(ConfigurationLabel));
         OnPropertyChanged(nameof(CopyConfigurationButtonLabel));
+        OnPropertyChanged(nameof(AddToVsCodeButtonLabel));
 
         if (_statusKey is not null)
         {
