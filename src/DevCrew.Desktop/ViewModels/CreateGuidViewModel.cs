@@ -351,6 +351,12 @@ public partial class CreateGuidViewModel : BaseViewModel, IDisposable
         {
             var savedGuids = await _guidRepository.GetGuidsPagedAsync(0, 10);
 
+            foreach (var savedItem in RecentGuids.Where(item => item.IsSaved).ToList())
+            {
+                RecentGuids.Remove(savedItem);
+                DetachGuidItem(savedItem);
+            }
+
             foreach (var guid in savedGuids)
             {
                 var guidItem = new GuidItemViewModel(
