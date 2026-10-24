@@ -90,6 +90,7 @@ jobs:
 
           Copy-Item -Path (Join-Path $publishDir '*') -Destination $packageRoot -Recurse -Force
           Copy-Item -Path "./artifacts/publish/mcp/win-x64/DevCrew.Mcp.exe" -Destination $packageRoot -Force
+          Copy-Item -Path "./artifacts/publish/cli/win-x64/DevCrew.Cli.exe" -Destination (Join-Path $packageRoot "crew.exe") -Force
           Copy-Item -Path "src\DevCrew.Desktop\Assets\icons\app-window.png" -Destination (Join-Path $assetDir "StoreLogo.png") -Force
           Copy-Item -Path "src\DevCrew.Desktop\Assets\icons\app-window.png" -Destination (Join-Path $assetDir "Square150x150Logo.png") -Force
           Copy-Item -Path "src\DevCrew.Desktop\Assets\icons\app-window.png" -Destination (Join-Path $assetDir "Square44x44Logo.png") -Force
@@ -98,8 +99,10 @@ jobs:
           <?xml version="1.0" encoding="utf-8"?>
           <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
                    xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+                   xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+                   xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
                    xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-                   IgnorableNamespaces="uap rescap">
+                   IgnorableNamespaces="uap uap3 desktop rescap">
             <Identity Name="$($env:WINDOWS_PACKAGE_ID)" Publisher="$($env:WINDOWS_PUBLISHER)" Version="$packageVersion" />
             <Properties>
               <DisplayName>DevCrew</DisplayName>
@@ -123,6 +126,13 @@ jobs:
                                     BackgroundColor="transparent"
                                     Square150x150Logo="Assets\Square150x150Logo.png"
                                     Square44x44Logo="Assets\Square44x44Logo.png" />
+                <Extensions>
+                  <uap3:Extension Category="windows.appExecutionAlias" Executable="crew.exe" EntryPoint="Windows.FullTrustApplication">
+                    <uap3:AppExecutionAlias>
+                      <desktop:ExecutionAlias Alias="crew.exe" />
+                    </uap3:AppExecutionAlias>
+                  </uap3:Extension>
+                </Extensions>
               </Application>
             </Applications>
           </Package>

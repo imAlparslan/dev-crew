@@ -18,6 +18,10 @@ Running the installer places:
 
 After installation, open a new terminal session and run `crew --version` to verify the CLI is available on your `PATH`.
 
+### Windows release installer
+
+Tagged Windows releases ship a `DevCrew-<version>.msix` package. Installing it registers the `crew` command via an app execution alias, so it is available on your `PATH` without extra setup. Open a new terminal and run `crew --version` to verify. (If it is not found, check Settings > Apps > Advanced app settings > App execution aliases and make sure `crew.exe` is enabled.)
+
 ### Build from source
 
 ```bash
