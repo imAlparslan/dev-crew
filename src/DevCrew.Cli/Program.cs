@@ -29,6 +29,7 @@ app.Configure(config =>
 {
     config.SetApplicationName("crew");
     config.SetApplicationVersion(ResolveCurrentVersion());
+    config.SetHelpProvider(new DefaultCommandHelpProvider(config.Settings));
 
     config.AddBase64Commands();
     config.AddGuidCommands();
