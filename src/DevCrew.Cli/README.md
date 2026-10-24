@@ -722,6 +722,28 @@ crew guid delete --value "3f2504e0-4f89-11d3-9a0c-0305e82c3301" --notes "my-api-
 
 ---
 
+## MCP Server
+
+The `devcrew-mcp` executable exposes the DevCrew developer utilities to MCP-compatible clients over stdio. The desktop app's MCP page can locate the executable and generate configuration for VS Code Copilot, Claude Desktop, Cursor, or a generic stdio client.
+
+The server reuses the same core services and local database as the CLI:
+
+| Tool group | Available operations |
+|------------|---------------------|
+| GUID | Generate GUIDs; optionally save them; list/search, update notes, and delete saved records |
+| Base64 | Encode UTF-8 text and decode Base64 content |
+| JSON | Validate, prettify, minify, sort keys, and compare documents with configurable diff options |
+| JWT | Decode and optionally verify signatures; build signed tokens; create, read, list, update, and delete templates |
+| Regex | Match patterns or saved presets; create, read/list, update, and delete presets |
+
+Registered tool names are `create_guid`, `list_guids`, `update_guid_notes`, `delete_guid`; `encode_base64`, `decode_base64`; `validate_json`, `format_json`, `compare_json`; `decode_jwt`, `build_jwt`, `create_jwt_template`, `get_jwt_template`, `list_jwt_templates`, `update_jwt_template`, `delete_jwt_template`; and `match_regex`, `create_regex_preset`, `list_regex_presets`, `update_regex_preset`, `delete_regex_preset`.
+
+Tool responses use a structured success/error result. List operations have bounded result counts. Template summaries intentionally omit HMAC secrets and RSA private/public key values. Pass text/content directly to tools: MCP tools do not access local files, the clipboard, desktop settings, or update services.
+
+JWT signing keys are required as tool inputs when signing directly or creating/updating templates. Use an appropriately trusted MCP client and do not expose the server to untrusted callers.
+
+---
+
 ## Notes
 
 ### Clipboard support

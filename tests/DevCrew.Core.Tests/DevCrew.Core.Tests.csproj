@@ -24,6 +24,7 @@
 
     <ItemGroup>
         <ProjectReference Include="../../src/DevCrew.Core/DevCrew.Core.csproj" />
+        <ProjectReference Include="../../src/DevCrew.Mcp/DevCrew.Mcp.csproj" />
     </ItemGroup>
 
 </Project>

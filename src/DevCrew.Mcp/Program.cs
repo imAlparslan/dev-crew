@@ -1,4 +1,6 @@
 using DevCrew.Core;
+using DevCrew.Core.Infrastructure.Persistence;
+using DevCrew.Mcp.Tools;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -15,6 +17,17 @@ builder.Services.AddDevCrewCore(builder.Configuration);
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()
-    .WithTools<GuidTools>();
+    .WithTools<GuidTools>()
+    .WithTools<Base64Tools>()
+    .WithTools<JsonTools>()
+    .WithTools<JwtTools>()
+    .WithTools<RegexTools>();
 
-await builder.Build().RunAsync();
+var app = builder.Build();
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    DatabaseSchemaInitializer.EnsureCompatibilitySchema(
+        scope.ServiceProvider.GetRequiredService<AppDbContext>());
+}
+
+await app.RunAsync();
