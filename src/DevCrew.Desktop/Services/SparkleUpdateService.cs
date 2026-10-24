@@ -41,7 +41,7 @@ public class SparkleUpdateService : IUpdateService
             Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
             "Downloads",
             "DevCrewUpdates");
-        _updater.TmpDownloadFileNameWithExtension = "DevCrew-update.pkg";
+        _updater.TmpDownloadFileNameWithExtension = ResolveDownloadFileName(null);
         _updater.CheckServerFileName = true;
 
     }
@@ -97,6 +97,8 @@ public class SparkleUpdateService : IUpdateService
         }
 
         cancellationToken.ThrowIfCancellationRequested();
+
+        _updater.TmpDownloadFileNameWithExtension = ResolveDownloadFileName(_latestUpdateItem.DownloadLink);
 
         // NetSparkle handles download and install flow from the selected appcast item.
         _updater.InitAndBeginDownload(_latestUpdateItem);
@@ -224,6 +226,22 @@ public class SparkleUpdateService : IUpdateService
         }
 
         return null;
+    }
+
+    internal static string ResolveDownloadFileName(string? downloadLink)
+    {
+        string? extension = null;
+        if (Uri.TryCreate(downloadLink, UriKind.Absolute, out var uri))
+        {
+            extension = Path.GetExtension(uri.AbsolutePath);
+        }
+
+        if (string.IsNullOrWhiteSpace(extension))
+        {
+            extension = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".msix" : ".pkg";
+        }
+
+        return "DevCrew-update" + extension;
     }
 
     private static string ResolveAppCastFileName()
